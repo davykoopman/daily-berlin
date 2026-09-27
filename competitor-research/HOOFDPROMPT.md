@@ -1,6 +1,6 @@
 # Hoofdprompt – Competitor Research (Google-dropshipping)
 
-> Versie 0.1 (concept). Gebaseerd op de *Competitor Research Guide* en een analyse van
+> Versie 0.2 (na proefronde DE, 27-09-2026). Gebaseerd op de *Competitor Research Guide* en een analyse van
 > davento.it en dailyberlin.de. Plak deze prompt aan het begin van een nieuwe sessie,
 > eventueel met een regel "Run voor: <land> / <seizoen>".
 
@@ -61,6 +61,17 @@ About You, Amazon, marktplaatsen), Temu/Shein-achtige platforms en mijn eigen st
   domein in Shopping, organisch of allebei stond.
 - Een domein dat bij **meerdere zoekwoorden** opduikt is een sterker signaal.
 
+### 3b. Aanvullende ontdekkingsroutes (bewezen in proefronde DE)
+- **Tranco-scan:** neem alle domeinen van het land uit de Tranco top-1M (plus .com-domeinen met Duitse
+  woorden zoals mode/berlin/haus/nord) en test welke Shopify draaien met een mode-catalogus via
+  `/products.json`. Hiermee kwamen de grootste vondsten boven (Drune, Nordheim, Lozenda).
+- **Gerichte zoekopdrachten** in de stijl van onze producttitels ("Herren Steppjacke …",
+  "Damen Wintermantel lang elegant …"), met de grote retailers uitgesloten.
+- **Bronstores:** kijk naar `product_type` en `vendor` in `/products.json`. Die verraden vaak van welke
+  store producten zijn overgenomen (bij Drune: "stuttgart-mode", "kaufmann mode"). Zoek die stores op.
+- **Netwerken:** stores met hetzelfde thema, dezelfde catalogus en dezelfde prijzen zijn vaak van één
+  operator. Noteer ze als groep.
+
 ## 4. Kwalificeren
 
 Per domein:
@@ -85,8 +96,10 @@ checken in SimilarWeb"** en sorteer die lijst op match-score.
 
 ## 6. Bestsellers (alleen voor ≥ 75K)
 
-Haal `/collections/all?sort_by=best-selling` (of `/products.json`) op en noteer de
-top 10 producten met titel, prijs, URL en categorie.
+Haal `/collections/all?sort_by=best-selling` op (werkt dat niet, dan
+`/search?q=*&type=product&sort_by=best-selling`) en noteer de top 10 met titel, prijs, URL en categorie.
+Let op: die sortering telt over de hele levensduur van de store, dus zomerproducten kunnen bovenaan staan.
+Controleer daarom ook de seizoenscollecties (jassen, truien, laarzen) gesorteerd op best-selling.
 
 ## 7. Output
 
@@ -110,8 +123,10 @@ al in staan als **"bestaand – update"** in plaats van "nieuw".
 
 | Stap | Bron | Status |
 |---|---|---|
-| Google Shopping + organisch per land | SERP-API (bijv. Serper.dev, SerpApi of DataForSEO) | ⏳ API-key nodig |
-| Maandelijkse bezoekers | SimilarWeb API, anders Semrush of DataForSEO | ⏳ keuze + key nodig |
+| Google Shopping + organisch per land | SERP-API (bijv. Serper.dev, SerpApi of DataForSEO) | ⏳ API-key nodig; google.com/Bing blokkeren directe toegang |
+| Store-ontdekking zonder API | Tranco-scan + gerichte zoekopdrachten | ✅ werkt |
+| Maandelijkse bezoekers | SimilarWeb-websitepagina via WebFetch (`similarweb.com/website/<domein>/`) | ✅ werkt, gratis; geen cijfer onder ~5–10K bezoeken |
+| Maandelijkse bezoekers (schaal) | SimilarWeb API, anders Semrush of DataForSEO | ⏳ optioneel |
 | Rank-fallback | Tranco (gratis) | ✅ werkt |
 | Store-fingerprint en bestsellers | Directe fetch van de store + `/products.json` | ✅ werkt |
 | Spreadsheet | CSV-export, of Google Sheets-koppeling | ⏳ |
