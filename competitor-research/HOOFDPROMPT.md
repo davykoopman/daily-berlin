@@ -103,6 +103,9 @@ Controleer daarom ook de seizoenscollecties (jassen, truien, laarzen) gesorteerd
 
 ## 7. Output
 
+Zet alle resultaten in `data/competitors.csv` en `data/bestsellers.csv` (zie CLAUDE.md), bouw
+`Competitor_Research.xlsx` opnieuw en stuur die mee. Daarnaast in de chat:
+
 Lever één tabel (CSV plus overzicht in de chat) met deze kolommen, in de volgorde van de spreadsheet:
 
 `Store name | Website | Country | Product category | Est. monthly visitors | Trend |

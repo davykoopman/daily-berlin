@@ -1,0 +1,59 @@
+Land,Store,Domein,Categorie,Bezoekers per maand,Trend vorige maand,Match-score,Paid search,Top landen,Gevonden via,Netwerk / operator,Eerst gevonden,Laatst gecheckt,Producten gekopieerd,Notities
+DE,Drune,drune.de,Dames & heren (2000+ producten),1500000,2.09,4,0.95,"DE 85%, AT 13%",Tranco-scan,,2026-09-27,2026-09-27,nee,"Grootste vondst. Producttypes verraden bronstores: 'stuttgart-mode', 'vardi dante', 'kaufmann mode', 'holda königsallee'"
+DE,Karlson Berlin,karlson-berlin.com,"Dames & heren, 'Naam | product'-titels",981100,1.81,5,0.4,DE 100%,Zoekopdracht + Tranco,,2026-09-27,2026-09-27,nee,"Symmetry-thema, 100% prijzen op ,95"
+DE,Nordheim Mode,nordheim-mode.de,"Dames & heren, schoenen, bikini's",545500,-0.05,5,0.87,"DE 90%, IT 4%, PT 4%",Tranco-scan,,2026-09-27,2026-09-27,nee,"Impulse-thema (zoals Daily Berlin), 12 taalmarkten"
+DE,Lozenda Fashion,lozendafashion.com,"Dames & heren, 2000+ producten",192100,-0.26,5,0.82,"DE 44%, IT 10%, FR 10%",Tranco-scan,,2026-09-27,2026-09-27,nee,"Actief in DE/IT/FR, 12 markten"
+DE,Sassy Classy,sassyclassy.de,"Dames, blouses/musselin",148600,0.16,3,0.29,DE 99%,Tranco-scan,,2026-09-27,2026-09-27,nee,Oogt meer als eigen boutique-label; vooral organisch verkeer
+DE,Risora,risora-shop.de,Gemengd: mode + huis/tuin,121300,0.06,4,0.88,"DE 82%, CH 11%, US 7%",Tranco-scan,,2026-09-27,2026-09-27,nee,Themanaam letterlijk 'Risora - Google'
+DE,Velareeh Haus,velareehhaus.com,"Dames & heren, jurken",95300,0.47,5,0.77,"DE 78%, NL 22%",Tranco-scan,,2026-09-27,2026-09-27,nee,Thema 'Kopie van ...' → vermoedelijk NL-operator; DE+NL verkeer
+DE,Nordspur,nordspur.de,Jassen/steppjassen D&H,89000,0.2,5,0.87,DE 98%,Tranco-scan,,2026-09-27,2026-09-27,nee,"Impact-thema, 100% ,95"
+DE,Falkenberg Mode,falkenberg-mode.de,"Dames & heren, badmode, jurken",83600,0.22,5,0.0,DE 100%,Tranco-scan,,2026-09-27,2026-09-27,nee,SimilarWeb meldt 100% organisch - controleren
+DE,Alpenkind Mode,alpenkindmode.com,Dirndl/tracht + casual D&H,76900,-0.33,5,0.8,"DE 92%, AT 8%",Zoekopdracht + Tranco,,2026-09-27,2026-09-27,nee,"Net boven 75K, dalend"
+DE,Ladypolitan,ladypolitan.de,Dames,67000,-0.27,3,0.16,"DE 70%, US 16%, AT 9%",Tranco-scan,,2026-09-27,2026-09-27,nee,"Lijkt echte boutique, vooral organisch"
+DE,Walther Mode,walther-mode.com,Dames & heren,41500,5.9,5,0.83,"IT 47%, US 20%, DE 11%",Zoekopdracht,,2026-09-27,2026-09-27,nee,"Sterk groeiend; 12 taalmarkten, vooral IT-verkeer"
+DE,Nicole Modehaus,nicole-modehaus.de,Dames & heren,32400,-0.04,5,,,Tranco-scan,Nicole (nina-nicole.de / nicole-modehaus.de),2026-09-27,2026-09-27,nee,Zelfde catalogus als nina-nicole.de; 85% paid social
+DE,Cecile Lavelle,cecilelavelle.com,"Dames & heren, jassen",26200,-0.6,5,0.73,"DE 28%, US 26%, UK 22%",Zoekopdracht,,2026-09-27,2026-09-27,nee,DE/US/UK verkeer
+DE,Wittenwald,wittenwald.de,Mode D&H,,,,,"ES 55%, AT 30%, DE 15%",Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,"<25K / geen SW-data. geen totaal (groei +125%, vooral ES/AT)"
+DE,Nina Nicole,nina-nicole.de,Mode D&H,,,,,,Zoekopdracht/Tranco,Nicole (nina-nicole.de / nicole-modehaus.de),2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen data; zusterstore van nicole-modehaus.de
+DE,Orthoday,orthoday.de,Mode D&H,,,,,,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal
+DE,Chaps Herrenmode,chaps-herrenmode.de,Mode D&H,,,,,,Zoekopdracht/Tranco,Chaps (chaps-herrenmode.de / chapslondon.co.uk),2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen data
+DE,Leipzigmodehausshop,leipzigmodehausshop.de,Mode D&H,,,,,,Zoekopdracht/Tranco,Devjour-netwerk (Althaus/FabrikStil/Leipzig/Schlossberg),2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen data
+DE,Fabrikstil,fabrikstil.de,Mode D&H,,,,,,Zoekopdracht/Tranco,Devjour-netwerk (Althaus/FabrikStil/Leipzig/Schlossberg),2026-09-27,2026-09-27,nee,<25K / geen SW-data. niet in SimilarWeb
+DE,Althausmode,althausmode.com,Mode D&H,,,,,,Zoekopdracht/Tranco,Devjour-netwerk (Althaus/FabrikStil/Leipzig/Schlossberg),2026-09-27,2026-09-27,nee,<25K / geen SW-data. niet in SimilarWeb
+DE,Berlinsprime,berlinsprime.de,Mode D&H,,,,,,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen data
+DE,Modemuller,modemuller.de,Mode D&H,,,,,,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen data
+DE,Herrmann Modehaus,herrmann-modehaus.de,Mode D&H,,,,,,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal
+DE,Nordmodehaus,nordmodehaus.com,Mode D&H,,,,,DE 97%,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,"<25K / geen SW-data. geen totaal (+255%, 96% paid) → volgende maand checken"
+DE,Falkenhof Mode,falkenhof-mode.de,Mode D&H,,,,,DE 100%,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal (94% paid)
+DE,Modehaushartmann,modehaushartmann.de,Mode D&H,,,,,DE 98%,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal (92% paid)
+DE,Bellarosamode,bellarosamode.com,Mode D&H,,,,,"UK 83%, FR 17%",Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal (UK/FR)
+DE,Annoboutique,annoboutique.com,Mode D&H,,,,,,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal
+DE,Berlinlook,berlinlook.com,Mode D&H,,,,,"DE 93%, SE 7%",Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal
+DE,Stefanberlin,stefanberlin.com,Mode D&H,,,,,DE 100%,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal (+338%)
+DE,Kiezstudio,kiezstudio.com,Mode D&H,,,,,,Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen data
+DE,Sophia Zurich,sophia-zurich.com,Mode D&H,,,,,"CH 70%, DE 30%",Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal (CH)
+DE,Mathilde Munchen,mathilde-munchen.de,Mode D&H,,,,,"PT 64%, DE 36%",Zoekopdracht/Tranco,,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen totaal
+DE,Kaufmannmode,kaufmannmode.de,Mode D&H,,,,,,Zoekopdracht/Tranco,Bronstore van Drune,2026-09-27,2026-09-27,nee,<25K / geen SW-data. geen data; bronstore van Drune
+DE,Leon Boutique,leonboutique.co,"Dames & heren, 'Naam | product'",242600,-0.2,5,0.78,"DE 56%, PK 37%, NL 3%",Tranco-scan (FR-lijst),,2026-09-27,2026-09-27,nee,"Gevonden tijdens FR-ronde; DE 56%, PK 37%"
+FR,Moreau Lyon,moreau-lyon.fr,Dames & heren,426400,0.3,5,0.69,FR 98%,Tranco-scan,,2026-09-27,2026-09-27,nee,"Sleek-thema, 100% ,95, 'MERK | PRODUCT'-titels"
+FR,Lumière Boutique,lumiereboutique.fr,Dames,275400,0.77,5,0.79,FR 100%,Tranco-scan,,2026-09-27,2026-09-27,nee,Thema 'nieuw thema' → vermoedelijk NL-operator
+FR,Laurent Monaco,laurentmonaco.fr,Heren,268600,-0.04,5,0.79,FR 100%,Tranco-scan,"""Autumn Edit LP""-operator (Laurent Monaco / Wentworth London)",2026-09-27,2026-09-27,nee,Zelfde thema als Wentworth London (UK) → zelfde operator
+FR,Look de Paris,lookdeparis.com,Dames,235800,0.49,4,0.93,FR 100%,Tranco-scan,Look de Paris / Boutique Paris,2026-09-27,2026-09-27,nee,"Identieke catalogus als boutique-paris.fr (165.6K) → netwerk; prijzen op ,99"
+FR,Armand et Fils,armandetfils.fr,Heren,195100,1.42,5,0.84,FR 99%,Tranco-scan,,2026-09-27,2026-09-27,nee,Sterk groeiend
+FR,Boutique Paris,boutique-paris.fr,Dames,165600,0.7,4,0.38,FR 100%,Zoekopdracht + Tranco,Look de Paris / Boutique Paris,2026-09-27,2026-09-27,nee,Zusterstore Look de Paris
+FR,Cette Saison,cettesaison.fr,Dames,151900,0.61,2,0.21,"FR 85%, BE 15%",Tranco-scan,,2026-09-27,2026-09-27,nee,"REFERENTIE - ander model. Chinese operator (themanaam), ,99-prijzen - ander model"
+FR,Maison Villard,maisonvillard.fr,Dames,95600,-0.55,5,0.45,"FR 79%, BE 21%",Tranco-scan,,2026-09-27,2026-09-27,nee,
+FR,Parisane,parisane.fr,Heren,77300,0.84,5,0.69,FR 100%,Tranco-scan,,2026-09-27,2026-09-27,nee,
+FR,Dolce Paris,dolce-paris.com,Dames & heren,64600,-0.08,5,0.92,FR 83%,Tranco-scan,,2026-09-27,2026-09-27,nee,
+FR,Laurence Boutique,laurence-boutique.fr,Dames,63300,-0.5,5,0.84,FR 100%,Tranco-scan,,2026-09-27,2026-09-27,nee,
+FR,Jetta,jetta.fr,Gemengd,50900,0.03,3,0.05,FR 100%,Tranco-scan,,2026-09-27,2026-09-27,nee,
+FR,Boutique Élégance Bordeaux,boutique-elegance-bordeaux.fr,Dames & heren,34300,-0.52,5,0.0,FR 100%,Tranco-scan,,2026-09-27,2026-09-27,nee,
+FR,Frilivin,frilivin.fr,Heren,19800,-0.2,4,0.29,FR 93%,Zoekopdracht + Tranco,,2026-09-27,2026-09-27,nee,
+FR,Evienne,evienne.fr,Dames,9100,-0.62,5,0.92,FR 100%,Zoekopdracht,,2026-09-27,2026-09-27,nee,
+UK,Wilson & Carter,wilson-and-carter.com,Dames & heren,200500,-0.54,5,0.85,"PH 45%, UK 40%",Tranco-scan,Wilson & Carter (2 domeinen),2026-09-27,2026-09-27,nee,Ook wilsoncarter-london.com (UK 71%). UK-aandeel ≈ 80K; PH-verkeer = waarschijnlijk eigen team/VA's
+UK,Wentworth London,wentworthlondon.com,Heren,86900,-0.41,5,0.89,UK 98%,Tranco-scan,"""Autumn Edit LP""-operator (Laurent Monaco / Wentworth London)",2026-09-27,2026-09-27,nee,Zelfde operator als Laurent Monaco (FR)
+UK,Mayfair & Finch,mayfairandfinch.co.uk,Dames,,1.74,5,0.94,UK 99%,Tranco-scan,,2026-09-27,2026-09-27,nee,"geen SW-cijfer. Snel groeiend, volgende maand checken"
+UK,Chaps London,chapslondon.co.uk,Heren,,0.93,5,0.96,UK 100%,Zoekopdracht,Chaps (chaps-herrenmode.de / chapslondon.co.uk),2026-09-27,2026-09-27,nee,geen SW-cijfer. Zelfde naam als chaps-herrenmode.de → vermoedelijk zelfde operator
+UK,London Ward,londonward.co,Heren,,-0.03,4,0.95,UK 99%,Zoekopdracht,,2026-09-27,2026-09-27,nee,geen SW-cijfer
+UK,Pink Boutique,pinkboutique.co.uk,Dames,554200,-0.24,1,0.21,UK 45%,Tranco-scan,,2026-09-27,2026-09-27,nee,"REFERENTIE - ander model. Echt UK-merk (eigen label, £ ,99), GEEN dropship-model - alleen referentie"
+UK,Femme Luxe,femmeluxe.co.uk,Dames,40800,-0.34,1,0.31,UK 40%,Tranco-scan,,2026-09-27,2026-09-27,nee,"REFERENTIE - ander model. Eigen merk, geen dropship-model"
