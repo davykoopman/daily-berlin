@@ -40,7 +40,7 @@
     <div class="section-resource-list__content pp-bundle__title">
       {% content_for 'blocks' %}
     </div>
-    {% render 'pp-tiers', tiers: ss.tiers, style: 'chips' %}
+    {% render 'pp-tier-progress', tiers: ss.tiers %}
   </div>
 
   {% capture list_items %}
@@ -82,25 +82,14 @@
 {% stylesheet %}
   .pp-bundle__head {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 
-  .pp-bundle__title {
-    flex: 0 1 auto;
-  }
-
-  @media screen and (max-width: 749px) {
-    .pp-bundle__head {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .pp-bundle__head .pp-tiers--chips {
-      padding-inline-start: 10px;
-    }
+  /* Line up with the heading text (heading block has 10px inline padding) */
+  .pp-bundle__head .pp-tierbar {
+    padding-inline-start: 10px;
   }
 
   .pp-bundle__all {

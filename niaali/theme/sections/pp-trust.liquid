@@ -10,7 +10,9 @@
       assign s2 = 'Łatwa wymiana rozmiaru lub modelu'
       assign t3 = 'Bezpieczne płatności'
       assign s3 = 'Chronione szyfrowaniem SSL'
-      assign t4 = 'Obsługa klienta 7/7'
+      assign t4 = 'Obsługa klienta'
+      assign d1 = 'Pn–Pt'
+      assign d2 = 'Sb–Nd'
     when 'nl'
       assign t1 = 'Gratis verzending'
       assign s1 = 'Elk pakket met track & trace'
@@ -18,7 +20,9 @@
       assign s2 = 'Eenvoudig ruilen van maat of model'
       assign t3 = 'Veilig betalen'
       assign s3 = 'Beveiligd met SSL-versleuteling'
-      assign t4 = 'Klantenservice 7/7'
+      assign t4 = 'Klantenservice'
+      assign d1 = 'ma–vr'
+      assign d2 = 'za–zo'
     when 'de'
       assign t1 = 'Kostenloser Versand'
       assign s1 = 'Jedes Paket mit Sendungsverfolgung'
@@ -26,7 +30,9 @@
       assign s2 = 'Einfacher Umtausch von Größe oder Modell'
       assign t3 = 'Sichere Zahlung'
       assign s3 = 'Geschützt durch SSL-Verschlüsselung'
-      assign t4 = 'Kundenservice 7/7'
+      assign t4 = 'Kundenservice'
+      assign d1 = 'Mo–Fr'
+      assign d2 = 'Sa–So'
     when 'fr'
       assign t1 = 'Livraison gratuite'
       assign s1 = 'Chaque colis avec suivi'
@@ -34,7 +40,9 @@
       assign s2 = 'Échange facile de taille ou de modèle'
       assign t3 = 'Paiement sécurisé'
       assign s3 = 'Protégé par chiffrement SSL'
-      assign t4 = 'Service client 7j/7'
+      assign t4 = 'Service client'
+      assign d1 = 'lun–ven'
+      assign d2 = 'sam–dim'
     when 'it'
       assign t1 = 'Spedizione gratuita'
       assign s1 = 'Ogni pacco con tracciamento'
@@ -42,7 +50,9 @@
       assign s2 = 'Cambio facile di taglia o modello'
       assign t3 = 'Pagamenti sicuri'
       assign s3 = 'Protetti da crittografia SSL'
-      assign t4 = 'Assistenza clienti 7/7'
+      assign t4 = 'Assistenza clienti'
+      assign d1 = 'lun–ven'
+      assign d2 = 'sab–dom'
     when 'es'
       assign t1 = 'Envío gratis'
       assign s1 = 'Cada paquete con seguimiento'
@@ -50,7 +60,9 @@
       assign s2 = 'Cambio fácil de talla o modelo'
       assign t3 = 'Pago seguro'
       assign s3 = 'Protegido con cifrado SSL'
-      assign t4 = 'Atención al cliente 7/7'
+      assign t4 = 'Atención al cliente'
+      assign d1 = 'lun–vie'
+      assign d2 = 'sáb–dom'
     else
       assign t1 = 'Free shipping'
       assign s1 = 'Every parcel is tracked'
@@ -58,11 +70,42 @@
       assign s2 = 'Easy size or model exchanges'
       assign t3 = 'Secure payments'
       assign s3 = 'Protected by SSL encryption'
-      assign t4 = 'Customer service 7/7'
+      assign t4 = 'Customer service'
+      assign d1 = 'Mon–Fri'
+      assign d2 = 'Sat–Sun'
   endcase
 
   assign t2 = t2 | replace: '[n]', ss.return_days
   assign email = ss.email | default: shop.email
+
+  # Opening hours: 24h clock, English gets am/pm
+  assign hrs = ss.weekday_open | append: ',' | append: ss.weekday_close | append: ',' | append: ss.weekend_open | append: ',' | append: ss.weekend_close | split: ','
+  assign h = ''
+  for x in hrs
+    assign v = x | plus: 0
+    if lang == 'en'
+      if v == 0
+        assign f = '12am'
+      elsif v < 12
+        assign f = v | append: 'am'
+      elsif v == 12
+        assign f = '12pm'
+      else
+        assign f = v | minus: 12 | append: 'pm'
+      endif
+    elsif lang == 'fr'
+      assign f = v | append: 'h'
+    else
+      assign f = v
+    endif
+    assign h = h | append: f | append: ','
+  endfor
+  assign h = h | split: ','
+  assign hours_1 = d1 | append: ' ' | append: h[0] | append: '–' | append: h[1]
+  assign hours_2 = d2 | append: ' ' | append: h[2] | append: '–' | append: h[3]
+  if request.locale.primary == false and ss.timezone != blank
+    assign hours_2 = hours_2 | append: ' (' | append: ss.timezone | append: ')'
+  endif
 -%}
 
 <div class="pp-trust color-{{ ss.color_scheme }}">
@@ -93,12 +136,14 @@
       <p class="pp-trust__text">{{ s3 }}</p>
     </li>
     <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 270ms;">
-      <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M4 5.5h16v10H9.5L5.5 19v-3.5H4z"/>
-        <path d="M8 9.5h8M8 12.5h5"/>
-      </svg>
-      <p class="pp-trust__title">{{ t4 }}</p>
-      <p class="pp-trust__text"><a class="pp-trust__link" href="mailto:{{ email }}">{{ email }}</a></p>
+      <a class="pp-trust__item-link" href="mailto:{{ email }}" aria-label="{{ t4 }}: {{ email }}">
+        <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 5.5h16v10H9.5L5.5 19v-3.5H4z"/>
+          <path d="M8 9.5h8M8 12.5h5"/>
+        </svg>
+        <p class="pp-trust__title">{{ t4 }}</p>
+        <p class="pp-trust__text"><span class="pp-trust__nowrap">{{ hours_1 }} ·</span> <span class="pp-trust__nowrap">{{ hours_2 }}</span></p>
+      </a>
     </li>
   </ul>
 </div>
@@ -161,11 +206,19 @@
     text-wrap: balance;
   }
 
-  .pp-trust__link {
+  .pp-trust__item-link {
+    display: contents;
     color: inherit;
+    text-decoration: none;
+  }
+
+  .pp-trust__item-link:hover .pp-trust__title {
     text-decoration: underline;
     text-underline-offset: 3px;
-    overflow-wrap: anywhere;
+  }
+
+  .pp-trust__nowrap {
+    white-space: nowrap;
   }
 
   @media screen and (max-width: 749px) {
@@ -208,6 +261,40 @@
       "type": "text",
       "id": "email",
       "label": "Customer service email (empty = store email)"
+    },
+    {
+      "type": "header",
+      "content": "Customer service hours (match the contact page)"
+    },
+    {
+      "type": "number",
+      "id": "weekday_open",
+      "label": "Mon–Fri from (hour, 24h)",
+      "default": 8
+    },
+    {
+      "type": "number",
+      "id": "weekday_close",
+      "label": "Mon–Fri until (hour, 24h)",
+      "default": 17
+    },
+    {
+      "type": "number",
+      "id": "weekend_open",
+      "label": "Sat–Sun from (hour, 24h)",
+      "default": 9
+    },
+    {
+      "type": "number",
+      "id": "weekend_close",
+      "label": "Sat–Sun until (hour, 24h)",
+      "default": 16
+    },
+    {
+      "type": "text",
+      "id": "timezone",
+      "label": "Time zone shown in other languages",
+      "default": "CET"
     },
     {
       "type": "color_scheme",
