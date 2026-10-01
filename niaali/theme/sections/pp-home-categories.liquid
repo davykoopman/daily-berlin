@@ -1,0 +1,367 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign title = 'Kategorie'
+    when 'nl'
+      assign title = 'Categorieën'
+    when 'de'
+      assign title = 'Kategorien'
+    when 'fr'
+      assign title = 'Catégories'
+    when 'it'
+      assign title = 'Categorie'
+    when 'es'
+      assign title = 'Categorías'
+    else
+      assign title = 'Shop by category'
+  endcase
+
+  assign women = collections[ss.women_handle]
+  assign men = collections[ss.men_handle]
+  assign women_list = ss.women_chips | remove: ' ' | split: ','
+  assign men_list = ss.men_chips | remove: ' ' | split: ','
+  assign strip_words = ss.strip_words | split: ','
+-%}
+
+<div class="pp-home-cat color-{{ ss.color_scheme }}" data-pp-gender-root>
+  <div class="pp-home-cat__inner">
+    <div class="pp-home__head">
+      <h2 class="pp-home__title">{{ title }}</h2>
+      {% render 'pp-gender-tabs', women: women, men: men, label: title %}
+    </div>
+
+    {%- for group in (1..2) -%}
+      {%- liquid
+        if group == 1
+          assign key = 'women'
+          assign parent = women
+          assign list = women_list
+          assign see_all_key = 'see_all_women'
+        else
+          assign key = 'men'
+          assign parent = men
+          assign list = men_list
+          assign see_all_key = 'see_all_men'
+        endif
+      -%}
+      <div class="pp-home-cat__panel" role="tabpanel" data-pp-panel="{{ key }}" {% if group == 2 %}hidden{% endif %}>
+        <div class="pp-home-cat__scroller">
+          <ul class="pp-home-cat__row" role="list">
+            {%- for handle in list -%}
+              {%- assign c = collections[handle] -%}
+              {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+              {%- liquid
+                assign label = c.title
+                for w in strip_words
+                  assign word = w | strip
+                  if word != blank
+                    assign label = label | replace: word, ''
+                  endif
+                endfor
+                assign label = label | strip
+                assign first = label | slice: 0 | upcase
+                assign rest = label | slice: 1, 200
+                assign label = first | append: rest
+
+                # The collection image when set in the admin, otherwise its first product photo
+                assign img = c.image | default: c.products.first.featured_image
+              -%}
+              <li class="pp-home-cat__item">
+                <a class="pp-home-cat__tile" href="{{ c.url }}">
+                  <span class="pp-home-cat__media">
+                    {%- if img != blank -%}
+                      {{
+                        img
+                        | image_url: width: 800
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '240, 360, 480, 600, 800',
+                          sizes: '(min-width: 990px) 16vw, (min-width: 750px) 25vw, 42vw',
+                          alt: label
+                      }}
+                    {%- endif -%}
+                  </span>
+                  <span class="pp-home-cat__label">{{ label }}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+            {%- if parent != blank -%}
+              <li class="pp-home-cat__item">
+                <a class="pp-home-cat__tile pp-home-cat__tile--all" href="{{ parent.url }}">
+                  <span class="pp-home-cat__media pp-home-cat__all">
+                    <span class="pp-home-cat__all-text">{% render 'pp-i18n', key: see_all_key %}</span>
+                    <span class="pp-home-cat__all-arrow" aria-hidden="true">→</span>
+                  </span>
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+        </div>
+        <div class="pp-home-cat__nav" aria-hidden="true">
+          <button type="button" class="pp-home-cat__arrow" data-dir="-1" tabindex="-1">←</button>
+          <button type="button" class="pp-home-cat__arrow" data-dir="1" tabindex="-1">→</button>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+  (function () {
+    if (window.ppHomeCatInit) return;
+    window.ppHomeCatInit = true;
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('.pp-home-cat__arrow');
+      if (!b) return;
+      var s = b.closest('.pp-home-cat__panel').querySelector('.pp-home-cat__scroller');
+      s.scrollBy({ left: +b.dataset.dir * s.clientWidth * 0.8, behavior: 'smooth' });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-home-cat {
+    padding-block: 40px 24px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .pp-home-cat__inner {
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    padding-inline: var(--page-margin, 40px);
+  }
+
+  .pp-home-cat__panel {
+    position: relative;
+  }
+
+  .pp-home-cat__scroller {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .pp-home-cat__scroller::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pp-home-cat__row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 5 * 12px) / 6);
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-home-cat__item {
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+
+  .pp-home-cat__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .pp-home-cat__media {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.05);
+  }
+
+  .pp-home-cat__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .pp-home-cat__tile:hover .pp-home-cat__media img {
+    transform: scale(1.04);
+  }
+
+  .pp-home-cat__label {
+    overflow: hidden;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* Last tile: link to the whole collection, same look as on the product page */
+  .pp-home-cat__all {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px;
+    text-align: center;
+    transition: background-color 0.25s ease;
+  }
+
+  .pp-home-cat__tile--all:hover .pp-home-cat__all {
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.09);
+  }
+
+  .pp-home-cat__all-text {
+    max-width: 12em;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .pp-home-cat__all-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-foreground-heading, #030302);
+    color: var(--color-background, #fff);
+    font-size: 1.125rem;
+    line-height: 1;
+    transition: transform 0.25s ease;
+  }
+
+  .pp-home-cat__tile--all:hover .pp-home-cat__all-arrow {
+    transform: translateX(4px);
+  }
+
+  .pp-home-cat__nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .pp-home-cat__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.2);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-foreground);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .pp-home-cat__arrow:hover {
+    border-color: var(--color-foreground-heading, #030302);
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .pp-home-cat__row {
+      grid-auto-columns: calc((100% - 3 * 12px) / 4);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-home-cat {
+      padding-block: 28px 16px;
+    }
+
+    .pp-home-cat__inner {
+      padding-inline: 16px;
+    }
+
+    /* Swipe row that bleeds to the screen edge */
+    .pp-home-cat__scroller {
+      margin-inline: -16px;
+      padding-inline: 16px;
+      scroll-padding-inline: 16px;
+    }
+
+    .pp-home-cat__row {
+      grid-auto-columns: 42vw;
+      gap: 10px;
+    }
+
+    .pp-home-cat__label {
+      font-size: 0.875rem;
+    }
+
+    .pp-home-cat__all-text {
+      font-size: 0.875rem;
+    }
+
+    .pp-home-cat__all-arrow {
+      width: 40px;
+      height: 40px;
+    }
+
+    /* Swiping is enough on phones */
+    .pp-home-cat__nav {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Home categories",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Sub collections for women and men with a switch. Tiles use the collection image, or the first product photo when the collection has no image. Texts follow the storefront language."
+    },
+    {
+      "type": "text",
+      "id": "women_handle",
+      "label": "Women collection handle",
+      "default": "kobiety"
+    },
+    {
+      "type": "textarea",
+      "id": "women_chips",
+      "label": "Women category handles (comma separated, in order)"
+    },
+    {
+      "type": "text",
+      "id": "men_handle",
+      "label": "Men collection handle",
+      "default": "mezczyzni"
+    },
+    {
+      "type": "textarea",
+      "id": "men_chips",
+      "label": "Men category handles (comma separated, in order)"
+    },
+    {
+      "type": "textarea",
+      "id": "strip_words",
+      "label": "Words removed from tile labels (comma separated)",
+      "default": " męskie, męski, męska, damskie, damski, damska,Men's ,Men’s ,Women's ,Women’s "
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Home categories"
+    }
+  ]
+}
+{% endschema %}
