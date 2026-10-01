@@ -301,14 +301,25 @@
     }
 
     .main-collection-grid .product-grid__card [class*='product_title'],
-    .main-collection-grid .product-grid__card [class*='product_title'] *,
-    .main-collection-grid .product-grid__card [ref='priceContainer'] {
+    .main-collection-grid .product-grid__card [class*='product_title'] * {
       font-size: 0.8125rem;
     }
 
-    .main-collection-grid .product-grid__card .save-price {
-      padding: 2px 5px;
+    /* Sized so price, old price and badge fit one line on 360px phones */
+    .main-collection-grid .product-grid__card [ref='priceContainer'],
+    .main-collection-grid .product-grid__card [ref='priceContainer'] > * {
+      gap: 4px;
+      font-size: 0.75rem;
+    }
+
+    .main-collection-grid .product-grid__card .compare-at-price {
       font-size: 11px;
+    }
+
+    .main-collection-grid .product-grid__card .save-price {
+      margin-left: 0;
+      padding: 1px 4px;
+      font-size: 10px;
     }
   }
 {% endstylesheet %}

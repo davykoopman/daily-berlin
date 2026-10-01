@@ -141,6 +141,100 @@
     text-overflow: ellipsis;
   }
 
+  /* Compact card: less space between image, swatches and text */
+  .pp-bundle .product-card .product-card__content {
+    gap: 10px;
+  }
+
+  /* Image, swatches, title and price share one left edge (same as the collection grid) */
+  .pp-bundle .product-card .card-gallery,
+  .pp-bundle .product-card .product-card__content > .group-block {
+    padding: 0;
+  }
+
+  /* Colour swatches: one fixed-height row, so every card lines up */
+  .pp-bundle .product-card variant-swatch-king {
+    display: block;
+    height: 28px;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .pp-bundle .product-card variant-swatch-king .swatches {
+    margin: 0 !important;
+  }
+
+  .pp-bundle .product-card variant-swatch-king .swatch-view {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    margin: 0 !important;
+  }
+
+  .pp-bundle .product-card variant-swatch-king .swatch-view-item,
+  .pp-bundle .product-card variant-swatch-king .swatch-image-wrapper {
+    width: 28px !important;
+    height: 28px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .pp-bundle .product-card variant-swatch-king .swatch-image,
+  .pp-bundle .product-card variant-swatch-king .star-set-image {
+    width: 26px !important;
+    height: 26px !important;
+    margin: 1px !important;
+  }
+
+  .pp-bundle .product-card variant-swatch-king .minification-text {
+    font-size: 12px;
+    line-height: 26px;
+  }
+
+  .pp-bundle .product-card .product-card__content:not(:has(variant-swatch-king)) > .group-block {
+    margin-top: 38px;
+  }
+
+  /* Price, compare-at price and badge on one line (same as the collection grid) */
+  .pp-bundle .product-card [ref='priceContainer'] {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .pp-bundle .product-card .save-price {
+    margin-left: 2px;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-bundle .product-card [class*='product_title'],
+    .pp-bundle .product-card [class*='product_title'] * {
+      font-size: 0.8125rem;
+    }
+
+    /* Sized so price, old price and badge fit one line on 360px phones */
+    .pp-bundle .product-card [ref='priceContainer'],
+    .pp-bundle .product-card [ref='priceContainer'] > * {
+      gap: 3px;
+      font-size: 0.75rem;
+    }
+
+    .pp-bundle .product-card .compare-at-price {
+      font-size: 11px;
+    }
+
+    .pp-bundle .product-card .save-price {
+      margin-left: 0;
+      padding: 1px 3px;
+      font-size: 10px;
+    }
+  }
+
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .pp-bundle .product-card {
       transition: transform 0.25s ease;
