@@ -452,7 +452,6 @@
             "pp_delivery": {
               "type": "pp-delivery",
               "settings": {
-                "cutoff_hour": 14,
                 "dispatch_days": "1–2"
               },
               "blocks": {}
