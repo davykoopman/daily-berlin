@@ -402,7 +402,7 @@
                     "text_HX847Y": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Łącz produkty objęte promocją i oszczędzaj więcej:</p><ul><li>2 produkty = 10% rabatu</li><li>3 produkty = 15% rabatu</li><li>4 produkty = 20% rabatu</li></ul><p>Rabat zostanie automatycznie naliczony w koszyku.</p>",
+                        "text": "<p>Łącz dowolne produkty i oszczędzaj więcej:</p><ul><li>2 produkty = 10% rabatu</li><li>3 produkty = 15% rabatu</li><li>4 produkty = 20% rabatu</li></ul><p>Rabat zostanie automatycznie naliczony w koszyku.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -598,7 +598,11 @@
         "color_scheme": "scheme-2",
         "padding-block-start": 0,
         "padding-block-end": 0
-      }
+      },
+      "custom_css": [
+        "@media screen and (max-width: 749px) {.media-block, .media-block__media {height: 45svh !important; max-height: 380px;}}",
+        "@media screen and (max-width: 749px) {.group-block-content {align-items: flex-start !important;} .text-block, .text-block p {text-align: left !important; margin-inline: 0 !important;}}"
+      ]
     },
     "product_recommendations_UeDczP": {
       "type": "product-recommendations",
@@ -759,10 +763,37 @@
             "product_card_gallery_7qMAmF",
             "group_4V7yPa"
           ]
+        },
+        "text_pp_tiers": {
+          "type": "text",
+          "name": "Tiers",
+          "settings": {
+            "text": "<p>Kup 2 = <strong>-10%</strong> · 3 = <strong>-15%</strong> · 4 = <strong>-20%</strong></p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 4,
+            "padding-inline-start": 10,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
         }
       },
       "block_order": [
-        "text_hT9TEm"
+        "text_hT9TEm",
+        "text_pp_tiers"
       ],
       "name": "t:names.product_recommendations",
       "settings": {
@@ -771,9 +802,9 @@
         "layout_type": "carousel",
         "carousel_on_mobile": false,
         "max_products": 10,
-        "columns": 3,
+        "columns": 4,
         "mobile_columns": "2",
-        "columns_gap": 0,
+        "columns_gap": 12,
         "rows_gap": 36,
         "icons_style": "arrow",
         "icons_shape": "none",
@@ -782,7 +813,13 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 20,
         "padding-block-end": 20
-      }
+      },
+      "custom_css": [
+        ".text-block p strong {color: #c20000;}",
+        ".product-badges {display: none;}",
+        ".product-card .text-block p {display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}",
+        "@media screen and (max-width: 749px) {.resource-list__slide {width: 42vw !important;} .product-card .text-block p {font-size: 0.875rem;} .save-price {margin-left: 6px;}}"
+      ]
     },
     "1783272547e5c21d82": {
       "type": "_blocks",
@@ -1109,8 +1146,8 @@
   },
   "order": [
     "product-information",
-    "media_with_content_jbLpBH",
     "product_recommendations_UeDczP",
+    "media_with_content_jbLpBH",
     "1783272547e5c21d82",
     "section_dmw4pk"
   ]

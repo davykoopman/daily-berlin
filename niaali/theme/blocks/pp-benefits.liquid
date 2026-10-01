@@ -126,6 +126,20 @@
       height: 20px;
     }
   }
+
+  /* Product page kit: quick add in the Mix & match section on phones */
+  @media screen and (max-width: 749px) {
+    product-recommendations .quick-add {
+      --quick-add-mobile-display: flex;
+      --quick-add-mobile-opacity: 1;
+    }
+
+    /* Swatch app picker uses the full width of the quick add sheet */
+    .quick-add-modal__content variant-swatch-king {
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

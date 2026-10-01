@@ -15,6 +15,8 @@ Herbruikbare productpagina-opzet ("PP-kit") voor alle stores. Gebouwd en getest 
 | `theme/templates/product.json` | Volgorde: titel → prijs → bullets → kleuren → maten → zwarte Add to cart → betaaliconen (automatisch, wat actief is) |
 | `*.original.*` | Back-up van de bestanden vóór de wijziging |
 
+Mix & match (product recommendations): kop + staffelregel, 4 kaarten desktop / 2 + swipen mobiel, -X% vakje, "W PROMOCJI"-label verborgen, titels max 2 regels, quick add ook op mobiel (CSS in `pp-benefits`, inclusief fix voor de Swatch King-kiezer in het quick add-venster). Volgorde: productinfo → Mix & match → O nas → FAQ. O nas op mobiel: lagere foto, tekst links.
+
 Foto's: carousel in 4:5 staand kader, begrensd op schermhoogte, bolletjes op mobiel en desktop.
 
 ## Op een nieuwe store zetten
