@@ -1142,12 +1142,30 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "pp_trust": {
+      "type": "pp-trust",
+      "settings": {
+        "return_days": 60,
+        "reply_hours": 12,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "pp_steps": {
+      "type": "pp-steps",
+      "settings": {
+        "dispatch_days": "1–2",
+        "return_days": 60,
+        "color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
     "product-information",
     "product_recommendations_UeDczP",
+    "pp_trust",
     "media_with_content_jbLpBH",
+    "pp_steps",
     "1783272547e5c21d82",
     "section_dmw4pk"
   ]
