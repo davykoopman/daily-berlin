@@ -189,7 +189,8 @@
                     "show_shipping": true,
                     "show_guarantee": true,
                     "return_days": 60,
-                    "show_buy_more": true
+                    "show_buy_more": true,
+                    "show_divider": true
                   },
                   "blocks": {}
                 }
@@ -447,12 +448,21 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "pp_delivery": {
+              "type": "pp-delivery",
+              "settings": {
+                "cutoff_hour": 14,
+                "dispatch_days": "1–2"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
             "group_8fkkWP",
             "variant_picker_3Nha6V",
             "buy_buttons_NmYpFG",
+            "pp_delivery",
             "payment_icons_pp",
             "accordion_iWQwkW"
           ]

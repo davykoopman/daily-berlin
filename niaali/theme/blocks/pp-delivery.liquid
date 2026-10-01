@@ -1,0 +1,89 @@
+{%- liquid
+  assign bs = block.settings
+
+  # The cut-off time in the shipping policy is store time (CET/CEST).
+  # Countries one hour behind (GMT/BST) see it in their own time.
+  assign hour = bs.cutoff_hour
+  assign country = localization.country.iso_code
+  if country == 'GB' or country == 'IE' or country == 'PT' or country == 'IS'
+    assign hour = hour | minus: 1
+  endif
+  assign cutoff = hour | append: ':00'
+-%}
+
+<p class="pp-delivery" {{ block.shopify_attributes }}>
+  <svg class="pp-delivery__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="8.5"/>
+    <path d="M12 7.5V12l3 2"/>
+  </svg>
+  <span>{% render 'pp-i18n', key: 'dispatch', n: cutoff, m: bs.dispatch_days %}</span>
+</p>
+
+{% stylesheet %}
+  /*
+    Sits right under the add to cart button.
+    --pp-layout-gap: gap between blocks in product details (40px desktop, 28px mobile).
+  */
+  .pp-delivery {
+    --pp-layout-gap: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin: calc(12px - var(--pp-layout-gap)) 0 calc(16px - var(--pp-layout-gap));
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.75);
+    text-align: center;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-delivery {
+      --pp-layout-gap: 28px;
+    }
+  }
+
+  .pp-delivery__icon {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Delivery time",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Text is translated automatically. Match the shipping policy."
+    },
+    {
+      "type": "number",
+      "id": "cutoff_hour",
+      "label": "Order cut-off hour (store time)",
+      "default": 14
+    },
+    {
+      "type": "text",
+      "id": "dispatch_days",
+      "label": "Dispatch time in business days",
+      "default": "1–2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Delivery time",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

@@ -2,8 +2,9 @@
   Translations for the product page kit (pp-*). Picks the text by the
   language the storefront is viewed in, falls back to English.
 
-  @param {string} key - free_shipping | money_back | buy_more | save
-  @param {number} [n] - Number placed in the text (days or percent)
+  @param {string} key - free_shipping | money_back | buy_more | save | dispatch
+  @param {number} [n] - Value for [n] (days, percent, or cut-off time)
+  @param {string} [m] - Value for [m] (dispatch days)
 {%- enddoc -%}
 
 {%- liquid
@@ -82,7 +83,25 @@
         else
           assign text = 'Save [n]%'
       endcase
+
+    when 'dispatch'
+      case lang
+        when 'pl'
+          assign text = 'Zamów do [n] – wysyłka w ciągu [m] dni roboczych'
+        when 'nl'
+          assign text = 'Bestel vóór [n] – verzonden binnen [m] werkdagen'
+        when 'de'
+          assign text = 'Bis [n] Uhr bestellen – Versand innerhalb von [m] Werktagen'
+        when 'fr'
+          assign text = 'Commandez avant [n] – expédié sous [m] jours ouvrés'
+        when 'it'
+          assign text = 'Ordina entro le [n] – spedito entro [m] giorni lavorativi'
+        when 'es'
+          assign text = 'Pide antes de las [n] – enviado en [m] días hábiles'
+        else
+          assign text = 'Order by [n] – dispatched within [m] business days'
+      endcase
   endcase
 
-  echo text | replace: '[n]', n
+  echo text | replace: '[n]', n | replace: '[m]', m
 -%}

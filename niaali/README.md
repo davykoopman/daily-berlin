@@ -10,6 +10,8 @@ Herbruikbare productpagina-opzet ("PP-kit") voor alle stores. Gebouwd en getest 
 | `theme/blocks/pp-benefits.liquid` | 3 bullets met icoon: gratis verzending, X-dagen geld-terug-garantie (link naar refund policy), buy more save more. Instelling *Return period in days* per store gelijkzetten aan de refund policy |
 | `theme/snippets/pp-i18n.liquid` | Vertalingen voor de kit op basis van de taal van de bezoeker (pl, en, nl, de, fr, it, es; anders Engels) |
 | `theme/snippets/price1.liquid` | Prijs: "Save X%" in rood, per variant berekend uit de compare-at-prijs (naar beneden afgerond) |
+| `theme/blocks/pp-delivery.liquid` | Levertijd onder de knop: "Bestel vóór [tijd] – verzonden binnen [x] werkdagen". Cut-off en dagen per store gelijkzetten aan de verzendpolicy; landen in GMT (VK, IE, PT) zien de tijd 1 uur eerder |
+| `theme/sections/header-group.json` | Aankondigingsbalk: 3 wisselende berichten (gratis verzending, staffelkorting, retourdagen), om de 4 sec, op mobiel 1 regel. Teksten per store aanpassen aan de echte staffel en policy, vertalen via *Translate & Adapt* |
 | `theme/templates/product.json` | Volgorde: titel → prijs → bullets → kleuren → maten → zwarte Add to cart → betaaliconen (automatisch, wat actief is) |
 | `*.original.*` | Back-up van de bestanden vóór de wijziging |
 
