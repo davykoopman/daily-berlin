@@ -116,24 +116,18 @@
   display: inline-block;
   margin-left: 10px;
   padding: 3px 8px;
-  background: #27AE60;
+  background: #c20000;
   color: #fff;
   font-size: 13px;
   font-weight: 600;
+  line-height: 1.2;
   border-radius: 4px;
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 .price--regular {
   color: #000 !important;
-}
-.pp-save {
-  display: inline-block;
-  margin-left: 10px;
-  color: #c20000;
-  font-size: 0.875em;
-  font-weight: 600;
-  vertical-align: baseline;
 }
 </style>
    
@@ -145,21 +139,15 @@
 {% endif %}
 
 {% if show_compare_price %}
-  {% comment %} Rounded down so the saving is never overstated {% endcomment %}
   {% assign save_percent = selected_variant.compare_at_price
     | minus: selected_variant.price
-    | times: 100
+    | times: 100.0
     | divided_by: selected_variant.compare_at_price
+    | round
   %}
 
   {% if save_percent > 0 %}
-    {% if product.handle == product_resource.handle %}
-      <span class="pp-save">{% render 'pp-i18n', key: 'save', n: save_percent %}</span>
-    {% else %}
-      <span class="save-price">
-        - {{ save_percent }}%
-      </span>
-    {% endif %}
+    <span class="save-price">-{{ save_percent }}%</span>
   {% endif %}
 {% endif %}
 
