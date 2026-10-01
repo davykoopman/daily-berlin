@@ -6,7 +6,11 @@
   endif
 -%}
 
-<ul class="pp-benefits" role="list" {{ block.shopify_attributes }}>
+<div
+  class="pp-benefits-wrap{% if bs.show_divider %} pp-benefits-wrap--divider{% endif %}"
+  {{ block.shopify_attributes }}
+>
+<ul class="pp-benefits" role="list">
   {%- if bs.show_shipping -%}
     <li class="pp-benefit">
       <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -43,8 +47,36 @@
     </li>
   {%- endif -%}
 </ul>
+</div>
 
 {% stylesheet %}
+  /*
+    Equal space above and below the bullets (and between line and bullets).
+    --pp-before: gap of the header group the block sits in (12px in the template).
+    --pp-after: space the layout already puts below the header group
+    (product details gap + variant picker padding): 50px desktop, 38px mobile.
+  */
+  .pp-benefits-wrap {
+    --pp-space: 20px;
+    --pp-before: 12px;
+    --pp-after: 50px;
+
+    width: 100%;
+    margin-top: calc(var(--pp-space) - var(--pp-before));
+    margin-bottom: calc(var(--pp-space) - var(--pp-after));
+  }
+
+  .pp-benefits-wrap--divider {
+    padding-top: var(--pp-space);
+    border-top: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-benefits-wrap {
+      --pp-after: 38px;
+    }
+  }
+
   .pp-benefits {
     display: grid;
     gap: 6px;
@@ -104,6 +136,12 @@
     {
       "type": "paragraph",
       "content": "Texts are translated automatically by storefront language."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show line above",
+      "default": true
     },
     {
       "type": "checkbox",
