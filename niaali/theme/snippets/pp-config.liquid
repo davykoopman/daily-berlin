@@ -1,0 +1,16 @@
+{%- doc -%}
+  Store configuration for the pp-* sections: collection handles and words
+  stripped from category labels. Kept in code (not in section settings) so
+  translation apps cannot translate handles and break the links.
+  Change these values per store.
+
+  @param {string} key - women_handle | men_handle | women_list | men_list | strip_words
+{%- enddoc -%}
+
+{%- case key -%}
+  {%- when 'women_handle' -%}kobiety
+  {%- when 'men_handle' -%}mezczyzni
+  {%- when 'women_list' -%}kurtki-damskie,sweter-damski,sukienki-damskie,buty-damskie,komplety-damskie,marynarki-damskie,botki-i-kozaki-damskie,sandaly-i-kapcie-damskie,bluzy-damskie,spodnie-damskie,bluzki-i-topy-damskie,akcesoria-damskie
+  {%- when 'men_list' -%}kurtka-meska,sweter-meski,buty-i-obuwie-meskie,spodnie-i-szorty-meskie,garnitury-i-komplety-meskie,koszule-i-koszulki-meskie,bluzy-meskie,akcesoria-meskie
+  {%- when 'strip_words' -%}męskie,męski,męska,damskie,damski,damska,Men's,Men’s,Women's,Women’s
+{%- endcase -%}

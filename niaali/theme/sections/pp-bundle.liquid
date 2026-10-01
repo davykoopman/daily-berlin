@@ -2,15 +2,25 @@
   assign ss = section.settings
   assign current = closest.product | default: product
 
+  # Collection handles live in snippets/pp-config (not in settings), so translation apps cannot change them
+  capture women_handle
+    render 'pp-config', key: 'women_handle'
+  endcapture
+  capture men_handle
+    render 'pp-config', key: 'men_handle'
+  endcapture
+  assign women_handle = women_handle | strip
+  assign men_handle = men_handle | strip
+
   # Same-gender collection: the first configured collection the product belongs to
   assign source = blank
   assign see_all_key = 'see_all'
   for c in current.collections
-    if ss.men_handle != blank and c.handle == ss.men_handle
+    if men_handle != blank and c.handle == men_handle
       assign source = c
       assign see_all_key = 'see_all_men'
       break
-    elsif ss.women_handle != blank and c.handle == ss.women_handle
+    elsif women_handle != blank and c.handle == women_handle
       assign source = c
       assign see_all_key = 'see_all_women'
       break
@@ -279,28 +289,26 @@
   "name": "PP Mix & match",
   "tag": "section",
   "blocks": [
-    { "type": "@theme" },
-    { "type": "@app" },
-    { "type": "text" },
-    { "type": "group" },
-    { "type": "spacer" }
+    {
+      "type": "@theme"
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "group"
+    },
+    {
+      "type": "spacer"
+    }
   ],
   "settings": [
     {
       "type": "paragraph",
       "content": "Shows products from the same collection as the current product (men or women). Tiers must match the store discount."
-    },
-    {
-      "type": "text",
-      "id": "men_handle",
-      "label": "Men collection handle",
-      "default": "mezczyzni"
-    },
-    {
-      "type": "text",
-      "id": "women_handle",
-      "label": "Women collection handle",
-      "default": "kobiety"
     },
     {
       "type": "collection",
@@ -352,9 +360,18 @@
       "id": "icons_style",
       "label": "Arrows",
       "options": [
-        { "value": "arrow", "label": "Arrows" },
-        { "value": "chevron", "label": "Chevrons" },
-        { "value": "none", "label": "None" }
+        {
+          "value": "arrow",
+          "label": "Arrows"
+        },
+        {
+          "value": "chevron",
+          "label": "Chevrons"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
       ],
       "default": "arrow"
     },
@@ -363,9 +380,18 @@
       "id": "icons_shape",
       "label": "Arrow shape",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "circle", "label": "Circle" },
-        { "value": "square", "label": "Square" }
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
       ],
       "default": "none"
     },
@@ -374,8 +400,14 @@
       "id": "section_width",
       "label": "Width",
       "options": [
-        { "value": "page-width", "label": "Page" },
-        { "value": "full-width", "label": "Full" }
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
       ],
       "default": "page-width"
     },

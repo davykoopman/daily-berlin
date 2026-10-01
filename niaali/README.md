@@ -23,6 +23,7 @@ Herbruikbare productpagina-opzet ("PP-kit") voor alle stores. Gebouwd en getest 
 | `theme/sections/pp-home-categories.liquid` | Homepage: subcollecties als fototegels met een Kobiety/Mężczyźni-schakelaar, één swipebare rij (6 per rij op desktop), laatste tegel linkt naar de hoofdcollectie. Foto = collectieafbeelding, of de eerste productfoto als de collectie er geen heeft |
 | `theme/sections/pp-home-best.liquid` | Homepage: bestsellers (volgorde van de collectie, staat op Best verkocht) met dezelfde Kobiety/Mężczyźni-schakelaar, staffel-voortgangsbalk en dezelfde kaartjes als "Łącz i oszczędzaj" |
 | `theme/snippets/pp-gender-tabs.liquid` | Kobiety/Mężczyźni-schakelaar voor de homepage. De keuze geldt voor alle secties op de pagina en wordt per bezoek onthouden |
+| `theme/snippets/pp-config.liquid` | Winkelinstellingen voor de pp-secties: handles van de heren-/damescollectie, de subcollecties (en hun volgorde) en de woorden die uit categorielabels worden gehaald. Staat in code in plaats van in de sectie-instellingen, zodat vertaalapps (T-Lab) de handles niet kunnen vertalen. Per winkel aanpassen |
 | `theme/templates/index.json` | Homepage: banner → trust-punten → categorieën → bestsellers → O nas → FAQ (FAQ in lijn met de policies) |
 | `theme/templates/collection.json` | Collectie-template: PP Collection heading + productgrid (kaarten zonder inspringing, 4:5 foto's) |
 | `theme/templates/product.json` | Volgorde: titel → prijs → bullets → kleuren → maten → zwarte Add to cart → betaaliconen (automatisch, wat actief is) |

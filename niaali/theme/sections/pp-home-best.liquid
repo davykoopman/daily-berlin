@@ -19,8 +19,17 @@
       assign title = 'Bestsellers'
   endcase
 
-  assign women = collections[ss.women_handle]
-  assign men = collections[ss.men_handle]
+  # Collection handles live in snippets/pp-config (not in settings), so translation apps cannot change them
+  capture women_handle
+    render 'pp-config', key: 'women_handle'
+  endcapture
+  capture men_handle
+    render 'pp-config', key: 'men_handle'
+  endcapture
+  assign women_handle = women_handle | strip
+  assign men_handle = men_handle | strip
+  assign women = collections[women_handle]
+  assign men = collections[men_handle]
 
   capture styles
     echo '--resource-list-column-gap-desktop: ' | append: ss.columns_gap | append: 'px;'
@@ -135,18 +144,6 @@
       "content": "Best selling products for women and men with a switch. Products follow the collection sort order (set the collections to Best selling)."
     },
     {
-      "type": "text",
-      "id": "women_handle",
-      "label": "Women collection handle",
-      "default": "kobiety"
-    },
-    {
-      "type": "text",
-      "id": "men_handle",
-      "label": "Men collection handle",
-      "default": "mezczyzni"
-    },
-    {
       "type": "checkbox",
       "id": "show_tiers",
       "label": "Show bundle progress bar",
@@ -191,9 +188,18 @@
       "id": "icons_style",
       "label": "Arrows",
       "options": [
-        { "value": "arrow", "label": "Arrows" },
-        { "value": "chevron", "label": "Chevrons" },
-        { "value": "none", "label": "None" }
+        {
+          "value": "arrow",
+          "label": "Arrows"
+        },
+        {
+          "value": "chevron",
+          "label": "Chevrons"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
       ],
       "default": "arrow"
     },
@@ -202,9 +208,18 @@
       "id": "icons_shape",
       "label": "Arrow shape",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "circle", "label": "Circle" },
-        { "value": "square", "label": "Square" }
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
       ],
       "default": "none"
     },
@@ -213,8 +228,14 @@
       "id": "section_width",
       "label": "Width",
       "options": [
-        { "value": "page-width", "label": "Page" },
-        { "value": "full-width", "label": "Full" }
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
       ],
       "default": "page-width"
     },

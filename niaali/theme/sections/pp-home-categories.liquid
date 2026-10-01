@@ -19,11 +19,29 @@
       assign title = 'Shop by category'
   endcase
 
-  assign women = collections[ss.women_handle]
-  assign men = collections[ss.men_handle]
-  assign women_list = ss.women_chips | remove: ' ' | split: ','
-  assign men_list = ss.men_chips | remove: ' ' | split: ','
-  assign strip_words = ss.strip_words | split: ','
+  # Collection handles live in snippets/pp-config (not in settings), so translation apps cannot change them
+  capture women_handle
+    render 'pp-config', key: 'women_handle'
+  endcapture
+  capture men_handle
+    render 'pp-config', key: 'men_handle'
+  endcapture
+  assign women_handle = women_handle | strip
+  assign men_handle = men_handle | strip
+  capture women_csv
+    render 'pp-config', key: 'women_list'
+  endcapture
+  capture men_csv
+    render 'pp-config', key: 'men_list'
+  endcapture
+  capture strip_csv
+    render 'pp-config', key: 'strip_words'
+  endcapture
+  assign women = collections[women_handle]
+  assign men = collections[men_handle]
+  assign women_list = women_csv | strip | split: ','
+  assign men_list = men_csv | strip | split: ','
+  assign strip_words = strip_csv | strip | split: ','
 -%}
 
 <div class="pp-home-cat color-{{ ss.color_scheme }}" data-pp-gender-root>
@@ -321,35 +339,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Sub collections for women and men with a switch. Tiles use the collection image, or the first product photo when the collection has no image. Texts follow the storefront language."
-    },
-    {
-      "type": "text",
-      "id": "women_handle",
-      "label": "Women collection handle",
-      "default": "kobiety"
-    },
-    {
-      "type": "textarea",
-      "id": "women_chips",
-      "label": "Women category handles (comma separated, in order)"
-    },
-    {
-      "type": "text",
-      "id": "men_handle",
-      "label": "Men collection handle",
-      "default": "mezczyzni"
-    },
-    {
-      "type": "textarea",
-      "id": "men_chips",
-      "label": "Men category handles (comma separated, in order)"
-    },
-    {
-      "type": "textarea",
-      "id": "strip_words",
-      "label": "Words removed from tile labels (comma separated)",
-      "default": " męskie, męski, męska, damskie, damski, damska,Men's ,Men’s ,Women's ,Women’s "
+      "content": "Sub collections for women and men with a switch. Tiles use the collection image, or the first product photo when the collection has no image. Texts follow the storefront language. The collections and their order are set in snippets/pp-config."
     },
     {
       "type": "color_scheme",

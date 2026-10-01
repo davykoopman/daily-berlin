@@ -19,21 +19,40 @@
       assign all_label = 'All'
   endcase
 
+  # Collection handles live in snippets/pp-config (not in settings), so translation apps cannot change them
+  capture women_handle
+    render 'pp-config', key: 'women_handle'
+  endcapture
+  capture men_handle
+    render 'pp-config', key: 'men_handle'
+  endcapture
+  assign women_handle = women_handle | strip
+  assign men_handle = men_handle | strip
+  capture women_csv
+    render 'pp-config', key: 'women_list'
+  endcapture
+  capture men_csv
+    render 'pp-config', key: 'men_list'
+  endcapture
+  capture strip_csv
+    render 'pp-config', key: 'strip_words'
+  endcapture
+
   # Which group (men / women) this collection belongs to
-  assign men_list = ss.men_chips | remove: ' ' | split: ','
-  assign women_list = ss.women_chips | remove: ' ' | split: ','
+  assign men_list = men_csv | strip | split: ','
+  assign women_list = women_csv | strip | split: ','
   assign group_parent = blank
   assign group_list = blank
-  if collection.handle == ss.men_handle or men_list contains collection.handle
-    assign group_parent = collections[ss.men_handle]
+  if collection.handle == men_handle or men_list contains collection.handle
+    assign group_parent = collections[men_handle]
     assign group_list = men_list
-  elsif collection.handle == ss.women_handle or women_list contains collection.handle
-    assign group_parent = collections[ss.women_handle]
+  elsif collection.handle == women_handle or women_list contains collection.handle
+    assign group_parent = collections[women_handle]
     assign group_list = women_list
   endif
 
   # Words removed from chip labels, so "Kurtki męskie" / "Men's jackets" become "Kurtki" / "Jackets"
-  assign strip_words = ss.strip_words | split: ','
+  assign strip_words = strip_csv | strip | split: ','
 -%}
 
 <div class="pp-collection-head color-{{ ss.color_scheme }}">
@@ -329,7 +348,9 @@
   "name": "PP Collection heading",
   "tag": "section",
   "enabled_on": {
-    "templates": ["collection"]
+    "templates": [
+      "collection"
+    ]
   },
   "settings": [
     {
@@ -347,34 +368,6 @@
       "id": "tiers",
       "label": "Bundle tiers (quantity:percent, match the store discount)",
       "default": "2:10,3:15,4:20"
-    },
-    {
-      "type": "text",
-      "id": "men_handle",
-      "label": "Men collection handle",
-      "default": "mezczyzni"
-    },
-    {
-      "type": "textarea",
-      "id": "men_chips",
-      "label": "Men category handles (comma separated, in order)"
-    },
-    {
-      "type": "text",
-      "id": "women_handle",
-      "label": "Women collection handle",
-      "default": "kobiety"
-    },
-    {
-      "type": "textarea",
-      "id": "women_chips",
-      "label": "Women category handles (comma separated, in order)"
-    },
-    {
-      "type": "textarea",
-      "id": "strip_words",
-      "label": "Words removed from button labels (comma separated)",
-      "default": " męskie, męski, męska, damskie, damski, damska,Men's ,Men’s ,Women's ,Women’s "
     },
     {
       "type": "color_scheme",
