@@ -69,21 +69,21 @@
   <div class="pp-steps__inner">
     <h2 class="pp-steps__heading">{{ heading }}</h2>
     <ol class="pp-steps__list" role="list">
-      <li class="pp-steps__item">
+      <li class="pp-steps__item" data-pp-reveal style="--pp-delay: 0ms;">
         <span class="pp-steps__num" aria-hidden="true">1</span>
         <div>
           <p class="pp-steps__title">{{ t1 }}</p>
           <p class="pp-steps__text">{{ s1 }}</p>
         </div>
       </li>
-      <li class="pp-steps__item">
+      <li class="pp-steps__item" data-pp-reveal style="--pp-delay: 90ms;">
         <span class="pp-steps__num" aria-hidden="true">2</span>
         <div>
           <p class="pp-steps__title">{{ t2 }}</p>
           <p class="pp-steps__text">{{ s2 }}</p>
         </div>
       </li>
-      <li class="pp-steps__item">
+      <li class="pp-steps__item" data-pp-reveal style="--pp-delay: 180ms;">
         <span class="pp-steps__num" aria-hidden="true">3</span>
         <div>
           <p class="pp-steps__title">{{ t3 }}</p>
@@ -93,6 +93,8 @@
     </ol>
   </div>
 </div>
+
+{% render 'pp-reveal' %}
 
 {% stylesheet %}
   .pp-steps {

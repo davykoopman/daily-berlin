@@ -605,7 +605,7 @@
       ]
     },
     "product_recommendations_UeDczP": {
-      "type": "product-recommendations",
+      "type": "pp-bundle",
       "blocks": {
         "text_hT9TEm": {
           "type": "text",
@@ -763,53 +763,24 @@
             "product_card_gallery_7qMAmF",
             "group_4V7yPa"
           ]
-        },
-        "text_pp_tiers": {
-          "type": "text",
-          "name": "Tiers",
-          "settings": {
-            "text": "<p>Kup 2 = <strong>-10%</strong> · 3 = <strong>-15%</strong> · 4 = <strong>-20%</strong></p>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 4,
-            "padding-inline-start": 10,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
         }
       },
       "block_order": [
-        "text_hT9TEm",
-        "text_pp_tiers"
+        "text_hT9TEm"
       ],
-      "name": "t:names.product_recommendations",
+      "name": "PP Mix & match",
       "settings": {
-        "product": "{{ closest.product }}",
-        "recommendation_type": "related",
-        "layout_type": "carousel",
-        "carousel_on_mobile": false,
-        "max_products": 10,
+        "men_handle": "mezczyzni",
+        "women_handle": "kobiety",
+        "tiers": "2:10,3:15,4:20",
+        "show_see_all": true,
+        "max_products": 8,
         "columns": 4,
-        "mobile_columns": "2",
         "columns_gap": 12,
-        "rows_gap": 36,
         "icons_style": "arrow",
         "icons_shape": "none",
         "section_width": "page-width",
-        "gap": 0,
+        "gap": 16,
         "color_scheme": "scheme-1",
         "padding-block-start": 20,
         "padding-block-end": 20

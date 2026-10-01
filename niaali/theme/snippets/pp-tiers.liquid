@@ -1,0 +1,67 @@
+{%- doc -%}
+  Renders the bundle discount tiers (matches the store's quantity discount).
+
+  @param {string} tiers - Comma separated "quantity:percent" pairs, e.g. "2:10,3:15,4:20"
+  @param {string} [style] - "chips" (default) or "inline"
+{%- enddoc -%}
+
+{%- liquid
+  assign style = style | default: 'chips'
+  capture unit
+    render 'pp-i18n', key: 'unit'
+  endcapture
+  assign unit = unit | strip
+  assign pairs = tiers | default: '2:10,3:15,4:20' | split: ','
+-%}
+
+{%- if style == 'inline' -%}
+  <span class="pp-tiers pp-tiers--inline">
+    {%- for pair in pairs -%}
+      {%- assign p = pair | strip | split: ':' -%}
+      <span class="pp-tiers__item">{{ p[0] }} {{ unit }} <strong>-{{ p[1] }}%</strong></span>
+      {%- unless forloop.last %}<span class="pp-tiers__sep" aria-hidden="true"> · </span>{% endunless -%}
+    {%- endfor -%}
+  </span>
+{%- else -%}
+  <ul class="pp-tiers pp-tiers--chips" role="list">
+    {%- for pair in pairs -%}
+      {%- assign p = pair | strip | split: ':' -%}
+      <li class="pp-tiers__chip">{{ p[0] }} {{ unit }} <strong>-{{ p[1] }}%</strong></li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-tiers--chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-tiers__chip {
+    padding: 5px 10px;
+    border-radius: 4px;
+    background: #fbeaea;
+    color: #c20000;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .pp-tiers strong {
+    color: #c20000;
+    font-weight: 700;
+  }
+
+  .pp-tiers--inline {
+    white-space: normal;
+  }
+
+  .pp-tiers__item {
+    white-space: nowrap;
+  }
+{% endstylesheet %}

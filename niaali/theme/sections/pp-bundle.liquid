@@ -1,0 +1,301 @@
+{%- liquid
+  assign ss = section.settings
+  assign current = closest.product | default: product
+
+  # Same-gender collection: the first configured collection the product belongs to
+  assign source = blank
+  assign see_all_key = 'see_all'
+  for c in current.collections
+    if ss.men_handle != blank and c.handle == ss.men_handle
+      assign source = c
+      assign see_all_key = 'see_all_men'
+      break
+    elsif ss.women_handle != blank and c.handle == ss.women_handle
+      assign source = c
+      assign see_all_key = 'see_all_women'
+      break
+    endif
+  endfor
+  if source == blank
+    assign source = ss.fallback_collection | default: collections.all
+  endif
+
+  capture styles
+    echo '--resource-list-column-gap-desktop: ' | append: ss.columns_gap | append: 'px;'
+    echo '--resource-list-columns: repeat(' | append: ss.columns | append: ', 1fr);'
+    echo '--column-count: ' | append: ss.columns | append: ';'
+  endcapture
+
+  capture see_all_label
+    render 'pp-i18n', key: see_all_key
+  endcapture
+-%}
+
+<div class="section-background color-{{ ss.color_scheme }}"></div>
+<div
+  class="section section--{{ ss.section_width }} color-{{ ss.color_scheme }} section-resource-list spacing-style gap-style pp-bundle"
+  style="{% render 'spacing-style', settings: ss %} {% render 'gap-style', value: ss.gap %} {{ styles }}"
+>
+  <div class="pp-bundle__head">
+    <div class="section-resource-list__content pp-bundle__title">
+      {% content_for 'blocks' %}
+    </div>
+    {% render 'pp-tiers', tiers: ss.tiers, style: 'chips' %}
+  </div>
+
+  {% capture list_items %}
+    {%- assign shown = 0 -%}
+    {% for item in source.products %}
+      {%- if item.id == current.id or item.available == false -%}{%- continue -%}{%- endif -%}
+      {%- if shown >= ss.max_products -%}{%- break -%}{%- endif -%}
+      {%- assign shown = shown | plus: 1 -%}
+      <div class="resource-list__item">
+        {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: item %}
+      </div>
+      <!--@list/split-->
+    {% endfor %}
+    {%- if ss.show_see_all -%}
+      <div class="resource-list__item">
+        <a class="pp-bundle__all" href="{{ source.url }}">
+          <span class="pp-bundle__all-text">{{ see_all_label | strip }}</span>
+          <span class="pp-bundle__all-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    {%- endif -%}
+  {% endcapture %}
+
+  {% liquid
+    assign slide_content = list_items | strip
+    assign slides = slide_content | split: '<!--@list/split-->'
+  %}
+
+  <div class="resource-list force-full-width resource-list__carousel">
+    {% render 'resource-list-carousel',
+      ref: 'resourceListCarousel',
+      slides: slides,
+      slide_count: slides.size,
+      settings: ss
+    %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .pp-bundle__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+  }
+
+  .pp-bundle__title {
+    flex: 0 1 auto;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-bundle__head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .pp-bundle__head .pp-tiers--chips {
+      padding-inline-start: 10px;
+    }
+  }
+
+  .pp-bundle__all {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 10px;
+    height: 100%;
+    min-height: 280px;
+    aspect-ratio: 4 / 5;
+    padding: 20px;
+    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.15);
+    border-radius: 2px;
+    color: var(--color-foreground);
+    text-decoration: none;
+    transition: background-color 0.25s ease;
+  }
+
+  .pp-bundle__all-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .pp-bundle__all-arrow {
+    font-size: 1.5rem;
+    transition: transform 0.25s ease;
+  }
+
+  .pp-bundle__all:hover {
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.04);
+  }
+
+  .pp-bundle__all:hover .pp-bundle__all-arrow {
+    transform: translateX(6px);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .pp-bundle .product-card {
+      transition: transform 0.25s ease;
+    }
+
+    .pp-bundle .product-card:hover {
+      transform: translateY(-4px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Mix & match",
+  "tag": "section",
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" },
+    { "type": "text" },
+    { "type": "group" },
+    { "type": "spacer" }
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows products from the same collection as the current product (men or women). Tiers must match the store discount."
+    },
+    {
+      "type": "text",
+      "id": "men_handle",
+      "label": "Men collection handle",
+      "default": "mezczyzni"
+    },
+    {
+      "type": "text",
+      "id": "women_handle",
+      "label": "Women collection handle",
+      "default": "kobiety"
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback collection (unisex products)"
+    },
+    {
+      "type": "text",
+      "id": "tiers",
+      "label": "Bundle tiers (quantity:percent)",
+      "default": "2:10,3:15,4:20"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_see_all",
+      "label": "Show link to full collection",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Products",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "icons_style",
+      "label": "Arrows",
+      "options": [
+        { "value": "arrow", "label": "Arrows" },
+        { "value": "chevron", "label": "Chevrons" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "arrow"
+    },
+    {
+      "type": "select",
+      "id": "icons_shape",
+      "label": "Arrow shape",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "circle", "label": "Circle" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between heading and products",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Mix & match"
+    }
+  ]
+}
+{% endschema %}

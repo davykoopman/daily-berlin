@@ -114,6 +114,12 @@
     text-decoration: underline;
   }
 
+  /* Product page kit: sale price in the cart, bold and red like on the product page */
+  .pp-sale-price {
+    color: #c20000;
+    font-weight: 700;
+  }
+
   /* Product page kit: keep payment icons on one row on phones */
   @media screen and (max-width: 749px) {
     .product-information .payment-icons__list {
@@ -129,7 +135,8 @@
 
   /* Product page kit: quick add in the Mix & match section on phones */
   @media screen and (max-width: 749px) {
-    product-recommendations .quick-add {
+    product-recommendations .quick-add,
+    .pp-bundle .quick-add {
       --quick-add-mobile-display: flex;
       --quick-add-mobile-opacity: 1;
     }
