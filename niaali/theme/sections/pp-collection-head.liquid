@@ -1,0 +1,381 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign all_label = 'Wszystko'
+    when 'nl'
+      assign all_label = 'Alles'
+    when 'de'
+      assign all_label = 'Alle'
+    when 'fr'
+      assign all_label = 'Tout'
+    when 'it'
+      assign all_label = 'Tutto'
+    when 'es'
+      assign all_label = 'Todo'
+    else
+      assign all_label = 'All'
+  endcase
+
+  # Which group (men / women) this collection belongs to
+  assign men_list = ss.men_chips | remove: ' ' | split: ','
+  assign women_list = ss.women_chips | remove: ' ' | split: ','
+  assign group_parent = blank
+  assign group_list = blank
+  if collection.handle == ss.men_handle or men_list contains collection.handle
+    assign group_parent = collections[ss.men_handle]
+    assign group_list = men_list
+  elsif collection.handle == ss.women_handle or women_list contains collection.handle
+    assign group_parent = collections[ss.women_handle]
+    assign group_list = women_list
+  endif
+
+  # Words removed from chip labels, so "Kurtki męskie" / "Men's jackets" become "Kurtki" / "Jackets"
+  assign strip_words = ss.strip_words | split: ','
+-%}
+
+<div class="pp-collection-head color-{{ ss.color_scheme }}">
+  <div class="pp-collection-head__inner">
+    <h1 class="pp-collection-head__title">{{ collection.title }}</h1>
+
+    {%- if ss.show_tiers -%}
+      <div class="pp-collection-head__tiers">
+        {% render 'pp-tier-progress', tiers: ss.tiers %}
+      </div>
+    {%- endif -%}
+
+    {%- if group_parent != blank and group_list.size > 0 -%}
+      <nav class="pp-chips" aria-label="{{ group_parent.title | escape }}">
+        <ul class="pp-chips__list" role="list">
+          <li>
+            <a
+              class="pp-chip{% if collection.handle == group_parent.handle %} is-active{% endif %}"
+              href="{{ group_parent.url }}"
+              {% if collection.handle == group_parent.handle %}aria-current="page"{% endif %}
+            >
+              {{- all_label -}}
+            </a>
+          </li>
+          {%- for handle in group_list -%}
+            {%- assign c = collections[handle] -%}
+            {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+            {%- liquid
+              assign label = c.title
+              for w in strip_words
+                assign word = w | strip
+                if word != blank
+                  assign label = label | replace: word, ''
+                endif
+              endfor
+              assign label = label | strip
+              assign first = label | slice: 0 | upcase
+              assign rest = label | slice: 1, 200
+              assign label = first | append: rest
+            -%}
+            <li>
+              <a
+                class="pp-chip{% if collection.handle == c.handle %} is-active{% endif %}"
+                href="{{ c.url }}"
+                {% if collection.handle == c.handle %}aria-current="page"{% endif %}
+              >
+                {{- label -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .pp-collection-head {
+    padding-block: 32px 20px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .pp-collection-head__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    padding-inline: var(--page-margin, 40px);
+    text-align: center;
+  }
+
+  .pp-collection-head__title {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
+  .pp-collection-head__tiers {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .pp-collection-head__tiers .pp-tierbar {
+    max-width: 420px;
+  }
+
+  .pp-chips {
+    width: 100%;
+  }
+
+  .pp-chips__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.2);
+    border-radius: 999px;
+    color: var(--color-foreground);
+    font-size: 0.875rem;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .pp-chip:hover {
+    border-color: var(--color-foreground-heading, #030302);
+  }
+
+  .pp-chip.is-active {
+    border-color: var(--color-foreground-heading, #030302);
+    background: var(--color-foreground-heading, #030302);
+    color: var(--color-background, #fff);
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-collection-head {
+      padding-block: 20px 12px;
+    }
+
+    .pp-collection-head__inner {
+      gap: 12px;
+      padding-inline: 16px;
+    }
+
+    .pp-collection-head__title {
+      font-size: 1.5rem;
+    }
+
+    /* One swipeable row on phones, bleeding to the screen edge */
+    .pp-chips {
+      margin-inline: -16px;
+      width: calc(100% + 32px);
+    }
+
+    .pp-chips__list {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-inline: 16px;
+      scrollbar-width: none;
+      scroll-snap-type: x proximity;
+    }
+
+    .pp-chips__list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pp-chips__list li {
+      scroll-snap-align: start;
+    }
+
+    .pp-chip {
+      height: 34px;
+      padding: 0 14px;
+      font-size: 0.8125rem;
+    }
+  }
+  /* Collection grid: clean, aligned cards (same look as the product page) */
+  .main-collection-grid .product-badges {
+    display: none;
+  }
+
+  @media screen and (min-width: 990px) {
+    .main-collection-grid .product-grid:not([product-grid-view='zoom-out']) {
+      --product-grid-columns-desktop: repeat(4, minmax(0, 1fr)) !important;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .main-collection-grid .product-grid:not([product-grid-view='zoom-out']) {
+      --product-grid-columns-desktop: repeat(3, minmax(0, 1fr)) !important;
+    }
+  }
+
+  /* Title always one line */
+  .main-collection-grid .product-grid__card [class*='product_title'] {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .main-collection-grid .product-grid__card [class*='product_title'],
+  .main-collection-grid .product-grid__card [class*='product_title'] * {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* Price, compare-at price and badge on one line */
+  .main-collection-grid .product-grid__card [ref='priceContainer'] {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .main-collection-grid .product-grid__card .save-price {
+    margin-left: 2px;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+
+  /* Colour swatches: one fixed-height row, so every card lines up */
+  .main-collection-grid .product-grid__card variant-swatch-king {
+    display: block;
+    height: 28px;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .swatches {
+    margin: 0 !important;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .swatch-view {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    margin: 0 !important;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .swatch-view-item,
+  .main-collection-grid .product-grid__card variant-swatch-king .swatch-image-wrapper {
+    width: 28px !important;
+    height: 28px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .swatch-image,
+  .main-collection-grid .product-grid__card variant-swatch-king .star-set-image {
+    width: 26px !important;
+    height: 26px !important;
+    margin: 1px !important;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .minification-text {
+    font-size: 12px;
+    line-height: 26px;
+  }
+
+  .main-collection-grid .product-grid__card:not(:has(variant-swatch-king)) > .group-block {
+    margin-top: 38px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-collection-grid .product-grid {
+      --product-grid-gap: 28px 12px;
+    }
+
+    .main-collection-grid .product-grid__card [class*='product_title'],
+    .main-collection-grid .product-grid__card [class*='product_title'] *,
+    .main-collection-grid .product-grid__card [ref='priceContainer'] {
+      font-size: 0.8125rem;
+    }
+
+    .main-collection-grid .product-grid__card .save-price {
+      padding: 2px 5px;
+      font-size: 11px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Collection heading",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Title, bundle progress bar and category buttons. Texts follow the storefront language; chip labels use the (translated) collection titles."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tiers",
+      "label": "Show bundle progress bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tiers",
+      "label": "Bundle tiers (quantity:percent, match the store discount)",
+      "default": "2:10,3:15,4:20"
+    },
+    {
+      "type": "text",
+      "id": "men_handle",
+      "label": "Men collection handle",
+      "default": "mezczyzni"
+    },
+    {
+      "type": "textarea",
+      "id": "men_chips",
+      "label": "Men category handles (comma separated, in order)"
+    },
+    {
+      "type": "text",
+      "id": "women_handle",
+      "label": "Women collection handle",
+      "default": "kobiety"
+    },
+    {
+      "type": "textarea",
+      "id": "women_chips",
+      "label": "Women category handles (comma separated, in order)"
+    },
+    {
+      "type": "textarea",
+      "id": "strip_words",
+      "label": "Words removed from button labels (comma separated)",
+      "default": " męskie, męski, męska, damskie, damski, damska,Men's ,Men’s ,Women's ,Women’s "
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Collection heading"
+    }
+  ]
+}
+{% endschema %}

@@ -19,6 +19,8 @@ Herbruikbare productpagina-opzet ("PP-kit") voor alle stores. Gebouwd en getest 
 | `theme/sections/header-group.json` | Aankondigingsbalk: 3 wisselende berichten (gratis verzending, staffelkorting, retourdagen), om de 4 sec, op mobiel 1 regel. Teksten per store aanpassen aan de echte staffel en policy, vertalen via *Translate & Adapt* |
 | `theme/sections/pp-trust.liquid` | Iconenrij met 4 garanties (verzending, retour + ruilen, veilig betalen, klantenservice met echte openingstijden, klikbaar naar e-mail). Instellingen: retourdagen, e-mail (leeg = store-e-mail), openingstijden en tijdzone (wordt in andere talen dan de hoofdtaal getoond, bv. "(CET)" op /gb). Teksten kort gehouden zodat alles op 1 regel past |
 | `theme/sections/pp-steps.liquid` | "Zo werkt het" in 3 stappen (bestellen, thuis passen, niet goed = retour/ruilen). Instellingen: verzenddagen en retourdagen |
+| `theme/sections/pp-collection-head.liquid` | Collectiepagina: compacte titel, staffel-voortgangsbalk en categorieknoppen (heren/dames, actieve knop zwart, op mobiel swipebaar). Bevat ook de CSS voor het productgrid: 4 kolommen desktop / 2 mobiel binnen paginabreedte, geen "W PROMOCJI"-labels, titel/prijs/kleuren altijd op 1 regel. Instellingen: collectie-handles per groep en woorden die uit de knoplabels worden gehaald |
+| `theme/templates/collection.json` | Collectie-template: PP Collection heading + productgrid (kaarten zonder inspringing, 4:5 foto's) |
 | `theme/templates/product.json` | Volgorde: titel → prijs → bullets → kleuren → maten → zwarte Add to cart → betaaliconen (automatisch, wat actief is) |
 | `*.original.*` | Back-up van de bestanden vóór de wijziging |
 
