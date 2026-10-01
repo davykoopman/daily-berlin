@@ -1,0 +1,88 @@
+{%- doc -%}
+  Translations for the product page kit (pp-*). Picks the text by the
+  language the storefront is viewed in, falls back to English.
+
+  @param {string} key - free_shipping | money_back | buy_more | save
+  @param {number} [n] - Number placed in the text (days or percent)
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign text = ''
+
+  case key
+    when 'free_shipping'
+      case lang
+        when 'pl'
+          assign text = 'Darmowa dostawa'
+        when 'nl'
+          assign text = 'Gratis verzending'
+        when 'de'
+          assign text = 'Kostenloser Versand'
+        when 'fr'
+          assign text = 'Livraison gratuite'
+        when 'it'
+          assign text = 'Spedizione gratuita'
+        when 'es'
+          assign text = 'Envío gratis'
+        else
+          assign text = 'Free shipping'
+      endcase
+
+    when 'money_back'
+      case lang
+        when 'pl'
+          assign text = '[n]-dniowa gwarancja zwrotu pieniędzy'
+        when 'nl'
+          assign text = '[n] dagen niet-goed-geld-terug-garantie'
+        when 'de'
+          assign text = '[n] Tage Geld-zurück-Garantie'
+        when 'fr'
+          assign text = 'Satisfait ou remboursé pendant [n] jours'
+        when 'it'
+          assign text = 'Soddisfatti o rimborsati entro [n] giorni'
+        when 'es'
+          assign text = 'Garantía de devolución de [n] días'
+        else
+          assign text = '[n]-Day Money-Back Guarantee'
+      endcase
+
+    when 'buy_more'
+      case lang
+        when 'pl'
+          assign text = 'Kup więcej, oszczędzaj więcej!'
+        when 'nl'
+          assign text = 'Koop meer, bespaar meer!'
+        when 'de'
+          assign text = 'Mehr kaufen, mehr sparen!'
+        when 'fr'
+          assign text = 'Achetez plus, économisez plus !'
+        when 'it'
+          assign text = 'Compra di più, risparmia di più!'
+        when 'es'
+          assign text = '¡Compra más, ahorra más!'
+        else
+          assign text = 'Buy more, Save more!'
+      endcase
+
+    when 'save'
+      case lang
+        when 'pl'
+          assign text = 'Oszczędzasz [n]%'
+        when 'nl'
+          assign text = 'Bespaar [n]%'
+        when 'de'
+          assign text = 'Spare [n] %'
+        when 'fr'
+          assign text = 'Économisez [n] %'
+        when 'it'
+          assign text = 'Risparmi il [n]%'
+        when 'es'
+          assign text = 'Ahorra un [n] %'
+        else
+          assign text = 'Save [n]%'
+      endcase
+  endcase
+
+  echo text | replace: '[n]', n
+-%}

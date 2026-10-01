@@ -1,0 +1,140 @@
+{%- liquid
+  assign bs = block.settings
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+-%}
+
+<ul class="pp-benefits" role="list" {{ block.shopify_attributes }}>
+  {%- if bs.show_shipping -%}
+    <li class="pp-benefit">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/>
+        <circle cx="6.5" cy="17.25" r="1.75"/>
+        <circle cx="16.75" cy="17.25" r="1.75"/>
+      </svg>
+      <span>{% render 'pp-i18n', key: 'free_shipping' %}</span>
+    </li>
+  {%- endif -%}
+
+  {%- if bs.show_guarantee -%}
+    <li class="pp-benefit">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 3l7.5 3v5.5c0 4.5-3.2 8.3-7.5 9.5-4.3-1.2-7.5-5-7.5-9.5V6L12 3z"/>
+        <path d="M8.75 12.25l2.25 2.25 4.25-4.5"/>
+      </svg>
+      {%- capture guarantee -%}{% render 'pp-i18n', key: 'money_back', n: bs.return_days %}{%- endcapture -%}
+      {%- if shop.refund_policy != blank -%}
+        <a class="pp-benefit__link" href="{{ root }}{{ shop.refund_policy.url }}">{{ guarantee }}</a>
+      {%- else -%}
+        <span>{{ guarantee }}</span>
+      {%- endif -%}
+    </li>
+  {%- endif -%}
+
+  {%- if bs.show_buy_more -%}
+    <li class="pp-benefit">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M3.5 12.6V4.5a1 1 0 0 1 1-1h8.1a1 1 0 0 1 .7.3l7.4 7.4a1 1 0 0 1 0 1.4l-8.1 8.1a1 1 0 0 1-1.4 0l-7.4-7.4a1 1 0 0 1-.3-.7z"/>
+        <circle cx="8" cy="8" r="1.5"/>
+      </svg>
+      <span>{% render 'pp-i18n', key: 'buy_more' %}</span>
+    </li>
+  {%- endif -%}
+</ul>
+
+{% stylesheet %}
+  .pp-benefits {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--color-foreground);
+  }
+
+  .pp-benefit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pp-benefit__icon {
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pp-benefit__link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .pp-benefit__link:hover {
+    text-decoration: underline;
+  }
+
+  /* Product page kit: keep payment icons on one row on phones */
+  @media screen and (max-width: 749px) {
+    .product-information .payment-icons__list {
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+
+    .product-information .payment-icons__item svg {
+      width: 31px;
+      height: 20px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Benefits",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Texts are translated automatically by storefront language."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping",
+      "label": "Show free shipping",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee",
+      "label": "Show money-back guarantee",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Return period in days (match the refund policy)",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_more",
+      "label": "Show buy more, save more",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Benefits",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
