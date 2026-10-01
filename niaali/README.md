@@ -11,7 +11,7 @@ Herbruikbare productpagina-opzet ("PP-kit") voor alle stores. Gebouwd en getest 
 | `theme/snippets/pp-i18n.liquid` | Vertalingen voor de kit op basis van de taal van de bezoeker (pl, en, nl, de, fr, it, es; anders Engels) |
 | `theme/snippets/price1.liquid` | Prijs: kortingsprijs vet en rood, normale prijs zwart, rood -X%-vakje uit de compare-at-prijs |
 | `theme/snippets/cart-products.liquid` | Winkelwagen: kortingsprijs vet en rood (klasse `pp-sale-price`, CSS in `pp-benefits`) |
-| `theme/snippets/pp-tier-progress.liquid` | Staffel-voortgangsbalk in Mix & match: leest het aantal producten in de winkelwagen en toont live "Dodaj jeszcze 1 produkt i oszczędź 10%" (eerlijke urgency). Instelling `2:10,3:15,4:20` gelijk aan de kortings-app |
+| `theme/snippets/pp-tier-progress.liquid` | Staffel-voortgangsbalk in Mix & match: leest het aantal producten in de winkelwagen en toont live "Dodaj jeszcze 1 produkt i oszczędź 10%" met een dunne balk in 3 stappen, zonder labels (eerlijke urgency). Instelling `2:10,3:15,4:20` gelijk aan de kortings-app |
 | `theme/snippets/pp-tiers.liquid` | (Niet meer in gebruik) staffel als labels |
 | `theme/snippets/pp-reveal.liquid` | Rustig verschijnen bij scrollen (iconenrij en stappen), uit bij "minder beweging" |
 | `theme/sections/pp-bundle.liquid` | Mix & match: producten uit dezelfde collectie (heren/dames via collectie-handle), staffel-voortgangsbalk onder de kop, tegel "Bekijk hele collectie", kaart-hover op desktop |

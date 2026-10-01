@@ -84,12 +84,11 @@
   data-u="{{ u_one }}|{{ u_few }}|{{ u_many }}"
 >
   <p class="pp-tierbar__msg" aria-live="polite">&nbsp;</p>
-  <ol class="pp-tierbar__steps" role="list">
+  <ol class="pp-tierbar__steps" role="list" aria-hidden="true">
     {%- for pair in pairs -%}
       {%- assign p = pair | strip | split: ':' -%}
       <li class="pp-tierbar__step" data-q="{{ p[0] }}">
         <span class="pp-tierbar__track"><span class="pp-tierbar__fill"></span></span>
-        <span class="pp-tierbar__label">{{ p[0] }} {{ unit }} -{{ p[1] }}%</span>
       </li>
     {%- endfor -%}
   </ol>
@@ -153,7 +152,7 @@
   }
 
   .pp-tierbar__msg {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     font-size: 0.875rem;
     line-height: 1.4;
     color: var(--color-foreground);
@@ -175,9 +174,7 @@
   }
 
   .pp-tierbar__step {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+    display: block;
   }
 
   .pp-tierbar__track {
@@ -195,19 +192,6 @@
     transform: scaleX(0);
     transform-origin: left center;
     transition: transform 0.5s ease;
-  }
-
-  .pp-tierbar__label {
-    font-size: 0.75rem;
-    line-height: 1.2;
-    text-align: right;
-    white-space: nowrap;
-    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.55);
-  }
-
-  .pp-tierbar__step.is-reached .pp-tierbar__label {
-    font-weight: 600;
-    color: var(--color-foreground-heading, var(--color-foreground));
   }
 
   @media (prefers-reduced-motion: reduce) {
