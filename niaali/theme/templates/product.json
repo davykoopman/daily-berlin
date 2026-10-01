@@ -323,7 +323,7 @@
                     "text_wbGpVU": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Wszystkie zamówienia wysyłamy bezpłatnie, bez minimalnej kwoty zamówienia i ukrytych warunków.</p><p>Zamówienia przygotowujemy do wysyłki w ciągu 1–2 dni roboczych, a dostawa trwa zazwyczaj 3–7 dni roboczych od nadania. Więcej informacji znajdziesz w naszej <a href=\"/policies/shipping-policy\" title=\"Polityka wysyłki\">Polityce wysyłki</a>. Masz pytania? Napisz do nas na <a href=\"mailto:support@niaali.com\">support@niaali.com</a>.</p>",
+                        "text": "<ul><li>Darmowa dostawa na wszystkie zamówienia – bez minimalnej kwoty i bez ukrytych kosztów.</li><li>Każda przesyłka ze śledzeniem – numer śledzenia otrzymasz e-mailem.</li><li>Zamówienia wysyłamy w ciągu 1–2 dni roboczych.</li></ul><p>Wszystkie szczegóły dotyczące wysyłki znajdziesz w naszej <a href=\"/policies/shipping-policy\" title=\"Polityka wysyłki\">Polityce wysyłki</a>. Masz pytania? Napisz do nas na <a href=\"mailto:support@niaali.com\">support@niaali.com</a>.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -362,7 +362,7 @@
                     "text_hYWKPd": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Jeśli z jakiegokolwiek powodu zamówienie nie spełni Twoich oczekiwań, możesz złożyć wniosek o zwrot w ciągu 60 dni od daty doręczenia. Produkt musi być nieużywany, w oryginalnym stanie i z kompletnym, oryginalnym opakowaniem.</p><p><strong>Jak zgłosić zwrot</strong></p><p>Wyślij wiadomość na adres <a href=\"mailto:support@niaali.com\">support@niaali.com</a> i podaj numer zamówienia. Otrzymasz dalsze instrukcje dotyczące odesłania produktu. Koszt przesyłki zwrotnej ponosi klient. Zwrot środków realizujemy w ciągu 7 dni roboczych od otrzymania i sprawdzenia produktu.</p><p>Więcej informacji znajdziesz w naszej <a href=\"/policies/refund-policy\" title=\"Polityka zwrotów\">Polityce zwrotów</a>.</p>",
+                        "text": "<ul><li>60 dni na zwrot od daty doręczenia.</li><li>Inny rozmiar lub model? Chętnie pomożemy w wymianie – napisz do nas.</li><li>Nie pobieramy opłat za ponowne przyjęcie towaru.</li><li>Zwrot środków w ciągu 7 dni roboczych od otrzymania i sprawdzenia produktu.</li></ul><p>Warunki i sposób zwrotu znajdziesz w naszej <a href=\"/policies/refund-policy\" title=\"Polityka zwrotów\">Polityce zwrotów</a>. Masz pytania? Napisz do nas na <a href=\"mailto:support@niaali.com\">support@niaali.com</a>.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -402,7 +402,7 @@
                     "text_HX847Y": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Mixuj dowolnie produkty objęte promocją, aby uzyskać wyższy<br/>rabat:</p><ul><li>2 produkty = 10% rabatu</li><li>3 produkty = 15% rabatu</li><li>4 produkty = 20% rabatu</li></ul><p>Rabat zostanie automatycznie naliczony i wyświetlony w koszyku. Możesz swobodnie łączyć różne produkty objęte promocją.</p>",
+                        "text": "<p>Łącz produkty objęte promocją i oszczędzaj więcej:</p><ul><li>2 produkty = 10% rabatu</li><li>3 produkty = 15% rabatu</li><li>4 produkty = 20% rabatu</li></ul><p>Rabat zostanie automatycznie naliczony w koszyku.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -913,7 +913,7 @@
                 "text_GyWdXg": {
                   "type": "text",
                   "settings": {
-                    "text": "<p>Zamówienia przygotowujemy do wysyłki w ciągu 1–2 dni roboczych. Dostawa trwa zazwyczaj 3–7 dni roboczych od nadania, więc w większości przypadków paczka dociera w ciągu 4–9 dni roboczych. Po nadaniu przesyłki otrzymasz e-mail z numerem śledzenia.</p>",
+                    "text": "<p>Zamówienia wysyłamy w ciągu 1–2 dni roboczych, a numer śledzenia przesyłki otrzymasz e-mailem. Szczegółowe informacje o czasie dostawy znajdziesz w naszej <a href=\"/policies/shipping-policy\" title=\"Polityka wysyłki\">Polityce wysyłki</a>.</p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
@@ -954,7 +954,7 @@
                   "type": "text",
                   "name": "t:names.text",
                   "settings": {
-                    "text": "<p>Masz 60 dni od daty doręczenia na złożenie wniosku o zwrot. Produkt musi być nieużywany, w oryginalnym stanie i z kompletnym opakowaniem. Napisz do nas na <a href=\"mailto:support@niaali.com\">support@niaali.com</a> i podaj numer zamówienia, a przekażemy Ci dalsze instrukcje. Koszt przesyłki zwrotnej ponosi klient. Zwrot środków realizujemy w ciągu 7 dni roboczych od otrzymania i sprawdzenia produktu.</p>",
+                    "text": "<p>Masz 60 dni od daty doręczenia na złożenie wniosku o zwrot, a wymiana na inny rozmiar lub model też jest możliwa. Napisz do nas na <a href=\"mailto:support@niaali.com\">support@niaali.com</a> i podaj numer zamówienia – przekażemy Ci dalsze instrukcje. Warunki zwrotu znajdziesz w naszej <a href=\"/policies/refund-policy\" title=\"Polityka zwrotów\">Polityce zwrotów</a>.</p>",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
