@@ -22,5 +22,10 @@ Apex differences vs Horizon (Niaali):
    (enabled checkout methods, one row), `pp-product-info` (accordion: details,
    shipping, returns, bundle), sections `pp-bundle`, `pp-trust`, `pp-steps`, `pp-faq`.
    Product page spacing: no Apex gaps, soft #f5f5f5 on "Chi siamo" and FAQ.
-3. Homepage – next.
+3. Homepage – done: hero (unchanged, translated) → `pp-trust` → `pp-home-categories`
+   → `pp-home-best` (only the visible group in the page; the other loads in the
+   background via `sections/pp-best-panel` + Section Rendering API) → Chi siamo → `pp-faq`.
+   Old Donna/Uomo tiles and Apex FAQ kept in index.json but disabled (rollback).
+   Other pages: search uses the pp-card grid (via collection-grid); cart line saving
+   text was fixed English "Save" → IT "Risparmi" / DE "Du sparst" (snippets/cart-item).
 4. Checkout texts.

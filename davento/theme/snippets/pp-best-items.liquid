@@ -1,0 +1,35 @@
+{%- doc -%}
+  Track of a bestseller row: available products of a collection (in its own
+  sort order, set it to Best selling) plus the "see the whole collection" tile.
+  Used by sections/pp-home-best (first group) and sections/pp-best-panel (the
+  other groups, loaded in the background with the Section Rendering API).
+
+  @param {object} source - Collection
+  @param {number} [max] - Number of products, default 8
+{%- enddoc -%}
+
+{%- liquid
+  assign max = max | default: 8
+  capture see_all_key
+    render 'pp-see-all-key', collection: source
+  endcapture
+  assign see_all_key = see_all_key | strip
+  capture see_all_label
+    render 'pp-i18n', key: see_all_key
+  endcapture
+-%}
+<ul class="pp-row__track" role="list">
+  {%- assign shown = 0 -%}
+  {%- for item in source.products -%}
+    {%- if item.available == false -%}{%- continue -%}{%- endif -%}
+    {%- if shown >= max -%}{%- break -%}{%- endif -%}
+    {%- assign shown = shown | plus: 1 -%}
+    <li class="pp-row__item">{% render 'pp-card', product: item, sizes: '(min-width: 769px) 25vw, 45vw' %}</li>
+  {%- endfor -%}
+  <li class="pp-row__item">
+    <a class="pp-bundle__all" href="{{ source.url }}">
+      <span class="pp-bundle__all-text">{{ see_all_label | strip }}</span>
+      <span class="pp-bundle__all-arrow" aria-hidden="true">→</span>
+    </a>
+  </li>
+</ul>

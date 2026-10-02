@@ -1,0 +1,26 @@
+{%- comment -%}
+  Not placed on a page: the home bestsellers section fetches this per group with
+  the Section Rendering API (/collections/<handle>?section_id=pp-best-panel), so
+  only the visible group is rendered with the home page.
+{%- endcomment -%}
+{%- if collection -%}
+  {% render 'pp-best-items', source: collection, max: section.settings.max_products %}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "PP Bestseller panel",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Products",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ]
+}
+{% endschema %}
