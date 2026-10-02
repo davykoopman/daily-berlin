@@ -2,7 +2,7 @@
   Translations for the product page kit (pp-*). Picks the text by the
   language the storefront is viewed in, falls back to English.
 
-  @param {string} key - free_shipping | money_back | buy_more | save | dispatch | shipping_more | guarantee_more | policy_link | unit | see_all_men | see_all_women | see_all | choose | add_to_cart | sold_out | unavailable | add_error | close
+  @param {string} key - free_shipping | money_back | buy_more | save | dispatch | shipping_more | guarantee_more | policy_link | unit | see_all_men | see_all_women | see_all | choose | add_to_cart | sold_out | unavailable | add_error | close | bundle_title
   @param {number} [n] - Number placed in the text (days or percent)
 {%- enddoc -%}
 
@@ -333,6 +333,24 @@
           assign text = 'Cerrar'
         else
           assign text = 'Close'
+      endcase
+
+    when 'bundle_title'
+      case lang
+        when 'pl'
+          assign text = 'Łącz i oszczędzaj'
+        when 'nl'
+          assign text = 'Combineer en bespaar'
+        when 'de'
+          assign text = 'Kombinieren und sparen'
+        when 'fr'
+          assign text = 'Combinez et économisez'
+        when 'it'
+          assign text = 'Abbina e risparmia'
+        when 'es'
+          assign text = 'Combina y ahorra'
+        else
+          assign text = 'Mix & save'
       endcase
   endcase
 

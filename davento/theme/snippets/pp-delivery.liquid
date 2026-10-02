@@ -1,0 +1,42 @@
+{%- doc -%}
+  One line under the add to cart button with the dispatch time from the
+  shipping policy. Text comes from pp-i18n (storefront language).
+
+  @param {string} [dispatch_days] - Dispatch time in business days, default "1–2"
+{%- enddoc -%}
+
+{%- assign dispatch_days = dispatch_days | default: '1–2' -%}
+
+<p class="pp-delivery">
+  <svg class="pp-delivery__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M3.5 7.5 12 3.5l8.5 4v9L12 20.5l-8.5-4z"/>
+    <path d="M3.5 7.5 12 11.5l8.5-4M12 11.5v9"/>
+  </svg>
+  <span>{% render 'pp-i18n', key: 'dispatch', n: dispatch_days %}</span>
+</p>
+
+{% stylesheet %}
+  .pp-delivery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.75);
+    text-align: center;
+  }
+
+  .pp-delivery__icon {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+{% endstylesheet %}

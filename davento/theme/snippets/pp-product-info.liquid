@@ -1,0 +1,155 @@
+{%- doc -%}
+  Product page accordion: product details (open), shipping, returns and the
+  bundle discount. Uses the theme's own collapsible (snippets/tab) so it looks
+  like the rest of Apex. Texts follow the Davento policies, positives first,
+  conditions are in the linked policy. Storefront language: it, de, else en.
+
+  @param {object} product - The product
+  @param {string} [email] - Customer service email, default shop email
+  @param {number} [return_days] - Return period, default 60
+  @param {string} [dispatch_days] - Dispatch time in business days, default "1–2"
+  @param {number} [refund_days] - Refund time after inspection in business days, default 7
+  @param {string} [tiers] - Bundle tiers "quantity:percent", default "2:10,3:15,4:20"
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign email = email | default: shop.email
+  assign return_days = return_days | default: 60
+  assign dispatch_days = dispatch_days | default: '1–2'
+  assign refund_days = refund_days | default: 7
+  assign pairs = tiers | default: '2:10,3:15,4:20' | split: ','
+
+  # Policy links in the language the customer is viewing (/de-de/policies/...)
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+  assign shipping_url = root | append: '/policies/shipping-policy'
+  assign refund_url = root | append: '/policies/refund-policy'
+  capture mail
+    echo '<a href="mailto:' | append: email | append: '">' | append: email | append: '</a>'
+  endcapture
+
+  case lang
+    when 'it'
+      assign t_details = 'Dettagli prodotto'
+      assign t_shipping = 'Spedizione e consegna'
+      assign t_returns = 'Resi e rimborsi'
+      assign t_bundle = 'Abbina e risparmia'
+      capture b_shipping
+        echo '<ul><li>Spedizione gratuita su tutti gli ordini – nessun importo minimo e nessun costo nascosto.</li>'
+        echo '<li>Ogni pacco è tracciato – riceverai il codice di tracciamento via e-mail.</li>'
+        echo '<li>Prepariamo e spediamo il tuo ordine in ' | append: dispatch_days | append: ' giorni lavorativi.</li></ul>'
+        echo '<p>Tutti i dettagli sulla spedizione sono nella nostra <a href="' | append: shipping_url | append: '">Informativa sulle spedizioni</a>. Hai domande? Scrivici a ' | append: mail | append: '.</p>'
+      endcapture
+      capture b_returns
+        echo '<ul><li>' | append: return_days | append: ' giorni dalla consegna per richiedere il reso.</li>'
+        echo '<li>Taglia o modello diverso? Il cambio è sempre possibile – scrivici.</li>'
+        echo '<li>Nessuna commissione di rifornimento: ti rimborsiamo l’intero importo dell’articolo.</li>'
+        echo '<li>Rimborso entro ' | append: refund_days | append: ' giorni lavorativi dal controllo del pacco.</li></ul>'
+        echo '<p>Condizioni e procedura di reso, comprese le spese di restituzione, sono nella nostra <a href="' | append: refund_url | append: '">Politica di reso e rimborso</a>. Hai domande? Scrivici a ' | append: mail | append: '.</p>'
+      endcapture
+      assign bundle_intro = 'Combina liberamente qualsiasi prodotto e risparmia di più:'
+      assign bundle_line = '[q] prodotti = [p]% di sconto'
+      assign bundle_note = 'Lo sconto viene applicato automaticamente nel carrello.'
+    when 'de'
+      assign t_details = 'Produktdetails'
+      assign t_shipping = 'Versand und Lieferung'
+      assign t_returns = 'Rückgabe und Erstattung'
+      assign t_bundle = 'Kombinieren und sparen'
+      capture b_shipping
+        echo '<ul><li>Kostenloser Versand für alle Bestellungen – ohne Mindestbestellwert und ohne versteckte Kosten.</li>'
+        echo '<li>Jedes Paket mit Sendungsverfolgung – die Sendungsnummer erhältst du per E-Mail.</li>'
+        echo '<li>Wir versenden deine Bestellung innerhalb von ' | append: dispatch_days | append: ' Werktagen.</li></ul>'
+        echo '<p>Alle Details zum Versand findest du in unserer <a href="' | append: shipping_url | append: '">Versandrichtlinie</a>. Fragen? Schreib uns an ' | append: mail | append: '.</p>'
+      endcapture
+      capture b_returns
+        echo '<ul><li>' | append: return_days | append: ' Tage ab Lieferung, um eine Rückgabe zu beantragen.</li>'
+        echo '<li>Andere Größe oder anderes Modell? Ein Umtausch ist jederzeit möglich – schreib uns einfach.</li>'
+        echo '<li>Keine Wiedereinlagerungsgebühr: Du erhältst den vollen Artikelpreis zurück.</li>'
+        echo '<li>Erstattung innerhalb von ' | append: refund_days | append: ' Werktagen nach Prüfung der Rücksendung.</li></ul>'
+        echo '<p>Bedingungen und Ablauf der Rückgabe, einschließlich der Rücksendekosten, findest du in unserer <a href="' | append: refund_url | append: '">Rückgabe- und Erstattungsrichtlinie</a>. Fragen? Schreib uns an ' | append: mail | append: '.</p>'
+      endcapture
+      assign bundle_intro = 'Kombiniere beliebige Produkte und spare mehr:'
+      assign bundle_line = '[q] Artikel = [p] % Rabatt'
+      assign bundle_note = 'Der Rabatt wird automatisch im Warenkorb abgezogen.'
+    else
+      assign t_details = 'Product details'
+      assign t_shipping = 'Shipping and delivery'
+      assign t_returns = 'Returns and refunds'
+      assign t_bundle = 'Mix & save'
+      capture b_shipping
+        echo '<ul><li>Free shipping on all orders – no minimum spend and no hidden costs.</li>'
+        echo '<li>Every parcel is tracked – you receive the tracking number by email.</li>'
+        echo '<li>We dispatch your order within ' | append: dispatch_days | append: ' business days.</li></ul>'
+        echo '<p>All shipping details are in our <a href="' | append: shipping_url | append: '">Shipping policy</a>. Questions? Email us at ' | append: mail | append: '.</p>'
+      endcapture
+      capture b_returns
+        echo '<ul><li>' | append: return_days | append: ' days from delivery to request a return.</li>'
+        echo '<li>Different size or model? Exchanges are always possible – just email us.</li>'
+        echo '<li>No restocking fee: you get the full item price back.</li>'
+        echo '<li>Refund within ' | append: refund_days | append: ' business days after we inspect the parcel.</li></ul>'
+        echo '<p>Return conditions and steps, including return shipping costs, are in our <a href="' | append: refund_url | append: '">Refund policy</a>. Questions? Email us at ' | append: mail | append: '.</p>'
+      endcapture
+      assign bundle_intro = 'Mix any products and save more:'
+      assign bundle_line = '[q] items = [p]% off'
+      assign bundle_note = 'The discount is applied automatically in the cart.'
+  endcase
+
+  capture b_bundle
+    echo '<p>' | append: bundle_intro | append: '</p><ul>'
+    for pair in pairs
+      assign p = pair | strip | split: ':'
+      echo '<li>' | append: bundle_line | replace: '[q]', p[0] | replace: '[p]', p[1] | append: '</li>'
+    endfor
+    echo '</ul><p>' | append: bundle_note | append: '</p>'
+  endcapture
+
+  capture description
+    if product.empty?
+      echo 'home_page.onboarding.product_description' | t
+    else
+      echo product.description
+    endif
+  endcapture
+
+  assign id_details = product.id | append: '-pp-details'
+  assign id_shipping = product.id | append: '-pp-shipping'
+  assign id_returns = product.id | append: '-pp-returns'
+  assign id_bundle = product.id | append: '-pp-bundle'
+-%}
+
+<div class="pp-info">
+  {%- render 'tab', id: id_details, title: t_details, content: description, force_open: true -%}
+  {%- render 'tab', id: id_shipping, title: t_shipping, content: b_shipping -%}
+  {%- render 'tab', id: id_returns, title: t_returns, content: b_returns -%}
+  {%- render 'tab', id: id_bundle, title: t_bundle, content: b_bundle -%}
+</div>
+
+{% stylesheet %}
+  /*
+    Product page flow (like Niaali): no theme gaps between the product block
+    and the sections below, soft background on "about us" and FAQ so the
+    sections run into each other without large white areas.
+  */
+  body.template-product .page-content--product {
+    padding-bottom: 0;
+  }
+
+  body.template-product .product-block:has(> .pp-info) {
+    margin-bottom: 0;
+  }
+
+  body.template-product .shopify-section > .amz-isec {
+    margin: 0;
+    padding-block: 48px;
+    background: #f5f5f5;
+  }
+
+  @media screen and (max-width: 768px) {
+    body.template-product .shopify-section > .amz-isec {
+      padding-block: 6px 36px;
+    }
+  }
+{% endstylesheet %}

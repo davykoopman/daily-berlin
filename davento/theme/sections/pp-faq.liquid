@@ -1,0 +1,232 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign email = ss.email | default: shop.email
+
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+  assign shipping_url = root | append: '/policies/shipping-policy'
+  assign refund_url = root | append: '/policies/refund-policy'
+  capture mail
+    echo '<a href="mailto:' | append: email | append: '">' | append: email | append: '</a>'
+  endcapture
+
+  # Payment methods: the ones enabled in the checkout, with their brand names
+  assign pay_names = ''
+  for type in shop.enabled_payment_types
+    case type
+      when 'visa'
+        assign n = 'Visa'
+      when 'master'
+        assign n = 'Mastercard'
+      when 'maestro'
+        assign n = 'Maestro'
+      when 'american_express'
+        assign n = 'American Express'
+      when 'apple_pay'
+        assign n = 'Apple Pay'
+      when 'google_pay'
+        assign n = 'Google Pay'
+      when 'shopify_pay'
+        assign n = 'Shop Pay'
+      when 'paypal'
+        assign n = 'PayPal'
+      when 'klarna'
+        assign n = 'Klarna'
+      when 'unionpay'
+        assign n = 'UnionPay'
+      when 'diners_club'
+        assign n = 'Diners Club'
+      when 'jcb'
+        assign n = 'JCB'
+      when 'discover'
+        assign n = 'Discover'
+      when 'bancontact'
+        assign n = 'Bancontact'
+      when 'ideal'
+        assign n = 'iDEAL'
+      when 'blik'
+        assign n = 'BLIK'
+      else
+        assign n = type | replace: '_', ' ' | capitalize
+    endcase
+    assign pay_names = pay_names | append: n | append: '|'
+  endfor
+  assign pay_list = pay_names | split: '|'
+
+  case lang
+    when 'it'
+      assign heading = 'Domande frequenti'
+      assign and_word = ' e '
+    when 'de'
+      assign heading = 'Häufig gestellte Fragen'
+      assign and_word = ' und '
+    else
+      assign heading = 'Frequently asked questions'
+      assign and_word = ' and '
+  endcase
+
+  assign pay_text = ''
+  for n in pay_list
+    if forloop.first
+      assign pay_text = n
+    elsif forloop.last
+      assign pay_text = pay_text | append: and_word | append: n
+    else
+      assign pay_text = pay_text | append: ', ' | append: n
+    endif
+  endfor
+
+  case lang
+    when 'it'
+      assign q1 = 'La spedizione è gratuita?'
+      capture a1
+        echo '<p>Sì, spediamo gratuitamente tutti gli ordini, senza importo minimo e senza costi nascosti.</p>'
+      endcapture
+      assign q2 = 'Quanto tempo richiede la consegna?'
+      capture a2
+        echo '<p>Prepariamo e spediamo gli ordini in ' | append: ss.dispatch_days | append: ' giorni lavorativi e riceverai il codice di tracciamento via e-mail. Nella maggior parte dei casi la consegna avviene in ' | append: ss.delivery_days | append: ' giorni lavorativi. Tutti i dettagli sono nella nostra <a href="' | append: shipping_url | append: '">Informativa sulle spedizioni</a>.</p>'
+      endcapture
+      assign q3 = 'Come funzionano i resi?'
+      capture a3
+        echo '<p>Hai ' | append: ss.return_days | append: ' giorni dalla consegna per richiedere il reso, ed è possibile anche cambiare taglia o modello. Scrivici a ' | append: mail | append: ' indicando il numero d’ordine: ti invieremo tutte le istruzioni. Le condizioni sono nella nostra <a href="' | append: refund_url | append: '">Politica di reso e rimborso</a>.</p>'
+      endcapture
+      assign q4 = 'Quali metodi di pagamento accettate?'
+      capture a4
+        echo '<p>Accettiamo ' | append: pay_text | append: '. Tutti i pagamenti sono elaborati in modo sicuro con crittografia SSL.</p>'
+      endcapture
+      assign q5 = 'Cosa faccio se il mio ordine non è arrivato?'
+      capture a5
+        echo '<p>Controlla prima il link di tracciamento nell’e-mail di conferma della spedizione. Se sono passati più di ' | append: ss.late_days | append: ' giorni lavorativi dalla spedizione e il pacco non è ancora arrivato, scrivici a ' | append: mail | append: ': ce ne occupiamo subito.</p>'
+      endcapture
+    when 'de'
+      assign q1 = 'Ist der Versand kostenlos?'
+      capture a1
+        echo '<p>Ja, wir versenden alle Bestellungen kostenlos – ohne Mindestbestellwert und ohne versteckte Kosten.</p>'
+      endcapture
+      assign q2 = 'Wie lange dauert die Lieferung?'
+      capture a2
+        echo '<p>Wir versenden Bestellungen innerhalb von ' | append: ss.dispatch_days | append: ' Werktagen, die Sendungsnummer erhältst du per E-Mail. In den meisten Fällen kommt deine Bestellung innerhalb von ' | append: ss.delivery_days | append: ' Werktagen an. Alle Details findest du in unserer <a href="' | append: shipping_url | append: '">Versandrichtlinie</a>.</p>'
+      endcapture
+      assign q3 = 'Wie funktioniert die Rückgabe?'
+      capture a3
+        echo '<p>Du hast ' | append: ss.return_days | append: ' Tage ab Lieferung, um eine Rückgabe zu beantragen, und ein Umtausch von Größe oder Modell ist ebenfalls möglich. Schreib uns an ' | append: mail | append: ' mit deiner Bestellnummer – wir senden dir alle Anweisungen. Die Bedingungen findest du in unserer <a href="' | append: refund_url | append: '">Rückgabe- und Erstattungsrichtlinie</a>.</p>'
+      endcapture
+      assign q4 = 'Welche Zahlungsmethoden akzeptiert ihr?'
+      capture a4
+        echo '<p>Wir akzeptieren ' | append: pay_text | append: '. Alle Zahlungen werden sicher mit SSL-Verschlüsselung verarbeitet.</p>'
+      endcapture
+      assign q5 = 'Was tun, wenn meine Bestellung nicht angekommen ist?'
+      capture a5
+        echo '<p>Prüfe zuerst den Tracking-Link in der Versandbestätigung per E-Mail. Wenn seit dem Versand mehr als ' | append: ss.late_days | append: ' Werktage vergangen sind und das Paket noch nicht da ist, schreib uns an ' | append: mail | append: ' – wir kümmern uns sofort darum.</p>'
+      endcapture
+    else
+      assign q1 = 'Is shipping free?'
+      capture a1
+        echo '<p>Yes, we ship every order for free, with no minimum spend and no hidden costs.</p>'
+      endcapture
+      assign q2 = 'How long does delivery take?'
+      capture a2
+        echo '<p>We dispatch orders within ' | append: ss.dispatch_days | append: ' business days and you receive the tracking number by email. Most orders arrive within ' | append: ss.delivery_days | append: ' business days. All details are in our <a href="' | append: shipping_url | append: '">Shipping policy</a>.</p>'
+      endcapture
+      assign q3 = 'How do returns work?'
+      capture a3
+        echo '<p>You have ' | append: ss.return_days | append: ' days from delivery to request a return, and exchanges for a different size or model are possible too. Email us at ' | append: mail | append: ' with your order number and we send you all instructions. The conditions are in our <a href="' | append: refund_url | append: '">Refund policy</a>.</p>'
+      endcapture
+      assign q4 = 'Which payment methods do you accept?'
+      capture a4
+        echo '<p>We accept ' | append: pay_text | append: '. All payments are processed securely with SSL encryption.</p>'
+      endcapture
+      assign q5 = 'What if my order has not arrived?'
+      capture a5
+        echo '<p>First check the tracking link in the shipping confirmation email. If more than ' | append: ss.late_days | append: ' business days have passed since dispatch and the parcel has not arrived, email us at ' | append: mail | append: ' and we will look into it right away.</p>'
+      endcapture
+  endcase
+
+  assign id_base = section.id | append: '-'
+-%}
+
+<div class="pp-faq">
+  <div class="amz-pw pp-faq__inner">
+    <h2 class="pp-faq__heading">{{ heading }}</h2>
+    {%- assign id1 = id_base | append: '1' -%}
+    {%- assign id2 = id_base | append: '2' -%}
+    {%- assign id3 = id_base | append: '3' -%}
+    {%- assign id4 = id_base | append: '4' -%}
+    {%- assign id5 = id_base | append: '5' -%}
+    {%- render 'tab', id: id1, title: q1, content: a1 -%}
+    {%- render 'tab', id: id2, title: q2, content: a2 -%}
+    {%- render 'tab', id: id3, title: q3, content: a3 -%}
+    {%- if pay_text != blank -%}
+      {%- render 'tab', id: id4, title: q4, content: a4 -%}
+    {%- endif -%}
+    {%- render 'tab', id: id5, title: q5, content: a5 -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .pp-faq {
+    padding-block: 48px;
+    background: #f5f5f5;
+  }
+
+  .pp-faq__heading {
+    margin: 0 0 20px;
+    text-align: left;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-faq {
+      padding-block: 32px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP FAQ",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Texts are translated automatically. Match the numbers to the shipping and refund policies. Payment methods come from the checkout."
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Customer service email (empty = store email)"
+    },
+    {
+      "type": "text",
+      "id": "dispatch_days",
+      "label": "Dispatch time in business days",
+      "default": "1–2"
+    },
+    {
+      "type": "text",
+      "id": "delivery_days",
+      "label": "Total delivery time in business days",
+      "default": "4–9"
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Return period in days",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "late_days",
+      "label": "Contact us after this many business days since dispatch",
+      "default": 7
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP FAQ"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,254 @@
+{%- liquid
+  assign ss = section.settings
+  assign current = product
+
+  # Same-group collection: the first menu group (e.g. Kobiety, Mężczyźni) the
+  # product belongs to, through the group collection or one of its sub items
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+  assign product_handles = current.collections | map: 'handle'
+
+  assign source = blank
+  for link in menu.links
+    if link.type != 'collection_link' or link.links.size == 0
+      continue
+    endif
+    if product_handles contains link.object.handle
+      assign source = link.object
+      break
+    endif
+    for item in link.links
+      if item.type == 'collection_link' and product_handles contains item.object.handle
+        assign source = link.object
+        break
+      endif
+    endfor
+    if source != blank
+      break
+    endif
+  endfor
+
+  assign see_all_key = 'see_all'
+  if source == blank
+    assign source = ss.fallback_collection | default: collections.all
+  else
+    capture see_all_key
+      render 'pp-see-all-key', collection: source
+    endcapture
+    assign see_all_key = see_all_key | strip
+  endif
+
+  capture styles
+    echo '--pp-row-columns: ' | append: ss.columns | append: '; --pp-row-gap: ' | append: ss.columns_gap | append: 'px;'
+  endcapture
+
+  capture see_all_label
+    render 'pp-i18n', key: see_all_key
+  endcapture
+-%}
+
+<div class="pp-bundle" style="--pp-pad-top: {{ ss.padding_top }}px; --pp-pad-bottom: {{ ss.padding_bottom }}px; {{ styles }}">
+  <div class="amz-pw">
+    <div class="pp-bundle__head">
+      <h2 class="pp-bundle__title h2">{% render 'pp-i18n', key: 'bundle_title' %}</h2>
+      {% render 'pp-tier-progress', tiers: ss.tiers %}
+    </div>
+
+    <div class="pp-row" data-pp-row>
+      <ul class="pp-row__track" role="list">
+        {%- assign shown = 0 -%}
+        {%- for item in source.products -%}
+          {%- if item.id == current.id or item.available == false -%}{%- continue -%}{%- endif -%}
+          {%- if shown >= ss.max_products -%}{%- break -%}{%- endif -%}
+          {%- assign shown = shown | plus: 1 -%}
+          <li class="pp-row__item">{% render 'pp-card', product: item, sizes: '(min-width: 769px) 25vw, 45vw' %}</li>
+        {%- endfor -%}
+        {%- if ss.show_see_all -%}
+          <li class="pp-row__item">
+            <a class="pp-bundle__all" href="{{ source.url }}">
+              <span class="pp-bundle__all-text">{{ see_all_label | strip }}</span>
+              <span class="pp-bundle__all-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        {%- endif -%}
+      </ul>
+      <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="-1" aria-label="←" disabled>←</button>
+      <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="1" aria-label="→">→</button>
+    </div>
+  </div>
+  {% render 'pp-quick-pick' %}
+</div>
+
+{% stylesheet %}
+  .pp-bundle {
+    padding-block: var(--pp-pad-top, 20px) var(--pp-pad-bottom, 20px);
+  }
+
+  .pp-bundle__head {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pp-bundle__title {
+    margin: 0;
+  }
+
+  /* "See the whole collection" tile: same size as a product image, centred */
+  .pp-bundle__all {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    padding: 20px;
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.05);
+    color: var(--color-foreground);
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.25s ease;
+  }
+
+  .pp-bundle__all-text {
+    max-width: 14em;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .pp-bundle__all-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--color-foreground-heading, #030302);
+    color: var(--color-background, #fff);
+    font-size: 1.25rem;
+    line-height: 1;
+    transition: transform 0.25s ease;
+  }
+
+  .pp-bundle__all:hover {
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.09);
+  }
+
+  .pp-bundle__all:hover .pp-bundle__all-arrow {
+    transform: translateX(4px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-bundle__all {
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .pp-bundle__all-text {
+      font-size: 0.875rem;
+    }
+
+    .pp-bundle__all-arrow {
+      width: 40px;
+      height: 40px;
+      font-size: 1.125rem;
+    }
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Mix & match",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Heading is translated automatically. Shows products from the same menu group as the current product (e.g. Donna or Uomo). Tiers must match the store discount."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback collection (unisex products)"
+    },
+    {
+      "type": "text",
+      "id": "tiers",
+      "label": "Bundle tiers (quantity:percent)",
+      "default": "2:10,3:15,4:20"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_see_all",
+      "label": "Show link to full collection",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Products",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Mix & match"
+    }
+  ]
+}
+{% endschema %}

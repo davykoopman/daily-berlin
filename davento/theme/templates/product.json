@@ -1,0 +1,258 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "price_FpNmac": {
+          "type": "price",
+          "settings": {
+            "cmp_color": "#000000",
+            "cmp_size": 16,
+            "cmp_pad_x": 2,
+            "cmp_weight": 400,
+            "cur_color": "#111111",
+            "cur_size": 22,
+            "cur_pad_x": 0,
+            "cur_weight": 600,
+            "reg_color": "#111111",
+            "reg_size": 22,
+            "reg_weight": 600,
+            "save_enable": true,
+            "save_format": "percent",
+            "save_label": "-",
+            "save_text_color": "#ffffff",
+            "save_bg_color": "#fd0000",
+            "save_size": 14,
+            "save_pad_x": 10,
+            "save_pad_y": 4,
+            "save_radius": 0,
+            "save_weight": 500,
+            "order_current": 1,
+            "order_compare": 2,
+            "order_save": 3,
+            "order_regular": 1
+          }
+        },
+        "pp_benefits": {
+          "type": "custom",
+          "settings": {
+            "code": "{% render 'pp-benefits', return_days: 60 %}"
+          }
+        },
+        "variant_picker_Ud4caN": {
+          "type": "variant_picker",
+          "settings": {
+            "variant_labels": true,
+            "picker_type": "button",
+            "product_dynamic_variants_enable": true,
+            "color_swatches": true,
+            "swatch_mode": "image",
+            "color_shape": "square",
+            "image_shape": "square",
+            "image_width": 56,
+            "image_height": 56,
+            "image_border_width": 1,
+            "badge_enable": false,
+            "badge_apply_to": "both",
+            "badge_text": "SALE",
+            "badge_bg": "#ff0000",
+            "badge_opacity": 70,
+            "badge_text_color": "#ffffff",
+            "badge_font_size": 11,
+            "badge_pad_x": 8,
+            "badge_pad_y": 3,
+            "badge_radius": 1,
+            "badge_position": "top_right",
+            "badge_offset_x": 2,
+            "badge_offset_y": 46,
+            "badge_z": 1,
+            "badge_uppercase": true,
+            "badge_weight": "600"
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "surface_pickup_enable": false,
+            "show_gift_card_recipient": false
+          }
+        },
+        "pp_delivery": {
+          "type": "custom",
+          "settings": {
+            "code": "{% render 'pp-delivery', dispatch_days: '1–2' %}"
+          }
+        },
+        "pp_payment": {
+          "type": "custom",
+          "settings": {
+            "code": "{% render 'pp-payment-icons' %}"
+          }
+        },
+        "pp_info": {
+          "type": "custom",
+          "settings": {
+            "code": "{% render 'pp-product-info', product: product, email: 'support@davento.it', return_days: 60, dispatch_days: '1–2', refund_days: 7, tiers: '2:10,3:15,4:20' %}"
+          }
+        }
+      },
+      "block_order": [
+        "price_FpNmac",
+        "pp_benefits",
+        "variant_picker_Ud4caN",
+        "buy_buttons",
+        "pp_delivery",
+        "pp_payment",
+        "pp_info"
+      ],
+      "custom_css": [],
+      "settings": {
+        "enable_sticky_atc": false,
+        "sticky_atc_position": "end",
+        "sticky_atc_mobile": true,
+        "sticky_atc_behavior": "add_to_cart",
+        "sticky_atc_button_style": "primary",
+        "sticky_atc_only_button_mobile": false,
+        "sticky_atc_only_button_desktop": false,
+        "sticky_atc_width_mobile": "full",
+        "sticky_atc_width_desktop": "medium",
+        "trustcount": "<p><strong>Excellent 4.8</strong> | Based on 7.482 reviews</p>",
+        "review_scroll_enable": true,
+        "review_scroll_target": "#amz-testimonial-2",
+        "review_scroll_open_collapsible": true,
+        "review_scroll_offset": 0,
+        "sku_enable": false,
+        "image_position": "left",
+        "image_size": "medium",
+        "product_zoom_enable": false,
+        "thumbnail_position": "beside",
+        "thumbnail_height": "flexible",
+        "thumbnail_arrows": false,
+        "mobile_layout": "full",
+        "enable_video_looping": false,
+        "product_video_style": "muted"
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "settings": {
+        "product_recommendations_heading": "Potrebbe interessarti anche",
+        "related_count": 4,
+        "products_per_row": 4,
+        "product_rows": 1,
+        "mobile_grid_enable": false
+      }
+    },
+    "sub": {
+      "type": "product-full-width",
+      "disabled": true,
+      "settings": {
+        "max_width": true
+      }
+    },
+    "text_and_image_AppCyB": {
+      "type": "text-and-image",
+      "name": "t:sections.text-and-image.presets.image_with_text.name",
+      "settings": {
+        "image": "shopify://shop_images/Davento-about-us.png",
+        "image_mask": "none",
+        "image2_mask": "none",
+        "subtitle": "",
+        "title": "Chi siamo",
+        "text": "<p>Davento propone capi di moda curati, pensati per l'uso quotidiano, selezionati per la loro vestibilità, il comfort e la durata che va ben oltre una singola stagione.</p>",
+        "button_label": "Per saperne di più...",
+        "button_link": "shopify://pages/chi-siamo",
+        "button_style": "primary",
+        "align_text": "left",
+        "image_width": "50",
+        "layout": "right",
+        "divider": false,
+        "top_padding": true,
+        "bottom_padding": true,
+        "lazyload_images": true
+      }
+    },
+    "amz-rv": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "settings": {
+        "recent_count": 5
+      }
+    },
+    "collection-return": {
+      "type": "collection-return",
+      "disabled": true,
+      "settings": {}
+    },
+    "1788194608fe06cfa6": {
+      "type": "_blocks",
+      "settings": {}
+    },
+    "pp_bundle": {
+      "type": "pp-bundle",
+      "settings": {
+        "menu": "main-menu",
+        "tiers": "2:10,3:15,4:20",
+        "show_see_all": true,
+        "max_products": 8,
+        "columns": 4,
+        "columns_gap": 12,
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "pp_trust": {
+      "type": "pp-trust",
+      "settings": {
+        "return_days": 60,
+        "email": "support@davento.it",
+        "weekday_open": 8,
+        "weekday_close": 17,
+        "weekend_open": 9,
+        "weekend_close": 16,
+        "timezone": ""
+      }
+    },
+    "pp_steps": {
+      "type": "pp-steps",
+      "settings": {
+        "dispatch_days": "1–2",
+        "return_days": 60
+      }
+    },
+    "pp_faq": {
+      "type": "pp-faq",
+      "settings": {
+        "email": "support@davento.it",
+        "dispatch_days": "1–2",
+        "delivery_days": "4–9",
+        "return_days": 60,
+        "late_days": 7
+      }
+    }
+  },
+  "order": [
+    "main",
+    "pp_bundle",
+    "pp_trust",
+    "text_and_image_AppCyB",
+    "pp_steps",
+    "pp_faq",
+    "product-recommendations",
+    "sub",
+    "amz-rv",
+    "collection-return",
+    "1788194608fe06cfa6"
+  ]
+}

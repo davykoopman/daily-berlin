@@ -18,6 +18,9 @@ Apex differences vs Horizon (Niaali):
 ## Steps
 1. Collection page – done: `pp-collection-head` (title, tier bar, menu chips),
    `collection-grid` renders `pp-card` + `pp-quick-pick`.
-2. Product page – next.
-3. Homepage.
+2. Product page – done: `pp-benefits` (3 bullets), `pp-delivery`, `pp-payment-icons`
+   (enabled checkout methods, one row), `pp-product-info` (accordion: details,
+   shipping, returns, bundle), sections `pp-bundle`, `pp-trust`, `pp-steps`, `pp-faq`.
+   Product page spacing: no Apex gaps, soft #f5f5f5 on "Chi siamo" and FAQ.
+3. Homepage – next.
 4. Checkout texts.

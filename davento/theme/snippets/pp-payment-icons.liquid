@@ -1,0 +1,50 @@
+{%- doc -%}
+  Payment icons on one row (phone and desktop). Uses the payment methods that
+  are enabled in the checkout, so the icons always match what customers can use.
+{%- enddoc -%}
+
+{%- assign types = shop.enabled_payment_types -%}
+{%- if types.size > 0 -%}
+  <ul class="pp-pay" role="list" style="--pp-pay-count: {{ types.size }};">
+    {%- for type in types -%}
+      <li class="pp-pay__item">{{ type | payment_type_svg_tag: class: 'pp-pay__icon' }}</li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-pay {
+    --pp-pay-gap: 5px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pp-pay-gap);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Shrinks evenly so all icons always fit on one row */
+  .pp-pay__item {
+    flex: 0 1 38px;
+    min-width: 0;
+    margin: 0;
+    line-height: 0;
+  }
+
+  .pp-pay__icon {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 38 / 24;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-pay {
+      --pp-pay-gap: 4px;
+    }
+  }
+{% endstylesheet %}
