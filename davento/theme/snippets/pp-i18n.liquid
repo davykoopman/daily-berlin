@@ -1,0 +1,340 @@
+{%- doc -%}
+  Translations for the product page kit (pp-*). Picks the text by the
+  language the storefront is viewed in, falls back to English.
+
+  @param {string} key - free_shipping | money_back | buy_more | save | dispatch | shipping_more | guarantee_more | policy_link | unit | see_all_men | see_all_women | see_all | choose | add_to_cart | sold_out | unavailable | add_error | close
+  @param {number} [n] - Number placed in the text (days or percent)
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign text = ''
+
+  case key
+    when 'free_shipping'
+      case lang
+        when 'pl'
+          assign text = 'Darmowa dostawa'
+        when 'nl'
+          assign text = 'Gratis verzending'
+        when 'de'
+          assign text = 'Kostenloser Versand'
+        when 'fr'
+          assign text = 'Livraison gratuite'
+        when 'it'
+          assign text = 'Spedizione gratuita'
+        when 'es'
+          assign text = 'Envío gratis'
+        else
+          assign text = 'Free shipping'
+      endcase
+
+    when 'money_back'
+      case lang
+        when 'pl'
+          assign text = '[n]-dniowa gwarancja zwrotu pieniędzy'
+        when 'nl'
+          assign text = '[n] dagen niet-goed-geld-terug-garantie'
+        when 'de'
+          assign text = '[n] Tage Geld-zurück-Garantie'
+        when 'fr'
+          assign text = 'Satisfait ou remboursé pendant [n] jours'
+        when 'it'
+          assign text = 'Soddisfatti o rimborsati entro [n] giorni'
+        when 'es'
+          assign text = 'Garantía de devolución de [n] días'
+        else
+          assign text = '[n]-Day Money-Back Guarantee'
+      endcase
+
+    when 'buy_more'
+      case lang
+        when 'pl'
+          assign text = 'Kup więcej, oszczędzaj więcej!'
+        when 'nl'
+          assign text = 'Koop meer, bespaar meer!'
+        when 'de'
+          assign text = 'Mehr kaufen, mehr sparen!'
+        when 'fr'
+          assign text = 'Achetez plus, économisez plus !'
+        when 'it'
+          assign text = 'Compra di più, risparmia di più!'
+        when 'es'
+          assign text = '¡Compra más, ahorra más!'
+        else
+          assign text = 'Buy more, Save more!'
+      endcase
+
+    when 'save'
+      case lang
+        when 'pl'
+          assign text = 'Oszczędzasz [n]%'
+        when 'nl'
+          assign text = 'Bespaar [n]%'
+        when 'de'
+          assign text = 'Spare [n] %'
+        when 'fr'
+          assign text = 'Économisez [n] %'
+        when 'it'
+          assign text = 'Risparmi il [n]%'
+        when 'es'
+          assign text = 'Ahorra un [n] %'
+        else
+          assign text = 'Save [n]%'
+      endcase
+
+    when 'dispatch'
+      case lang
+        when 'pl'
+          assign text = 'Wysyłka w ciągu [n] dni roboczych'
+        when 'nl'
+          assign text = 'Verzonden binnen [n] werkdagen'
+        when 'de'
+          assign text = 'Versand innerhalb von [n] Werktagen'
+        when 'fr'
+          assign text = 'Expédié sous [n] jours ouvrés'
+        when 'it'
+          assign text = 'Spedito entro [n] giorni lavorativi'
+        when 'es'
+          assign text = 'Enviado en [n] días hábiles'
+        else
+          assign text = 'Dispatched within [n] business days'
+      endcase
+
+    when 'shipping_more'
+      case lang
+        when 'pl'
+          assign text = 'Wysyłamy w ciągu [n] dni roboczych, a numer śledzenia otrzymasz e-mailem.'
+        when 'nl'
+          assign text = 'We versturen binnen [n] werkdagen en je ontvangt je trackingnummer per e-mail.'
+        when 'de'
+          assign text = 'Wir versenden innerhalb von [n] Werktagen, die Sendungsnummer erhältst du per E-Mail.'
+        when 'fr'
+          assign text = 'Nous expédions sous [n] jours ouvrés et vous recevez votre numéro de suivi par e-mail.'
+        when 'it'
+          assign text = 'Spediamo entro [n] giorni lavorativi e riceverai il numero di tracciamento via e-mail.'
+        when 'es'
+          assign text = 'Enviamos en [n] días hábiles y recibirás tu número de seguimiento por e-mail.'
+        else
+          assign text = 'We dispatch within [n] business days and email you your tracking number.'
+      endcase
+
+    when 'guarantee_more'
+      case lang
+        when 'pl'
+          assign text = 'Masz [n] dni od doręczenia na zwrot, a wymiana rozmiaru lub modelu jest możliwa.'
+        when 'nl'
+          assign text = 'Je hebt [n] dagen na levering om te retourneren, en ruilen van maat of model kan.'
+        when 'de'
+          assign text = 'Du hast [n] Tage ab Lieferung für die Rückgabe, ein Umtausch von Größe oder Modell ist möglich.'
+        when 'fr'
+          assign text = 'Vous avez [n] jours après la livraison pour retourner, et l’échange de taille ou de modèle est possible.'
+        when 'it'
+          assign text = 'Hai [n] giorni dalla consegna per il reso, ed è possibile cambiare taglia o modello.'
+        when 'es'
+          assign text = 'Tienes [n] días desde la entrega para devolverlo, y puedes cambiar de talla o modelo.'
+        else
+          assign text = 'You have [n] days from delivery to return, and exchanges for a different size or model are possible.'
+      endcase
+
+    when 'policy_link'
+      case lang
+        when 'pl'
+          assign text = 'Zobacz politykę zwrotów'
+        when 'nl'
+          assign text = 'Bekijk het retourbeleid'
+        when 'de'
+          assign text = 'Rückgabebedingungen ansehen'
+        when 'fr'
+          assign text = 'Voir la politique de retour'
+        when 'it'
+          assign text = 'Vedi la politica di reso'
+        when 'es'
+          assign text = 'Ver la política de devoluciones'
+        else
+          assign text = 'View refund policy'
+      endcase
+
+    when 'unit'
+      case lang
+        when 'pl'
+          assign text = 'szt.'
+        when 'nl'
+          assign text = 'st.'
+        when 'de'
+          assign text = 'Stk.'
+        when 'fr'
+          assign text = 'art.'
+        when 'it'
+          assign text = 'pz.'
+        when 'es'
+          assign text = 'uds.'
+        else
+          assign text = 'items'
+      endcase
+
+    when 'see_all_men'
+      case lang
+        when 'pl'
+          assign text = 'Zobacz całą kolekcję męską'
+        when 'nl'
+          assign text = 'Bekijk de hele herencollectie'
+        when 'de'
+          assign text = 'Zur gesamten Herrenkollektion'
+        when 'fr'
+          assign text = 'Voir toute la collection homme'
+        when 'it'
+          assign text = 'Scopri tutta la collezione uomo'
+        when 'es'
+          assign text = 'Ver toda la colección de hombre'
+        else
+          assign text = 'Shop the full men’s collection'
+      endcase
+
+    when 'see_all_women'
+      case lang
+        when 'pl'
+          assign text = 'Zobacz całą kolekcję damską'
+        when 'nl'
+          assign text = 'Bekijk de hele damescollectie'
+        when 'de'
+          assign text = 'Zur gesamten Damenkollektion'
+        when 'fr'
+          assign text = 'Voir toute la collection femme'
+        when 'it'
+          assign text = 'Scopri tutta la collezione donna'
+        when 'es'
+          assign text = 'Ver toda la colección de mujer'
+        else
+          assign text = 'Shop the full women’s collection'
+      endcase
+
+    when 'see_all'
+      case lang
+        when 'pl'
+          assign text = 'Zobacz wszystkie produkty'
+        when 'nl'
+          assign text = 'Bekijk alle producten'
+        when 'de'
+          assign text = 'Alle Produkte ansehen'
+        when 'fr'
+          assign text = 'Voir tous les produits'
+        when 'it'
+          assign text = 'Vedi tutti i prodotti'
+        when 'es'
+          assign text = 'Ver todos los productos'
+        else
+          assign text = 'Shop all products'
+      endcase
+
+    when 'choose'
+      case lang
+        when 'pl'
+          assign text = 'Wybierz'
+        when 'nl'
+          assign text = 'Kies'
+        when 'de'
+          assign text = 'Auswählen'
+        when 'fr'
+          assign text = 'Choisir'
+        when 'it'
+          assign text = 'Scegli'
+        when 'es'
+          assign text = 'Elegir'
+        else
+          assign text = 'Choose'
+      endcase
+
+    when 'add_to_cart'
+      case lang
+        when 'pl'
+          assign text = 'Dodaj do koszyka'
+        when 'nl'
+          assign text = 'In winkelwagen'
+        when 'de'
+          assign text = 'In den Warenkorb'
+        when 'fr'
+          assign text = 'Ajouter au panier'
+        when 'it'
+          assign text = 'Aggiungi al carrello'
+        when 'es'
+          assign text = 'Añadir al carrito'
+        else
+          assign text = 'Add to cart'
+      endcase
+
+    when 'sold_out'
+      case lang
+        when 'pl'
+          assign text = 'Wyprzedane'
+        when 'nl'
+          assign text = 'Uitverkocht'
+        when 'de'
+          assign text = 'Ausverkauft'
+        when 'fr'
+          assign text = 'Épuisé'
+        when 'it'
+          assign text = 'Esaurito'
+        when 'es'
+          assign text = 'Agotado'
+        else
+          assign text = 'Sold out'
+      endcase
+
+    when 'unavailable'
+      case lang
+        when 'pl'
+          assign text = 'Niedostępne'
+        when 'nl'
+          assign text = 'Niet beschikbaar'
+        when 'de'
+          assign text = 'Nicht verfügbar'
+        when 'fr'
+          assign text = 'Indisponible'
+        when 'it'
+          assign text = 'Non disponibile'
+        when 'es'
+          assign text = 'No disponible'
+        else
+          assign text = 'Unavailable'
+      endcase
+
+    when 'add_error'
+      case lang
+        when 'pl'
+          assign text = 'Nie udało się dodać do koszyka. Spróbuj ponownie.'
+        when 'nl'
+          assign text = 'Toevoegen is niet gelukt. Probeer het opnieuw.'
+        when 'de'
+          assign text = 'Hinzufügen fehlgeschlagen. Bitte versuche es erneut.'
+        when 'fr'
+          assign text = 'L’ajout a échoué. Veuillez réessayer.'
+        when 'it'
+          assign text = 'Aggiunta non riuscita. Riprova.'
+        when 'es'
+          assign text = 'No se pudo añadir. Inténtalo de nuevo.'
+        else
+          assign text = 'Could not add to cart. Please try again.'
+      endcase
+
+    when 'close'
+      case lang
+        when 'pl'
+          assign text = 'Zamknij'
+        when 'nl'
+          assign text = 'Sluiten'
+        when 'de'
+          assign text = 'Schließen'
+        when 'fr'
+          assign text = 'Fermer'
+        when 'it'
+          assign text = 'Chiudi'
+        when 'es'
+          assign text = 'Cerrar'
+        else
+          assign text = 'Close'
+      endcase
+  endcase
+
+  echo text | replace: '[n]', n
+-%}

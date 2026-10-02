@@ -1,0 +1,365 @@
+{%- if settings.cart_type == 'drawer' -%}
+  {%- liquid
+    assign amz_drawer_logo = blank
+    assign amz_drawer_logo_inv = blank
+
+    if header_section
+      for b in header_section.blocks
+        if b.type == 'logo'
+          assign amz_drawer_logo = b.settings.logo
+          assign amz_drawer_logo_inv = b.settings['amz-logo-inv']
+        endif
+      endfor
+    endif
+
+    # Prefer the main (usually black) logo if available
+    if amz_drawer_logo == blank and shop.brand.logo != blank
+      assign amz_drawer_logo = shop.brand.logo
+    endif
+
+    # Fallback to inverted logo only if no main logo is available
+    if amz_drawer_logo == blank
+      assign amz_drawer_logo = amz_drawer_logo_inv
+    endif
+  -%}
+
+  <div id="CartDrawer" class="drawer drawer--right">
+    <form
+      id="CartDrawerForm"
+      action="{{ routes.cart_url }}"
+      method="post"
+      novalidate
+      class="drawer__contents"
+      data-location="cart-drawer"
+      tabindex="-1"
+    >
+      <div class="drawer__fixed-header">
+        <div class="drawer__header appear-animation appear-delay-1" style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+          <div style="width:44px; flex-shrink:0;"></div>
+          <div style="flex:1; display:flex; justify-content:center; align-items:center;">
+            {%- if amz_drawer_logo != blank -%}
+              {{ amz_drawer_logo
+                | image_url: width: 480
+                | image_tag: alt: shop.name, class: 'amz-cart-drawer__logo', loading: 'lazy'
+              }}
+            {%- else -%}
+              <span class="amz-cart-drawer__logo-text">{{ shop.name }}</span>
+            {%- endif -%}
+          </div>
+          <div class="drawer__close" style="width:44px; flex-shrink:0; display:flex; justify-content:flex-end; align-items:center;">
+            <button type="button" class="drawer__close-button js-drawer-close">
+              <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-close" viewBox="0 0 64 64">
+                <title>icon-X</title><path d="m19 17.61 27.12 27.13m0-27.12L19 44.74"/>
+              </svg>
+              <span class="icon__fallback-text">{{ 'cart.general.close_cart' | t }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="drawer__inner">
+        {%- if settings.cart_drawer_show_announcement -%}
+          {%- if settings.cart_announce_enable or settings.cart_reserve_enable -%}
+            <div
+              class="amz-cart-ann-bar appear-animation appear-delay-2"
+              style="background-color: transparent; color: inherit; height: {{ settings.cart_drawer_announcement_height }}px; display: block;"
+            >
+              <div
+                class="amz-cart-ann-bar__inner appear-animation appear-delay-1"
+                style="height:100%; display:flex; align-items:center; justify-content:center;"
+              >
+                {%- render 'cart-announcement-slider' -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if settings.cart_drawer_show_announcement and settings.reward_bar_enable -%}
+          <div style="height:8px;"></div>
+        {%- endif -%}
+
+        {%- if settings.reward_bar_enable -%}
+          <div class="appear-animation appear-delay-2" data-reward-bar>
+            {%- render 'reward-bar' -%}
+          </div>
+        {%- endif -%}
+
+        <div class="drawer__scrollable">
+          <div data-products class="appear-animation appear-delay-2"></div>
+
+          {% if settings.cart_notes_enable %}
+            <div class="appear-animation appear-delay-3">
+              <label for="CartNoteDrawer">{{ 'cart.general.note' | t }}</label>
+              <textarea name="note" class="input-full cart-notes" id="CartNoteDrawer">{{ cart.note }}</textarea>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="drawer__footer appear-animation appear-delay-4">
+          <div data-discounts>
+            {% if cart.cart_level_discount_applications != blank %}
+              <div class="cart__discounts cart__item-sub cart__item-row">
+                <div>{{ 'cart.general.discounts' | t }}</div>
+                <div class="text-right">
+                  {% for cart_discount in cart.cart_level_discount_applications %}
+                    <div class="cart__discount">
+                      {{ cart_discount.title }} (-{{ cart_discount.total_allocated_amount | money }})
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="cart__item-sub cart__item-row cart__subtotal-row">
+            <div class="ajaxcart__subtotal">{{ 'cart.general.subtotal' | t }}</div>
+            <div data-subtotal>{{ cart.total_price | money }}</div>
+          </div>
+
+          <div class="cart__item-row text-center">
+            <small>
+              {{ 'cart.general.shipping_at_checkout' | t -}}
+              <br>
+            </small>
+          </div>
+
+          {% if settings.cart_terms_conditions_enable %}
+            <div class="cart__item-row cart__terms">
+              <input type="checkbox" id="CartTermsDrawer" class="cart__terms-checkbox">
+              <label for="CartTermsDrawer">
+                {% if settings.cart_terms_conditions_page != blank %}
+                  {{ 'cart.general.terms_html' | t: url: settings.cart_terms_conditions_page.url }}
+                {% else %}
+                  {{ 'cart.general.terms' | t }}
+                {% endif %}
+              </label>
+            </div>
+          {% endif %}
+
+          <div class="cart__checkout-wrapper">
+            <style>
+              #CartDrawer .cart__checkout{
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                gap:8px;
+              }
+              #CartDrawer .cart__checkout-lock{
+                width:16px;
+                height:16px;
+                flex:0 0 auto;
+              }
+              #CartDrawer .cart__checkout-dot{
+                opacity:0.85;
+              }
+              .cart__item-savings {
+              font-weight: bold;
+              color: #00aa63;
+              }
+              span.cart__checkout-text {
+              letter-spacing: 1px;
+              }
+              span.cart__checkout-total {
+              letter-spacing: 1px;
+              }
+            </style>
+
+            <button
+              type="submit"
+              name="checkout"
+              data-terms-required="{{ settings.cart_terms_conditions_enable }}"
+              class="btn cart__checkout"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="white"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+                class="cart__checkout-lock"
+              >
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z"></path>
+              </svg>
+              <span class="cart__checkout-text">{{ 'cart.general.checkout_securely' | t }}</span>
+              <span class="cart__checkout-dot">•</span>
+              <span class="cart__checkout-total" data-checkout-total>{{ cart.total_price | money }}</span>
+            </button>
+
+            {% if additional_checkout_buttons and settings.cart_additional_buttons %}
+              <div class="additional-checkout-buttons additional-checkout-buttons--vertical">
+                {{ content_for_additional_checkout_buttons }}
+              </div>
+            {% endif %}
+          </div>
+
+          <style>
+            #CartDrawer .amz-cart-drawer__logo{height:28px;width:auto;display:block;}
+            #CartDrawer .amz-cart-drawer__logo-text{font-weight:600;font-size:16px;line-height:1;}
+          </style>
+
+          <script>
+            (function () {
+              function formatMoneyFromCents(cents) {
+                var amount = Number(cents || 0) / 100;
+                if (window.Shopify && typeof Shopify.formatMoney === 'function' && Shopify.money_format) {
+                  try { return Shopify.formatMoney(Number(cents || 0), Shopify.money_format); } catch (e) {}
+                }
+                try {
+                  var locale = (window.Shopify && Shopify.locale) ? Shopify.locale : 'en';
+                  var currency = (window.Shopify && Shopify.currency && Shopify.currency.active) ? Shopify.currency.active : 'USD';
+                  return new Intl.NumberFormat(locale, { style: 'currency', currency: currency }).format(amount);
+                } catch (e) {
+                  return amount.toFixed(2);
+                }
+              }
+
+              function setTotalsFromCents(cents) {
+                if (typeof cents !== 'number' || isNaN(cents)) return;
+                var text = formatMoneyFromCents(cents);
+                var elTotal = document.querySelector('#CartDrawer [data-checkout-total]');
+                if (elTotal) elTotal.textContent = text;
+                var elSubtotal = document.querySelector('#CartDrawer [data-subtotal]');
+                if (elSubtotal) elSubtotal.textContent = text;
+              }
+
+              function fetchCartAndUpdate() {
+                return fetch((window.apx && apx.routes && apx.routes.cart) ? apx.routes.cart : '/cart.js', { credentials: 'same-origin' })
+                  .then(function (r) { return r.json(); })
+                  .then(function (cart) {
+                    var cents = (cart && typeof cart.total_price === 'number') ? cart.total_price : 0;
+                    setTotalsFromCents(cents);
+                  })
+                  .catch(function () {});
+              }
+
+              function bindObserver() {
+                var target = document.querySelector('#CartDrawer [data-products]');
+                if (!target || target.__amzTotalsObs) return;
+                var obs = new MutationObserver(function () {
+                  fetchCartAndUpdate();
+                });
+                obs.observe(target, { childList: true, subtree: true });
+                target.__amzTotalsObs = true;
+              }
+
+              document.addEventListener('DOMContentLoaded', function () {
+                fetchCartAndUpdate();
+                bindObserver();
+              });
+              document.addEventListener('cart:updated', function () {
+                fetchCartAndUpdate();
+                bindObserver();
+              });
+              document.addEventListener('drawer:open', function (e) {
+                if (e && e.target && e.target.id === 'CartDrawer') {
+                  setTimeout(function () {
+                    fetchCartAndUpdate();
+                    bindObserver();
+                  }, 50);
+                }
+              });
+            })();
+          </script>
+        </div>
+      </div>
+
+      <div class="drawer__cart-empty appear-animation appear-delay-2">
+        <div class="drawer__scrollable">
+          {{ 'cart.general.empty' | t }}
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      var _savedScrollY = 0;
+      var _touchStartY = 0;
+      var _isLocked = false;
+
+      function getDrawerScrollable() {
+        return document.querySelector('#CartDrawer .drawer__scrollable');
+      }
+
+      function onTouchStart(e) {
+        _touchStartY = e.touches[0].clientY;
+      }
+
+      function onTouchMove(e) {
+        var scrollable = getDrawerScrollable();
+
+        if (!scrollable) {
+          e.preventDefault();
+          return;
+        }
+
+        var node = e.target;
+        var insideScrollable = false;
+        while (node) {
+          if (node === scrollable) {
+            insideScrollable = true;
+            break;
+          }
+          node = node.parentNode;
+        }
+
+        if (!insideScrollable) {
+          e.preventDefault();
+          return;
+        }
+
+        var deltaY = _touchStartY - e.touches[0].clientY;
+        var atTop = scrollable.scrollTop <= 0;
+        var atBottom = scrollable.scrollTop + scrollable.clientHeight >= scrollable.scrollHeight - 1;
+
+        if ((atTop && deltaY < 0) || (atBottom && deltaY > 0)) {
+          e.preventDefault();
+        }
+      }
+
+      function lockScroll() {
+        if (_isLocked) return;
+        _isLocked = true;
+        _savedScrollY = window.pageYOffset || 0;
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.top = '-' + _savedScrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.addEventListener('touchstart', onTouchStart, { passive: true });
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+      }
+
+      function unlockScroll() {
+        if (!_isLocked) return;
+        _isLocked = false;
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, _savedScrollY);
+        document.removeEventListener('touchstart', onTouchStart);
+        document.removeEventListener('touchmove', onTouchMove);
+      }
+
+      var _htmlObserver = new MutationObserver(function (mutations) {
+        mutations.forEach(function (m) {
+          if (m.attributeName === 'class') {
+            if (document.documentElement.classList.contains('js-drawer-open')) {
+              lockScroll();
+            } else {
+              unlockScroll();
+            }
+          }
+        });
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        _htmlObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      });
+    })();
+  </script>
+{%- endif -%}

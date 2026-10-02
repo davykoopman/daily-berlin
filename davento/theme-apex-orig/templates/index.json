@@ -1,0 +1,160 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow_iJ73j4": {
+      "type": "slideshow",
+      "blocks": {
+        "image_LDtL9t": {
+          "type": "image",
+          "settings": {
+            "top_subheading": "",
+            "title": "Capi di moda da indossare tutti i giorni",
+            "title_size": 60,
+            "subheading": "",
+            "link": "shopify://collections",
+            "link_text": "Acquista ora",
+            "link_2": "",
+            "link_text_2": "",
+            "color_accent": "rgba(0,0,0,0)",
+            "text_align": "vertical-center horizontal-center",
+            "image": "shopify://shop_images/Davento-hero-banner.png",
+            "parallax_direction": "top",
+            "overlay_opacity": 10
+          }
+        }
+      },
+      "block_order": [
+        "image_LDtL9t"
+      ],
+      "name": "t:sections.slideshow.presets.hero_optional_slideshow.name",
+      "settings": {
+        "section_height": "750px",
+        "mobile_height": "auto",
+        "parallax": false,
+        "style": "bars",
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "lazyload_images": true
+      }
+    },
+    "text_and_image_3Hjyqh": {
+      "type": "text-and-image",
+      "name": "t:sections.text-and-image.presets.image_with_text.name",
+      "settings": {
+        "image": "shopify://shop_images/Davento-about-us.png",
+        "image_mask": "none",
+        "image2_mask": "none",
+        "subtitle": "",
+        "title": "Chi siamo",
+        "text": "<p>Davento propone capi di moda curati, pensati per l'uso quotidiano, selezionati per la loro vestibilità, il comfort e la durata che va ben oltre una singola stagione.</p>",
+        "button_label": "Per saperne di più...",
+        "button_link": "shopify://pages/chi-siamo",
+        "button_style": "primary",
+        "align_text": "left",
+        "image_width": "50",
+        "layout": "right",
+        "divider": false,
+        "top_padding": true,
+        "bottom_padding": true,
+        "lazyload_images": true
+      }
+    },
+    "1785069243b39bd644": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_0b706db_pd3644": {
+          "type": "ai_gen_block_0b706db",
+          "settings": {
+            "women_image": "shopify://shop_images/ChatGPT_Image_Jul_26_2026_03_26_30_PM.png",
+            "women_title": "Donna",
+            "women_subtitle": "Acquista Moda Donna",
+            "women_link": "shopify://collections/donna",
+            "men_image": "shopify://shop_images/ChatGPT_Image_Jul_26_2026_03_23_52_PM.png",
+            "men_title": "Uomo",
+            "men_subtitle": "Acquista Moda Uomo",
+            "men_link": "shopify://collections/uomo",
+            "image_aspect_ratio": "3/4",
+            "border_radius": 0,
+            "desktop_width_percent": 100,
+            "gap_desktop": 20,
+            "gap_mobile": 15,
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "overlay_hover_opacity": 20,
+            "text_color": "#ffffff",
+            "title_size": 48,
+            "title_weight": 700,
+            "subtitle_size": 16
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_0b706db_pd3644"
+      ],
+      "settings": {}
+    },
+    "faq_y3PQcD": {
+      "type": "faq",
+      "blocks": {
+        "question_bK3HbG": {
+          "type": "question",
+          "settings": {
+            "title": "La spedizione è davvero gratuita?",
+            "text": "<p>Sì. Ogni ordine viene spedito gratuitamente in Italia e Germania, senza alcun importo minimo di spesa richiesto.</p>"
+          }
+        },
+        "question_PryzUU": {
+          "type": "question",
+          "settings": {
+            "title": "Quando arriverà il mio ordine?",
+            "text": "<p>Gli ordini vengono evasi in 1-2 giorni lavorativi e arrivano entro 3-7 giorni lavorativi dalla spedizione, per un totale di 4-9 giorni lavorativi.</p>"
+          }
+        },
+        "question_nGARxK": {
+          "type": "question",
+          "settings": {
+            "title": "Posso restituire un articolo se non è di mio gradimento?",
+            "text": "<p>Certamente. Hai 60 giorni di tempo dalla consegna per avviare la procedura di reso. Basta inviare un’e-mail all’indirizzo support@davento.it.</p>"
+          }
+        },
+        "question_nAfNXG": {
+          "type": "question",
+          "settings": {
+            "title": "È sicuro effettuare pagamenti sul vostro sito?",
+            "text": "<p>Sì. Tutti i pagamenti sono crittografati con protocollo SSL e non salviamo mai i dati della tua carta di credito sui nostri server.<br/></p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_bK3HbG",
+        "question_PryzUU",
+        "question_nGARxK",
+        "question_nAfNXG"
+      ],
+      "name": "t:sections.faq.presets.faq.name",
+      "settings": {
+        "title": "FAQs"
+      }
+    },
+    "1788195008cb962f38": {
+      "type": "_blocks",
+      "settings": {}
+    }
+  },
+  "order": [
+    "slideshow_iJ73j4",
+    "text_and_image_3Hjyqh",
+    "1785069243b39bd644",
+    "faq_y3PQcD",
+    "1788195008cb962f38"
+  ]
+}

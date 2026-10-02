@@ -1,0 +1,702 @@
+
+{%- liquid
+  assign current_filter_size = 0
+
+  for filter in collection.filters
+    assign current_filter_size = current_filter_size | plus: filter.active_values.size
+  endfor
+-%}
+
+<div
+  class="collection-content"
+  data-section-id="{{ section.id }}"
+  data-apx-section="collection-grid"
+>
+  <div id="CollectionAjaxContent">
+    <div class="amz-pw{% if settings.collection_full_width_products %} amz-pw--full{% endif %}">
+      <div class="grid">
+        <div class="grid__item medium-up--one-fifth grid__item--sidebar">
+          {%- render 'collection-grid-filters',
+            collection: collection,
+            enable_sidebar: section.settings.enable_sidebar,
+            filter_style: section.settings.filter_style,
+            collapsed: section.settings.collapsed,
+            enable_color_swatches: section.settings.enable_color_swatches,
+            enable_swatch_labels: section.settings.enable_swatch_labels
+          -%}
+        </div>
+        <div class="grid__item medium-up--four-fifths grid__item--content">
+          {%- liquid
+            for block in section.blocks
+              case block.type
+              when 'product_grid'
+                assign paginate_by = block.settings.per_row | times: block.settings.rows_per_page
+              endcase
+            endfor
+          -%}
+          {%- paginate collection.products by paginate_by -%}
+          {%- for block in section.blocks -%}
+            <div {{ block.shopify_attributes }} {%- if block.type == 'product-grid' -%}data-scroll-to{%- endif -%}>
+              {%- case block.type -%}
+              {%- when 'collection_description' -%}
+                {%- if collection.description != blank and current_filter_size == 0 -%}
+                  <div class="rte collection__description">
+                    {{ collection.description }}
+                  </div>
+                {%- endif -%}
+              {%- when 'subcollections' -%}
+                {%- if paginate.current_page == 1 and current_filter_size == 0 -%}
+                  {%- render 'subcollections', per_row: block.settings.subcollections_per_row -%}
+                {%- endif -%}
+              {%- when 'product_grid' -%}
+                <div data-scroll-to>
+                  {% render 'collection-grid',
+                    collection: collection,
+                    items: collection.products,
+                    enable_sidebar: section.settings.enable_sidebar,
+                    filter_style: section.settings.filter_style,
+                    enable_sort: section.settings.enable_sort,
+                    enable_collection_count: block.settings.enable_collection_count,
+                    per_row: block.settings.per_row,
+                    mobile_flush_grid: block.settings.mobile_flush_grid,
+                    quick_shop_enable: settings.quick_shop_enable,
+                    page: paginate.current_page,
+                    promo_ads_enable: block.settings.promo_ads_enable,
+                    promo_ads_first_page_only: block.settings.promo_ads_first_page_only,
+                    promo_ad_1_enable: block.settings.promo_ad_1_enable,
+                    promo_ad_1_image: block.settings.promo_ad_1_image,
+                    promo_ad_1_link: block.settings.promo_ad_1_link,
+                    promo_ad_1_row: block.settings.promo_ad_1_row,
+                    promo_ad_1_col: block.settings.promo_ad_1_col,
+                    promo_ad_1_mobile_row: block.settings.promo_ad_1_mobile_row,
+                    promo_ad_1_mobile_col: block.settings.promo_ad_1_mobile_col,
+                    promo_ad_1_height_desktop: block.settings.promo_ad_1_height_desktop,
+                    promo_ad_1_height_mobile: block.settings.promo_ad_1_height_mobile,
+                    promo_ad_1_radius: block.settings.promo_ad_1_radius,
+                    promo_ad_1_fit: block.settings.promo_ad_1_fit,
+                    promo_ad_2_enable: block.settings.promo_ad_2_enable,
+                    promo_ad_2_image: block.settings.promo_ad_2_image,
+                    promo_ad_2_link: block.settings.promo_ad_2_link,
+                    promo_ad_2_row: block.settings.promo_ad_2_row,
+                    promo_ad_2_col: block.settings.promo_ad_2_col,
+                    promo_ad_2_mobile_row: block.settings.promo_ad_2_mobile_row,
+                    promo_ad_2_mobile_col: block.settings.promo_ad_2_mobile_col,
+                    promo_ad_2_height_desktop: block.settings.promo_ad_2_height_desktop,
+                    promo_ad_2_height_mobile: block.settings.promo_ad_2_height_mobile,
+                    promo_ad_2_radius: block.settings.promo_ad_2_radius,
+                    promo_ad_2_fit: block.settings.promo_ad_2_fit,
+                    promo_ad_3_enable: block.settings.promo_ad_3_enable,
+                    promo_ad_3_image: block.settings.promo_ad_3_image,
+                    promo_ad_3_link: block.settings.promo_ad_3_link,
+                    promo_ad_3_row: block.settings.promo_ad_3_row,
+                    promo_ad_3_col: block.settings.promo_ad_3_col,
+                    promo_ad_3_mobile_row: block.settings.promo_ad_3_mobile_row,
+                    promo_ad_3_mobile_col: block.settings.promo_ad_3_mobile_col,
+                    promo_ad_3_height_desktop: block.settings.promo_ad_3_height_desktop,
+                    promo_ad_3_height_mobile: block.settings.promo_ad_3_height_mobile,
+                    promo_ad_3_radius: block.settings.promo_ad_3_radius,
+                    promo_ad_3_fit: block.settings.promo_ad_3_fit,
+                    promo_ad_4_enable: block.settings.promo_ad_4_enable,
+                    promo_ad_4_image: block.settings.promo_ad_4_image,
+                    promo_ad_4_link: block.settings.promo_ad_4_link,
+                    promo_ad_4_row: block.settings.promo_ad_4_row,
+                    promo_ad_4_col: block.settings.promo_ad_4_col,
+                    promo_ad_4_mobile_row: block.settings.promo_ad_4_mobile_row,
+                    promo_ad_4_mobile_col: block.settings.promo_ad_4_mobile_col,
+                    promo_ad_4_height_desktop: block.settings.promo_ad_4_height_desktop,
+                    promo_ad_4_height_mobile: block.settings.promo_ad_4_height_mobile,
+                    promo_ad_4_radius: block.settings.promo_ad_4_radius,
+                    promo_ad_4_fit: block.settings.promo_ad_4_fit
+                  %}
+                  {%- if paginate.pages > 1 -%}
+                    {%- render 'pagination', paginate: paginate -%}
+                  {%- endif -%}
+                </div>
+              {%- endcase -%}
+            </div>
+          {%- endfor -%}
+
+          {%- endpaginate -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if section.settings.enable_sidebar == false or section.settings.filter_style == 'drawer' or collection.filters.size == 0 -%}
+{% comment %}
+  Override grid styles if sidebar is disabled
+{% endcomment %}
+{% style %}
+  .collection-content .grid__item--sidebar { width: 0; padding:0; }
+  .collection-content .grid__item--content { width: 100%; }
+  .grid__item--sidebar { position: static; overflow: hidden; }
+{% endstyle %}
+{%- endif -%}
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "CollectionPage",
+  {% if collection.description != blank %}
+    "description": {{ collection.description | strip_html | json }},
+  {% endif %}
+  {% if page_image %}
+    {% assign image_size = page_image.width | append: 'x' %}
+    "image": {
+      "@type": "ImageObject",
+      "height": {{ page_image.height | json }},
+      "url": {{ page_image | img_url: image_size | prepend: "https:" | json }},
+      "width": {{ page_image.width | json }}
+    },
+  {% endif %}
+  "name": {{ collection.title | json }}
+}
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.main-collection.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.main-collection.settings.header_filtering_and_sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sidebar",
+      "label": "t:sections.main-collection.settings.enable_sidebar.label",
+      "default": true,
+      "info": "t:sections.main-collection.settings.enable_sidebar.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapsed",
+      "label": "t:sections.main-collection.settings.collapsed.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "filter_style",
+      "label": "t:sections.main-collection.settings.filter_style.label",
+      "default": "sidebar",
+      "options": [
+        {
+          "value": "sidebar",
+          "label": "t:sections.main-collection.settings.filter_style.options.sidebar.label"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.main-collection.settings.filter_style.options.drawer.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_color_swatches",
+      "label": "t:sections.main-collection.settings.enable_color_swatches.label",
+      "info": "t:sections.main-collection.settings.enable_color_swatches.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_swatch_labels",
+      "label": "t:common.enable_swatch_labels.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sort",
+      "label": "t:sections.main-collection.settings.enable_sort.label",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_description",
+      "name": "t:sections.main-collection.blocks.collection_description.name",
+      "limit": 1
+    },
+    {
+      "type": "product_grid",
+      "name": "t:sections.main-collection.blocks.products.name",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable_collection_count",
+          "label": "t:sections.main-collection.blocks.products.settings.enable_collection_count.label",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "per_row",
+          "label": "t:sections.main-collection.blocks.products.settings.per_row.label",
+          "default": 4,
+          "min": 2,
+          "max": 5,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "rows_per_page",
+          "label": "t:sections.main-collection.blocks.products.settings.rows_per_page.label",
+          "default": 7,
+          "min": 3,
+          "max": 20,
+          "step": 1
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_flush_grid",
+          "label": "t:sections.main-collection.blocks.products.settings.mobile_flush_grid.label",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Promo ad images"
+        },
+        {
+          "type": "checkbox",
+          "id": "promo_ads_enable",
+          "label": "Enable promo ad images",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "promo_ads_first_page_only",
+          "label": "Show promo ad images on first page only",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Promo image 1"
+        },
+        {
+          "type": "checkbox",
+          "id": "promo_ad_1_enable",
+          "label": "Enable promo image 1",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "promo_ad_1_image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "promo_ad_1_link",
+          "label": "Link"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_1_row",
+          "label": "Desktop row",
+          "default": 1,
+          "min": 1,
+          "max": 50,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_1_col",
+          "label": "Desktop column",
+          "default": 4,
+          "min": 1,
+          "max": 5,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_1_mobile_row",
+          "label": "Mobile row (0 = auto)",
+          "default": 0,
+          "min": 0,
+          "max": 200,
+          "step": 2
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_1_mobile_col",
+          "label": "Mobile column (0 = auto)",
+          "default": 0,
+          "min": 0,
+          "max": 6,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_1_height_desktop",
+          "label": "Height (desktop)",
+          "default": 520,
+          "min": 200,
+          "max": 900,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_1_height_mobile",
+          "label": "Height (mobile)",
+          "default": 420,
+          "min": 150,
+          "max": 800,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_1_radius",
+          "label": "Border radius",
+          "default": 10,
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "promo_ad_1_fit",
+          "label": "Image fit",
+          "default": "cover",
+          "options": [
+            {
+              "value": "cover",
+              "label": "Cover"
+            },
+            {
+              "value": "contain",
+              "label": "Contain"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Promo image 2"
+        },
+        {
+          "type": "checkbox",
+          "id": "promo_ad_2_enable",
+          "label": "Enable promo image 2",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "promo_ad_2_image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "promo_ad_2_link",
+          "label": "Link"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_2_row",
+          "label": "Desktop row",
+          "default": 3,
+          "min": 1,
+          "max": 50,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_2_col",
+          "label": "Desktop column",
+          "default": 1,
+          "min": 1,
+          "max": 5,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_2_mobile_row",
+          "label": "Mobile row (0 = auto)",
+          "default": 0,
+          "min": 0,
+          "max": 200,
+          "step": 2
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_2_mobile_col",
+          "label": "Mobile column (0 = auto)",
+          "default": 0,
+          "min": 0,
+          "max": 6,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_2_height_desktop",
+          "label": "Height (desktop)",
+          "default": 520,
+          "min": 200,
+          "max": 900,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_2_height_mobile",
+          "label": "Height (mobile)",
+          "default": 420,
+          "min": 150,
+          "max": 800,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_2_radius",
+          "label": "Border radius",
+          "default": 10,
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "promo_ad_2_fit",
+          "label": "Image fit",
+          "default": "cover",
+          "options": [
+            {
+              "value": "cover",
+              "label": "Cover"
+            },
+            {
+              "value": "contain",
+              "label": "Contain"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Promo image 3"
+        },
+        {
+          "type": "checkbox",
+          "id": "promo_ad_3_enable",
+          "label": "Enable promo image 3",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "promo_ad_3_image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "promo_ad_3_link",
+          "label": "Link"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_3_row",
+          "label": "Desktop row",
+          "default": 5,
+          "min": 1,
+          "max": 50,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_3_col",
+          "label": "Desktop column",
+          "default": 4,
+          "min": 1,
+          "max": 5,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_3_mobile_row",
+          "label": "Mobile row (0 = auto)",
+          "default": 0,
+          "min": 0,
+          "max": 200,
+          "step": 2
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_3_mobile_col",
+          "label": "Mobile column (0 = auto)",
+          "default": 0,
+          "min": 0,
+          "max": 6,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_3_height_desktop",
+          "label": "Height (desktop)",
+          "default": 520,
+          "min": 200,
+          "max": 900,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_3_height_mobile",
+          "label": "Height (mobile)",
+          "default": 420,
+          "min": 150,
+          "max": 800,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_3_radius",
+          "label": "Border radius",
+          "default": 10,
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "promo_ad_3_fit",
+          "label": "Image fit",
+          "default": "cover",
+          "options": [
+            {
+              "value": "cover",
+              "label": "Cover"
+            },
+            {
+              "value": "contain",
+              "label": "Contain"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Promo image 4"
+        },
+        {
+          "type": "checkbox",
+          "id": "promo_ad_4_enable",
+          "label": "Enable promo image 4",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "promo_ad_4_image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "promo_ad_4_link",
+          "label": "Link"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_4_row",
+          "label": "Desktop row",
+          "default": 4,
+          "min": 1,
+          "max": 50,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_4_col",
+          "label": "Desktop column",
+          "default": 4,
+          "min": 1,
+          "max": 5,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_4_mobile_row",
+          "label": "Mobile row (0 = auto)",
+          "default": 0,
+          "min": 0,
+          "max": 200,
+          "step": 2
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_4_mobile_col",
+          "label": "Mobile column (0 = auto)",
+          "default": 0,
+          "min": 0,
+          "max": 6,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_4_height_desktop",
+          "label": "Height (desktop)",
+          "default": 520,
+          "min": 200,
+          "max": 1200,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_4_height_mobile",
+          "label": "Height (mobile)",
+          "default": 420,
+          "min": 160,
+          "max": 900,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "promo_ad_4_radius",
+          "label": "Border radius",
+          "default": 10,
+          "min": 0,
+          "max": 60,
+          "step": 1,
+          "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "promo_ad_4_fit",
+          "label": "Image fit",
+          "default": "cover",
+          "options": [
+            {
+              "value": "cover",
+              "label": "Cover"
+            },
+            {
+              "value": "contain",
+              "label": "Contain"
+            }
+          ]
+        }
+      ],
+      "limit": 1
+    },
+    {
+      "type": "subcollections",
+      "name": "t:sections.main-collection.blocks.subcollections.name",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.main-collection.blocks.subcollections.settings.content"
+        },
+        {
+          "type": "range",
+          "id": "subcollections_per_row",
+          "label": "t:sections.main-collection.blocks.subcollections.settings.subcollections_per_row.label",
+          "default": 5,
+          "min": 2,
+          "max": 5,
+          "step": 1
+        }
+      ],
+      "limit": 1
+    }
+  ]
+}
+{% endschema %}

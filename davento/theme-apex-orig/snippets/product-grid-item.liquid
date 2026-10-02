@@ -1,0 +1,1151 @@
+{% comment %}
+  Arguments
+  - product: product object
+  - [per_row]: number of items per row
+  - [quick_shop_enable]: boolean
+  - [collection]: collection object
+{% endcomment %}
+
+{%- liquid
+  unless per_row
+    assign per_row = 4
+  endunless
+
+  capture gridView
+    render 'products_per_row', products_per_row: per_row, style: 'fractions'
+  endcapture
+  assign sizeVariable = gridView
+  if fallback != blank
+    assign fallback = fallback
+  else
+    assign fallback = 'variable'
+  endif
+
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  assign product_tags = product.tags | join: ','
+  assign has_custom_label = false
+  if product.metafields.theme.label and product.metafields.theme.label != blank
+    assign has_custom_label = true
+    assign custom_label = product.metafields.theme.label.value
+  elsif product_tags contains '_label_'
+    for tag in product.tags
+      if tag contains '_label_'
+        assign tag_starts_with = tag | slice: 0
+        if tag_starts_with == '_'
+          assign has_custom_label = true
+          assign custom_label = tag | replace: '_label_', ''
+        endif
+      endif
+    endfor
+  endif
+
+  assign has_badge1 = false
+  assign has_badge2 = false
+
+  for tag in product.tags
+    if tag == 'badge1'
+      assign has_badge1 = true
+    elsif tag == 'badge2'
+      assign has_badge2 = true
+    endif
+  endfor
+-%}
+
+{%- liquid
+  assign amz_grid_swatches_enable = settings.grid_swatches_enable
+  if amz_grid_swatches_enable == null
+    assign amz_grid_swatches_enable = settings.enable_swatches
+  endif
+  if grid_swatches_enable != null
+    assign amz_grid_swatches_enable = grid_swatches_enable
+  endif
+
+  assign amz_grid_swatches_mode = settings.grid_swatches_mode_default | default: 'color'
+  if grid_swatches_mode != blank
+    assign amz_grid_swatches_mode = grid_swatches_mode
+  endif
+
+  assign amz_grid_swatches_position = settings.grid_swatches_position | default: 'below_image'
+  if grid_swatches_position != blank
+    assign amz_grid_swatches_position = grid_swatches_position
+  endif
+
+  assign amz_grid_swatches_shape = settings.grid_swatches_shape | default: 'theme'
+  if grid_swatches_shape != blank
+    assign amz_grid_swatches_shape = grid_swatches_shape
+  endif
+
+  assign amz_is_round = false
+  if amz_grid_swatches_shape == 'round'
+    assign amz_is_round = true
+  elsif amz_grid_swatches_shape == 'theme'
+    if settings.swatch_style == 'round'
+      assign amz_is_round = true
+    endif
+  endif
+
+  assign amz_grid_swatches_collapse = settings.grid_swatches_collapse
+  if amz_grid_swatches_collapse == null
+    assign amz_grid_swatches_collapse = true
+  endif
+  if amz_grid_swatches_collapse != false
+    if grid_swatches_collapse != null
+      assign amz_grid_swatches_collapse = grid_swatches_collapse
+    endif
+  endif
+
+  assign amz_grid_swatches_limit = settings.grid_swatches_limit | default: 3
+  if grid_swatches_limit != blank
+    assign amz_grid_swatches_limit = grid_swatches_limit
+  endif
+
+  assign amz_grid_swatches_tooltip = settings.grid_swatches_tooltip_enable
+  if amz_grid_swatches_tooltip == null
+    assign amz_grid_swatches_tooltip = true
+  endif
+  assign amz_grid_swatches_hide_single = settings.grid_swatches_hide_if_single
+  if amz_grid_swatches_hide_single == null
+    assign amz_grid_swatches_hide_single = true
+  endif
+
+  assign amz_is_featured_context = false
+  if grid_swatches_enable != null and request.page_type != 'collection'
+    assign amz_is_featured_context = true
+  endif
+
+  if amz_is_featured_context and settings.grid_swatches_hide_featured
+    assign amz_grid_swatches_enable = false
+  endif
+
+  if request.page_type == 'product' and settings.grid_swatches_hide_recommendations
+    assign amz_grid_swatches_enable = false
+  endif
+
+  assign amz_swatch_trigger = 'products.general.color_swatch_trigger' | t | downcase
+  assign amz_swatch_file_extension = settings.grid_swatches_file_ext | default: 'png'
+-%}
+
+{%- capture amz_grid_swatches_html -%}
+  {%- if amz_grid_swatches_enable -%}
+    {%- liquid
+      assign amz_swatch_option_index = nil
+      for option in product.options_with_values
+        assign option_name = option.name | downcase
+        assign is_color = false
+        if option_name contains amz_swatch_trigger
+          assign is_color = true
+        elsif amz_swatch_trigger == 'color' and option_name contains 'colour'
+          assign is_color = true
+        endif
+        if is_color
+          assign amz_swatch_option_index = forloop.index0
+          break
+        endif
+      endfor
+    -%}
+
+    {%- if amz_swatch_option_index != nil -%}
+      {%- liquid
+        assign values = ''
+        assign count = 0
+      -%}
+      <div class="amz-grid-swatches amz-sw-align-d-{{ settings.grid_swatches_align_desktop | default: 'left' }} amz-sw-align-m-{{ settings.grid_swatches_align_mobile | default: 'left' }}" data-swatch-limit="{{ amz_grid_swatches_limit }}" data-swatch-collapse="{{ amz_grid_swatches_collapse }}" data-collapse-device="{{ settings.grid_swatches_collapse_device | default: 'desktop' }}" data-device="{{ settings.grid_swatches_device | default: 'both' }}" data-swipe-mode="{{ settings.grid_swatches_swipe_mode | default: 'disabled' }}" data-swipe-arrows="{{ settings.grid_swatches_swipe_arrows | default: true }}" data-per-view-mobile="{{ settings.grid_swatches_swipe_per_view_mobile | default: 3 }}">
+        <button type="button" class="amz-grid-swatches__nav amz-grid-swatches__nav--prev" aria-label="Previous swatches"><svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M0 0h24v24H0z" fill="none"></path><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path></svg></button>
+        <div class="amz-grid-swatches__viewport" tabindex="0">
+          <div class="amz-grid-swatches__track">
+        {%- for variant in product.variants -%}
+          {%- assign value = variant.options[amz_swatch_option_index] -%}
+          {%- unless values contains value -%}
+            {%- liquid
+              assign values = values | join: ',' | append: ',' | append: value | split: ','
+              assign count = count | plus: 1
+
+              assign color_file_name = value | handle | append: '.' | append: amz_swatch_file_extension
+              assign color_image = color_file_name | file_img_url: '50x50' | prepend: 'https:' | split: '?' | first
+              assign color_swatch_fallback = value | split: ' ' | last | handle
+
+              assign variant_img = blank
+              if variant.image
+                assign variant_img = variant.image | img_url: '720x'
+              elsif variant.featured_media and variant.featured_media.preview_image
+                assign variant_img = variant.featured_media.preview_image | img_url: '720x'
+              endif
+
+              assign hidden = false
+              if amz_grid_swatches_collapse and count > amz_grid_swatches_limit
+                assign hidden = true
+              endif
+            -%}
+
+            <button
+              type="button"
+              class="amz-grid-swatch{% if amz_is_round %} is-round{% else %} is-square{% endif %}{% if hidden %} is-collapsed{% endif %}{% if variant_img != blank %} has-variant-image{% endif %}"
+              data-swatch-value="{{ value | escape }}"
+              data-variant-id="{{ variant.id }}"
+              {% if variant_img != blank %}data-variant-image="{{ variant_img }}"{% endif %}
+              {% if amz_grid_swatches_tooltip %}data-swatch-tooltip="{{ value | escape }}"{% endif %}
+              aria-label="{{ product.title | escape }} - {{ value | escape }}"
+              style="{% if amz_grid_swatches_mode == 'image' and variant_img != blank %}background-image:url({{ variant_img }});{% else %}background-color: {{ color_swatch_fallback }};{% if images[color_file_name] != blank %}background-image:url({{ color_image }});{% endif %}{% endif %}"
+            >
+              <span class="visually-hidden">{{ value }}</span>
+            </button>
+          {%- endunless -%}
+        {%- endfor -%}
+
+        {%- if amz_grid_swatches_hide_single and count < 2 -%}
+          {%- style -%}
+            .amz-gp[data-product-id="{{ product.id }}"] .amz-grid-swatches { display:none; }
+          {%- endstyle -%}
+        {%- endif -%}
+
+        {%- if amz_grid_swatches_collapse and count > amz_grid_swatches_limit -%}
+          <button type="button" class="amz-grid-swatch-more" aria-label="Show more swatches">+{{ count | minus: amz_grid_swatches_limit }}</button>
+          <button type="button" class="amz-grid-swatch-less" aria-label="Show fewer swatches">−</button>
+        {%- endif -%}
+
+          </div>
+        </div>
+        <button type="button" class="amz-grid-swatches__nav amz-grid-swatches__nav--next" aria-label="Next swatches"><svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M0 0h24v24H0z" fill="none"></path><path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z"></path></svg></button>
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- style -%}
+  @media (min-width: 769px) {
+    .amz-grid-swatches.amz-sw-align-d-left .amz-grid-swatches__track { justify-content: flex-start; }
+    .amz-grid-swatches.amz-sw-align-d-center .amz-grid-swatches__track { justify-content: center; }
+    .amz-grid-swatches.amz-sw-align-d-right .amz-grid-swatches__track { justify-content: flex-end; }
+  }
+  @media (max-width: 768px) {
+    .amz-grid-swatches.amz-sw-align-m-left .amz-grid-swatches__track { justify-content: flex-start; }
+    .amz-grid-swatches.amz-sw-align-m-center .amz-grid-swatches__track { justify-content: center; }
+    .amz-grid-swatches.amz-sw-align-m-right .amz-grid-swatches__track { justify-content: flex-end; }
+  }
+{%- endstyle -%}
+
+
+
+<div
+  class="grid__item amz-gp {{ gridView }} {% if quick_shop_enable %} amz-gp__has-qs{% endif %}"
+  data-aos="row-of-{{ per_row }}"
+  data-product-handle="{{ product.handle }}"
+  data-product-id="{{ product.id }}"
+>
+  <div class="amz-gp__body">
+    {%- liquid
+      assign imageRatio = settings.product_grid_image_size
+      assign fixed_aspect_ratio = false
+      unless imageRatio == 'natural'
+        assign fixed_aspect_ratio = true
+      endunless
+
+      if image_style == 'circle'
+        assign fixed_aspect_ratio = true
+        assign imageRatio = 'square'
+      endif
+
+      assign preview_image = product.featured_media.preview_image
+    -%}
+
+    <div class="grid__item-image-wrapper">
+      <div class="amz-gp__img-mask" style="position: relative;">
+        {%- render 'amz-trending-badges', product: product, context: 'collection' -%}
+
+        {%- if has_custom_label -%}
+          <div class="amz-gp__tag amz-gp__tag--custom">
+            {{ custom_label }}
+          </div>
+        {%- else -%}
+          {%- unless product.available -%}
+            <div class="amz-gp__tag amz-gp__tag--sold-out">
+              {{ 'products.product.sold_out' | t }}
+            </div>
+          {%- endunless -%}
+          {%- if on_sale and product.available -%}
+            {%- assign compare_price = product.compare_at_price -%}
+            {%- assign regular_price = product.price -%}
+            {%- assign sale_badge_text = '' -%}
+
+            {%- if settings.product_grid_sale_badge_style == 'percent' and compare_price > regular_price -%}
+              {%- assign percent = compare_price
+                | minus: regular_price
+                | times: 100.0
+                | divided_by: compare_price
+                | round
+              -%}
+              {%- assign percent_string = percent | append: '' -%}
+              {%- assign sale_badge_text = settings.product_grid_sale_badge_percent_text
+                | replace: '{percent}', percent_string
+              -%}
+            {%- elsif settings.product_grid_sale_badge_style == 'amount' and compare_price > regular_price -%}
+              {%- assign amount = compare_price | minus: regular_price | money -%}
+              {%- assign sale_badge_text = settings.product_grid_sale_badge_value_text | replace: '{amount}', amount -%}
+            {%- else -%}
+              {%- assign sale_badge_text = settings.product_grid_sale_badge_simple_text -%}
+            {%- endif -%}
+
+            {%- if settings.product_grid_sale_badge_enable -%}
+              <div
+                class="amz-gp__tag amz-gp__tag--sale amz-gp__tag--{{ settings.product_grid_sale_badge_position }}"
+                style="
+                  background-color: {{ settings.color_sale_tag }};
+                  color: {{ settings.color_sale_tag_text }};
+                  font-size: {{ settings.product_grid_sale_badge_font_size | default: 14 }}px;
+                  padding: {{ settings.product_grid_sale_badge_padding_y | default: 4 }}px {{ settings.product_grid_sale_badge_padding_x | default: 6 }}px;
+                  border-radius: {{ settings.product_grid_sale_badge_radius | default: 6 }}px;
+
+                  {% if settings.product_grid_sale_badge_position contains 'top' %}
+                    top: {{ settings.product_grid_sale_badge_spacing_top | default: 16 }}px;
+                  {% else %}
+                    bottom: {{ settings.product_grid_sale_badge_spacing_bottom | default: 16 }}px;
+                  {% endif %}
+
+                  {% if settings.product_grid_sale_badge_position contains 'right' %}
+                    right: {{ settings.product_grid_sale_badge_spacing_right | default: 16 }}px;
+                  {% else %}
+                    left: {{ settings.product_grid_sale_badge_spacing_left | default: 16 }}px;
+                  {% endif %}
+                "
+              >
+                {{ sale_badge_text }}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if has_badge1 and settings.badge1_enable -%}
+          {%- assign badge1_position_class = 'amz-gp__tag--' | append: settings.badge1_position -%}
+          <div
+            class="amz-gp__tag amz-gp__tag--custom-badge amz-gp__tag--badge1 {{ badge1_position_class }}"
+            style="
+              background-color: {{ settings.badge1_bg_color }};
+              color: {{ settings.badge1_text_color }};
+              font-size: {{ settings.badge1_font_size }}px;
+              font-weight: {{ settings.badge1_font_weight }};
+              padding: {{ settings.badge1_padding_y }}px {{ settings.badge1_padding_x }}px;
+              border-radius: {{ settings.badge1_radius }}px;
+              {% if settings.badge1_position contains 'top' %}
+                top: {{ settings.badge1_spacing_top }}px;
+              {% else %}
+                bottom: {{ settings.badge1_spacing_bottom }}px;
+              {% endif %}
+              {% if settings.badge1_position contains 'right' %}
+                right: {{ settings.badge1_spacing_right }}px;
+              {% else %}
+                left: {{ settings.badge1_spacing_left }}px;
+              {% endif %}
+            "
+          >
+            {{ settings.badge1_text }}
+          </div>
+        {%- endif -%}
+
+        {%- if has_badge2 and settings.badge2_enable -%}
+          {%- assign badge2_position_class = 'amz-gp__tag--' | append: settings.badge2_position -%}
+          <div
+            class="amz-gp__tag amz-gp__tag--custom-badge amz-gp__tag--badge2 {{ badge2_position_class }}"
+            style="
+              background-color: {{ settings.badge2_bg_color }};
+              color: {{ settings.badge2_text_color }};
+              font-size: {{ settings.badge2_font_size }}px;
+              font-weight: {{ settings.badge2_font_weight }};
+              padding: {{ settings.badge2_padding_y }}px {{ settings.badge2_padding_x }}px;
+              border-radius: {{ settings.badge2_radius }}px;
+              {% if settings.badge2_position contains 'top' %}
+                top: {{ settings.badge2_spacing_top }}px;
+              {% else %}
+                bottom: {{ settings.badge2_spacing_bottom }}px;
+              {% endif %}
+              {% if settings.badge2_position contains 'right' %}
+                right: {{ settings.badge2_spacing_right }}px;
+              {% else %}
+                left: {{ settings.badge2_spacing_left }}px;
+              {% endif %}
+            "
+          >
+            {{ settings.badge2_text }}
+          </div>
+        {%- endif -%}
+        {%- if fixed_aspect_ratio -%}
+          <div
+            class="grid__image-ratio grid__image-ratio--{% if image_style == 'circle' %}square{% else %}{{ settings.product_grid_image_size }}{% endif %}"
+          >
+            {%- capture image_classes -%}
+              {% unless settings.product_grid_image_fill %} grid__image-contain{% endunless %} image-style--{{ image_style }}
+            {%- endcapture -%}
+            {%- if preview_image != blank -%}
+          {%- render 'image-element',
+  img: preview_image,
+  classes: image_classes,
+  sizes: sizes,
+  sizeVariable: sizeVariable,
+  fallback: fallback,
+  widths: '360, 540, 720, 900, 1080',
+  loading: 'lazy',
+  fetchpriority: 'auto'
+-%}
+            {%- else -%}
+              {%- capture placeholder -%}product-{% cycle 1, 2, 3, 4, 5, 6 %}{%- endcapture -%}
+              <div class="product-image--placeholder">{{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}</div>
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <div
+            class="image-wrap"
+            {% if preview_image != blank %}
+              style="height: 0; padding-bottom: {{ 100 | divided_by: preview_image.aspect_ratio }}%;"
+            {% endif %}
+          >
+            {%- if preview_image != blank -%}
+              {%- capture image_classes -%}
+                amz-gp__img image-style--{{ image_style }}
+              {%- endcapture -%}
+            {%- render 'image-element',
+  img: preview_image,
+  classes: image_classes,
+  sizes: sizes,
+  sizeVariable: sizeVariable,
+  fallback: fallback,
+  widths: '360, 540, 720, 900, 1080',
+  loading: 'lazy',
+  fetchpriority: 'auto'
+-%}
+            {%- else -%}
+              {%- capture placeholder -%}product-{% cycle 1, 2, 3, 4, 5, 6 %}{%- endcapture -%}
+              <div class="product-image--placeholder">{{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}</div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if settings.product_hover_image and product.media.size > 1 -%}
+          {%- for media in product.media offset: 1 limit: 1 -%}
+            {%- assign second_image = media.preview_image -%}
+          {%- endfor -%}
+          <div class="amz-gp__img2 small--hide">
+            {%- capture image_classes -%}
+              image-style--{{ image_style }}
+            {%- endcapture -%}
+          {%- render 'image-element',
+  img: preview_image,
+  classes: image_classes,
+  sizes: sizes,
+  sizeVariable: sizeVariable,
+  fallback: fallback,
+  widths: '360, 540, 720, 900, 1080',
+  loading: 'lazy',
+  fetchpriority: 'auto'
+-%}
+          </div>
+        {%- endif -%}
+
+        {%- if quick_shop_enable and type == blank -%}
+          <button class="quick-product__btn quick-product__btn--not-ready js-modal-open-quick-modal-{{ product.id }} small--hide">
+            {{ settings.quick_shop_text }}
+          </button>
+        {%- endif -%}
+      </div>
+
+      {%- if amz_grid_swatches_position == 'below_image' -%}{{ amz_grid_swatches_html }}{%- endif -%}
+
+      <a href="{{ product.url | within: collection }}" class="amz-gp__lnk">
+        <div class="amz-gp__meta">
+          <div class="amz-gp__ttl amz-gp__ttl--{{ settings.type_product_style }}">
+            {%- if settings.product_grid_title_truncate_enable -%}
+              {%- assign title_words = product.title | strip | split: ' ' -%}
+              {%- assign title_limit = settings.product_grid_title_word_limit | default: 3 -%}
+              {%- if title_words.size > title_limit -%}
+                {{ title_words | slice: 0, title_limit | join: ' ' }}…
+              {%- else -%}
+                {{ product.title }}
+              {%- endif -%}
+            {%- else -%}
+              {{ product.title }}
+            {%- endif -%}
+          </div>
+
+          {%- if settings.vendor_enable -%}
+            <div class="amz-gp__vendor">{{ product.vendor }}</div>
+          {%- endif -%}
+
+          <div class="amz-gp__price">
+            {%- assign regular_price = product.price -%}
+            {%- assign compare_price = product.compare_at_price -%}
+            {%- assign grid_on_sale = false -%}
+
+            {%- if compare_price > regular_price and product.available -%}
+              {%- assign grid_on_sale = true -%}
+            {%- endif -%}
+
+            {%- capture price_current_html -%}
+              {%- if grid_on_sale -%}
+                {%- if product.price_varies -%}
+                  {%- assign price_value = product.price_min | money -%}
+                  <span class="amz-gp__price--current" style="color: {{ settings.cur_color }}; font-size: {{ settings.cur_size | default: 15 }}px; font-weight: {{ settings.cur_weight | default: 600 }}; padding-left: {{ settings.cur_pad_x | default: 2 }}px; padding-right: {{ settings.cur_pad_x | default: 2 }}px;">
+                    {{ 'products.general.from_text_html' | t: price: price_value }}
+                  </span>
+                {%- else -%}
+                  <span class="amz-gp__price--current" style="color: {{ settings.cur_color }}; font-size: {{ settings.cur_size | default: 15 }}px; font-weight: {{ settings.cur_weight | default: 600 }}; padding-left: {{ settings.cur_pad_x | default: 2 }}px; padding-right: {{ settings.cur_pad_x | default: 2 }}px;">
+                    {{ regular_price | money }}
+                  </span>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endcapture -%}
+
+            {%- capture price_regular_html -%}
+              {%- unless grid_on_sale -%}
+                {%- if product.price_varies -%}
+                  {%- assign price_value = product.price_min | money -%}
+                  <span class="amz-gp__price--regular" style="color: {{ settings.reg_color }}; font-size: {{ settings.reg_size | default: 15 }}px; font-weight: {{ settings.reg_weight | default: 500 }};">
+                    {{ 'products.general.from_text_html' | t: price: price_value }}
+                  </span>
+                {%- else -%}
+                  <span class="amz-gp__price--regular" style="color: {{ settings.reg_color }}; font-size: {{ settings.reg_size | default: 15 }}px; font-weight: {{ settings.reg_weight | default: 500 }};">
+                    {{ regular_price | money }}
+                  </span>
+                {%- endif -%}
+              {%- endunless -%}
+            {%- endcapture -%}
+
+            {%- capture price_compare_html -%}
+              {%- if grid_on_sale -%}
+                <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+                <span class="amz-gp__price--orig" style="color: {{ settings.cmp_color }}; font-size: {{ settings.cmp_size | default: 15 }}px; font-weight: {{ settings.cmp_weight | default: 400 }}; padding-left: {{ settings.cmp_pad_x | default: 0 }}px; padding-right: {{ settings.cmp_pad_x | default: 0 }}px;">
+                  {{ compare_price | money }}
+                </span>
+                <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
+              {%- endif -%}
+            {%- endcapture -%}
+
+            {%- capture price_save_html -%}
+              {%- assign show_save = false -%}
+              {%- if settings.save_enable and grid_on_sale -%}
+                {%- assign show_save = true -%}
+              {%- endif -%}
+              {%- if show_save and compare_price > regular_price -%}
+                {%- if settings.save_format == 'amount' -%}
+                  {%- capture saved_val -%}{{ compare_price | minus: regular_price | money }}{%- endcapture -%}
+                {%- else -%}
+                  {%- capture saved_val -%}{{ compare_price | minus: regular_price | times: 100.0 | divided_by: compare_price | round }}%{%- endcapture -%}
+                {%- endif -%}
+                <span class="amz-gp__price--save" style="color: {{ settings.save_text_color }}; background: {{ settings.save_bg_color }}; font-size: {{ settings.save_size | default: 15 }}px; font-weight: {{ settings.save_weight | default: 500 }}; padding: {{ settings.save_pad_y | default: 4 }}px {{ settings.save_pad_x | default: 2 }}px; border-radius: {{ settings.save_radius | default: 6 }}px;">
+                  {%- if settings.save_position == 'before' -%}
+                    {{ saved_val }} {{ settings.save_label | default: 'Save' }}
+                  {%- else -%}
+                    {{ settings.save_label | default: 'Save' }} {{ saved_val }}
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+            {%- endcapture -%}
+
+            {%- assign p1 = settings.order_current | default: 2 -%}
+            {%- assign p2 = settings.order_compare | default: 1 -%}
+            {%- assign p3 = settings.order_save | default: 3 -%}
+            {%- assign p4 = settings.order_regular | default: 1 -%}
+
+            {%- for i in (1..4) -%}
+              {%- if p1 == i -%}{{ price_current_html }}{%- endif -%}
+              {%- if p2 == i -%}{{ price_compare_html }}{%- endif -%}
+              {%- if p3 == i -%}{{ price_save_html }}{%- endif -%}
+              {%- if p4 == i -%}{{ price_regular_html }}{%- endif -%}
+            {%- endfor -%}
+
+            {%- assign product_variant = product.selected_or_first_available_variant -%}
+            {%- if product_variant.unit_price_measurement -%}
+              <div class="product__unit-price">
+                {%- capture unit_price_base_unit -%}
+                  {%- if product_variant.unit_price_measurement -%}
+                    {%- if product_variant.unit_price_measurement.reference_value != 1 -%}
+                      {{ product_variant.unit_price_measurement.reference_value }}
+                    {%- endif -%}
+                    {{ product_variant.unit_price_measurement.reference_unit }}
+                  {%- endif -%}
+                {%- endcapture -%}
+
+                {{ product_variant.unit_price | money }}/{{ unit_price_base_unit }}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </a>
+
+      {%- if amz_grid_swatches_position == 'below_title' or amz_grid_swatches_position == 'below_price' -%}
+        {{ amz_grid_swatches_html }}
+      {%- endif -%}
+    </div>
+    {%- if settings.amz_qad_enable -%}
+      {%- if settings.amz_qad_only_collection_page and request.page_type != 'collection' -%}
+      {%- else -%}
+        {%- if product.available or settings.amz_qad_show_soldout -%}
+          <button
+            type="button"
+            class="amz-qad-trigger js-amz-qad-open"
+            aria-controls="AmzQuickAddDrawer"
+            data-amz-qad-handle="{{ product.handle }}"
+            data-amz-qad-url="{{ product.url | within: collection }}"
+            data-amz-qad-product-id="{{ product.id }}"
+            {% unless product.available %}
+              disabled aria-disabled="true"
+            {% endunless %}
+          >
+            {{ settings.amz_qad_trigger_label | default: 'Add to cart' }}
+          </button>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  {%- if quick_shop_enable and type == blank -%}
+    {%- render 'quick-shop-modal', product: product -%}
+  {%- endif -%}
+</div>
+
+<script>
+  (function () {
+    function qsa(sel, ctx) {
+      return Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
+    }
+    function preload() {
+      var seen = {};
+      qsa('.amz-grid-swatch[data-variant-image]').forEach(function (s) {
+        var src = s.getAttribute('data-variant-image');
+        if (!src || seen[src]) return;
+        seen[src] = true;
+        var im = new Image();
+        im.src = src;
+      });
+    }
+    function setHoverLock(card, on) {
+      if (!card) return;
+      if (on) card.classList.add('amz-swatch-hover-lock');
+      else card.classList.remove('amz-swatch-hover-lock');
+    }
+    function getMainImg(card) {
+      if (!card) return null;
+      var mask = card.querySelector('.amz-gp__img-mask');
+      if (mask) {
+        var imgs = Array.prototype.slice.call(mask.querySelectorAll('img'));
+        for (var i = 0; i < imgs.length; i++) {
+          if (!imgs[i].closest('.amz-gp__img2')) return imgs[i];
+        }
+      }
+      var imgs2 = Array.prototype.slice.call(card.querySelectorAll('img'));
+      for (var j = 0; j < imgs2.length; j++) {
+        if (!imgs2[j].closest('.amz-gp__img2')) return imgs2[j];
+      }
+      return null;
+    }
+    function setActive(container, swatch) {
+      if (!container) return;
+      qsa('.amz-grid-swatch.is-active', container).forEach(function (el) {
+        el.classList.remove('is-active');
+      });
+      if (swatch) swatch.classList.add('is-active');
+    }
+    function swapImage(swatch) {
+      if (!swatch) return;
+      var src = swatch.getAttribute('data-variant-image');
+      if (!src) return;
+      var card = swatch.closest('.amz-gp');
+      var img = getMainImg(card);
+      if (!img) return;
+
+      img.setAttribute('src', src);
+      img.setAttribute('data-src', src);
+      img.removeAttribute('srcset');
+      img.removeAttribute('data-srcset');
+
+      var picture = img.closest('picture');
+      if (picture) {
+        var sources = picture.querySelectorAll('source');
+        for (var i = 0; i < sources.length; i++) {
+          sources[i].setAttribute('srcset', src);
+          sources[i].removeAttribute('data-srcset');
+        }
+      }
+    }
+    function handleSwatch(e) {
+      var swatch = e.target.closest('.amz-grid-swatch');
+      if (!swatch) return;
+      var container = swatch.closest('.amz-grid-swatches');
+      if (container) setActive(container, swatch);
+      var card = swatch.closest('.amz-gp');
+      setHoverLock(card, true);
+      swapImage(swatch);
+    }
+    function stopNav(e) {
+      if (!e.target.closest('.amz-grid-swatches')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    }
+    function onToggleCollapse(e) {
+      var btn = e.target.closest('.amz-grid-swatch-more, .amz-grid-swatch-less');
+      if (!btn) return;
+      var container = btn.closest('.amz-grid-swatches');
+      if (!container) return;
+      container.classList.toggle('is-expanded');
+    }
+
+    document.addEventListener(
+      'pointerover',
+      function (e) {
+        if (e.target.closest('.amz-grid-swatch')) handleSwatch(e);
+      },
+      true
+    );
+
+    document.addEventListener(
+      'focusin',
+      function (e) {
+        if (e.target.closest('.amz-grid-swatch')) handleSwatch(e);
+      },
+      true
+    );
+
+    document.addEventListener(
+      'pointerdown',
+      function (e) {
+        stopNav(e);
+      },
+      true
+    );
+
+    document.addEventListener(
+      'mouseup',
+      function (e) {
+        stopNav(e);
+      },
+      true
+    );
+
+    document.addEventListener(
+      'touchend',
+      function (e) {
+        stopNav(e);
+      },
+      true
+    );
+
+    document.addEventListener(
+      'click',
+      function (e) {
+        if (e.target.closest('.amz-grid-swatch')) {
+          stopNav(e);
+          handleSwatch(e);
+          return;
+        }
+        if (e.target.closest('.amz-grid-swatch-more, .amz-grid-swatch-less')) {
+          stopNav(e);
+          onToggleCollapse(e);
+        }
+      },
+      true
+    );
+
+    document.addEventListener(
+      'pointerout',
+      function (e) {
+        var container = e.target.closest('.amz-grid-swatches');
+        if (!container) return;
+        var next = e.relatedTarget;
+        if (next && container.contains(next)) return;
+        var card = container.closest('.amz-gp');
+        setHoverLock(card, false);
+      },
+      true
+    );
+
+    document.addEventListener('DOMContentLoaded', function () {
+      preload();
+    });
+  })();
+</script>
+
+<style>
+  .amz-gp.amz-swatch-hover-lock .amz-gp__img2{opacity:0!important;visibility:hidden!important;}
+  .amz-gp.amz-swatch-hover-lock .amz-gp__img-mask:hover .amz-gp__img2{opacity:0!important;visibility:hidden!important;}
+
+  .amz-gp__body{ position: relative; }
+  .amz-grid-swatches{ position: relative; z-index: 10; }
+  .amz-grid-swatch,
+  .amz-grid-swatch-more{ position: relative; z-index: 11; }
+
+  .amz-gp__body:hover .amz-gp__img2{ animation: none !important; opacity: 0 !important; }
+  .amz-gp__img-mask:hover + .amz-gp__img2{ animation: fade-in 0.2s cubic-bezier(0.26, 0.54, 0.32, 1) 0s forwards; }
+
+  .amz-gp.amz-swatch-hover-lock .amz-gp__img2{ animation: none !important; opacity: 0 !important; }
+  button.amz-grid-swatch-more {
+    width: 25px !important;
+    min-width: 30px;
+    height: 30px;
+}
+  button.amz-grid-swatch-less {
+    width: 25px !important;
+    min-width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    border: solid 1px #d7d7d7;
+  }
+</style>
+
+<script>
+  (function () {
+    window.AMZGridSwatchSlider = window.AMZGridSwatchSlider || {};
+    var NS = window.AMZGridSwatchSlider;
+    if (NS.__booted) {
+      if (NS.initAll) {
+        NS.initAll(document);
+        document.addEventListener('DOMContentLoaded', function () { NS.initAll(document); });
+        window.addEventListener('load', function () { NS.initAll(document); });
+      }
+      return;
+    }
+    NS.__booted = true;
+
+    function ensureCSS() {
+      if (document.getElementById('amz-swatch-slider-css')) return;
+      var css =
+        '' +
+        '.amz-grid-swatches{position:relative;max-width:100%;display:flex;align-items:center;gap:var(--amz-grid-swatch-gap,6px);}' +
+        '.amz-grid-swatches__viewport{max-width:100%;}' +
+        '.amz-grid-swatches__track{display:flex;align-items:center;flex-wrap:nowrap;gap:var(--amz-grid-swatch-gap,6px)!important;}' +
+        '.amz-grid-swatch-more,.amz-grid-swatch-less{display:flex;align-items:center;justify-content:center;line-height:1;}' +
+        '@media (max-width:768px){.amz-grid-swatches.amz-sw-align-m-center .amz-grid-swatches__track{justify-content:center;}.amz-grid-swatches.amz-sw-align-m-right .amz-grid-swatches__track{justify-content:flex-end;}.amz-grid-swatches.amz-sw-align-m-left .amz-grid-swatches__track{justify-content:flex-start;}}@media (min-width:769px){.amz-grid-swatches.amz-sw-align-d-center .amz-grid-swatches__track{justify-content:center;}.amz-grid-swatches.amz-sw-align-d-right .amz-grid-swatches__track{justify-content:flex-end;}.amz-grid-swatches.amz-sw-align-d-left .amz-grid-swatches__track{justify-content:flex-start;}}' +
+        '' +
+        '.amz-grid-swatches.amz-swatch-swipe-active{position:relative!important;display:block!important;}' +
+        '.amz-grid-swatches.amz-swatch-swipe-active .amz-grid-swatches__viewport{width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;-ms-overflow-style:none!important;scrollbar-width:none!important;scroll-snap-type:x mandatory!important;}' +
+        '.amz-grid-swatches.amz-swatch-swipe-active .amz-grid-swatches__viewport::-webkit-scrollbar{display:none!important;}' +
+        '.amz-grid-swatches.amz-swatch-swipe-active .amz-grid-swatches__track{display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:var(--amz-grid-swatch-gap,6px)!important;width:max-content!important;}' +
+        '.amz-grid-swatches.amz-swatch-swipe-active .amz-grid-swatch,.amz-grid-swatches.amz-swatch-swipe-active .amz-grid-swatch-more,.amz-grid-swatches.amz-swatch-swipe-active .amz-grid-swatch-less{flex:0 0 auto!important;scroll-snap-align:start;}' +
+        '.amz-grid-swatches__nav{display:none;position:absolute;top:50%;transform:translateY(-50%);align-items:center;justify-content:center;border:0;background:rgba(255,255,255,.35);padding:0;width:28px;height:28px;cursor:pointer;border-radius:999px;border:1px solid #dadada;z-index:3;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}' +
+        '.amz-grid-swatches__nav svg{width:22px;height:22px;pointer-events:none;opacity:.85;}' +
+        '.amz-grid-swatches.amz-swatch-swipe-active .amz-grid-swatches__nav{display:flex;}' +
+        '.amz-grid-swatches__nav--prev{left:2px;}' +
+        '.amz-grid-swatches__nav--next{right:2px;}' +
+        '.amz-grid-swatches__nav[style*="visibility: hidden"]{pointer-events:none;}';
+      var style = document.createElement('style');
+      style.id = 'amz-swatch-slider-css';
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
+
+    function isMobile() {
+      return window.matchMedia('(max-width: 749px)').matches;
+    }
+
+    function collapseApplies(el) {
+      var mode = (el.dataset.collapseDevice || 'desktop').toLowerCase();
+      if (mode === 'disabled') return false;
+      if (mode === 'both') return true;
+      if (mode === 'mobile') return isMobile();
+      if (mode === 'desktop') return !isMobile();
+      return !isMobile();
+    }
+
+    function shouldShowSwatches(el) {
+      var device = (el.dataset.device || 'both').toLowerCase();
+      if (device === 'both') return true;
+      if (device === 'mobile') return isMobile();
+      if (device === 'desktop') return !isMobile();
+      return true;
+    }
+
+    function isSwipeActive(el) {
+      if (collapseApplies(el)) return false;
+      var mode = (el.dataset.swipeMode || 'disabled').toLowerCase();
+      if (mode === 'disabled') return false;
+      if (mode === 'both') return true;
+      if (mode === 'mobile') return isMobile();
+      if (mode === 'desktop') return !isMobile();
+      return false;
+    }
+
+    function arrowsEnabled(el) {
+      return String(el.dataset.swipeArrows || 'true') !== 'false';
+    }
+
+    function perView(el) {
+      var v = el.dataset.perViewMobile;
+      var n = parseInt(v || '3', 10);
+      if (!n || n < 1) n = 3;
+      return n;
+    }
+
+    function initEl(el) {
+      if (!el) return;
+      if (el.__amzSwBound) return;
+      el.__amzSwBound = true;
+      el.dataset.amzSwInit = '1';
+
+      var viewport = el.querySelector('.amz-grid-swatches__viewport');
+      var track = el.querySelector('.amz-grid-swatches__track');
+      var prev = el.querySelector('.amz-grid-swatches__nav--prev');
+      var next = el.querySelector('.amz-grid-swatches__nav--next');
+      if (!viewport || !track) return;
+
+      function updateVisibility() {
+        el.style.display = shouldShowSwatches(el) ? '' : 'none';
+      }
+
+      function getStepWidth() {
+        var first = track.querySelector('.amz-grid-swatch');
+        if (!first) return 0;
+        var s = window.getComputedStyle(track);
+        var gap = parseFloat(s.columnGap || s.gap || '0') || 0;
+        var w = first.offsetWidth || first.getBoundingClientRect().width || 0;
+        if (w && w < 18) {
+          w = parseFloat(window.getComputedStyle(first).width || '0') || w;
+        }
+        if (!w || w < 18) w = 36;
+        return w + gap;
+      }
+
+      function updateViewportWidth() {
+        viewport.style.width = '';
+        viewport.style.maxWidth = '100%';
+        track.style.width = 'max-content';
+
+        var first = track.querySelector('.amz-grid-swatch');
+        if (!first) return;
+
+        var s = window.getComputedStyle(track);
+        var gap = parseFloat(s.columnGap || s.gap || '0') || 0;
+
+        var w = first.offsetWidth || first.getBoundingClientRect().width || 0;
+        if (w && w < 18) {
+          w = parseFloat(window.getComputedStyle(first).width || '0') || w;
+        }
+        if (!w || w < 18) w = 36;
+
+        var pv = perView(el);
+        var target = pv * w + Math.max(0, pv - 1) * gap;
+
+        viewport.style.width = Math.round(target) + 'px';
+      }
+
+      function updateArrows() {
+        if (!prev || !next) return;
+
+        if (!isSwipeActive(el) || !arrowsEnabled(el)) {
+          prev.style.visibility = 'hidden';
+          next.style.visibility = 'hidden';
+          return;
+        }
+
+        var maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+        if (maxScroll <= 1) {
+          prev.style.visibility = 'hidden';
+          next.style.visibility = 'hidden';
+          return;
+        }
+
+        var x = viewport.scrollLeft;
+        prev.style.visibility = x > 1 ? 'visible' : 'hidden';
+        next.style.visibility = x < maxScroll - 1 ? 'visible' : 'hidden';
+      }
+
+      function layout() {
+        updateVisibility();
+
+        var active = isSwipeActive(el);
+        el.classList.toggle('amz-swatch-swipe-active', active);
+
+        var more = track.querySelector('.amz-grid-swatch-more');
+        var less = track.querySelector('.amz-grid-swatch-less');
+        var doCollapse = collapseApplies(el) && String(el.dataset.swatchCollapse || 'false') !== 'false';
+        if (active) {
+          var collapsed = track.querySelectorAll('.amz-grid-swatch.is-collapsed');
+          collapsed.forEach(function (b) {
+            b.classList.remove('is-collapsed');
+          });
+          if (more) more.style.display = 'none';
+          if (less) less.style.display = 'none';
+
+          if (arrowsEnabled(el)) {
+            if (prev) prev.style.display = '';
+            if (next) next.style.display = '';
+          } else {
+            if (prev) prev.style.display = 'none';
+            if (next) next.style.display = 'none';
+          }
+
+          updateViewportWidth();
+          requestAnimationFrame(function () {
+            updateViewportWidth();
+            updateArrows();
+          });
+        } else {
+          viewport.style.width = '';
+          viewport.style.maxWidth = '';
+          if (prev) prev.style.display = 'none';
+          if (next) next.style.display = 'none';
+          if (more) more.style.display = doCollapse ? '' : 'none';
+          if (less) less.style.display = doCollapse ? '' : 'none';
+
+          var collapsed2 = track.querySelectorAll('.amz-grid-swatch');
+          var limit = parseInt(el.dataset.swatchLimit || '3', 10);
+          if (!limit || limit < 1) limit = 3;
+          if (doCollapse) {
+            var shown = 0;
+            collapsed2.forEach(function (b) {
+              if (!b.classList.contains('amz-grid-swatch')) return;
+              shown += 1;
+              if (shown > limit) b.classList.add('is-collapsed');
+            });
+          } else {
+            track.querySelectorAll('.amz-grid-swatch.is-collapsed').forEach(function (b) {
+              b.classList.remove('is-collapsed');
+            });
+            el.classList.remove('is-expanded');
+          }
+        }
+      }
+
+      function step(dir) {
+        if (!isSwipeActive(el)) return;
+        var delta = getStepWidth() * dir;
+        if (!delta) return;
+        var stepW = getStepWidth();
+        if (!stepW) return;
+        var maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+        var current = viewport.scrollLeft || 0;
+        var idx = Math.round(current / stepW);
+        var target = (idx + dir) * stepW;
+        if (target < 0) target = 0;
+        if (target > maxScroll) target = maxScroll;
+        try {
+          viewport.scrollTo({ left: target, behavior: 'smooth' });
+        } catch (err) {
+          viewport.scrollLeft = target;
+        }
+      }
+
+      if (prev)
+        prev.addEventListener('click', function (e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          step(-1);
+        });
+      if (next)
+        next.addEventListener('click', function (e) {
+          if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          step(1);
+        });
+
+      [prev, next].forEach(function (btn) {
+        if (!btn) return;
+        ['mousedown', 'touchstart', 'pointerdown'].forEach(function (ev) {
+          btn.addEventListener(ev, function (e) {
+            if (e) e.stopPropagation();
+          }, { passive: true });
+        });
+      });
+
+
+      function handleNavEvent(e) {
+        var btn = e && e.target && e.target.closest ? e.target.closest('.amz-grid-swatches__nav') : null;
+        if (!btn) return;
+        var container = btn.closest ? btn.closest('.amz-grid-swatches') : null;
+        if (!container) return;
+        if (!isSwipeActive(container) || !arrowsEnabled(container)) return;
+
+        if (String(btn.style && btn.style.visibility || '') === 'hidden') return;
+
+        if (e.cancelable) e.preventDefault();
+        if (e.stopPropagation) e.stopPropagation();
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+
+        var viewport2 = container.querySelector('.amz-grid-swatches__viewport');
+        var track2 = container.querySelector('.amz-grid-swatches__track');
+        if (!viewport2 || !track2) return;
+
+        var swatches = track2.querySelectorAll('.amz-grid-swatch, .amz-grid-swatch-more, .amz-grid-swatch-less');
+        var first2 = track2.querySelector('.amz-grid-swatch');
+        if (!first2) return;
+
+        var s2 = window.getComputedStyle(track2);
+        var gap2 = parseFloat(s2.columnGap || s2.gap || '0') || 0;
+
+        var w2 = first2.getBoundingClientRect().width || first2.offsetWidth || 0;
+        if (w2 && w2 < 18) w2 = parseFloat(window.getComputedStyle(first2).width || '0') || w2;
+        if (!w2 || w2 < 18) w2 = 36;
+
+        var stepW2 = w2 + gap2;
+        var dir2 = btn.classList.contains('amz-grid-swatches__nav--prev') ? -1 : 1;
+
+        var maxScroll2 = Math.max(0, viewport2.scrollWidth - viewport2.clientWidth);
+        if (maxScroll2 <= 1) return;
+
+        var current2 = viewport2.scrollLeft || 0;
+        var idx2 = Math.round(current2 / stepW2);
+        var target2 = (idx2 + dir2) * stepW2;
+        if (target2 < 0) target2 = 0;
+        if (target2 > maxScroll2) target2 = maxScroll2;
+
+        try {
+          viewport2.scrollTo({ left: target2, behavior: 'smooth' });
+        } catch (err) {
+          viewport2.scrollLeft = target2;
+        }
+
+        window.requestAnimationFrame(function () {
+          var max2 = Math.max(0, viewport2.scrollWidth - viewport2.clientWidth);
+          var x2 = viewport2.scrollLeft;
+          var prev2 = container.querySelector('.amz-grid-swatches__nav--prev');
+          var next2 = container.querySelector('.amz-grid-swatches__nav--next');
+          if (prev2) prev2.style.visibility = x2 > 1 ? 'visible' : 'hidden';
+          if (next2) next2.style.visibility = x2 < max2 - 1 ? 'visible' : 'hidden';
+        });
+      }
+
+      ['click','pointerdown','mousedown','touchstart'].forEach(function (ev) {
+        document.addEventListener(ev, handleNavEvent, true);
+      });
+
+      viewport.addEventListener('scroll', function () {
+        window.requestAnimationFrame(updateArrows);
+      });
+
+      window.addEventListener('resize', function () {
+        layout();
+      });
+
+      layout();
+    }
+
+    function initAll(root) {
+      (root || document).querySelectorAll('.amz-grid-swatches').forEach(initEl);
+    }
+
+    NS.initAll = initAll;
+    NS.initEl = initEl;
+
+    ensureCSS();
+    initAll(document);
+    document.addEventListener('DOMContentLoaded', function () { initAll(document); });
+    window.addEventListener('load', function () { initAll(document); });
+
+    var obs = new MutationObserver(function (mutations) {
+      mutations.forEach(function (m) {
+        m.addedNodes &&
+          m.addedNodes.forEach(function (n) {
+            if (n && n.nodeType === 1) {
+              if (n.matches && n.matches('.amz-grid-swatches')) initEl(n);
+              initAll(n);
+            }
+          });
+      });
+    });
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+  })();
+</script>
