@@ -19,40 +19,35 @@
       assign all_label = 'All'
   endcase
 
-  # Collection handles live in snippets/pp-config (not in settings), so translation apps cannot change them
-  capture women_handle
-    render 'pp-config', key: 'women_handle'
-  endcapture
-  capture men_handle
-    render 'pp-config', key: 'men_handle'
-  endcapture
-  assign women_handle = women_handle | strip
-  assign men_handle = men_handle | strip
-  capture women_csv
-    render 'pp-config', key: 'women_list'
-  endcapture
-  capture men_csv
-    render 'pp-config', key: 'men_list'
-  endcapture
-  capture strip_csv
-    render 'pp-config', key: 'strip_words'
-  endcapture
-
-  # Which group (men / women) this collection belongs to
-  assign men_list = men_csv | strip | split: ','
-  assign women_list = women_csv | strip | split: ','
-  assign group_parent = blank
-  assign group_list = blank
-  if collection.handle == men_handle or men_list contains collection.handle
-    assign group_parent = collections[men_handle]
-    assign group_list = men_list
-  elsif collection.handle == women_handle or women_list contains collection.handle
-    assign group_parent = collections[women_handle]
-    assign group_list = women_list
+  # Groups come from the menu: a top-level collection link with sub items is a
+  # group (e.g. Kobiety), its collection sub items are the chips, in menu order.
+  # Menu links point at the collection itself, so translations cannot break them.
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
   endif
 
-  # Words removed from chip labels, so "Kurtki męskie" / "Men's jackets" become "Kurtki" / "Jackets"
-  assign strip_words = strip_csv | strip | split: ','
+  # The group this collection is the parent of, or one of the sub items of
+  assign group_link = blank
+  for link in menu.links
+    if link.type != 'collection_link' or link.links.size == 0
+      continue
+    endif
+    if link.object.handle == collection.handle
+      assign group_link = link
+      break
+    endif
+    for item in link.links
+      if item.type == 'collection_link' and item.object.handle == collection.handle
+        assign group_link = link
+        break
+      endif
+    endfor
+    if group_link != blank
+      break
+    endif
+  endfor
+  assign group_parent = group_link.object
 -%}
 
 <div class="pp-collection-head color-{{ ss.color_scheme }}">
@@ -65,8 +60,8 @@
       </div>
     {%- endif -%}
 
-    {%- if group_parent != blank and group_list.size > 0 -%}
-      <nav class="pp-chips" aria-label="{{ group_parent.title | escape }}">
+    {%- if group_link != blank -%}
+      <nav class="pp-chips" aria-label="{{ group_link.title | escape }}">
         <ul class="pp-chips__list" role="list">
           <li>
             <a
@@ -77,29 +72,17 @@
               {{- all_label -}}
             </a>
           </li>
-          {%- for handle in group_list -%}
-            {%- assign c = collections[handle] -%}
-            {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
-            {%- liquid
-              assign label = c.title
-              for w in strip_words
-                assign word = w | strip
-                if word != blank
-                  assign label = label | replace: word, ''
-                endif
-              endfor
-              assign label = label | strip
-              assign first = label | slice: 0 | upcase
-              assign rest = label | slice: 1, 200
-              assign label = first | append: rest
-            -%}
+          {%- for item in group_link.links -%}
+            {%- if item.type != 'collection_link' -%}{%- continue -%}{%- endif -%}
+            {%- assign c = item.object -%}
+            {%- if c == blank or c.handle == group_parent.handle or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
             <li>
               <a
                 class="pp-chip{% if collection.handle == c.handle %} is-active{% endif %}"
                 href="{{ c.url }}"
                 {% if collection.handle == c.handle %}aria-current="page"{% endif %}
               >
-                {{- label -}}
+                {{- item.title -}}
               </a>
             </li>
           {%- endfor -%}
@@ -355,7 +338,13 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Title, bundle progress bar and category buttons. Texts follow the storefront language; chip labels use the (translated) collection titles."
+      "content": "Title, bundle progress bar and category buttons. The buttons come from the menu: the sub items of the menu group this collection belongs to, with the menu titles, in menu order."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
     },
     {
       "type": "checkbox",

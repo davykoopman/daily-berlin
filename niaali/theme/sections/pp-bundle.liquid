@@ -2,32 +2,42 @@
   assign ss = section.settings
   assign current = closest.product | default: product
 
-  # Collection handles live in snippets/pp-config (not in settings), so translation apps cannot change them
-  capture women_handle
-    render 'pp-config', key: 'women_handle'
-  endcapture
-  capture men_handle
-    render 'pp-config', key: 'men_handle'
-  endcapture
-  assign women_handle = women_handle | strip
-  assign men_handle = men_handle | strip
+  # Same-group collection: the first menu group (e.g. Kobiety, Mężczyźni) the
+  # product belongs to, through the group collection or one of its sub items
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+  assign product_handles = current.collections | map: 'handle'
 
-  # Same-gender collection: the first configured collection the product belongs to
   assign source = blank
-  assign see_all_key = 'see_all'
-  for c in current.collections
-    if men_handle != blank and c.handle == men_handle
-      assign source = c
-      assign see_all_key = 'see_all_men'
+  for link in menu.links
+    if link.type != 'collection_link' or link.links.size == 0
+      continue
+    endif
+    if product_handles contains link.object.handle
+      assign source = link.object
       break
-    elsif women_handle != blank and c.handle == women_handle
-      assign source = c
-      assign see_all_key = 'see_all_women'
+    endif
+    for item in link.links
+      if item.type == 'collection_link' and product_handles contains item.object.handle
+        assign source = link.object
+        break
+      endif
+    endfor
+    if source != blank
       break
     endif
   endfor
+
+  assign see_all_key = 'see_all'
   if source == blank
     assign source = ss.fallback_collection | default: collections.all
+  else
+    capture see_all_key
+      render 'pp-see-all-key', collection: source
+    endcapture
+    assign see_all_key = see_all_key | strip
   endif
 
   capture styles
@@ -308,7 +318,13 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Shows products from the same collection as the current product (men or women). Tiers must match the store discount."
+      "content": "Shows products from the same menu group as the current product (e.g. Kobiety or Mężczyźni): the first top-level collection link in the menu that contains the product. Tiers must match the store discount."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
     },
     {
       "type": "collection",

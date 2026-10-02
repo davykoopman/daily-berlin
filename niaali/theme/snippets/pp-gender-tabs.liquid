@@ -1,20 +1,29 @@
 {%- doc -%}
-  Women / Men switch for home page sections. Panels inside the same section
-  carry data-pp-panel="women" / "men". The choice is shared by every switch on
-  the page and remembered for the visit, so categories and bestsellers match.
+  Group switch (e.g. Kobiety / Mężczyźni) for home page sections. Groups come
+  from the menu: every top-level collection link that has sub items is a group,
+  in menu order. Panels in the same section carry data-pp-panel="<parent
+  collection handle>". The choice is shared by every switch on the page and
+  remembered for the visit, so categories and bestsellers match.
 
-  @param {object} women - Women collection (label + key)
-  @param {object} men - Men collection
+  @param {object} menu - Linklist (main menu)
   @param {string} label - Accessible name of the switch
 {%- enddoc -%}
 
 <div class="pp-tabs" role="tablist" aria-label="{{ label | escape }}" data-pp-tabs>
-  <button type="button" class="pp-tab is-active" role="tab" aria-selected="true" data-pp-tab="women">
-    {{- women.title -}}
-  </button>
-  <button type="button" class="pp-tab" role="tab" aria-selected="false" data-pp-tab="men">
-    {{- men.title -}}
-  </button>
+  {%- assign first_tab = true -%}
+  {%- for link in menu.links -%}
+    {%- if link.type != 'collection_link' or link.links.size == 0 -%}{%- continue -%}{%- endif -%}
+    <button
+      type="button"
+      class="pp-tab{% if first_tab %} is-active{% endif %}"
+      role="tab"
+      aria-selected="{% if first_tab %}true{% else %}false{% endif %}"
+      data-pp-tab="{{ link.object.handle }}"
+    >
+      {{- link.title -}}
+    </button>
+    {%- assign first_tab = false -%}
+  {%- endfor -%}
 </div>
 
 <script>
@@ -23,12 +32,16 @@
     var KEY = 'pp-gender';
     var get = function () { try { return sessionStorage.getItem(KEY); } catch (e) { return null; } };
     var set = function (v) { try { sessionStorage.setItem(KEY, v); } catch (e) {} };
-    var apply = function (value) {
-      value = value || get() || 'women';
+    var apply = function (wanted) {
+      wanted = wanted || get();
       document.querySelectorAll('[data-pp-tabs]').forEach(function (tabs) {
         var root = tabs.closest('[data-pp-gender-root]');
         if (!root) return;
-        tabs.querySelectorAll('[data-pp-tab]').forEach(function (b) {
+        var buttons = [].slice.call(tabs.querySelectorAll('[data-pp-tab]'));
+        if (!buttons.length) return;
+        // Fall back to the first group when the stored one is not on this page
+        var value = buttons.some(function (b) { return b.dataset.ppTab === wanted; }) ? wanted : buttons[0].dataset.ppTab;
+        buttons.forEach(function (b) {
           var on = b.dataset.ppTab === value;
           b.classList.toggle('is-active', on);
           b.setAttribute('aria-selected', on ? 'true' : 'false');

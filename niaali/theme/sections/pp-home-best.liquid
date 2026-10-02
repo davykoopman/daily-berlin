@@ -19,17 +19,13 @@
       assign title = 'Bestsellers'
   endcase
 
-  # Collection handles live in snippets/pp-config (not in settings), so translation apps cannot change them
-  capture women_handle
-    render 'pp-config', key: 'women_handle'
-  endcapture
-  capture men_handle
-    render 'pp-config', key: 'men_handle'
-  endcapture
-  assign women_handle = women_handle | strip
-  assign men_handle = men_handle | strip
-  assign women = collections[women_handle]
-  assign men = collections[men_handle]
+  # Groups come from the menu (same as the categories section): every top-level
+  # collection link with sub items, in menu order. Products follow the sort order
+  # of the group collection (set it to Best selling).
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
 
   capture styles
     echo '--resource-list-column-gap-desktop: ' | append: ss.columns_gap | append: 'px;'
@@ -47,24 +43,22 @@
   <div class="pp-home-best__head">
     <div class="pp-home__head">
       <h2 class="pp-home__title">{{ title }}</h2>
-      {% render 'pp-gender-tabs', women: women, men: men, label: title %}
+      {% render 'pp-gender-tabs', menu: menu, label: title %}
     </div>
     {%- if ss.show_tiers -%}
       {% render 'pp-tier-progress', tiers: ss.tiers %}
     {%- endif -%}
   </div>
 
-  {%- for group in (1..2) -%}
+  {%- assign first_group = true -%}
+  {%- for group in menu.links -%}
+    {%- if group.type != 'collection_link' or group.links.size == 0 -%}{%- continue -%}{%- endif -%}
     {%- liquid
-      if group == 1
-        assign key = 'women'
-        assign source = women
-        assign see_all_key = 'see_all_women'
-      else
-        assign key = 'men'
-        assign source = men
-        assign see_all_key = 'see_all_men'
-      endif
+      assign source = group.object
+      capture see_all_key
+        render 'pp-see-all-key', collection: source
+      endcapture
+      assign see_all_key = see_all_key | strip
 
       capture see_all_label
         render 'pp-i18n', key: see_all_key
@@ -98,8 +92,8 @@
     <div
       class="resource-list force-full-width resource-list__carousel pp-home-best__panel"
       role="tabpanel"
-      data-pp-panel="{{ key }}"
-      {% if group == 2 %}hidden{% endif %}
+      data-pp-panel="{{ source.handle }}"
+      {% unless first_group %}hidden{% endunless %}
     >
       {% render 'resource-list-carousel',
         ref: 'resourceListCarousel',
@@ -108,6 +102,7 @@
         settings: ss
       %}
     </div>
+    {%- assign first_group = false -%}
   {%- endfor -%}
 </div>
 
@@ -141,7 +136,13 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Best selling products for women and men with a switch. Products follow the collection sort order (set the collections to Best selling)."
+      "content": "Best selling products per menu group (e.g. Kobiety, Mężczyźni) with a switch. Groups are the top-level collection links with sub items in the menu. Products follow the collection sort order (set the collections to Best selling)."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
     },
     {
       "type": "checkbox",

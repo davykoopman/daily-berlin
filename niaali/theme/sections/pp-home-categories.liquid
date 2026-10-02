@@ -19,70 +19,41 @@
       assign title = 'Shop by category'
   endcase
 
-  # Collection handles live in snippets/pp-config (not in settings), so translation apps cannot change them
-  capture women_handle
-    render 'pp-config', key: 'women_handle'
-  endcapture
-  capture men_handle
-    render 'pp-config', key: 'men_handle'
-  endcapture
-  assign women_handle = women_handle | strip
-  assign men_handle = men_handle | strip
-  capture women_csv
-    render 'pp-config', key: 'women_list'
-  endcapture
-  capture men_csv
-    render 'pp-config', key: 'men_list'
-  endcapture
-  capture strip_csv
-    render 'pp-config', key: 'strip_words'
-  endcapture
-  assign women = collections[women_handle]
-  assign men = collections[men_handle]
-  assign women_list = women_csv | strip | split: ','
-  assign men_list = men_csv | strip | split: ','
-  assign strip_words = strip_csv | strip | split: ','
+  # Groups and categories come from the menu: a top-level collection link with
+  # sub items is a group (e.g. Kobiety), its collection sub items are the tiles.
+  # Menu links point at the collection itself, so translations cannot break them.
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
 -%}
 
 <div class="pp-home-cat color-{{ ss.color_scheme }}" data-pp-gender-root>
   <div class="pp-home-cat__inner">
     <div class="pp-home__head">
       <h2 class="pp-home__title">{{ title }}</h2>
-      {% render 'pp-gender-tabs', women: women, men: men, label: title %}
+      {% render 'pp-gender-tabs', menu: menu, label: title %}
     </div>
 
-    {%- for group in (1..2) -%}
+    {%- assign first_group = true -%}
+    {%- for group in menu.links -%}
+      {%- if group.type != 'collection_link' or group.links.size == 0 -%}{%- continue -%}{%- endif -%}
       {%- liquid
-        if group == 1
-          assign key = 'women'
-          assign parent = women
-          assign list = women_list
-          assign see_all_key = 'see_all_women'
-        else
-          assign key = 'men'
-          assign parent = men
-          assign list = men_list
-          assign see_all_key = 'see_all_men'
-        endif
+        assign parent = group.object
+        capture see_all_key
+          render 'pp-see-all-key', collection: parent
+        endcapture
+        assign see_all_key = see_all_key | strip
       -%}
-      <div class="pp-home-cat__panel" role="tabpanel" data-pp-panel="{{ key }}" {% if group == 2 %}hidden{% endif %}>
+      <div class="pp-home-cat__panel" role="tabpanel" data-pp-panel="{{ parent.handle }}" {% unless first_group %}hidden{% endunless %}>
         <div class="pp-home-cat__scroller">
           <ul class="pp-home-cat__row" role="list">
-            {%- for handle in list -%}
-              {%- assign c = collections[handle] -%}
-              {%- if c == blank or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+            {%- for item in group.links -%}
+              {%- if item.type != 'collection_link' -%}{%- continue -%}{%- endif -%}
+              {%- assign c = item.object -%}
+              {%- if c == blank or c.handle == parent.handle or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
               {%- liquid
-                assign label = c.title
-                for w in strip_words
-                  assign word = w | strip
-                  if word != blank
-                    assign label = label | replace: word, ''
-                  endif
-                endfor
-                assign label = label | strip
-                assign first = label | slice: 0 | upcase
-                assign rest = label | slice: 1, 200
-                assign label = first | append: rest
+                assign label = item.title
 
                 # The collection image when set in the admin, otherwise its first product photo
                 assign img = c.image | default: c.products.first.featured_image
@@ -106,16 +77,14 @@
                 </a>
               </li>
             {%- endfor -%}
-            {%- if parent != blank -%}
-              <li class="pp-home-cat__item">
-                <a class="pp-home-cat__tile pp-home-cat__tile--all" href="{{ parent.url }}">
-                  <span class="pp-home-cat__media pp-home-cat__all">
-                    <span class="pp-home-cat__all-text">{% render 'pp-i18n', key: see_all_key %}</span>
-                    <span class="pp-home-cat__all-arrow" aria-hidden="true">→</span>
-                  </span>
-                </a>
-              </li>
-            {%- endif -%}
+            <li class="pp-home-cat__item">
+              <a class="pp-home-cat__tile pp-home-cat__tile--all" href="{{ parent.url }}">
+                <span class="pp-home-cat__media pp-home-cat__all">
+                  <span class="pp-home-cat__all-text">{% render 'pp-i18n', key: see_all_key %}</span>
+                  <span class="pp-home-cat__all-arrow" aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
           </ul>
         </div>
         <div class="pp-home-cat__nav" aria-hidden="true">
@@ -123,6 +92,7 @@
           <button type="button" class="pp-home-cat__arrow" data-dir="1" tabindex="-1">→</button>
         </div>
       </div>
+      {%- assign first_group = false -%}
     {%- endfor -%}
   </div>
 </div>
@@ -339,7 +309,13 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Sub collections for women and men with a switch. Tiles use the collection image, or the first product photo when the collection has no image. Texts follow the storefront language. The collections and their order are set in snippets/pp-config."
+      "content": "Categories come from the menu: each top-level collection link with sub items (e.g. Kobiety, Mężczyźni) becomes a switch, its collection sub items become the tiles, in menu order. Tiles use the collection image, or the first product photo when the collection has no image."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
     },
     {
       "type": "color_scheme",
