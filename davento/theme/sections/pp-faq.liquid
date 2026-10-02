@@ -172,9 +172,19 @@
     background: #f5f5f5;
   }
 
+  /* Centred block: heading, questions and answers share one centre line */
+  .pp-faq__inner {
+    max-width: 860px;
+    margin-inline: auto;
+  }
+
   .pp-faq__heading {
     margin: 0 0 20px;
-    text-align: left;
+    text-align: center;
+  }
+
+  .pp-faq .collapsible-content__inner {
+    text-align: center;
   }
 
   @media screen and (max-width: 768px) {
