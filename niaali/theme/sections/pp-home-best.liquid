@@ -28,15 +28,13 @@
   endif
 
   capture styles
-    echo '--resource-list-column-gap-desktop: ' | append: ss.columns_gap | append: 'px;'
-    echo '--resource-list-columns: repeat(' | append: ss.columns | append: ', 1fr);'
-    echo '--column-count: ' | append: ss.columns | append: ';'
+    echo '--pp-row-columns: ' | append: ss.columns | append: '; --pp-row-gap: ' | append: ss.columns_gap | append: 'px;'
   endcapture
 -%}
 
 <div class="section-background color-{{ ss.color_scheme }}"></div>
 <div
-  class="section section--{{ ss.section_width }} color-{{ ss.color_scheme }} section-resource-list spacing-style pp-bundle pp-home-best"
+  class="section section--{{ ss.section_width }} color-{{ ss.color_scheme }} spacing-style pp-bundle pp-home-best"
   style="{% render 'spacing-style', settings: ss %} {{ styles }}"
   data-pp-gender-root
 >
@@ -65,45 +63,34 @@
       endcapture
     -%}
 
-    {% capture list_items %}
-      {%- assign shown = 0 -%}
-      {% for item in source.products %}
-        {%- if item.available == false -%}{%- continue -%}{%- endif -%}
-        {%- if shown >= ss.max_products -%}{%- break -%}{%- endif -%}
-        {%- assign shown = shown | plus: 1 -%}
-        <div class="resource-list__item">
-          {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: item %}
-        </div>
-        <!--@list/split-->
-      {% endfor %}
-      <div class="resource-list__item">
-        <a class="pp-bundle__all" href="{{ source.url }}">
-          <span class="pp-bundle__all-text">{{ see_all_label | strip }}</span>
-          <span class="pp-bundle__all-arrow" aria-hidden="true">→</span>
-        </a>
-      </div>
-    {% endcapture %}
-
-    {% liquid
-      assign slide_content = list_items | strip
-      assign slides = slide_content | split: '<!--@list/split-->'
-    %}
-
     <div
-      class="resource-list force-full-width resource-list__carousel pp-home-best__panel"
+      class="pp-row pp-home-best__panel"
       role="tabpanel"
+      data-pp-row
       data-pp-panel="{{ source.handle }}"
       {% unless first_group %}hidden{% endunless %}
     >
-      {% render 'resource-list-carousel',
-        ref: 'resourceListCarousel',
-        slides: slides,
-        slide_count: slides.size,
-        settings: ss
-      %}
+      <ul class="pp-row__track" role="list">
+        {%- assign shown = 0 -%}
+        {%- for item in source.products -%}
+          {%- if item.available == false -%}{%- continue -%}{%- endif -%}
+          {%- if shown >= ss.max_products -%}{%- break -%}{%- endif -%}
+          {%- assign shown = shown | plus: 1 -%}
+          <li class="pp-row__item">{% render 'pp-card', product: item %}</li>
+        {%- endfor -%}
+        <li class="pp-row__item">
+          <a class="pp-bundle__all" href="{{ source.url }}">
+            <span class="pp-bundle__all-text">{{ see_all_label | strip }}</span>
+            <span class="pp-bundle__all-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+      <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="-1" aria-label="←" disabled>←</button>
+      <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="1" aria-label="→">→</button>
     </div>
     {%- assign first_group = false -%}
   {%- endfor -%}
+  {% render 'pp-quick-pick' %}
 </div>
 
 {% stylesheet %}
@@ -118,15 +105,6 @@
     margin-bottom: 0;
   }
 
-  .pp-home-best .product-badges {
-    display: none;
-  }
-
-  @media screen and (max-width: 749px) {
-    .pp-home-best .resource-list__slide {
-      width: 42vw !important;
-    }
-  }
 {% endstylesheet %}
 
 {% schema %}
@@ -183,46 +161,6 @@
       "step": 1,
       "unit": "px",
       "default": 12
-    },
-    {
-      "type": "select",
-      "id": "icons_style",
-      "label": "Arrows",
-      "options": [
-        {
-          "value": "arrow",
-          "label": "Arrows"
-        },
-        {
-          "value": "chevron",
-          "label": "Chevrons"
-        },
-        {
-          "value": "none",
-          "label": "None"
-        }
-      ],
-      "default": "arrow"
-    },
-    {
-      "type": "select",
-      "id": "icons_shape",
-      "label": "Arrow shape",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "circle",
-          "label": "Circle"
-        },
-        {
-          "value": "square",
-          "label": "Square"
-        }
-      ],
-      "default": "none"
     },
     {
       "type": "select",
