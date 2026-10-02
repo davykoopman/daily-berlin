@@ -30,6 +30,23 @@ MARKET_NAME = {"DE": "Duitsland", "FR": "Frankrijk", "UK": "VK", "IT": "Italië"
                "US": "VS", "CA": "Canada", "NL": "Nederland", "AT": "Oostenrijk", "CH": "Zwitserland"}
 
 
+# Alleen deze competitors mogen bronlink zijn: geverifieerd ≥75K bezoekers/mnd (SimilarWeb-hoofdcijfer),
+# match-score ≥4 (zelfde dropship-model, geen eigen label) en geen onbevestigde/geschatte cijfers.
+MIN_SOURCE_VISITS = 75000
+ELIGIBLE, VISITS = set(), {}
+
+
+def load_eligible():
+    import csv
+    for r in csv.DictReader(open(BASE / "data/competitors.csv", encoding="utf-8")):
+        v = int(r["Bezoekers per maand"] or 0)
+        n = r["Notities"].lower()
+        VISITS[r["Domein"]] = v
+        if (v >= MIN_SOURCE_VISITS and int(r["Match-score"] or 0) >= 4 and "referentie" not in n
+                and "onbevestigd" not in n and "schatting" not in n):
+            ELIGIBLE.add(r["Domein"])
+
+
 def gender(title, typ=""):
     t = f"{title} {typ}"
     w, m = bool(W_RE.search(t)), bool(M_RE.search(t))
@@ -66,18 +83,22 @@ def build_groups(pool):
 
 
 def evaluate(members, markets, store_visits_rank):
+    # Verzadiging en bevestiging: alle competitors. Bewijs en bron: alleen grote (ELIGIBLE) competitors.
     in_m = [m for m in members if m["market"] in markets]
     out_m = [m for m in members if m["market"] not in markets]
     stores_all = {m["store"] for m in members}
     stores_in = {m["store"] for m in in_m}
-    best = max(members, key=lambda m: (m["pct"], -m["age"]))
-    best_in = max((m["pct"] for m in in_m), default=0)
-    best_out = max((m["pct"] for m in out_m), default=0)
-    newest = min(m["age"] for m in members)
+    big = [m for m in members if m["store"] in ELIGIBLE]
+    if not big:
+        return None
+    best = max(big, key=lambda m: (m["pct"], -m["age"]))
+    best_in = max((m["pct"] for m in big if m["market"] in markets), default=0)
+    best_out = max((m["pct"] for m in big if m["market"] not in markets), default=0)
+    newest = min(m["age"] for m in big)
     season = st.mean(max((mm["season"].get(k, 0) for mm in members), default=0) for k in markets)
-    all_tier0 = all(m["tier0"] for m in members)
-    big_new = [m for m in members if m["age"] <= 14 and m["visits"] >= 150000]
-    selling_new = [m for m in members if m["age"] <= 21 and m["pct"] >= 0.6 and not m["tier0"]]
+    all_tier0 = all(m["tier0"] for m in big)
+    big_new = [m for m in big if m["age"] <= 14 and m["visits"] >= 150000]
+    selling_new = [m for m in big if m["age"] <= 21 and m["pct"] >= 0.6 and not m["tier0"]]
 
     strat = None
     if len(stores_in) >= 3:
@@ -105,7 +126,7 @@ def evaluate(members, markets, store_visits_rank):
         score -= 8   # we gaan niet onder de prijs zitten, dus bewezen-in-eigen-markt weegt minder
     if all_tier0 and newest > 10:
         score -= 20
-    return dict(strat=strat, score=round(score, 1), best=best, members=members, in_m=in_m, out_m=out_m,
+    return dict(strat=strat, score=round(score, 1), best=best, members=members, big=big, in_m=in_m, out_m=out_m,
                 stores_all=stores_all, stores_in=stores_in, season=round(season, 2), newest=newest, newness=newness)
 
 
@@ -168,8 +189,8 @@ def choose_source(ev, store_cur, markets, media):
     """Bronlink: (1) liefst NIET bij een concurrent in jouw eigen markt – zelfde foto en prijs is
     directe concurrentie; (2) waar het product goed verkoopt (≤0,15 onder de beste ranking);
     (3) de beste foto's; (4) dezelfde valuta en de hoogste prijs."""
-    top = max(m["pct"] for m in ev["members"])
-    near = [m for m in ev["members"] if m["pct"] >= top - 0.15] or ev["members"]
+    top = max(m["pct"] for m in ev["big"])
+    near = [m for m in ev["big"] if m["pct"] >= top - 0.15] or ev["big"]
     for m in near:
         m["img_score"], m["img_txt"] = image_score(media.get(f'{m["store"]}/{m["handle"]}'))
     return max(near, key=lambda m: (m["market"] not in markets, round(m["img_score"] / 15),
@@ -216,9 +237,11 @@ def explain(ev, markets, names):
     top = f"top {max(1, round((1 - b['pct']) * 100))}%"
     parts.append(f"{top} bestseller bij {nm(b['store'])} ({b['market']}, {b['visits']/1000:.0f}K bez./mnd)" if b["visits"]
                  else f"{top} bestseller bij {nm(b['store'])} ({b['market']})")
-    others = sorted({(nm(m["store"]), m["market"]) for m in ev["members"] if m["store"] != b["store"]})
+    others = sorted({(nm(m["store"]), m["market"], m["store"] in ELIGIBLE) for m in ev["members"] if m["store"] != b["store"]},
+                    key=lambda t: (not t[2], t[0]))
     if others:
-        parts.append("ook bij " + ", ".join(f"{s} ({mk})" for s, mk in others[:4]) + (" e.a." if len(others) > 4 else ""))
+        parts.append("ook bij " + ", ".join(f"{s} ({mk}{'' if big else ', klein'})" for s, mk, big in others[:4])
+                     + (f" +{len(others) - 4}" if len(others) > 4 else ""))
     if not ev["stores_in"]:
         parts.append(f"nog bij géén competitor in {'/'.join(markets)} → vrije ruimte")
     else:
@@ -315,7 +338,9 @@ STRAT_TXT = {
 }
 
 
-def write_excel(store, picks, own, pool, names, path):
+def write_workbook(results, pool, names, path):
+    """Eén bestand: 'Strategie & uitleg' + per store een tab 'Te listen' en een tab 'Links'."""
+    from collections import Counter
     from openpyxl import Workbook
     from openpyxl.drawing.image import Image as XLImage
     from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
@@ -327,30 +352,7 @@ def write_excel(store, picks, own, pool, names, path):
     thin = Border(bottom=Side(style="thin", color="D9DDE3"))
     hdr_fill = PatternFill("solid", fgColor=navy)
     sfill = {"A": "C6EFCE", "B": "DDEBF7", "C": "FCE4D6", "D": "FFF2CC", "E": "EDE7F6"}
-    cur = store["valuta"]
     wb = Workbook()
-
-    # --- Lijst ---
-    ws = wb.active
-    ws.title = "Te listen"
-    ws["A1"] = f"{store['naam']} – {len(picks)} producten om te listen ({'/'.join(MARKET_NAME.get(m, m) for m in store['markten'])})"
-    ws["A1"].font = f(size=15, bold=True, color=navy)
-    ws["A2"] = (f"Gemaakt {dt.date.today():%d-%m-%Y} · gesorteerd op listweek en score · ±15-25 per dag ≈ 12-20 dagen · "
-                f"prijzen in {cur} · bron: {len(pool['stores'])} competitors")
-    ws["A2"].font = f(italic=True, color="666666")
-    heads = ["#", "Foto", "Listweek", "Strategie", "Score", "Product (bron-titel)", "Categorie", "D/H", "Waarom dit product",
-             f"Adviesprijs ({cur})", f"Sweet spot categorie ({cur})", "Prijsadvies", f"Inkoop ({cur}) – zelf invullen", "Marge %",
-             "Bron (importlink)", "Bron-land", "Foto-score", "Foto's", "Foto-advies", "Andere bronnen", "Gelist?"]
-    widths = [5, 13, 9, 26, 7, 42, 15, 5, 70, 12, 12, 34, 14, 9, 12, 9, 9, 18, 38, 40, 9]
-    H = 4
-    for i, (h, w) in enumerate(zip(heads, widths), 1):
-        c = ws.cell(row=H, column=i, value=h)
-        c.font, c.fill = f(bold=True, color="FFFFFF"), hdr_fill
-        c.alignment = Alignment(wrap_text=True, vertical="center")
-        ws.column_dimensions[c.column_letter].width = w
-    ws.row_dimensions[H].height = 32
-    dv = DataValidation(type="list", formula1='"ja,nee"', allow_blank=True)
-    ws.add_data_validation(dv)
 
     def thumb(u):
         try:
@@ -359,104 +361,134 @@ def write_excel(store, picks, own, pool, names, path):
             return b
         except Exception:
             return None
-    with cf.ThreadPoolExecutor(16) as ex:
-        thumbs = list(ex.map(lambda e: thumb(e["best"]["img"]) if e["best"]["img"] else None, picks))
 
-    for i, (e, tb) in enumerate(zip(picks, thumbs)):
-        r = H + 1 + i
-        b = e["best"]
-        alts = [f'https://{m["store"]}/products/{m["handle"]}' for m in e["members"] if m is not b][:3]
-        vals = [i + 1, "", f"Week {e['week']}", STRAT_TXT[e["strat"]][0], e["score"], b["title"], b["cat"], e["gender"],
-                e["uitleg"], e["advies"], e["band"], e["prijs_why"], None, None, "Open",
-                b["market"] + (" ⚠ eigen markt" if e["bron_in_markt"] else ""), b.get("img_score"), b.get("img_txt"),
-                e["foto_advies"], "\n".join(alts), "nee"]
-        for j, v in enumerate(vals, 1):
-            c = ws.cell(row=r, column=j, value=v)
-            c.font, c.border = f(), thin
-            c.alignment = Alignment(vertical="center", wrap_text=j in (4, 6, 9, 12, 19, 20))
-        ws.row_dimensions[r].height = 66
-        ws.cell(row=r, column=4).fill = PatternFill("solid", fgColor=sfill[e["strat"]])
-        for col in (10, 13):
-            ws.cell(row=r, column=col).number_format = "0.00"
-        inp = ws.cell(row=r, column=13)
-        inp.fill, inp.font = PatternFill("solid", fgColor="FFF2CC"), f(color="0000FF")
-        m = ws.cell(row=r, column=14, value=f'=IF(M{r}="","",(J{r}-M{r})/J{r})')
-        m.number_format = "0%"
-        lk = ws.cell(row=r, column=15)
-        lk.hyperlink, lk.font = f'https://{b["store"]}/products/{b["handle"]}', f(color="1F5FBF", underline="single")
-        if e["bron_in_markt"]:
-            ws.cell(row=r, column=16).fill = PatternFill("solid", fgColor="FCE4D6")
-        g = ws.cell(row=r, column=21)
-        g.fill, g.font = PatternFill("solid", fgColor="FFF2CC"), f(color="0000FF")
-        dv.add(g)
-        if tb:
-            im = XLImage(tb); im.anchor = f"B{r}"; ws.add_image(im)
-    ws.freeze_panes = "C5"
-    ws.auto_filter.ref = f"A{H}:U{H + len(picks)}"
-
-    # --- Links ---
-    ls = wb.create_sheet("Links (kopiëren)")
-    ls["A1"], ls["A1"].font = "Importlinks in listvolgorde – kopieer per dag 15-25 regels", f(bold=True)
-    for c, h in enumerate(["#", "Listweek", "Link", "Adviesprijs"], 1):
-        x = ls.cell(row=3, column=c, value=h); x.font, x.fill = f(bold=True, color="FFFFFF"), hdr_fill
-    for i, e in enumerate(picks):
-        b = e["best"]
-        for c, v in enumerate([i + 1, f"Week {e['week']}", f'https://{b["store"]}/products/{b["handle"]}', e["advies"]], 1):
-            ls.cell(row=4 + i, column=c, value=v).font = f()
-    ls.column_dimensions["C"].width = 95
-    ls.column_dimensions["B"].width = 10
-
-    # --- Strategie ---
-    sg = wb.create_sheet("Strategie & uitleg")
-    sg.column_dimensions["A"].width = 34
-    sg.column_dimensions["B"].width = 110
-    sg["A1"], sg["A1"].font = f"Waarom deze selectie voor {store['naam']}", f(size=14, bold=True, color=navy)
-    from collections import Counter
-    cnt, cats, wk = Counter(e["strat"] for e in picks), Counter(e["best"]["cat"] for e in picks), Counter(e["week"] for e in picks)
-    lines = [("Jouw markt(en)", ", ".join(MARKET_NAME.get(m, m) for m in store["markten"]) + f" · catalogus nu {own['n']} producten, {own['share_w']:.0%} dames"),
-             ("Seizoen", "Oktober: herfstlagen eerst (week 1-2), zwaardere winterjassen en laarzen in week 3 (koude markten), kerstartikelen in week 4."),
-             ("Bronkeuze", "Bron = liefst een competitor in een ánder land (zelfde foto + prijs bij een concurrent in jouw land is directe concurrentie). "
-              "Daarbinnen: goed verkopend, beste foto's (aantal, resolutie, staande verhouding), dezelfde valuta, hoogste prijs. "
-              "'⚠ eigen markt' = alleen een binnenlandse bron beschikbaar: volg dan het foto-advies."),
-             ("Foto-score", "0-100: ≥6 foto's, 1e foto ≥1200 px, staand 3:4/4:5 = hoog. De eerste foto bepaalt je klikratio in Google Shopping."),
-             ("Dubbelcheck", "Producten die al in je store staan (fotovergelijking) zijn eruit gefilterd. Stores met dezelfde markt krijgen nooit hetzelfde product."),
-             ("Prijsadvies", "Adviesprijs = prijs van de bronlink (overnemen bij het listen; andere valuta → omgerekend en afgerond op ,95). "
-              "Bron = de competitor waar het product het best verkoopt; bij gelijke ranking de hoogste prijs. We zitten nooit onder de prijs van "
-              "de concurrent. Ligt de bronprijs onder de sweet spot van de categorie (P25–P75 van de bestsellers), dan staat er 'kan hoger'. "
-              "Vul je inkoop in voor de marge."),
-             ("", "")]
+    # ---------- Strategie & uitleg ----------
+    sg = wb.active
+    sg.title = "Strategie & uitleg"
+    sg.column_dimensions["A"].width = 30
+    sg.column_dimensions["B"].width = 120
+    sg["A1"], sg["A1"].font = "Listingplan – alle stores", f(size=15, bold=True, color=navy)
+    sg["A2"] = f"Gemaakt {dt.date.today():%d-%m-%Y} · per store een tab 'Te listen' en een tab 'Links' · ±15-25 per dag"
+    sg["A2"].font = f(italic=True, color="666666")
+    big = sorted((d for d in ELIGIBLE), key=lambda d: -VISITS.get(d, 0))
+    rules = [
+        ("Bronnen (importlinks)", f"Uitsluitend {len(big)} competitors met een geverifieerd SimilarWeb-cijfer van ≥75K bezoekers/mnd, "
+         "hetzelfde dropship-model (match ≥4) en geen eigen label. Kleinere of onbevestigde stores tellen alleen mee als "
+         "bevestiging ('ook bij …, klein') en voor verzadiging, nooit als bron."),
+        ("Bronkeuze per product", "Liefst een competitor in een ánder land dan jouw markt (zelfde foto + prijs bij een binnenlandse "
+         "concurrent = directe concurrentie). Daarbinnen: goed verkopend, beste foto's, dezelfde valuta, hoogste prijs. "
+         "'⚠ eigen markt' = alleen een binnenlandse grote bron: volg het foto-advies."),
+        ("Prijs", "Adviesprijs = prijs van de bronlink (overnemen; andere valuta → omgerekend, ,95). Nooit onderprijzen. "
+         "Onder de sweet spot van de categorie (P25–P75 van bestsellers) → 'kan hoger'."),
+        ("Foto's", "Foto-score 0-100 (≥6 foto's, 1e foto ≥1200 px, staand 3:4/4:5). Telt mee in de volgorde; zwakke foto's eruit."),
+        ("Seizoen & volgorde", "Week 1-2 herfstlagen, week 3 winterjassen/laarzen (koude markten), week 4 kerst."),
+        ("Dubbelcheck", "Wat al in je store staat is eruit (fotovergelijking). Stores met dezelfde markt (UK) krijgen nooit hetzelfde product."),
+        ("", "")]
     for s_ in "ABCDE":
-        lines.append((STRAT_TXT[s_][0] + f"  ({cnt.get(s_, 0)})", STRAT_TXT[s_][1]))
-    lines += [("", ""), ("Verdeling categorieën", ", ".join(f"{k} {v}" for k, v in cats.most_common())),
-              ("Verdeling listweken", ", ".join(f"week {k}: {v}" for k, v in sorted(wk.items()))),
-              ("Let op", "Bestseller-rank = positie in 'best verkocht' van de store zelf; geen exacte verkoopaantallen. "
-               "Gebruik eigen foto's/teksten of die van de leverancier, niet 1-op-1 van de competitor.")]
-    for i, (k, v) in enumerate(lines, 3):
-        sg.cell(row=i, column=1, value=k).font = f(bold=True)
-        c = sg.cell(row=i, column=2, value=v); c.font = f(); c.alignment = Alignment(wrap_text=True, vertical="top")
+        rules.append((STRAT_TXT[s_][0], STRAT_TXT[s_][1]))
+    rules += [("", ""), ("Let op", "Bestseller-rank = positie in 'best verkocht' van de store zelf, geen verkoopaantal. "
+               "Gebruik bij voorkeur leveranciersfoto's of eigen teksten, niet alles 1-op-1 van de competitor.")]
+    r0 = 4
+    for i, (k, v) in enumerate(rules):
+        sg.cell(row=r0 + i, column=1, value=k).font = f(bold=True)
+        c = sg.cell(row=r0 + i, column=2, value=v); c.font = f(); c.alignment = Alignment(wrap_text=True, vertical="top")
+    r = r0 + len(rules) + 1
+    sg.cell(row=r, column=1, value="Per store").font = f(size=12, bold=True, color=navy)
+    r += 1
+    for store, picks, own in results:
+        cnt, cats, wk = Counter(e["strat"] for e in picks), Counter(e["best"]["cat"] for e in picks), Counter(e["week"] for e in picks)
+        src = Counter(e["best"]["store"] for e in picks)
+        txt = (f"Markt: {', '.join(MARKET_NAME.get(m, m) for m in store['markten'])} · {store['valuta']} · catalogus {own['n']} producten "
+               f"({own['share_w']:.0%} dames) · {len(picks)} picks\n"
+               f"Strategie: " + ", ".join(f"{k} {cnt[k]}" for k in "ABCDE" if cnt.get(k)) + "\n"
+               f"Categorieën: " + ", ".join(f"{k} {v}" for k, v in cats.most_common()) + "\n"
+               f"Listweken: " + ", ".join(f"week {k}: {v}" for k, v in sorted(wk.items())) + "\n"
+               f"Bronnen: " + ", ".join(f"{names.get(d, d)} ({VISITS.get(d, 0)/1000:.0f}K) {n}×" for d, n in src.most_common()))
+        sg.cell(row=r, column=1, value=store["naam"]).font = f(bold=True)
+        c = sg.cell(row=r, column=2, value=txt); c.font = f(); c.alignment = Alignment(wrap_text=True, vertical="top")
+        sg.row_dimensions[r].height = 92
+        r += 1
+    r += 1
+    sg.cell(row=r, column=1, value="Toegestane bronnen").font = f(size=12, bold=True, color=navy)
+    r += 1
+    mk = {s["domain"]: s["market"] for s in pool["stores"]}
+    for d in big:
+        sg.cell(row=r, column=1, value=names.get(d, d)).font = f()
+        sg.cell(row=r, column=2, value=f"{mk.get(d, '')} · {VISITS.get(d, 0):,} bezoekers/mnd".replace(",", ".")).font = f()
+        r += 1
 
-    # --- Competitors ---
-    cs = wb.create_sheet("Competitors gebruikt")
-    used = Counter(m["store"] for e in picks for m in e["members"])
-    best_used = Counter(e["best"]["store"] for e in picks)
-    hd = ["Competitor", "Markt", "Bezoekers/mnd", "Producten in pool", "Bron voor # picks", "Komt voor in # picks", "Waarom deze competitor"]
-    for c, h in enumerate(hd, 1):
-        x = cs.cell(row=1, column=c, value=h); x.font, x.fill = f(bold=True, color="FFFFFF"), hdr_fill
-    for c, w in zip("ABCDEFG", (28, 8, 14, 14, 14, 16, 80)):
-        cs.column_dimensions[c].width = w
-    rows = sorted(pool["stores"], key=lambda s: -best_used.get(s["domain"], 0))
-    for i, s in enumerate(rows, 2):
-        why = []
-        if s["visits"] >= 75000:
-            why.append(f"prioriteit-competitor ({s['visits']/1000:.0f}K bezoekers/mnd)")
-        elif s["visits"]:
-            why.append(f"monitor-competitor ({s['visits']/1000:.0f}K)")
-        why.append("zelfde markt als jij → toont wat hier al verkoopt (en wat verzadigd is)" if s["market"] in store["markten"]
-                   else "andere markt → bewezen producten die bij jou nog niet aangeboden worden")
-        for c, v in enumerate([names.get(s["domain"], s["domain"]), s["market"], s["visits"] or None, s["n"],
-                               best_used.get(s["domain"], 0), used.get(s["domain"], 0), "; ".join(why)], 1):
-            x = cs.cell(row=i, column=c, value=v); x.font = f()
-        cs.cell(row=i, column=3).number_format = "#,##0"
+    # ---------- per store ----------
+    heads = ["#", "Foto", "Listweek", "Strategie", "Score", "Product (bron-titel)", "Categorie", "D/H", "Waarom dit product",
+             "Adviesprijs", "Sweet spot categorie", "Prijsadvies", "Inkoop – zelf invullen", "Marge %",
+             "Bron (importlink)", "Bron", "Bron-land", "Foto-score", "Foto's", "Foto-advies", "Andere (grote) bronnen", "Gelist?"]
+    widths = [5, 13, 9, 26, 7, 42, 15, 5, 70, 11, 12, 34, 12, 9, 12, 20, 10, 9, 18, 38, 40, 9]
+    for store, picks, own in results:
+        cur = store["valuta"]
+        ws = wb.create_sheet(store["naam"][:31])
+        ws.sheet_properties.tabColor = "F4B183"
+        ws["A1"] = f"{store['naam']} – {len(picks)} producten om te listen ({'/'.join(MARKET_NAME.get(m, m) for m in store['markten'])}, {cur})"
+        ws["A1"].font = f(size=15, bold=True, color=navy)
+        ws["A2"] = "Gesorteerd op listweek en score · bronnen alleen grote competitors (≥75K bezoekers/mnd, geverifieerd)"
+        ws["A2"].font = f(italic=True, color="666666")
+        H = 4
+        for i, (h, w) in enumerate(zip(heads, widths), 1):
+            hv = f"{h} ({cur})" if h in ("Adviesprijs", "Sweet spot categorie", "Inkoop – zelf invullen") else h
+            c = ws.cell(row=H, column=i, value=hv)
+            c.font, c.fill = f(bold=True, color="FFFFFF"), hdr_fill
+            c.alignment = Alignment(wrap_text=True, vertical="center")
+            ws.column_dimensions[c.column_letter].width = w
+        ws.row_dimensions[H].height = 32
+        dv = DataValidation(type="list", formula1='"ja,nee"', allow_blank=True)
+        ws.add_data_validation(dv)
+        with cf.ThreadPoolExecutor(16) as ex:
+            thumbs = list(ex.map(lambda e: thumb(e["best"]["img"]) if e["best"]["img"] else None, picks))
+        for i, (e, tb) in enumerate(zip(picks, thumbs)):
+            r = H + 1 + i
+            b = e["best"]
+            alts = [f'https://{m["store"]}/products/{m["handle"]}' for m in e["big"] if m is not b][:3]
+            vals = [i + 1, "", f"Week {e['week']}", STRAT_TXT[e["strat"]][0], e["score"], b["title"], b["cat"], e["gender"],
+                    e["uitleg"], e["advies"], e["band"], e["prijs_why"], None, None, "Open",
+                    f"{names.get(b['store'], b['store'])} ({VISITS.get(b['store'], 0)/1000:.0f}K)",
+                    b["market"] + (" ⚠ eigen markt" if e["bron_in_markt"] else ""), b.get("img_score"), b.get("img_txt"),
+                    e["foto_advies"], "\n".join(alts), "nee"]
+            for j, v in enumerate(vals, 1):
+                c = ws.cell(row=r, column=j, value=v)
+                c.font, c.border = f(), thin
+                c.alignment = Alignment(vertical="center", wrap_text=j in (4, 6, 9, 12, 16, 20, 21))
+            ws.row_dimensions[r].height = 66
+            ws.cell(row=r, column=4).fill = PatternFill("solid", fgColor=sfill[e["strat"]])
+            for col in (10, 13):
+                ws.cell(row=r, column=col).number_format = "0.00"
+            inp = ws.cell(row=r, column=13)
+            inp.fill, inp.font = PatternFill("solid", fgColor="FFF2CC"), f(color="0000FF")
+            m = ws.cell(row=r, column=14, value=f'=IF(M{r}="","",(J{r}-M{r})/J{r})')
+            m.number_format = "0%"
+            lk = ws.cell(row=r, column=15)
+            lk.hyperlink, lk.font = f'https://{b["store"]}/products/{b["handle"]}', f(color="1F5FBF", underline="single")
+            if e["bron_in_markt"]:
+                ws.cell(row=r, column=17).fill = PatternFill("solid", fgColor="FCE4D6")
+            g = ws.cell(row=r, column=22)
+            g.fill, g.font = PatternFill("solid", fgColor="FFF2CC"), f(color="0000FF")
+            dv.add(g)
+            if tb:
+                im = XLImage(tb); im.anchor = f"B{r}"; ws.add_image(im)
+        ws.freeze_panes = "C5"
+        ws.auto_filter.ref = f"A{H}:V{H + len(picks)}"
+
+        ls = wb.create_sheet(f"{store['naam'][:22]} – Links")
+        ls.sheet_properties.tabColor = "A9D08E"
+        ls["A1"], ls["A1"].font = f"{store['naam']}: importlinks in listvolgorde – kopieer per dag 15-25 regels", f(bold=True)
+        for c, h in enumerate(["#", "Listweek", "Link", f"Adviesprijs ({cur})", "Bron"], 1):
+            x = ls.cell(row=3, column=c, value=h); x.font, x.fill = f(bold=True, color="FFFFFF"), hdr_fill
+        for i, e in enumerate(picks):
+            b = e["best"]
+            for c, v in enumerate([i + 1, f"Week {e['week']}", f'https://{b["store"]}/products/{b["handle"]}', e["advies"],
+                                   names.get(b["store"], b["store"])], 1):
+                ls.cell(row=4 + i, column=c, value=v).font = f()
+        ls.column_dimensions["C"].width = 95
+        ls.column_dimensions["B"].width = 10
+        ls.column_dimensions["D"].width = 14
+        ls.column_dimensions["E"].width = 22
     wb.save(path)
 
 
@@ -469,10 +501,16 @@ def main():
     fx = cfg["fx_naar_eur"]
     pool = json.loads((CACHE / "pool.json").read_text())
     import csv
+    load_eligible()
     names = {r["Domein"]: r["Store"] for r in csv.DictReader(open(BASE / "data/competitors.csv", encoding="utf-8"))}
     names.update({s["domain"]: s["name"] for s in pool["stores"] if s["name"] != s["domain"]})
+    # Bezoekers altijd uit het masterbestand (ook voor handmatig toegevoegde stores).
     for s_ in pool["stores"]:
-        s_["visits"] = s_["visits"] or 0
+        s_["visits"] = VISITS.get(s_["domain"], 0)
+    for r_ in pool["products"]:
+        r_["visits"] = VISITS.get(r_["store"], 0)
+    in_pool = {s_["domain"] for s_ in pool["stores"]}
+    print(f"Toegestane bronnen: {len(ELIGIBLE & in_pool)} (niet in pool: {sorted(ELIGIBLE - in_pool)})", file=sys.stderr)
     groups = build_groups(pool)
     print(f"Pool: {len(pool['products'])} producten in {len(groups)} unieke producten", file=sys.stderr)
     OUT.mkdir(exist_ok=True)
@@ -482,12 +520,15 @@ def main():
         stores = [s for s in stores if s["naam"] in a.store]
     # Stores met één markt eerst kiezen; zo krijgen Fashionnovo en Alovefashion (alleen UK) eerst de UK-ruimte
     # en krijgt Niaali (PL + UK) daarna wat overblijft. Binnen één markt krijgt geen enkel product twee stores.
-    stores.sort(key=lambda s: len(s["markten"]))
-    for s in stores:
+    order = {s["naam"]: i for i, s in enumerate(stores)}
+    results = []
+    for s in sorted(stores, key=lambda s: len(s["markten"])):
         picks, own = select_for_store(s, pool, groups, fx, names, taken, a.aantal)
-        path = OUT / f'{s["naam"]}_{dt.date.today():%Y-%m-%d}.xlsx'
-        write_excel(s, picks, own, pool, names, path)
-        print(f"   → {path}", file=sys.stderr)
+        results.append((s, picks, own))
+    results.sort(key=lambda t: order[t[0]["naam"]])
+    path = OUT / f"Listings_alle_stores_{dt.date.today():%Y-%m-%d}.xlsx"
+    write_workbook(results, pool, names, path)
+    print(f"→ {path}", file=sys.stderr)
 
 
 if __name__ == "__main__":

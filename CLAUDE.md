@@ -27,7 +27,10 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
 - Eigen stores en markten: `competitor-research/config/stores.json`; seizoenen: `config/seasons.json`.
 - Stap 1 `python3 pool.py --extra <domein:MARKT ...>` haalt alle competitors op (≥25K bezoekers + extra's),
   vergelijkt foto's en groepeert hetzelfde product over stores (`.cache/pool.json`).
-- Stap 2 `python3 select_products.py --aantal 300` maakt per store `listings/<Store>_<datum>.xlsx`.
+- Stap 2 `python3 select_products.py --aantal 300` maakt één bestand `listings/Listings_alle_stores_<datum>.xlsx`
+  (tab per store + Links-tab per store + Strategie & uitleg).
+- Bronlinks ALLEEN van competitors met geverifieerd ≥75K bezoekers/mnd (SimilarWeb-hoofdcijfer), match ≥4,
+  geen eigen label; onbevestigd/geschat = nooit bron (alleen bevestiging). Controleer na elke run dat er 0 bronnen <75K zijn.
 - Regels van de gebruiker: bron liefst NIET uit de eigen markt (zelfde foto+prijs = concurrentie);
   adviesprijs = prijs van de bronlink (niet onderprijzen, hoger is beter; alleen 'kan hoger' bij te lage prijs);
   foto's wegen zwaar (vooral de 1e); ~300 per store voor 20-25 dagen, koudere items later in de lijst.
