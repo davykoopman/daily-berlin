@@ -155,6 +155,11 @@
     color: var(--color-foreground);
   }
 
+  /* Grid cells may shrink below the title width (titles are one line with an ellipsis) */
+  .product-grid__item:has(> .pp-card) {
+    min-width: 0;
+  }
+
   .pp-card__media {
     position: relative;
     overflow: hidden;
