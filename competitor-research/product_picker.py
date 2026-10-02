@@ -32,7 +32,12 @@ def get(url, binary=False, timeout=30):
 def fetch_products(domain):
     out = []
     for page in range(1, 41):
-        batch = json.loads(get(f"https://{domain}/products.json?limit=250&page={page}"))["products"]
+        try:
+            batch = json.loads(get(f"https://{domain}/products.json?limit=250&page={page}"))["products"]
+        except Exception:
+            if out:
+                break  # sommige stores geven een fout op diepe pagina's: houd wat binnen is
+            raise
         out += batch
         if len(batch) < 250:
             break
@@ -40,9 +45,15 @@ def fetch_products(domain):
 
 
 def fetch_bestseller_rank(domain, n_products):
+    base = [f"https://{domain}/collections/all?sort_by=best-selling&page={{n}}"]
+    try:
+        get(base[0].format(n=1))
+    except Exception:
+        base[0] = f"https://{domain}/search?q=*&type=product&sort_by=best-selling&page={{n}}"
+
     def page(n):
         try:
-            h = get(f"https://{domain}/collections/all?sort_by=best-selling&page={n}")
+            h = get(base[0].format(n=n))
         except Exception:
             return []
         seen = []

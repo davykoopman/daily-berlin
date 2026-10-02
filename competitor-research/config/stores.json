@@ -1,0 +1,14 @@
+{
+  "_uitleg": "Jouw stores: domein, doelmarkten (bepalen seizoen en concurrentie), valuta en mediane verkoopprijs.",
+  "stores": [
+    {"naam": "Stellamea",    "domein": "stellamea.com",    "markten": ["ES"],       "valuta": "EUR", "taal": "es"},
+    {"naam": "Davento",      "domein": "davento.it",       "markten": ["IT", "DE"], "valuta": "EUR", "taal": "it/de"},
+    {"naam": "Niaali",       "domein": "niaali.com",       "markten": ["PL", "UK"], "valuta": "PLN", "taal": "pl/en"},
+    {"naam": "Fashionnovo",  "domein": "fashionnovo.com",  "markten": ["UK"],       "valuta": "GBP", "taal": "en"},
+    {"naam": "Alovefashion", "domein": "alovefashion.com", "markten": ["UK"],       "valuta": "GBP", "taal": "en"},
+    {"naam": "Newmae",       "domein": "newmae.com",       "markten": ["US"],       "valuta": "USD", "taal": "en"},
+    {"naam": "Daily Berlin", "domein": "dailyberlin.de",   "markten": ["DE"],       "valuta": "EUR", "taal": "de", "_noot": "niet in de lijst van 6, wel gebruikt als referentie"}
+  ],
+  "fx_naar_eur": {"EUR": 1.0, "GBP": 1.17, "USD": 0.92, "CAD": 0.67, "PLN": 0.23, "CHF": 1.06, "SEK": 0.087, "DKK": 0.134, "AUD": 0.6},
+  "_fx_noot": "Vaste omrekenkoersen (benadering, okt 2026) om prijzen tussen landen te vergelijken."
+}
