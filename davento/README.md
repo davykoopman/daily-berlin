@@ -36,3 +36,11 @@ Apex differences vs Horizon (Niaali):
    inclusa. Spedizione gratuita." / "Inkl. MwSt. Kostenloser Versand.", IT save
    text "Salva" → "Risparmi".
    Large files: upload via stagedUploadsCreate + themeFilesUpsert type URL (md5 checked).
+
+## Shared header / product page extras
+- `sections/pp-announcement.liquid` in `header-group.json` (Apex announcement kept, disabled):
+  3 messages, IT/DE/EN from code, rotate every 4 s (pause only for a real mouse),
+  one line down to 320 px wide.
+- Product page desktop: photo column sticky under the header (Apex sets sticky but
+  floats + `overflow-x: hidden` on #MainContent broke it; now flex + `overflow-x: clip`).
+- `staged-upload.py`: helper for big theme files (stagedUploadsCreate → curl → themeFilesUpsert type URL).
