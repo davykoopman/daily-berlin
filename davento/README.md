@@ -28,4 +28,11 @@ Apex differences vs Horizon (Niaali):
    Old Donna/Uomo tiles and Apex FAQ kept in index.json but disabled (rollback).
    Other pages: search uses the pp-card grid (via collection-grid); cart line saving
    text was fixed English "Save" → IT "Risparmi" / DE "Du sparst" (snippets/cart-item).
-4. Checkout texts.
+4. Checkout texts – done (locales/it.json, locales/de.json; checkout uses them once the
+   theme is published): express divider "oppure paga in modo sicuro qui sotto" /
+   "oder unten sicher bezahlen", shipping placeholder "Spedizione gratuita con
+   tracciamento…" / "Kostenloser Versand mit Sendungsverfolgung…", summary shipping
+   line "Gratuita" / "Kostenlos", typo "Kostenlosser" fixed. Cart note "Prezzi IVA
+   inclusa. Spedizione gratuita." / "Inkl. MwSt. Kostenloser Versand.", IT save
+   text "Salva" → "Risparmi".
+   Large files: upload via stagedUploadsCreate + themeFilesUpsert type URL (md5 checked).
