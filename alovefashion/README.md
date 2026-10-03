@@ -32,3 +32,6 @@
   buttons and footer, cream #F6F2EB announcement/trust/FAQ bands, pill buttons, trust icons in round circles,
   olive check circles, dot tier bar, muted red sale price/box. Footer: same business details, calmer layout.
 - No "European" wording (UK audience).
+- Product page: colour option shows the variant photo as swatch (snippets/variant-main-picker.liquid, settings
+  show_variant_image + 44×55 swatches). Checkout texts in locales/en.default.json ("or pay securely below",
+  free tracked UK delivery). About us page: "modern European style" sentence replaced (rest unchanged).
