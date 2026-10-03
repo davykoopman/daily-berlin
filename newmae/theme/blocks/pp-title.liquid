@@ -1,0 +1,52 @@
+{%- liquid
+  assign product_resource = closest.product
+  if request.visual_preview_mode and product_resource == blank
+    assign product_resource = collections.all.products.first
+  endif
+-%}
+
+<h1
+  class="pp-title{% if block.settings.uppercase %} pp-title--upper{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  {{- product_resource.title | escape -}}
+</h1>
+
+{% stylesheet %}
+  .pp-title {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight, 600);
+    font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);
+    line-height: 1.25;
+    color: var(--color-foreground-heading, var(--color-foreground));
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
+  }
+
+  .pp-title--upper {
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Product title",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "uppercase",
+      "label": "Uppercase",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Product title",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}
