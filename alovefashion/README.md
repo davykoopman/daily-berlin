@@ -18,3 +18,8 @@
 5. Shopify privacy policy names "DK Interim Management, Venray"; pages name "RVG Online, Schijndel". Refund/shipping/terms not set
    in Settings → Policies → checkout footer only shows Privacy policy.
 6. Checkout rate text "Ships next business day" contradicts policy (1–2 business days).
+
+## Done (2026-10-03)
+- Automatic discounts: Buy 2 save 10% (1939658015067), Buy 3 save 15% (1939658047835), Buy 4+ save 20% (1939658080603). Verified 2/3/4 items.
+- 14 smart collections by product type created + published (womens-coats-jackets … mens-shoes-boots), plan in data/collections-plan.json.
+  Meanwhile someone else built manual WOMEN/MEN + 23 manual sub collections and rebuilt main-menu → waiting for the user's choice (A keep manual / B use smart).

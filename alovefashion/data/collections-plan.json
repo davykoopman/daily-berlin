@@ -1,0 +1,418 @@
+[
+ [
+  "women",
+  "Women",
+  [
+   [
+    "STARTS_WITH",
+    "Women"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Dresses"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Wedding & Bridal Party Dresses > Bridal Party Dresses"
+   ]
+  ]
+ ],
+ [
+  "men",
+  "Men",
+  [
+   [
+    "STARTS_WITH",
+    "Men"
+   ],
+   [
+    "STARTS_WITH",
+    "AS - Mens"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Clothing Tops > Sweaters"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Clothing Tops > Shirts"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Suits"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Suits > Pant Suits"
+   ]
+  ]
+ ],
+ [
+  "womens-coats-jackets",
+  "Women's Coats & Jackets",
+  [
+   [
+    "EQUALS",
+    "Womens - Jackets & Coats"
+   ],
+   [
+    "EQUALS",
+    "Womens - Winter Coats"
+   ],
+   [
+    "EQUALS",
+    "Womens - Raincoats"
+   ],
+   [
+    "EQUALS",
+    "Womens - Blazers"
+   ]
+  ]
+ ],
+ [
+  "womens-knitwear",
+  "Women's Knitwear & Jumpers",
+  [
+   [
+    "EQUALS",
+    "Womens - Knitwear"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sweaters"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sweaters & Knitwear"
+   ]
+  ]
+ ],
+ [
+  "womens-cardigans",
+  "Women's Cardigans",
+  [
+   [
+    "EQUALS",
+    "Womens - Cardigans"
+   ]
+  ]
+ ],
+ [
+  "womens-dresses",
+  "Women's Dresses",
+  [
+   [
+    "EQUALS",
+    "Womens - Maxi Dress"
+   ],
+   [
+    "EQUALS",
+    "Womens - Midi Dress"
+   ],
+   [
+    "EQUALS",
+    "Womens - Mini Dress"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Dresses"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Wedding & Bridal Party Dresses > Bridal Party Dresses"
+   ]
+  ]
+ ],
+ [
+  "womens-shoes-boots",
+  "Women's Shoes & Boots",
+  [
+   [
+    "EQUALS",
+    "Womens - Boots"
+   ],
+   [
+    "EQUALS",
+    "Womens - Shoes & Heels"
+   ],
+   [
+    "EQUALS",
+    "Womens - Shoes"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sneakers"
+   ],
+   [
+    "EQUALS",
+    "Womens - Slippers"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sandals"
+   ]
+  ]
+ ],
+ [
+  "womens-trousers-sets",
+  "Women's Trousers & Sets",
+  [
+   [
+    "EQUALS",
+    "Womens - Trousers"
+   ],
+   [
+    "EQUALS",
+    "Womens - Pants"
+   ],
+   [
+    "EQUALS",
+    "Womens - Jeans"
+   ],
+   [
+    "EQUALS",
+    "Womens - Jumpsuits"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sets"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sets & Co-Ords"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sets & Co-ords"
+   ],
+   [
+    "EQUALS",
+    "Womens - Loungewear Sets"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sleepwear & Pyjamas"
+   ]
+  ]
+ ],
+ [
+  "womens-tops-accessories",
+  "Women's Tops & Accessories",
+  [
+   [
+    "EQUALS",
+    "Womens - Tops & Blouses"
+   ],
+   [
+    "EQUALS",
+    "Womens - Bags"
+   ],
+   [
+    "EQUALS",
+    "Womens - Scarves"
+   ],
+   [
+    "EQUALS",
+    "Womens - Sports Bras"
+   ],
+   [
+    "EQUALS",
+    "Women - Tops & Blouses"
+   ]
+  ]
+ ],
+ [
+  "mens-coats-jackets",
+  "Men's Coats & Jackets",
+  [
+   [
+    "EQUALS",
+    "Mens - Jackets & Coats"
+   ],
+   [
+    "EQUALS",
+    "Mens - Winter Coats"
+   ],
+   [
+    "EQUALS",
+    "Men > Coats"
+   ]
+  ]
+ ],
+ [
+  "mens-knitwear",
+  "Men's Knitwear & Cardigans",
+  [
+   [
+    "EQUALS",
+    "Mens - Sweaters"
+   ],
+   [
+    "EQUALS",
+    "Mens - Knitwear"
+   ],
+   [
+    "EQUALS",
+    "Mens - Knitwear & Sweaters"
+   ],
+   [
+    "EQUALS",
+    "Mens - Sweaters & Knitwear"
+   ],
+   [
+    "EQUALS",
+    "Mens - Cardigans"
+   ],
+   [
+    "EQUALS",
+    "Men's -Cardigan"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Clothing Tops > Sweaters"
+   ]
+  ]
+ ],
+ [
+  "mens-hoodies-loungewear",
+  "Men's Hoodies & Loungewear",
+  [
+   [
+    "EQUALS",
+    "Mens - Hoodies"
+   ],
+   [
+    "EQUALS",
+    "Mens - Hoodies & Sweatshirts"
+   ],
+   [
+    "EQUALS",
+    "Mens - Tracksuits"
+   ],
+   [
+    "EQUALS",
+    "Mens - Loungewear Sets"
+   ],
+   [
+    "EQUALS",
+    "Mens - Sleepwear"
+   ],
+   [
+    "EQUALS",
+    "AS - Mens - Loungewear Sets"
+   ]
+  ]
+ ],
+ [
+  "mens-shirts-tops",
+  "Men's Shirts & Tops",
+  [
+   [
+    "EQUALS",
+    "Mens - Shirts"
+   ],
+   [
+    "EQUALS",
+    "Mens - T-Shirts & Polos"
+   ],
+   [
+    "EQUALS",
+    "Mens - Tops & Blouses"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Clothing Tops > Shirts"
+   ]
+  ]
+ ],
+ [
+  "mens-trousers-jeans",
+  "Men's Trousers & Jeans",
+  [
+   [
+    "EQUALS",
+    "Mens - Trousers"
+   ],
+   [
+    "EQUALS",
+    "Mens - Trousers & Jeans"
+   ],
+   [
+    "EQUALS",
+    "Mens - Jeans"
+   ],
+   [
+    "EQUALS",
+    "Mens - Pants"
+   ],
+   [
+    "EQUALS",
+    "Mens - Shorts"
+   ],
+   [
+    "EQUALS",
+    "Mens - Sports Shorts"
+   ]
+  ]
+ ],
+ [
+  "mens-suits-sets",
+  "Men's Suits & Sets",
+  [
+   [
+    "EQUALS",
+    "Mens - Suits & Blazers"
+   ],
+   [
+    "EQUALS",
+    "Mens - Suits"
+   ],
+   [
+    "EQUALS",
+    "Mens - Sets & Co-Ords"
+   ],
+   [
+    "EQUALS",
+    "Mens - Sets & Co-ords"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Suits"
+   ],
+   [
+    "EQUALS",
+    "Apparel & Accessories > Clothing > Suits > Pant Suits"
+   ]
+  ]
+ ],
+ [
+  "mens-shoes-boots",
+  "Men's Shoes & Boots",
+  [
+   [
+    "EQUALS",
+    "Mens - Boots"
+   ],
+   [
+    "EQUALS",
+    "Mens - Shoes"
+   ],
+   [
+    "EQUALS",
+    "Mens - Shoes & Heels"
+   ],
+   [
+    "EQUALS",
+    "Mens - Sneakers"
+   ],
+   [
+    "EQUALS",
+    "Mens - Sandals"
+   ],
+   [
+    "EQUALS",
+    "Mens - Slippers"
+   ]
+  ]
+ ]
+]
