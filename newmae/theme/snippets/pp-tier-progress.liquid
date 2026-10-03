@@ -140,6 +140,17 @@
         .catch(function () {});
     };
     document.addEventListener('cart:update', refresh);
+    // Dwell / newer Horizon: cart lines events with a promise that resolves after the update
+    import('@shopify/events')
+      .then(function (ev) {
+        if (!ev || !ev.StandardEvents) return;
+        document.addEventListener(ev.StandardEvents.cartLinesUpdate, function (e) {
+          var done = function () { setTimeout(refresh, 150); };
+          if (e.promise && e.promise.then) e.promise.then(done, done);
+          else done();
+        });
+      })
+      .catch(function () {});
     // Back/forward cache: the cart may have changed on another page
     window.addEventListener('pageshow', function (e) { if (e.persisted) refresh(); });
   })();

@@ -20,3 +20,9 @@
 - Footer: no business hours / GMT, "email us anytime". Trust card shows the support email instead of hours.
 - Dwell differences vs Niaali/Fabric: no color schemes (color_palette), desktop scrolls inside .page-wrapper.
 - Discounts (automatic, all products): Buy 2 save 10%, Buy 3 save 15%, Buy 4+ save 20%.
+- Product page v2: gallery dots (no thumbnails), price 20px with red bold sale price + red -X% box
+  (snippets/price.liquid), Swatch King swatches 44px (40px mobile), announcement bar 14px bold.
+- Cart (drawer + page): tier progress bar + "Free shipping · 60-day returns · Secure checkout" under the
+  total (snippets/tax-info.liquid), no currency code, prices in the body font (config/settings_data.json).
+- Checkout texts (locales/en.default.json, shopify.checkout.*): free tracked shipping before the address,
+  shipping line "Free", express divider "or pay securely below".

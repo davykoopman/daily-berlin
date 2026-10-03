@@ -124,6 +124,33 @@
       width: 100%;
     }
   }
+
+  /* Colour swatches (Swatch King) on the product page: compact, one tidy row */
+  .product-details variant-swatch-king .swatch-view-image .swatch-view-item,
+  .product-details variant-swatch-king .swatch-view-image .swatch-image-wrapper {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .product-details variant-swatch-king .swatch-view-image .swatch-image,
+  .product-details variant-swatch-king .swatch-view-image .star-set-image {
+    width: 100% !important;
+    height: 100% !important;
+    background-size: cover !important;
+    background-position: center top !important;
+  }
+
+  .product-details variant-swatch-king .swatch-view-image {
+    gap: 6px !important;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-details variant-swatch-king .swatch-view-image .swatch-view-item,
+    .product-details variant-swatch-king .swatch-view-image .swatch-image-wrapper {
+      width: 40px !important;
+      height: 40px !important;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
