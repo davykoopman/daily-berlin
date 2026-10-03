@@ -23,3 +23,12 @@
 - Automatic discounts: Buy 2 save 10% (1939658015067), Buy 3 save 15% (1939658047835), Buy 4+ save 20% (1939658080603). Verified 2/3/4 items.
 - 14 smart collections by product type created + published (womens-coats-jackets … mens-shoes-boots), plan in data/collections-plan.json.
   Meanwhile someone else built manual WOMEN/MEN + 23 manual sub collections and rebuilt main-menu → waiting for the user's choice (A keep manual / B use smart).
+
+## Kit in work theme "Alove - kit (werk)" #202302062939 (not published)
+- Files in alovefashion/theme (based on the NewMae kit), texts follow the Alove policy pages: free UK delivery,
+  dispatch 1–2 business days, 7–11 business days total, 14-day returns + exchanges, refund within 10 business days,
+  support@alovefashion.com. No policy, address, product or tracking changes.
+- Look (different from Niaali): Playfair Display headings + Jost body (no bold body text), deep olive #2F3B2F header,
+  buttons and footer, cream #F6F2EB announcement/trust/FAQ bands, pill buttons, trust icons in round circles,
+  olive check circles, dot tier bar, muted red sale price/box. Footer: same business details, calmer layout.
+- No "European" wording (UK audience).

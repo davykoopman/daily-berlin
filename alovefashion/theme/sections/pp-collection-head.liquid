@@ -1,0 +1,277 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign all_label = 'Wszystko'
+    when 'nl'
+      assign all_label = 'Alles'
+    when 'de'
+      assign all_label = 'Alle'
+    when 'fr'
+      assign all_label = 'Tout'
+    when 'it'
+      assign all_label = 'Tutto'
+    when 'es'
+      assign all_label = 'Todo'
+    else
+      assign all_label = 'All'
+  endcase
+
+  # Groups come from the menu: a top-level collection link with sub items is a
+  # group (e.g. Women), its collection sub items are the chips, in menu order.
+  # Menu links point at the collection itself, so translations cannot break them.
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+
+  # The group this collection is the parent of, or one of the sub items of
+  assign group_link = blank
+  for link in menu.links
+    if link.type != 'collection_link' or link.links.size == 0
+      continue
+    endif
+    if link.object.handle == collection.handle
+      assign group_link = link
+      break
+    endif
+    for item in link.links
+      if item.type == 'collection_link' and item.object.handle == collection.handle
+        assign group_link = link
+        break
+      endif
+    endfor
+    if group_link != blank
+      break
+    endif
+  endfor
+  assign group_parent = group_link.object
+-%}
+
+<div class="pp-collection-head">
+  <div class="pp-collection-head__inner">
+    <h1 class="pp-collection-head__title">{{ collection.title }}</h1>
+
+    {%- if ss.show_tiers -%}
+      <div class="pp-collection-head__tiers">
+        {% render 'pp-tier-progress', tiers: ss.tiers %}
+      </div>
+    {%- endif -%}
+
+    {%- if group_link != blank -%}
+      <nav class="pp-chips" aria-label="{{ group_link.title | escape }}">
+        <ul class="pp-chips__list" role="list">
+          <li>
+            <a
+              class="pp-chip{% if collection.handle == group_parent.handle %} is-active{% endif %}"
+              href="{{ group_parent.url }}"
+              {% if collection.handle == group_parent.handle %}aria-current="page"{% endif %}
+            >
+              {{- all_label -}}
+            </a>
+          </li>
+          {%- for item in group_link.links -%}
+            {%- if item.type != 'collection_link' -%}{%- continue -%}{%- endif -%}
+            {%- assign c = item.object -%}
+            {%- if c == blank or c.handle == group_parent.handle or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+            <li>
+              <a
+                class="pp-chip{% if collection.handle == c.handle %} is-active{% endif %}"
+                href="{{ c.url }}"
+                {% if collection.handle == c.handle %}aria-current="page"{% endif %}
+              >
+                {{- item.title -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+  </div>
+</div>
+
+{% render 'pp-alove-style' %}
+
+{% stylesheet %}
+  .pp-collection-head {
+    padding-block: 32px 20px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .pp-collection-head__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    padding-inline: var(--page-margin, 40px);
+    text-align: center;
+  }
+
+  .pp-collection-head__title {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
+  .pp-collection-head__tiers {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .pp-collection-head__tiers .pp-tierbar {
+    max-width: 420px;
+  }
+
+  .pp-chips {
+    width: 100%;
+  }
+
+  .pp-chips__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.2);
+    border-radius: 999px;
+    color: var(--color-foreground);
+    font-size: 0.875rem;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .pp-chip:hover {
+    border-color: var(--color-foreground-heading, #1f2a1f);
+  }
+
+  .pp-chip.is-active {
+    border-color: var(--color-foreground-heading, #1f2a1f);
+    background: var(--color-foreground-heading, #1f2a1f);
+    color: var(--color-background, #fff);
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-collection-head {
+      padding-block: 20px 12px;
+    }
+
+    .pp-collection-head__inner {
+      gap: 12px;
+      padding-inline: 16px;
+    }
+
+    .pp-collection-head__title {
+      font-size: 1.5rem;
+    }
+
+    /* One swipeable row on phones, bleeding to the screen edge */
+    .pp-chips {
+      margin-inline: -16px;
+      width: calc(100% + 32px);
+    }
+
+    .pp-chips__list {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-inline: 16px;
+      scrollbar-width: none;
+      scroll-snap-type: x proximity;
+      scroll-padding-inline: 16px;
+    }
+
+    .pp-chips__list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pp-chips__list li {
+      scroll-snap-align: start;
+    }
+
+    .pp-chip {
+      height: 34px;
+      padding: 0 14px;
+      font-size: 0.8125rem;
+    }
+  }
+  /* Collection grid: clean, aligned cards (same look as the product page) */
+  .main-collection-grid .product-badges {
+    display: none;
+  }
+
+  @media screen and (min-width: 990px) {
+    .main-collection-grid .product-grid:not([product-grid-view='zoom-out']) {
+      --product-grid-columns-desktop: repeat(4, minmax(0, 1fr)) !important;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .main-collection-grid .product-grid:not([product-grid-view='zoom-out']) {
+      --product-grid-columns-desktop: repeat(3, minmax(0, 1fr)) !important;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-collection-grid .product-grid {
+      --product-grid-gap: 28px 12px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Collection heading",
+  "tag": "section",
+  "enabled_on": {
+    "templates": [
+      "collection"
+    ]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Title, bundle progress bar and category buttons. The buttons come from the menu: the sub items of the menu group this collection belongs to, with the menu titles, in menu order."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tiers",
+      "label": "Show bundle progress bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tiers",
+      "label": "Bundle tiers (quantity:percent, match the store discount)",
+      "default": "2:10,3:15,4:20"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Collection heading"
+    }
+  ]
+}
+{% endschema %}

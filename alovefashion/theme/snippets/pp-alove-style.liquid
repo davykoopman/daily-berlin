@@ -1,0 +1,152 @@
+{%- doc -%}
+  Alove Fashion look on top of the kit: olive and cream, round trust icons,
+  check circles, dot tier bar, calm type weights. Only styles, no markup.
+{%- enddoc -%}
+
+{% stylesheet %}
+  :root {
+    --al-olive: #2f3b2f;
+    --al-ink: #1f2a1f;
+    --al-cream: #f6f2eb;
+    --al-sand: #e8e1d5;
+  }
+
+  /* Calm type: headings regular, body text regular, no bold blocks */
+  .footer strong,
+  .footer b,
+  .rte strong {
+    font-weight: 500;
+  }
+
+  .footer h1,
+  .footer h2,
+  .footer h3,
+  .footer h4,
+  .footer h5 {
+    font-family: var(--font-heading--family);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+
+  /* Trust row: cream band, icons in round white circles */
+  .pp-trust {
+    background: var(--al-cream);
+    border-block: 0;
+  }
+
+  .pp-trust__icon {
+    box-sizing: content-box;
+    width: 26px;
+    height: 26px;
+    padding: 15px;
+    margin-bottom: 6px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--al-olive);
+    stroke-width: 1.3;
+  }
+
+  .pp-trust__title {
+    letter-spacing: 0.02em;
+  }
+
+  /* Product benefits: olive check circles instead of line icons */
+  .pp-benefit__icon {
+    display: none;
+  }
+
+  .pp-benefit::before {
+    content: '';
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--al-olive) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 12px no-repeat;
+  }
+
+  .pp-benefits {
+    gap: 8px;
+  }
+
+  /* Tier progress: three dots on a thin line, olive when reached */
+  .pp-tierbar__steps {
+    gap: 0;
+  }
+
+  .pp-tierbar__step {
+    position: relative;
+    padding-right: 10px;
+  }
+
+  .pp-tierbar__track {
+    height: 2px;
+    margin-top: 4px;
+    border-radius: 0;
+    background: var(--al-sand);
+  }
+
+  .pp-tierbar__fill {
+    background: var(--al-olive);
+  }
+
+  .pp-tierbar__step::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--al-sand);
+    transition: background-color 0.3s ease;
+  }
+
+  .pp-tierbar__step:has(.pp-tierbar__fill[style*='scaleX(1)'])::after {
+    background: var(--al-olive);
+  }
+
+  .pp-tierbar__msg strong {
+    color: var(--al-olive);
+  }
+
+  /* How it works: olive numbers */
+  .pp-steps__num {
+    background: var(--al-olive);
+    font-weight: 400;
+  }
+
+  /* FAQ: cream band, questions left aligned with the plus on the right */
+  .pp-faq {
+    background: var(--al-cream);
+  }
+
+  .pp-faq__q {
+    justify-content: flex-start;
+    padding: 14px 36px 14px 0;
+    font-weight: 500;
+    text-align: left;
+  }
+
+  .pp-faq__icon {
+    right: 4px;
+  }
+
+  .pp-faq__a {
+    padding: 0 36px 18px 0;
+    text-align: left;
+    color: rgb(31 42 31 / 0.8);
+  }
+
+  .pp-faq__item,
+  .pp-faq__item:first-of-type {
+    border-color: var(--al-sand);
+  }
+
+  /* Bundle and category chips: olive when active */
+  .pp-tab.is-active,
+  .pp-chip.is-active {
+    border-color: var(--al-olive);
+    background-color: var(--al-olive);
+    color: #fff;
+  }
+{% endstylesheet %}
