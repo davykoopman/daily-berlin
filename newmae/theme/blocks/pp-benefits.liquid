@@ -40,6 +40,33 @@
 </ul>
 </div>
 
+<script>
+  (function () {
+    if (window.ppSwatchFull) return;
+    window.ppSwatchFull = true;
+    var fix = function () {
+      document.querySelectorAll('.product-details variant-swatch-king .swatch-view-image .star-set-image[style*="crop="]').forEach(function (el) {
+        el.style.backgroundImage = el.style.backgroundImage
+          .replace(/([?&])height=\d+&?/, '$1')
+          .replace(/([?&])crop=[a-z]+&?/, '$1')
+          .replace(/width=\d+/, 'width=150')
+          .replace(/[?&]"?\)$/, '")');
+      });
+    };
+    var queued = false;
+    var start = function () {
+      fix();
+      new MutationObserver(function () {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(function () { queued = false; fix(); });
+      }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
+  })();
+</script>
+
 {% stylesheet %}
   /*
     Equal space above and below the bullets (and between line and bullets).
@@ -125,30 +152,47 @@
     }
   }
 
-  /* Colour swatches (Swatch King) on the product page: compact, one tidy row */
+  /*
+    Colour swatches (Swatch King) on the product page: portrait boxes like the
+    product photos (4:5), the whole photo visible (the uncropped image is loaded
+    by the script below the bullets).
+  */
+  .product-details variant-swatch-king .swatch-view-image {
+    gap: 6px !important;
+  }
+
   .product-details variant-swatch-king .swatch-view-image .swatch-view-item,
   .product-details variant-swatch-king .swatch-view-image .swatch-image-wrapper {
     width: 44px !important;
-    height: 44px !important;
+    height: 55px !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  .product-details variant-swatch-king .swatch-view-image .swatch-image,
-  .product-details variant-swatch-king .swatch-view-image .star-set-image {
+  .product-details variant-swatch-king .swatch-view-image .swatch-view-item .swatch-image {
+    display: block !important;
     width: 100% !important;
     height: 100% !important;
-    background-size: cover !important;
-    background-position: center top !important;
+    margin: 0 !important;
+    padding: 2px !important;
+    box-sizing: border-box !important;
   }
 
-  .product-details variant-swatch-king .swatch-view-image {
-    gap: 6px !important;
+  .product-details variant-swatch-king .swatch-view-image .swatch-view-item .swatch-image .star-set-image {
+    display: block !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 100% !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
   }
 
   @media screen and (max-width: 749px) {
     .product-details variant-swatch-king .swatch-view-image .swatch-view-item,
     .product-details variant-swatch-king .swatch-view-image .swatch-image-wrapper {
       width: 40px !important;
-      height: 40px !important;
+      height: 50px !important;
     }
   }
 {% endstylesheet %}

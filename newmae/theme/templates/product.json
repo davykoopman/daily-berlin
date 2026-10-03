@@ -325,7 +325,7 @@
                 "pp_row_mix": {
                   "type": "_accordion-row",
                   "settings": {
-                    "heading": "Mix & save",
+                    "heading": "Mix & Save",
                     "open_by_default": false,
                     "icon": "none",
                     "width": 20
@@ -441,7 +441,7 @@
           "type": "text",
           "name": "t:names.header",
           "settings": {
-            "text": "<h2>Mix &amp; save</h2>",
+            "text": "<h2>Mix &amp; Save</h2>",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
