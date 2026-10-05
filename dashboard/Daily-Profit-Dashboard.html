@@ -46,6 +46,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .drop.over{background:var(--accent-soft);border-color:var(--accent)}
 .drop .tx{min-width:0;flex:1 1 280px}
 .drop .tx b{font-weight:600}
+#diag summary{cursor:pointer;color:var(--accent);font-weight:600}
 .btns{display:flex;flex-wrap:wrap;gap:8px}
 .btn{font:inherit;font-size:13px;font-weight:600;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 14px;cursor:pointer}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
@@ -119,6 +120,7 @@ td.spark{width:96px;padding-block:4px}
     <button class="btn" id="pickFiles">Kies bestanden</button>
     <button class="btn" id="useDemo" hidden>Toon voorbeeld</button>
   </div>
+  <div id="diag" style="flex-basis:100%;font-size:12.5px"></div>
   <input type="file" id="fDir" webkitdirectory multiple hidden>
   <input type="file" id="fFiles" accept=".xlsx,.xlsm" multiple hidden>
 </div>
@@ -341,38 +343,63 @@ function dailyTable(days){
 const MAANDEN=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 const num=v=>typeof v==='number'&&isFinite(v)?v:0;
 function storeName(f){return f.name.replace(/\.[^.]+$/,'').split(' - ').pop().trim()}
+const norm=h=>String(h).toLowerCase().replace(/\s+/g,' ').trim();
+function toDay(v){
+  if(typeof v==='number'&&v>30000&&v<80000)return Math.round(v-25569)*864e5;
+  if(v instanceof Date)return Date.UTC(v.getFullYear(),v.getMonth(),v.getDate());
+  if(typeof v==='string'){const m=v.trim().match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})$/);
+    if(m){const y=+m[3]<100?2000+ +m[3]:+m[3];return Date.UTC(y,+m[2]-1,+m[1])}
+    const iso=v.trim().match(/^(\d{4})-(\d{2})-(\d{2})/);if(iso)return Date.UTC(+iso[1],+iso[2]-1,+iso[3])}
+  return null;
+}
+let DIAG=[];
 async function readFiles(list){
   const files=[...list].filter(f=>/\.xlsx?m?$/i.test(f.name)&&!f.name.startsWith('~$'));
   if(!files.length){setStatus('Geen Excel-bestanden gevonden. Kies de map met de Daily Profit Sheets.',true);return}
   setStatus('Bezig met lezen van '+files.length+' bestanden…');
-  const names=[],rows=[],problems=[];
+  const names=[],rows=[];DIAG=[];
   for(const f of files){
+    const d={file:f.name,tabs:[],rows:0,omzet:0,headers:'',err:''};DIAG.push(d);
     try{
       const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});
-      const tabs=wb.SheetNames.filter(n=>n.length===5&&MAANDEN.includes(n.slice(0,3).toLowerCase())&&/^\d\d$/.test(n.slice(3)));
-      if(!tabs.length){problems.push(f.name+': geen maandtabs gevonden');continue}
-      const si=names.length;let n=0;
-      tabs.forEach(t=>XLSX.utils.sheet_to_json(wb.Sheets[t],{raw:true}).forEach(r=>{
-        if(typeof r['Datum']!=='number')return;            // totaalrij heeft tekst
-        const date=Math.round((r['Datum']-25569))*864e5;
-        if(date>Date.now())return;
-        rows.push({store:si,date,omzet:num(r['Omzet']),cogs:num(r['Cost of Goods']),ads:num(r['Adspend Google']),mb:num(r['Media Buyer']),
-          team:num(r['Team Kosten']),refunds:num(r['Refunds']),subs:num(r['Subscriptions']),trans:num(r['Transactie'])});n++}));
-      names.push(storeName(f));
-    }catch(e){problems.push(f.name+': '+e.message)}
+      d.alle=wb.SheetNames.join(', ');
+      const tabs=wb.SheetNames.filter(n=>{const t=n.trim();return t.length===5&&MAANDEN.includes(t.slice(0,3).toLowerCase())&&/^\d\d$/.test(t.slice(3))});
+      if(!tabs.length){d.err='geen tabs zoals Aug26 gevonden';continue}
+      const si=names.length;
+      tabs.forEach(t=>{
+        const recs=XLSX.utils.sheet_to_json(wb.Sheets[t],{raw:true});
+        let n=0;
+        if(recs[0]&&!d.headers)d.headers=Object.keys(recs[0]).join(' | ');
+        recs.forEach(r0=>{
+          const r={};for(const k in r0)r[norm(k)]=r0[k];
+          const date=toDay(r['datum']);if(date==null||date>Date.now())return;
+          let ads=0;for(const k in r)if(k.startsWith('adspend'))ads+=num(r[k]);
+          const row={store:si,date,omzet:num(r['omzet']),cogs:num(r['cost of goods']),ads,mb:num(r['media buyer']),
+            team:num(r['team kosten']),refunds:num(r['refunds']),subs:num(r['subscriptions']),trans:num(r['transactie'])};
+          rows.push(row);n++;d.omzet+=row.omzet});
+        d.tabs.push(t+' ('+n+' dagen)');d.rows+=n;
+      });
+      if(d.rows)names.push(storeName(f));else{d.err='tabs gevonden maar geen datums herkend';}
+    }catch(e){d.err=e.message}
   }
-  if(!rows.length){setStatus('Er zijn geen dagregels gelezen. '+problems.join(' · '),true);return}
+  if(!rows.length){setStatus('Er zijn geen dagregels gelezen.',true);showDiag();return}
   setData(names,rows,false);
   try{localStorage.setItem('dp-data',JSON.stringify({names,rows,at:Date.now()}))}catch(e){}
-  setStatus(null,false,problems);render();
+  setStatus();render();
 }
-function setStatus(msg,warn,problems){
+function showDiag(){
+  const el=document.getElementById('diag');if(!DIAG.length){el.innerHTML='';return}
+  el.innerHTML='<details><summary>Wat is er per bestand gelezen?</summary><div class="tw"><table style="min-width:600px"><thead><tr><th>Bestand</th><th>Tabs</th><th>Omzet totaal</th><th>Kolommen</th><th>Opmerking</th></tr></thead><tbody>'
+   +DIAG.map(d=>`<tr><td>${d.file}</td><td>${d.tabs.join(', ')||'–'}</td><td class="num">${eur(d.omzet)}</td><td style="white-space:normal;text-align:left">${d.headers||'–'}</td><td style="white-space:normal;text-align:left" class="${d.err||d.omzet===0?'down':''}">${d.err||(d.omzet===0?'Alle omzet is 0, mogelijk geen opgeslagen waarden (zie hulp)':'ok')}${d.err||d.omzet===0?'<br>Tabs in bestand: '+(d.alle||''):''}</td></tr>`).join('')
+   +'</tbody></table></div></details>';
+}
+function setStatus(msg,warn){showDiag();
   const el=document.getElementById('status');
   if(msg){el.innerHTML=(warn?'<span class="down"><b>'+msg+'</b></span>':msg);return}
   if(isDemo){el.innerHTML='<b>Voorbeeldcijfers.</b> Kies de map met je Daily Profit Sheets of sleep de bestanden hierheen. Alles wordt in je browser gelezen en niet verstuurd.';return}
   const last=Math.max(...DATA.map(r=>r.date));
   el.innerHTML='<b>Je eigen data:</b> '+STORES.length+' stores, laatste dag '+fmtDay(last)+'. Kies de map opnieuw om te verversen.'
-   +(problems&&problems.length?'<br><span class="down">'+problems.join(' · ')+'</span>':'');
+   ;
 }
 function after(){document.getElementById('useDemo').hidden=isDemo;document.getElementById('sub').textContent=isDemo?'Alle stores samen · voorbeeldcijfers':'Alle stores samen · '+STORES.length+' stores'}
 const _render=render;render=function(){after();_render()};
