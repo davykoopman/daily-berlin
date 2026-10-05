@@ -340,7 +340,7 @@ function dailyTable(days){
 
 
 /* ---------- echte bestanden lezen ---------- */
-const MAANDEN=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+const MAANDEN=['jan','feb','mrt','mar','apr','mei','may','jun','jul','aug','sep','okt','oct','nov','dec'];
 const num=v=>typeof v==='number'&&isFinite(v)?v:0;
 function storeName(f){return f.name.replace(/\.[^.]+$/,'').split(' - ').pop().trim()}
 const norm=h=>String(h).toLowerCase().replace(/\s+/g,' ').trim();
