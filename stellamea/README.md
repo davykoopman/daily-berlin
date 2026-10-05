@@ -21,3 +21,13 @@
 7. Home is women-only (Hombre = 118 products not shown); "Prendas seleccionadas" shows 1 product.
 8. Spain/Omnibus: a strike-through "before" price must be the lowest price of the last 30 days → no red sale box
    unless prices are real; urgency via bundle discounts instead.
+
+## Done (2026-10-05, after GO)
+- Pages fixed (links only): Política de Pagos + Formulario de Desistimiento → mailto:support@stellamea.com.
+- Shipping rate renamed "Free Shipping" → "Envío gratuito con seguimiento".
+- Automatic discounts: Compra 2, ahorra 10% (2222800929112) · Compra 3, ahorra 15% (2222800961880) ·
+  Compra 4+, ahorra 20% (2222800994648). Verified on the live cart (1 → 0%, 2 → 10%, 3 → 15%, 4 → 20%).
+- Work theme "Stellamea - kit (werk)" #199421821272 (copy of live, unpublished).
+- Policies: API has no write_legal_policies scope → corrected texts in stellamea/policies/*.html to paste in
+  Settings → Policies (30 days everywhere, exchanges allowed, mailto links, Stellemea typo, 12 business hours).
+- Compare-at: 170 of 245 active products have a compare-at price (34 of them more than 40% off). User keeps an eye on it.
