@@ -1,49 +1,13 @@
 {%- liquid
   assign bs = block.settings
-  assign dmin = bs.delivery_min | default: 4
-  assign dmax = bs.delivery_max | default: 9
 -%}
 <p class="pp-delivery" {{ block.shopify_attributes }}>
   <svg class="pp-delivery__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <path d="M3.5 7.5 12 3.5l8.5 4v9L12 20.5l-8.5-4z"/>
     <path d="M3.5 7.5 12 11.5l8.5-4M12 11.5v9"/>
   </svg>
-  <span data-pp-eta data-min="{{ dmin }}" data-max="{{ dmax }}">{% render 'pp-i18n', key: 'dispatch', n: bs.dispatch_days %}</span>
+  <span>{% render 'pp-i18n', key: 'dispatch', n: bs.dispatch_days %}</span>
 </p>
-
-<script>
-  (function () {
-    // Delivery window from the shipping policy: total business days (weekends skipped)
-    var addBusinessDays = function (date, days) {
-      var d = new Date(date.getTime());
-      while (days > 0) {
-        d.setDate(d.getDate() + 1);
-        var w = d.getDay();
-        if (w !== 0 && w !== 6) days--;
-      }
-      return d;
-    };
-    var run = function () {
-      document.querySelectorAll('[data-pp-eta]:not([data-done])').forEach(function (el) {
-        var lang = (document.documentElement.lang || 'es').slice(0, 2);
-        if (lang !== 'es') return;
-        var now = new Date();
-        var a = addBusinessDays(now, +el.dataset.min || 4);
-        var b = addBusinessDays(now, +el.dataset.max || 9);
-        var day = function (d) { return d.getDate(); };
-        var month = function (d) { return d.toLocaleDateString('es-ES', { month: 'long' }); };
-        var range = a.getMonth() === b.getMonth()
-          ? 'entre el ' + day(a) + ' y el ' + day(b) + ' de ' + month(b)
-          : 'entre el ' + day(a) + ' de ' + month(a) + ' y el ' + day(b) + ' de ' + month(b);
-        el.innerHTML = 'Recíbelo <strong>' + range + '</strong> · envío gratis';
-        el.setAttribute('data-done', '');
-      });
-    };
-    run();
-    document.addEventListener('DOMContentLoaded', run);
-    new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
-  })();
-</script>
 
 {% stylesheet %}
   /*
@@ -101,7 +65,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Match the shipping policy. In Spanish it shows the delivery window as dates (weekends skipped)."
+      "content": "Match the shipping policy. Shows only the dispatch time; the delivery fields below are not shown."
     },
     {
       "type": "text",

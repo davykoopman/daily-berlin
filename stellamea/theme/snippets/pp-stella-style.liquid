@@ -26,17 +26,33 @@
     border-radius: 4px;
   }
 
+  .pp-trust__list {
+    align-items: stretch;
+    grid-auto-rows: 1fr;
+  }
+
+  .pp-trust__item {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+  }
+
   .pp-trust__item:has(.pp-trust__item-link) {
+    align-items: stretch;
     padding: 0;
     background: none;
   }
 
   .pp-trust__item-link {
+    box-sizing: border-box;
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
     gap: 6px;
+    width: 100%;
     height: 100%;
+    text-align: center;
   }
 
   .pp-trust__icon {
@@ -141,9 +157,24 @@
     font-weight: 600;
   }
 
-  /* How it works: terracotta numbers */
+  /* How it works: terracotta numbers, a thin sand line separates it from the section above */
   .pp-steps__num {
     background: var(--sm-terra);
+  }
+
+  .pp-steps .pp-steps__inner {
+    box-sizing: border-box;
+    width: calc(100% - 80px);
+    max-width: 1160px;
+    padding: 40px 0 0;
+    border-top: 1px solid var(--sm-sand);
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-steps .pp-steps__inner {
+      width: calc(100% - 32px);
+      padding-top: 32px;
+    }
   }
 
   /* FAQ: linen band, left aligned, two columns on desktop */
@@ -186,6 +217,11 @@
     .pp-faq__item:nth-child(2) {
       border-top: 1px solid var(--sm-sand);
     }
+  }
+
+  /* Footer: a text heading gets the same spacing as the menu headings, so all columns line up */
+  .shopify-section-group-footer-group .group-block-content > .text-block.h4:first-child {
+    padding-block: 0.8em;
   }
 
   /* Product page accordions: readable headings */
