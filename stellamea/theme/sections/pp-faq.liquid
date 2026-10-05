@@ -1,0 +1,306 @@
+{%- liquid
+  assign ss = section.settings
+  assign email = ss.email | default: shop.email
+
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+  assign shipping_url = root | append: '/policies/shipping-policy'
+  assign refund_url = root | append: '/policies/refund-policy'
+  capture mail
+    echo '<a href="mailto:' | append: email | append: '">' | append: email | append: '</a>'
+  endcapture
+
+  # Payment methods: the ones enabled in the checkout, with their brand names
+  assign pay_names = ''
+  for type in shop.enabled_payment_types
+    case type
+      when 'visa'
+        assign n = 'Visa'
+      when 'master'
+        assign n = 'Mastercard'
+      when 'maestro'
+        assign n = 'Maestro'
+      when 'american_express'
+        assign n = 'American Express'
+      when 'apple_pay'
+        assign n = 'Apple Pay'
+      when 'google_pay'
+        assign n = 'Google Pay'
+      when 'shopify_pay'
+        assign n = 'Shop Pay'
+      when 'paypal'
+        assign n = 'PayPal'
+      when 'klarna'
+        assign n = 'Klarna'
+      when 'unionpay'
+        assign n = 'UnionPay'
+      else
+        assign n = type | replace: '_', ' ' | capitalize
+    endcase
+    assign pay_names = pay_names | append: n | append: '|'
+  endfor
+  assign pay_list = pay_names | split: '|'
+  assign pay_text = ''
+  for n in pay_list
+    if forloop.first
+      assign pay_text = n
+    elsif forloop.last
+      assign pay_text = pay_text | append: ' y ' | append: n
+    else
+      assign pay_text = pay_text | append: ', ' | append: n
+    endif
+  endfor
+
+  # The store sells in Spanish only (Spain). Texts follow the shipping and refund policies.
+  assign q1 = '¿El envío es gratuito?'
+  capture a1
+    echo '<p>Sí. Todos los pedidos dentro de España tienen envío gratuito, sin compra mínima y sin costes ocultos. Cada paquete se envía con seguimiento.</p>'
+  endcapture
+  assign q2 = '¿Cuánto tarda en llegar mi pedido?'
+  capture a2
+    echo '<p>Preparamos tu pedido en ' | append: ss.dispatch_days | append: ' días laborables y te enviamos el enlace de seguimiento por e-mail en cuanto sale. El plazo total estimado es de ' | append: ss.delivery_days | append: ' días laborables. Encontrarás todos los detalles en nuestra <a href="' | append: shipping_url | append: '">Política de envíos</a>.</p>'
+  endcapture
+  assign q3 = '¿Puedo devolver o cambiar un artículo?'
+  capture a3
+    echo '<p>Sí. Tienes ' | append: ss.return_days | append: ' días desde la entrega para solicitar una devolución o un cambio de talla o color. Escríbenos a ' | append: mail | append: ' con tu número de pedido y te enviaremos los siguientes pasos. No aplicamos tarifa de reposición. Las condiciones, incluidos los gastos de devolución, están en nuestra <a href="' | append: refund_url | append: '">Política de devoluciones y reembolsos</a>.</p>'
+  endcapture
+  assign q4 = '¿Qué métodos de pago aceptáis?'
+  capture a4
+    echo '<p>Aceptamos ' | append: pay_text | append: '. Todos los pagos se procesan de forma segura con cifrado SSL.</p>'
+  endcapture
+  assign q5 = '¿Qué hago si mi pedido no ha llegado?'
+  capture a5
+    echo '<p>Consulta primero el enlace de seguimiento de tu e-mail de envío. Si han pasado más de ' | append: ss.late_days | append: ' días laborables desde el envío y tu paquete no ha llegado, escríbenos a ' | append: mail | append: ' y lo revisaremos enseguida.</p>'
+  endcapture
+  assign q6 = '¿Cómo puedo contactar con vosotros?'
+  capture a6
+    echo '<p>Escríbenos a ' | append: mail | append: '. Nuestro equipo está disponible de lunes a viernes, de 09:00 a 17:00, y normalmente responde dentro de las 12 horas laborables. Si tu consulta es sobre un pedido, añade tu número de pedido.</p>'
+  endcapture
+  assign q7 = '¿Puedo modificar o cancelar mi pedido?'
+  capture a7
+    echo '<p>Escríbenos lo antes posible a ' | append: mail | append: '. Haremos todo lo posible por ayudarte mientras tu pedido no se haya empezado a preparar.</p>'
+  endcapture
+  assign q8 = '¿Cuándo recibiré mi reembolso?'
+  capture a8
+    echo '<p>Cuando recibamos e inspeccionemos tu devolución, procesamos el reembolso en un plazo máximo de 7 días laborables con el mismo método de pago. El importe puede tardar unos días más en aparecer, según tu banco.</p>'
+  endcapture
+
+  assign count = 6
+  if ss.extended
+    assign count = 8
+  endif
+-%}
+
+<div class="pp-faq{% if ss.extended %} pp-faq--extended{% endif %}">
+  <div class="pp-faq__inner">
+    <h2 class="pp-faq__heading">{{ ss.heading }}</h2>
+    <div class="pp-faq__list">
+    {%- for i in (1..count) -%}
+      {%- liquid
+        case i
+          when 1
+            assign q = q1
+            assign a = a1
+          when 2
+            assign q = q2
+            assign a = a2
+          when 3
+            assign q = q3
+            assign a = a3
+          when 4
+            assign q = q4
+            assign a = a4
+          when 5
+            assign q = q5
+            assign a = a5
+          when 6
+            assign q = q6
+            assign a = a6
+          when 7
+            assign q = q7
+            assign a = a7
+          when 8
+            assign q = q8
+            assign a = a8
+        endcase
+      -%}
+      {%- if i == 4 and pay_text == blank -%}{%- continue -%}{%- endif -%}
+      <details class="pp-faq__item">
+        <summary class="pp-faq__q">
+          <span>{{ q }}</span>
+          <span class="pp-faq__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq__a">{{ a }}</div>
+      </details>
+    {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% render 'pp-stella-style' %}
+
+{% stylesheet %}
+  /* Centred block: heading, questions and answers share one centre line */
+  .pp-faq {
+    padding-block: 48px;
+    background: #f5f5f5;
+    color: var(--color-foreground);
+  }
+
+  .pp-faq__inner {
+    max-width: 860px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+
+  .pp-faq__heading {
+    margin: 0 0 20px;
+    text-align: center;
+  }
+
+  .pp-faq__item {
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+  .pp-faq__item:first-of-type {
+    border-top: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+  .pp-faq__q {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 12px 36px;
+    font-weight: 500;
+    line-height: 1.35;
+    text-align: center;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .pp-faq__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .pp-faq__icon {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    transform: translateY(-50%);
+  }
+
+  .pp-faq__icon::before,
+  .pp-faq__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 14px;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease;
+  }
+
+  .pp-faq__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .pp-faq__item[open] .pp-faq__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .pp-faq__a {
+    padding: 0 8px 18px;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  .pp-faq__a p {
+    margin: 0;
+  }
+
+  .pp-faq__a a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-faq {
+      padding-block: 32px;
+    }
+
+    .pp-faq__q {
+      min-height: 52px;
+      font-size: 0.9375rem;
+    }
+
+    .pp-faq__a {
+      font-size: 0.875rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP FAQ",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Match the numbers to the shipping and refund policies. Payment methods come from the checkout."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Preguntas frecuentes"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Customer service email (empty = store email)"
+    },
+    {
+      "type": "text",
+      "id": "dispatch_days",
+      "label": "Processing time in business days",
+      "default": "1–2"
+    },
+    {
+      "type": "text",
+      "id": "delivery_days",
+      "label": "Total delivery time in business days",
+      "default": "4–9"
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Return period in days",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "extended",
+      "label": "Show all 8 questions (FAQ page)",
+      "default": false
+    },
+    {
+      "type": "number",
+      "id": "late_days",
+      "label": "Contact us after this many business days since dispatch",
+      "default": 7
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP FAQ"
+    }
+  ]
+}
+{% endschema %}

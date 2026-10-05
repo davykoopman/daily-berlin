@@ -1,0 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pp_faq": {
+      "type": "pp-faq",
+      "settings": {
+        "heading": "Preguntas frecuentes",
+        "email": "support@stellamea.com",
+        "dispatch_days": "1–2",
+        "delivery_days": "4–9",
+        "return_days": 30,
+        "extended": true,
+        "late_days": 7
+      }
+    }
+  },
+  "order": [
+    "pp_faq"
+  ]
+}

@@ -1,0 +1,191 @@
+{%- doc -%}
+  Stellamea look on top of the kit: terracotta and linen, square trust tiles,
+  terracotta check marks, pill tier bar, round photo swatches, underlined tabs,
+  two-column FAQ on desktop. Only styles, no markup.
+{%- enddoc -%}
+
+{% stylesheet %}
+  :root {
+    --sm-terra: #7d5449;
+    --sm-terra-dark: #5f3f36;
+    --sm-linen: #edebe7;
+    --sm-sand: #d0cac4;
+    --sm-ink: #282828;
+    --sm-sale: #b3261e;
+  }
+
+  /* Trust row: square linen tiles with a terracotta line icon */
+  .pp-trust {
+    border-block: 0;
+  }
+
+  .pp-trust__item,
+  .pp-trust__item-link {
+    padding: 18px 12px;
+    background: var(--sm-linen);
+    border-radius: 4px;
+  }
+
+  .pp-trust__item:has(.pp-trust__item-link) {
+    padding: 0;
+    background: none;
+  }
+
+  .pp-trust__item-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+  }
+
+  .pp-trust__icon {
+    color: var(--sm-terra);
+  }
+
+  .pp-trust__title {
+    font-weight: 600;
+    color: var(--sm-ink);
+  }
+
+  /* Product benefits: terracotta check marks, no circles */
+  .pp-benefit__icon {
+    display: none;
+  }
+
+  .pp-benefit::before {
+    content: '';
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    background: var(--sm-terra);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5l5 5 10-11'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5l5 5 10-11'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  /* Tier progress: three pills "2 · −10%" that fill up in terracotta */
+  .pp-tierbar__steps {
+    gap: 6px;
+  }
+
+  .pp-tierbar__step {
+    position: relative;
+  }
+
+  .pp-tierbar__track {
+    height: 24px;
+    border-radius: 999px;
+    background: var(--sm-linen);
+  }
+
+  .pp-tierbar__fill {
+    background: var(--sm-terra);
+  }
+
+  .pp-tierbar__step::after {
+    content: attr(data-label);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--sm-ink);
+    pointer-events: none;
+    transition: color 0.3s ease;
+  }
+
+  .pp-tierbar__step.is-reached::after {
+    color: #fff;
+  }
+
+  .pp-tierbar__msg strong {
+    color: var(--sm-terra);
+  }
+
+  /* Sale price: red pill instead of a box */
+  .price-save {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--sm-sale);
+  }
+
+  [ref='priceContainer'] .price--sale {
+    color: var(--sm-sale);
+  }
+
+  /* Colour swatches: round photos */
+  .variant-option--swatches .swatch {
+    border-radius: 50%;
+  }
+
+  /* Collection chips and gender tabs: underlined tabs instead of filled pills */
+  .pp-chip,
+  .pp-tab {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: none;
+  }
+
+  .pp-chip.is-active,
+  .pp-tab.is-active {
+    border-color: var(--sm-terra);
+    background: none;
+    color: var(--sm-terra);
+    font-weight: 600;
+  }
+
+  /* How it works: terracotta numbers */
+  .pp-steps__num {
+    background: var(--sm-terra);
+  }
+
+  /* FAQ: linen band, left aligned, two columns on desktop */
+  .pp-faq {
+    background: var(--sm-linen);
+  }
+
+  .pp-faq__inner {
+    max-width: 1100px;
+  }
+
+  .pp-faq__q {
+    justify-content: flex-start;
+    padding: 14px 36px 14px 0;
+    text-align: left;
+  }
+
+  .pp-faq__icon {
+    right: 4px;
+  }
+
+  .pp-faq__a {
+    padding: 0 36px 18px 0;
+    text-align: left;
+  }
+
+  .pp-faq__item,
+  .pp-faq__item:first-of-type {
+    border-color: var(--sm-sand);
+  }
+
+  @media screen and (min-width: 990px) {
+    .pp-faq__list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      column-gap: 48px;
+    }
+
+    .pp-faq__item:nth-child(2) {
+      border-top: 1px solid var(--sm-sand);
+    }
+  }
+
+  /* Product page accordions: readable headings */
+  .product-details details > summary {
+    font-size: 0.9375rem;
+  }
+{% endstylesheet %}
