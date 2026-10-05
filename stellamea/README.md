@@ -31,3 +31,15 @@
 - Policies: API has no write_legal_policies scope → corrected texts in stellamea/policies/*.html to paste in
   Settings → Policies (30 days everywhere, exchanges allowed, mailto links, Stellemea typo, 12 business hours).
 - Compare-at: 170 of 245 active products have a compare-at price (34 of them more than 40% off). User keeps an eye on it.
+
+## Kit in work theme "Stellamea - kit (werk)" #199421821272 (not published)
+- Files in stellamea/theme (Alove kit base, identical Horizon/Dwell base files). Everything in Spanish (tú, Spain wording:
+  "Añadir al carrito"), texts follow the policies: free shipping Spain, 1–2 days processing, 4–9 business days total,
+  30 days returns + exchanges (size/colour), refund within 7 business days, support@stellamea.com, 12 business hours.
+- Look: terracotta #7D5449 + linen #EDEBE7, navy footer kept; Lora headings + Manrope body; square linen trust tiles;
+  terracotta check marks; pill tier bar "2 · −10% / 3 · −15% / 4+ · −20%"; red sale pill; round photo swatches;
+  underlined tabs; FAQ two columns on desktop; sticky header; terracotta announcement bar (3 messages).
+- New: delivery window under the button ("Recíbelo entre el 9 y el 16 de octubre"), business days 4–9, weekends skipped.
+- Compare-at prices visible again (custom CSS that hid them is not in the kit settings). Cart total without "EUR".
+- FAQ page template: 8 questions (incl. exchanges) with working email. Chips/categories drop the "Mujer "/"Hombre " prefix.
+- Checkout texts in locales/es.json: "o paga de forma segura abajo", free tracked shipping messages.

@@ -82,7 +82,16 @@
                 href="{{ c.url }}"
                 {% if collection.handle == c.handle %}aria-current="page"{% endif %}
               >
-                {{- item.title -}}
+                {%- liquid
+                  # Inside the group, drop the group name in front ("Mujer Chaquetas" -> "Chaquetas")
+                  assign chip = item.title
+                  assign prefix = group_link.title | append: ' '
+                  assign head = chip | slice: 0, prefix.size
+                  if head == prefix
+                    assign chip = chip | remove_first: prefix
+                  endif
+                -%}
+                {{- chip -}}
               </a>
             </li>
           {%- endfor -%}

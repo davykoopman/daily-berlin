@@ -72,7 +72,7 @@
     position: relative;
   }
 
-  .pp-tierbar__track {
+  .pp-tierbar .pp-tierbar__steps .pp-tierbar__track {
     height: 24px;
     border-radius: 999px;
     background: var(--sm-linen);
@@ -113,6 +113,10 @@
 
   [ref='priceContainer'] .price--sale {
     color: var(--sm-sale);
+  }
+
+  [ref='priceContainer']:has(.price-save) .compare-at-price {
+    color: #8a8580;
   }
 
   /* Colour swatches: round photos */

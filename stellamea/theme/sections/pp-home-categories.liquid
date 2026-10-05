@@ -54,6 +54,12 @@
               {%- if c == blank or c.handle == parent.handle or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
               {%- liquid
                 assign label = item.title
+                # Inside the group, drop the group name in front ("Mujer Chaquetas" -> "Chaquetas")
+                assign prefix = group.title | append: ' '
+                assign head = label | slice: 0, prefix.size
+                if head == prefix
+                  assign label = label | remove_first: prefix
+                endif
 
                 # The collection image when set in the admin, otherwise its first product photo
                 assign img = c.image | default: c.products.first.featured_image
