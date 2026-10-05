@@ -1,0 +1,23 @@
+# Stellamea (www.stellamea.com) – analysis before the kit (2026-10-05, no changes made)
+
+- Shop uvuk2u-pc, Spain only, EUR, Spanish only, taxes included, not Plus. 245 active / 11 draft products.
+- Live theme "Stellamea" #196272292184 = Dwell preset (same base as NewMae → NewMae kit ports 1:1).
+- Fonts Manrope (body) + Epilogue (headings); palette white / #4A4A4A / terracotta #7D5449 / linen #EDEBE7 / navy footer.
+- Custom CSS hides compare-at prices, sale badge and cart tax note. No discounts. Tracking app WeTracked (leave as is).
+- Checkout: card (+2), PayPal, Klarna, express. Shipping rate "Free Shipping" (English), ES only, free.
+- Policies (Shopify policies, Spanish): shipping 1–2 + 3–7 = 4–9 business days, free, tracked. Refund policy: 30 days,
+  customer pays return shipping unless faulty/wrong, no restocking fee, refund within 7 business days, NO exchanges.
+  Support Mon–Fri 09–17, reply within 12 business hours. Company Auremir, Cano y Cueto 7-A, 41004 Sevilla.
+
+## Issues found
+1. Returns 30 days (refund policy) vs 60 days (legal notice) – contradiction.
+2. Email links: href="support@stellamea.com" without mailto (broken) in contact/legal/privacy/refund/shipping/terms;
+   payment policy + desistimiento page link to support@auremir.com.
+3. Privacy policy says "Stellemea"; legal notice says reply within 1 business day vs 12 business hours elsewhere.
+4. English texts in the store: "Cart", "DISCOVER SOMETHING NEW", "You might also like...", rate "Free Shipping".
+5. Footer menu "footer" (not used in footer?) links to non-existing pages /pages/contacto, informacion-de-pago,
+   declaracion-de-desistimiento. Pages sobre-nosotros, preguntas-frecuentes, contactanos have an empty body.
+6. Small collections in the menu: Bolsos 1, Bañadores 1, Pijamas 1, Accesorios 1, Conjuntos 2, Monos 2, Hombre Bolsos 1.
+7. Home is women-only (Hombre = 118 products not shown); "Prendas seleccionadas" shows 1 product.
+8. Spain/Omnibus: a strike-through "before" price must be the lowest price of the last 30 days → no red sale box
+   unless prices are real; urgency via bundle discounts instead.
