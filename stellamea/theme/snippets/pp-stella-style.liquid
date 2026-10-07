@@ -1,6 +1,6 @@
 {%- doc -%}
   Stellamea look on top of the kit: terracotta and linen, square trust tiles,
-  terracotta check marks, pill tier bar, round photo swatches, underlined tabs,
+  terracotta benefit icons, pill tier bar, square photo swatches, underlined tabs,
   two-column FAQ on desktop. Only styles, no markup.
 {%- enddoc -%}
 
@@ -138,19 +138,25 @@
     color: var(--sm-ink);
   }
 
-  /* Product benefits: terracotta check marks, no circles */
-  .pp-benefit__icon {
-    display: none;
+  /* Product benefits: terracotta line icons (truck, shield, tag) in a linen circle */
+  .pp-benefits {
+    gap: 10px;
   }
 
-  .pp-benefit::before {
-    content: '';
-    flex: 0 0 18px;
-    width: 18px;
-    height: 18px;
-    background: var(--sm-terra);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5l5 5 10-11'/%3E%3C/svg%3E") center / contain no-repeat;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5l5 5 10-11'/%3E%3C/svg%3E") center / contain no-repeat;
+  .pp-benefit {
+    gap: 12px;
+  }
+
+  .pp-benefit .pp-benefit__icon {
+    box-sizing: border-box;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    padding: 7px;
+    border-radius: 50%;
+    background: var(--sm-linen);
+    color: var(--sm-terra);
+    stroke-width: 1.6;
   }
 
   /* Tier progress: three pills "2 · −10%" that fill up in terracotta */
@@ -209,9 +215,9 @@
     color: #8a8580;
   }
 
-  /* Colour swatches: round photos */
+  /* Colour swatches: square photos, same as the size buttons */
   .variant-option--swatches .swatch {
-    border-radius: 50%;
+    border-radius: 0;
   }
 
   /* Collection chips and gender tabs: underlined tabs instead of filled pills */
