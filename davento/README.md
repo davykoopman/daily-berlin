@@ -58,4 +58,8 @@ no footer link. Customs/import costs left out of the texts on request.
   until it is active.
 - To paste by the user (no write_legal_policies): policies/legal_notice.it.txt / .de.txt and the shipping policy
   country paragraph in policies/shipping_country_paragraph.txt. Legal form: eenmanszaak (impresa individuale / Einzelunternehmen).
-- Open: homepage FAQ block in the live theme still says "Italia e Germania"; German translations of the changed pages.
+- Kit theme (unpublished by the user for these edits, live = old "Davento" theme meanwhile):
+  `snippets/pp-payment-icons.liquid` and `sections/pp-faq.liquid` show/list TWINT only for visitors in CH
+  (localization.country), FAQ names it "TWINT"; disabled Apex FAQ in index.json made country-neutral.
+  The visible homepage FAQ (pp-faq) was already country-neutral.
+- Full shipping policy to paste: policies/shipping_policy.it.html (German via T-Lab).

@@ -110,7 +110,7 @@
           "type": "question",
           "settings": {
             "title": "La spedizione è davvero gratuita?",
-            "text": "<p>Sì. Ogni ordine viene spedito gratuitamente in Italia e Germania, senza alcun importo minimo di spesa richiesto.</p>"
+            "text": "<p>Sì. Ogni ordine viene spedito gratuitamente, senza alcun importo minimo di spesa richiesto.</p>"
           }
         },
         "question_PryzUU": {

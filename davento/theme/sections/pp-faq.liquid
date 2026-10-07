@@ -13,9 +13,14 @@
     echo '<a href="mailto:' | append: email | append: '">' | append: email | append: '</a>'
   endcapture
 
-  # Payment methods: the ones enabled in the checkout, with their brand names
+  # Payment methods: the ones enabled in the checkout, with their brand names.
+  # TWINT only works in Switzerland (CHF), so it is only listed for visitors there.
+  assign country = localization.country.iso_code
   assign pay_names = ''
   for type in shop.enabled_payment_types
+    if type == 'twint' and country != 'CH'
+      continue
+    endif
     case type
       when 'visa'
         assign n = 'Visa'
@@ -49,6 +54,8 @@
         assign n = 'iDEAL'
       when 'blik'
         assign n = 'BLIK'
+      when 'twint'
+        assign n = 'TWINT'
       else
         assign n = type | replace: '_', ' ' | capitalize
     endcase
