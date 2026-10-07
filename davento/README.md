@@ -47,11 +47,15 @@ Apex differences vs Horizon (Niaali):
 
 ## Switzerland / TWINT prep (2026-10-07, after GO)
 Markets and domains are handled by the media buyer: CH market (CHF, /ch, German) and free shipping zone CH already exist.
-- Footer menu "Politiche": added "Note legali" → /policies/legal-notice (after "Condizioni di servizio").
-- Page "Domande Frequenti": "in Italia e Germania" → "in Italia, Germania e Svizzera" (free shipping
-  answer and "Spedite anche all'estero?" answer, which was "soltanto in Italia e Germania").
-- Page "Pagamenti": "Accettiamo pagamenti in EUR (€) tramite…" → "…in EUR (€) e, per gli ordini in Svizzera,
-  in franchi svizzeri (CHF) tramite…". TWINT not listed yet (add once it is active).
-- Open: legal notice needs owner name + legal form (API has no write_legal_policies, user pastes);
-  shipping policy still says Italy and Germany only; homepage FAQ block in the live theme still says
-  "Italia e Germania" (live theme can't be written via API); German translations of the changed pages.
+Austria follows later, so country texts are written without a country list ("all countries selectable at checkout").
+User wants own details in the background: legal notice only on /policies/legal-notice (Shopify links it in checkout),
+no footer link. Customs/import costs left out of the texts on request.
+- Footer menu: "Note legali" link added and removed again (menu back to the original 7 items).
+- Page "Domande Frequenti": free shipping answer "…su ogni ordine in Italia e Germania…" → "…su ogni ordine…";
+  "Spedite anche all'estero?" "Al momento effettuiamo consegne soltanto in Italia e Germania." →
+  "Sì. Spediamo in tutti i paesi che puoi selezionare al momento del checkout."
+- Page "Pagamenti": "in EUR (€)" → "in EUR (€) e, per gli ordini in Svizzera, in franchi svizzeri (CHF)". TWINT not listed
+  until it is active.
+- To paste by the user (no write_legal_policies): policies/legal_notice.it.txt / .de.txt and the shipping policy
+  country paragraph in policies/shipping_country_paragraph.txt. Legal form of DK Interim Management still to confirm.
+- Open: homepage FAQ block in the live theme still says "Italia e Germania"; German translations of the changed pages.

@@ -1,0 +1,5 @@
+IT (replaces the paragraph "Ci facciamo carico noi di ogni spesa di spedizione in Italia e Germania …"):
+La spedizione è gratuita su ogni ordine. Spediamo in tutti i paesi che puoi selezionare al momento del checkout, e ogni pacco viene preparato e controllato con estrema attenzione prima di essere affidato al corriere.
+
+DE (replaces the matching paragraph in the German translation):
+Der Versand ist bei jeder Bestellung kostenlos. Wir liefern in alle Länder, die du im Checkout auswählen kannst, und jedes Paket wird mit größter Sorgfalt vorbereitet und kontrolliert, bevor es dem Versanddienstleister übergeben wird.
