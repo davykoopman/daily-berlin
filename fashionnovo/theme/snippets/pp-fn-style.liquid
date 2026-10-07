@@ -1,6 +1,6 @@
 {%- doc -%}
   Fashionnovo look on top of the kit: navy, sand and camel. Trust strip with thin
-  dividers, camel benefit icons on sand tiles, numbered tier stepper, "Save £X" labels on sand
+  dividers, camel benefit icons on sand tiles, numbered tier stepper, red "Save £X" labels on sand
   card backgrounds, square photo swatches, framed About image, steps timeline and
   a numbered FAQ. Only styles, no markup.
 {%- enddoc -%}
@@ -12,6 +12,7 @@
     --fn-sand-line: #e6dfd3;
     --fn-camel: #b08a5a;
     --fn-muted: #5b6478;
+    --fn-sale: #a8231b;
   }
 
   /* Announcement bar: small camel diamond before every message */
@@ -262,7 +263,7 @@
     color: var(--fn-navy);
   }
 
-  /* Product cards: sand photo background, camel "Save £X" label on the photo */
+  /* Product cards: sand photo background, red "Save £X" label on the photo */
   .pp-card__media {
     background-color: var(--fn-sand);
     border-radius: 4px;
@@ -275,7 +276,7 @@
     z-index: 2;
     padding: 3px 8px;
     border-radius: 2px;
-    background: var(--fn-camel);
+    background: var(--fn-sale);
     color: #fff;
     font-size: 0.6875rem;
     font-weight: 600;
@@ -294,7 +295,7 @@
   }
 
   .pp-qp__badge {
-    background: var(--fn-camel);
+    background: var(--fn-sale);
     border-radius: 2px;
   }
 
