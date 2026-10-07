@@ -57,5 +57,5 @@ no footer link. Customs/import costs left out of the texts on request.
 - Page "Pagamenti": "in EUR (€)" → "in EUR (€) e, per gli ordini in Svizzera, in franchi svizzeri (CHF)". TWINT not listed
   until it is active.
 - To paste by the user (no write_legal_policies): policies/legal_notice.it.txt / .de.txt and the shipping policy
-  country paragraph in policies/shipping_country_paragraph.txt. Legal form of DK Interim Management still to confirm.
+  country paragraph in policies/shipping_country_paragraph.txt. Legal form: eenmanszaak (impresa individuale / Einzelunternehmen).
 - Open: homepage FAQ block in the live theme still says "Italia e Germania"; German translations of the changed pages.

@@ -1,5 +1,5 @@
 Handelsname: Davento
-Firma: DK Interim Management ([Rechtsform])
+Firma: DK Interim Management (Einzelunternehmen)
 Inhaber: Davy Koopman
 Anschrift: Merseloseweg 62a, 5801 CE Venray, Niederlande
 E-Mail: support@davento.it
