@@ -1,0 +1,234 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign t1 = 'Darmowa dostawa'
+      assign s1 = 'Każda przesyłka ze śledzeniem'
+      assign t2 = '[n] dni na zwrot'
+      assign s2 = 'Łatwa wymiana rozmiaru lub modelu'
+      assign t3 = 'Bezpieczne płatności'
+      assign s3 = 'Chronione szyfrowaniem SSL'
+      assign t4 = 'Obsługa klienta'
+    when 'nl'
+      assign t1 = 'Gratis verzending'
+      assign s1 = 'Elk pakket met track & trace'
+      assign t2 = '[n] dagen retour'
+      assign s2 = 'Eenvoudig ruilen van maat of model'
+      assign t3 = 'Veilig betalen'
+      assign s3 = 'Beveiligd met SSL-versleuteling'
+      assign t4 = 'Klantenservice'
+    when 'de'
+      assign t1 = 'Kostenloser Versand'
+      assign s1 = 'Jedes Paket mit Sendungsverfolgung'
+      assign t2 = '[n] Tage Rückgabe'
+      assign s2 = 'Einfacher Umtausch von Größe oder Modell'
+      assign t3 = 'Sichere Zahlung'
+      assign s3 = 'Geschützt durch SSL-Verschlüsselung'
+      assign t4 = 'Kundenservice'
+    when 'fr'
+      assign t1 = 'Livraison gratuite'
+      assign s1 = 'Chaque colis avec suivi'
+      assign t2 = '[n] jours pour retourner'
+      assign s2 = 'Échange facile de taille ou de modèle'
+      assign t3 = 'Paiement sécurisé'
+      assign s3 = 'Protégé par chiffrement SSL'
+      assign t4 = 'Service client'
+    when 'it'
+      assign t1 = 'Spedizione gratuita'
+      assign s1 = 'Ogni pacco con tracciamento'
+      assign t2 = '[n] giorni per il reso'
+      assign s2 = 'Cambio facile di taglia o modello'
+      assign t3 = 'Pagamenti sicuri'
+      assign s3 = 'Protetti da crittografia SSL'
+      assign t4 = 'Assistenza clienti'
+    when 'es'
+      assign t1 = 'Envío gratis'
+      assign s1 = 'Cada paquete con seguimiento'
+      assign t2 = '[n] días para devoluciones'
+      assign s2 = 'Cambio fácil de talla o modelo'
+      assign t3 = 'Pago seguro'
+      assign s3 = 'Protegido con cifrado SSL'
+      assign t4 = 'Atención al cliente'
+    else
+      assign t1 = 'Free UK delivery'
+      assign s1 = 'Every parcel is tracked'
+      assign t2 = '[n]-day returns'
+      assign s2 = 'Easy size or colour exchanges'
+      assign t3 = 'Secure checkout'
+      assign s3 = 'Protected by SSL encryption'
+      assign t4 = 'Customer service'
+  endcase
+
+  assign t2 = t2 | replace: '[n]', ss.return_days
+  assign email = ss.email | default: shop.email
+
+  # No opening hours or time zone: the card shows the support email, which is
+  # always reachable (reply times are in the policies)
+-%}
+
+<div class="pp-trust">
+  <ul class="pp-trust__list" role="list">
+    <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 0ms;">
+      <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/>
+        <circle cx="6.5" cy="17.25" r="1.75"/>
+        <circle cx="16.75" cy="17.25" r="1.75"/>
+      </svg>
+      <p class="pp-trust__title">{{ t1 }}</p>
+      <p class="pp-trust__text">{{ s1 }}</p>
+    </li>
+    <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 90ms;">
+      <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5"/>
+        <path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/>
+      </svg>
+      <p class="pp-trust__title">{{ t2 }}</p>
+      <p class="pp-trust__text">{{ s2 }}</p>
+    </li>
+    <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 180ms;">
+      <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <rect x="5" y="10.5" width="14" height="10" rx="1.5"/>
+        <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5M12 14.5v2"/>
+      </svg>
+      <p class="pp-trust__title">{{ t3 }}</p>
+      <p class="pp-trust__text">{{ s3 }}</p>
+    </li>
+    <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 270ms;">
+      <a class="pp-trust__item-link" href="mailto:{{ email }}" aria-label="{{ t4 }}: {{ email }}">
+        <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 5.5h16v10H9.5L5.5 19v-3.5H4z"/>
+          <path d="M8 9.5h8M8 12.5h5"/>
+        </svg>
+        <p class="pp-trust__title">{{ t4 }}</p>
+        <p class="pp-trust__text">{{ email }}</p>
+      </a>
+    </li>
+  </ul>
+</div>
+
+{% render 'pp-reveal' %}
+
+{% render 'pp-fn-style' %}
+
+{% stylesheet %}
+  .pp-trust {
+    padding-block: 40px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    border-block: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.08);
+  }
+
+  .pp-trust__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    list-style: none;
+  }
+
+  .pp-trust__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .pp-trust__icon {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 4px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pp-trust__title {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-wrap: balance;
+  }
+
+  .pp-trust__text {
+    margin: 0;
+    max-width: 240px;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.7);
+    text-wrap: balance;
+  }
+
+  .pp-trust__item-link {
+    display: contents;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .pp-trust__item-link:hover .pp-trust__title {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .pp-trust__nowrap {
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-trust {
+      padding-block: 28px;
+    }
+
+    .pp-trust__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px 16px;
+      padding: 0 16px;
+    }
+
+    .pp-trust__title {
+      font-size: 0.75rem;
+    }
+
+    .pp-trust__text {
+      font-size: 0.75rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Trust icons",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Texts are translated automatically. Match the numbers to the policies and the email to the contact page."
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Return period in days",
+      "default": 30
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Customer service email (empty = store email)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Trust icons"
+    }
+  ]
+}
+{% endschema %}

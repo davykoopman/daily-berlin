@@ -1,0 +1,135 @@
+{%- doc -%}
+  Group switch (e.g. Kobiety / Mężczyźni) for home page sections. Groups come
+  from the menu: every top-level collection link that has sub items is a group,
+  in menu order. Panels in the same section carry data-pp-panel="<parent
+  collection handle>". The choice is shared by every switch on the page and
+  remembered for the visit, so categories and bestsellers match.
+
+  @param {object} menu - Linklist (main menu)
+  @param {string} label - Accessible name of the switch
+{%- enddoc -%}
+
+<div class="pp-tabs" role="tablist" aria-label="{{ label | escape }}" data-pp-tabs>
+  {%- assign first_tab = true -%}
+  {%- for link in menu.links -%}
+    {%- if link.type != 'collection_link' or link.links.size == 0 -%}{%- continue -%}{%- endif -%}
+    <button
+      type="button"
+      class="pp-tab{% if first_tab %} is-active{% endif %}"
+      role="tab"
+      aria-selected="{% if first_tab %}true{% else %}false{% endif %}"
+      data-pp-tab="{{ link.object.handle }}"
+    >
+      {{- link.title -}}
+    </button>
+    {%- assign first_tab = false -%}
+  {%- endfor -%}
+</div>
+
+<script>
+  (function () {
+    if (window.ppGenderTabs) { window.ppGenderTabs.apply(); return; }
+    var KEY = 'pp-gender';
+    var get = function () { try { return sessionStorage.getItem(KEY); } catch (e) { return null; } };
+    var set = function (v) { try { sessionStorage.setItem(KEY, v); } catch (e) {} };
+    var apply = function (wanted) {
+      wanted = wanted || get();
+      document.querySelectorAll('[data-pp-tabs]').forEach(function (tabs) {
+        var root = tabs.closest('[data-pp-gender-root]');
+        if (!root) return;
+        var buttons = [].slice.call(tabs.querySelectorAll('[data-pp-tab]'));
+        if (!buttons.length) return;
+        // Fall back to the first group when the stored one is not on this page
+        var value = buttons.some(function (b) { return b.dataset.ppTab === wanted; }) ? wanted : buttons[0].dataset.ppTab;
+        buttons.forEach(function (b) {
+          var on = b.dataset.ppTab === value;
+          b.classList.toggle('is-active', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        root.querySelectorAll('[data-pp-panel]').forEach(function (p) {
+          p.hidden = p.dataset.ppPanel !== value;
+        });
+      });
+      // Carousels measure themselves; let them recalculate after a panel becomes visible
+      window.dispatchEvent(new Event('resize'));
+    };
+    window.ppGenderTabs = { apply: function () { apply(); } };
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-pp-tab]');
+      if (!b) return;
+      set(b.dataset.ppTab);
+      apply(b.dataset.ppTab);
+    });
+    apply();
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-tabs {
+    display: inline-flex;
+    gap: 8px;
+  }
+
+  .pp-tab {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 18px;
+    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.2);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-foreground);
+    font: inherit;
+    font-size: 0.875rem;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .pp-tab:hover {
+    border-color: var(--color-foreground-heading, #1f2a44);
+  }
+
+  .pp-tab.is-active {
+    border-color: var(--color-foreground-heading, #1f2a44);
+    background: var(--color-foreground-heading, #1f2a44);
+    color: var(--color-background, #fff);
+  }
+
+  /* Shared heading row for home page sections: title left, switch right */
+  .pp-home__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    margin-bottom: 20px;
+  }
+
+  .pp-home__title {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  [data-pp-panel][hidden] {
+    display: none !important;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-home__head {
+      margin-bottom: 16px;
+    }
+
+    .pp-home__title {
+      font-size: 1.25rem;
+    }
+
+    .pp-tab {
+      height: 34px;
+      padding: 0 14px;
+      font-size: 0.8125rem;
+    }
+  }
+{% endstylesheet %}

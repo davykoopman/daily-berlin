@@ -1,0 +1,213 @@
+{%- doc -%}
+  Bundle discount progress bar. Reads the number of items in the cart and shows
+  how many more are needed for the next tier. Updates live on cart changes.
+
+  @param {string} tiers - Comma separated "quantity:percent" pairs, e.g. "2:10,3:15,4:20" (match the discount app)
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign pairs = tiers | default: '2:10,3:15,4:20' | split: ','
+
+  # [n] = items still needed, [p] = next percent, [c] = current percent
+  case lang
+    when 'pl'
+      assign m_start = 'Dodaj jeszcze <strong>[n] [u]</strong> i oszczędź <strong>[p]%</strong>'
+      assign m_next = 'Masz <strong>[c]% rabatu</strong> – dodaj jeszcze <strong>[n] [u]</strong> i oszczędź <strong>[p]%</strong>'
+      assign m_max = 'Masz maksymalny rabat <strong>[c]%</strong> ✓'
+      assign u_one = 'produkt'
+      assign u_few = 'produkty'
+      assign u_many = 'produktów'
+      assign unit = 'szt.'
+    when 'nl'
+      assign m_start = 'Voeg nog <strong>[n] [u]</strong> toe en bespaar <strong>[p]%</strong>'
+      assign m_next = 'Je hebt <strong>[c]% korting</strong> – voeg nog <strong>[n] [u]</strong> toe en bespaar <strong>[p]%</strong>'
+      assign m_max = 'Je hebt de maximale korting van <strong>[c]%</strong> ✓'
+      assign u_one = 'product'
+      assign u_few = 'producten'
+      assign u_many = 'producten'
+      assign unit = 'st.'
+    when 'de'
+      assign m_start = 'Füge noch <strong>[n] [u]</strong> hinzu und spare <strong>[p] %</strong>'
+      assign m_next = 'Du hast <strong>[c] % Rabatt</strong> – füge noch <strong>[n] [u]</strong> hinzu und spare <strong>[p] %</strong>'
+      assign m_max = 'Du hast den maximalen Rabatt von <strong>[c] %</strong> ✓'
+      assign u_one = 'Artikel'
+      assign u_few = 'Artikel'
+      assign u_many = 'Artikel'
+      assign unit = 'Stk.'
+    when 'fr'
+      assign m_start = 'Ajoutez encore <strong>[n] [u]</strong> et économisez <strong>[p] %</strong>'
+      assign m_next = 'Vous avez <strong>[c] % de remise</strong> – ajoutez encore <strong>[n] [u]</strong> et économisez <strong>[p] %</strong>'
+      assign m_max = 'Vous avez la remise maximale de <strong>[c] %</strong> ✓'
+      assign u_one = 'article'
+      assign u_few = 'articles'
+      assign u_many = 'articles'
+      assign unit = 'art.'
+    when 'it'
+      assign m_start = 'Aggiungi ancora <strong>[n] [u]</strong> e risparmia il <strong>[p]%</strong>'
+      assign m_next = 'Hai il <strong>[c]% di sconto</strong> – aggiungi ancora <strong>[n] [u]</strong> e risparmia il <strong>[p]%</strong>'
+      assign m_max = 'Hai lo sconto massimo del <strong>[c]%</strong> ✓'
+      assign u_one = 'prodotto'
+      assign u_few = 'prodotti'
+      assign u_many = 'prodotti'
+      assign unit = 'pz.'
+    when 'es'
+      assign m_start = 'Añade <strong>[n] [u]</strong> más y ahorra un <strong>[p] %</strong>'
+      assign m_next = 'Tienes un <strong>[c] % de descuento</strong> – añade <strong>[n] [u]</strong> más y ahorra un <strong>[p] %</strong>'
+      assign m_max = 'Tienes el descuento máximo del <strong>[c] %</strong> ✓'
+      assign u_one = 'producto'
+      assign u_few = 'productos'
+      assign u_many = 'productos'
+      assign unit = 'uds.'
+    else
+      assign m_start = 'Add <strong>[n] more [u]</strong> and save <strong>[p]%</strong>'
+      assign m_next = 'You get <strong>[c]% off</strong> – add <strong>[n] more [u]</strong> and save <strong>[p]%</strong>'
+      assign m_max = 'You get the maximum <strong>[c]% off</strong> ✓'
+      assign u_one = 'item'
+      assign u_few = 'items'
+      assign u_many = 'items'
+      assign unit = 'items'
+  endcase
+
+  assign cart_js = routes.cart_url | append: '.js'
+-%}
+
+<div
+  class="pp-tierbar"
+  data-pp-tierbar
+  data-tiers="{{ pairs | join: ',' | strip | escape }}"
+  data-count="{{ cart.item_count }}"
+  data-cart-url="{{ cart_js }}"
+  data-m-start="{{ m_start | escape }}"
+  data-m-next="{{ m_next | escape }}"
+  data-m-max="{{ m_max | escape }}"
+  data-u="{{ u_one }}|{{ u_few }}|{{ u_many }}"
+>
+  <p class="pp-tierbar__msg" aria-live="polite">&nbsp;</p>
+  <ol class="pp-tierbar__steps" role="list" aria-hidden="true">
+    {%- for pair in pairs -%}
+      {%- assign p = pair | strip | split: ':' -%}
+      <li class="pp-tierbar__step" data-q="{{ p[0] }}" data-label="{{ p[0] }}{% if forloop.last %}+{% endif %}" data-off="−{{ p[1] }}%">
+        <span class="pp-tierbar__track"><span class="pp-tierbar__fill"></span></span>
+      </li>
+    {%- endfor -%}
+  </ol>
+</div>
+
+<script>
+  (function () {
+    var plural = function (n, forms) {
+      // forms: one|few|many (few/many differ in Polish only)
+      if (n === 1) return forms[0];
+      var m10 = n % 10, m100 = n % 100;
+      if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return forms[1];
+      return forms[2];
+    };
+    var render = function (el, count) {
+      var tiers = el.dataset.tiers.split(',').map(function (t) { var a = t.split(':'); return { q: +a[0], p: +a[1] }; });
+      var forms = el.dataset.u.split('|');
+      var cur = null, next = null;
+      tiers.forEach(function (t) { if (count >= t.q) cur = t; else if (!next) next = t; });
+      var msg;
+      if (!next) msg = el.dataset.mMax;
+      else {
+        var n = next.q - count;
+        msg = (cur ? el.dataset.mNext : el.dataset.mStart).replace('[u]', plural(n, forms)).replace('[n]', n).replace('[p]', next.p);
+      }
+      if (cur) msg = msg.replace('[c]', cur.p);
+      el.querySelector('.pp-tierbar__msg').innerHTML = msg;
+      var prev = 0;
+      el.querySelectorAll('.pp-tierbar__step').forEach(function (s) {
+        var q = +s.dataset.q;
+        var f = Math.max(0, Math.min(1, (count - prev) / (q - prev)));
+        s.querySelector('.pp-tierbar__fill').style.transform = 'scaleX(' + f + ')';
+        s.classList.toggle('is-reached', count >= q);
+        prev = q;
+      });
+    };
+    var all = function () { return document.querySelectorAll('[data-pp-tierbar]'); };
+    all().forEach(function (el) { render(el, +el.dataset.count || 0); });
+    if (window.ppTierbarInit) return;
+    window.ppTierbarInit = true;
+    var refresh = function (e) {
+      var c = e && e.detail && e.detail.resource && typeof e.detail.resource.item_count === 'number' ? e.detail.resource.item_count : null;
+      if (c !== null) { all().forEach(function (el) { render(el, c); }); return; }
+      var el0 = all()[0];
+      if (!el0) return;
+      fetch(el0.dataset.cartUrl, { headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (cart) { all().forEach(function (el) { render(el, cart.item_count); }); })
+        .catch(function () {});
+    };
+    document.addEventListener('cart:update', refresh);
+    // Dwell / newer Horizon: cart lines events with a promise that resolves after the update
+    import('@shopify/events')
+      .then(function (ev) {
+        if (!ev || !ev.StandardEvents) return;
+        document.addEventListener(ev.StandardEvents.cartLinesUpdate, function (e) {
+          var done = function () { setTimeout(refresh, 150); };
+          if (e.promise && e.promise.then) e.promise.then(done, done);
+          else done();
+        });
+      })
+      .catch(function () {});
+    // Back/forward cache: the cart may have changed on another page
+    window.addEventListener('pageshow', function (e) { if (e.persisted) refresh(); });
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-tierbar {
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .pp-tierbar__msg {
+    margin: 0 0 8px;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-foreground);
+  }
+
+  .pp-tierbar__msg strong {
+    font-weight: 600;
+    color: var(--color-foreground-heading, var(--color-foreground));
+  }
+
+  .pp-tierbar__steps {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-tierbar__step {
+    display: block;
+  }
+
+  .pp-tierbar__track {
+    display: block;
+    height: 4px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+  .pp-tierbar__fill {
+    display: block;
+    height: 100%;
+    background: var(--color-foreground-heading, #1f2a44);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.5s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-tierbar__fill {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

@@ -1,0 +1,249 @@
+{%- liquid
+  assign bs = block.settings
+-%}
+
+<div
+  class="pp-benefits-wrap{% if bs.show_divider %} pp-benefits-wrap--divider{% endif %}"
+  {{ block.shopify_attributes }}
+>
+<ul class="pp-benefits" role="list">
+  {%- if bs.show_shipping -%}
+    <li class="pp-benefit">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/>
+        <circle cx="6.5" cy="17.25" r="1.75"/>
+        <circle cx="16.75" cy="17.25" r="1.75"/>
+      </svg>
+      <span>{% render 'pp-i18n', key: 'free_shipping' %}</span>
+    </li>
+  {%- endif -%}
+
+  {%- if bs.show_guarantee -%}
+    <li class="pp-benefit">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 3l7.5 3v5.5c0 4.5-3.2 8.3-7.5 9.5-4.3-1.2-7.5-5-7.5-9.5V6L12 3z"/>
+        <path d="M8.75 12.25l2.25 2.25 4.25-4.5"/>
+      </svg>
+      <span>{% render 'pp-i18n', key: 'money_back', n: bs.return_days %}</span>
+    </li>
+  {%- endif -%}
+
+  {%- if bs.show_buy_more -%}
+    <li class="pp-benefit">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M3.5 12.6V4.5a1 1 0 0 1 1-1h8.1a1 1 0 0 1 .7.3l7.4 7.4a1 1 0 0 1 0 1.4l-8.1 8.1a1 1 0 0 1-1.4 0l-7.4-7.4a1 1 0 0 1-.3-.7z"/>
+        <circle cx="8" cy="8" r="1.5"/>
+      </svg>
+      <span>{% render 'pp-i18n', key: 'buy_more' %}</span>
+    </li>
+  {%- endif -%}
+</ul>
+</div>
+
+<script>
+  (function () {
+    if (window.ppSwatchFull) return;
+    window.ppSwatchFull = true;
+    var fix = function () {
+      document.querySelectorAll('.product-details variant-swatch-king .swatch-view-image .star-set-image[style*="crop="]').forEach(function (el) {
+        el.style.backgroundImage = el.style.backgroundImage
+          .replace(/([?&])height=\d+&?/, '$1')
+          .replace(/([?&])crop=[a-z]+&?/, '$1')
+          .replace(/width=\d+/, 'width=150')
+          .replace(/[?&]"?\)$/, '")');
+      });
+    };
+    var queued = false;
+    var start = function () {
+      fix();
+      new MutationObserver(function () {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(function () { queued = false; fix(); });
+      }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
+  })();
+</script>
+
+{% render 'pp-fn-style' %}
+
+{% stylesheet %}
+  /*
+    Equal space above and below the bullets (and between line and bullets).
+    --pp-before: gap of the header group the block sits in (12px in the template).
+    --pp-after: space the layout already puts below the header group
+    (product details gap 12px + variant picker padding 12px): 24px.
+  */
+  .pp-benefits-wrap {
+    --pp-space: 20px;
+    --pp-before: 12px;
+    --pp-after: 24px;
+
+    width: 100%;
+    margin-top: calc(var(--pp-space) - var(--pp-before));
+    margin-bottom: calc(var(--pp-space) - var(--pp-after));
+  }
+
+  .pp-benefits-wrap--divider {
+    padding-top: var(--pp-space);
+    border-top: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+
+  .pp-benefits {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--color-foreground);
+  }
+
+  .pp-benefit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pp-benefit__icon {
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Product page kit: sale price in the cart, bold and red like on the product page */
+  .pp-sale-price {
+    color: #a8231b;
+    font-weight: 600;
+  }
+
+  /* Product page kit: keep payment icons on one row on phones */
+  @media screen and (max-width: 749px) {
+    .product-information .payment-icons__list {
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+
+    .product-information .payment-icons__item svg {
+      width: 31px;
+      height: 20px;
+    }
+  }
+
+  /* Product page kit: quick add in the Mix & match section on phones */
+  @media screen and (max-width: 749px) {
+    product-recommendations .quick-add,
+    .pp-bundle .quick-add {
+      --quick-add-mobile-display: flex;
+      --quick-add-mobile-opacity: 1;
+    }
+
+    /* Swatch app picker uses the full width of the quick add sheet */
+    .quick-add-modal__content variant-swatch-king {
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+  }
+
+  /*
+    Colour swatches (Swatch King) on the product page: portrait boxes like the
+    product photos (4:5), the whole photo visible (the uncropped image is loaded
+    by the script below the bullets).
+  */
+  .product-details variant-swatch-king .swatch-view-image {
+    gap: 6px !important;
+  }
+
+  .product-details variant-swatch-king .swatch-view-image .swatch-view-item,
+  .product-details variant-swatch-king .swatch-view-image .swatch-image-wrapper {
+    width: 44px !important;
+    height: 55px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .product-details variant-swatch-king .swatch-view-image .swatch-view-item .swatch-image {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 2px !important;
+    box-sizing: border-box !important;
+  }
+
+  .product-details variant-swatch-king .swatch-view-image .swatch-view-item .swatch-image .star-set-image {
+    display: block !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 100% !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-details variant-swatch-king .swatch-view-image .swatch-view-item,
+    .product-details variant-swatch-king .swatch-view-image .swatch-image-wrapper {
+      width: 40px !important;
+      height: 50px !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Benefits",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Texts are translated automatically by storefront language."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show line above",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping",
+      "label": "Show free shipping",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee",
+      "label": "Show money-back guarantee",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Return period in days (match the refund policy)",
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_more",
+      "label": "Show buy more, save more",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Benefits",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

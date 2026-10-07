@@ -37,3 +37,20 @@
   About image copied from the Davento CDN to Fashionnovo Files (fashionnovo-about-us.png). Originals: orig-texts/.
 - Policies: no write_legal_policies scope → corrected texts in policies/*.html to paste in Settings → Policies.
 - Work theme "Fashionnovo - kit (werk)" #205357056340 (copy of live, unpublished).
+
+## Kit in work theme "Fashionnovo - kit (werk)" #205357056340 (not published)
+- Files in fashionnovo/theme, based on the Alove kit (English/UK). Horizon 4.1.1 is older than the Alove base:
+  main-collection, search-results and variant-main-picker are patched from the Fashionnovo originals
+  (no collection-wrapper-styles / swatch-styles snippets in 4.1.1). Originals in theme-orig/.
+- Texts follow the Fashionnovo policies: free UK delivery, dispatch 1–3 business days, 4–11 total, order by 5 PM
+  (Mon–Sat), 60-day returns + exchanges, refund within 7 business days, support@fashionnovo.com, reply within 12 hours.
+  Policy links → /policies/shipping-policy and /policies/refund-policy. Menus: quick-links (the header menu).
+- British English: "basket" everywhere (locales/en.default.json), checkout texts "or pay securely below",
+  "Free tracked UK delivery…".
+- Look (snippets/pp-fn-style.liquid): navy #1F2A44, sand #F3EEE6, camel #B08A5A; Tenor Sans + Outfit (unchanged).
+  White header with logo left + menu inline, navy announcement bar with camel diamonds, hero text in a sand card
+  (bottom left), trust strip with thin dividers (2×2 grid lines on mobile), camel check marks, numbered tier stepper
+  (2 · 3 · 4+, check mark when reached), "Save £X" labels (product page + cards + quick pick) instead of −X%,
+  sand card backgrounds, square photo swatches, framed About image, steps timeline, numbered FAQ with chevrons,
+  navy footer with payment icons. Hero: Shop women / Shop men (Our Collection no longer linked).
+- Verified on the preview: home, collection, product (sale), basket (2 items → "Buy 2, save 10%", −£10.39), checkout.

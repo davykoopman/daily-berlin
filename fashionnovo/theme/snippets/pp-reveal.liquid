@@ -1,0 +1,58 @@
+{%- doc -%}
+  Soft fade-in for elements with [data-pp-reveal] when they scroll into view.
+  Runs once per page. Skipped when the visitor prefers reduced motion.
+{%- enddoc -%}
+<script>
+  (function () {
+    if (window.ppRevealInit) return;
+    window.ppRevealInit = true;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('pp-motion');
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('pp-in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    var watch = function () {
+      document.querySelectorAll('[data-pp-reveal]:not(.pp-in)').forEach(function (el) { io.observe(el); });
+    };
+    var queued = false;
+    var start = function () {
+      watch();
+      // Sections re-rendered by the theme (e.g. on variant change) get observed too
+      new MutationObserver(function () {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(function () { queued = false; watch(); });
+      }).observe(document.body, { childList: true, subtree: true });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-motion [data-pp-reveal] {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    transition-delay: var(--pp-delay, 0ms);
+  }
+
+  .pp-motion [data-pp-reveal].pp-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-motion [data-pp-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+{% endstylesheet %}

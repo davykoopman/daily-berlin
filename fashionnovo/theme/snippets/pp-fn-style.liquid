@@ -1,0 +1,413 @@
+{%- doc -%}
+  Fashionnovo look on top of the kit: navy, sand and camel. Trust strip with thin
+  dividers, camel check marks, numbered tier stepper, "Save £X" labels on sand
+  card backgrounds, square photo swatches, framed About image, steps timeline and
+  a numbered FAQ. Only styles, no markup.
+{%- enddoc -%}
+
+{% stylesheet %}
+  :root {
+    --fn-navy: #1f2a44;
+    --fn-sand: #f3eee6;
+    --fn-sand-line: #e6dfd3;
+    --fn-camel: #b08a5a;
+    --fn-muted: #5b6478;
+  }
+
+  /* Announcement bar: small camel diamond before every message */
+  .announcement-bar__text::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 10px;
+    vertical-align: 2px;
+    background: var(--fn-camel);
+    transform: rotate(45deg);
+  }
+
+  /* Home hero: text in a sand card at the bottom left of the photo */
+  [id$='__hero_G7CAX9'] .overlay {
+    display: none;
+  }
+
+  [id$='__hero_G7CAX9'] .hero__content-wrapper {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: flex-start;
+    gap: 14px 10px;
+    box-sizing: border-box;
+    align-self: end;
+    justify-self: start;
+    height: auto;
+    width: min(480px, calc(100% - 32px));
+    margin: 0 0 clamp(16px, 6vh, 64px) clamp(16px, 6vw, 96px);
+    padding: clamp(22px, 3vw, 36px);
+    background: var(--fn-sand);
+    border-radius: 4px;
+  }
+
+  [id$='__hero_G7CAX9'] .hero__content-wrapper > .text-block {
+    flex: 0 0 100%;
+    align-items: flex-start;
+    padding-inline: 0;
+    text-align: left;
+  }
+
+  [id$='__hero_G7CAX9'] .hero__content-wrapper > .text-block > * {
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  [id$='__hero_G7CAX9'] .hero__content-wrapper > .text-block,
+  [id$='__hero_G7CAX9'] .hero__content-wrapper > .text-block * {
+    color: var(--fn-navy);
+    text-align: left;
+  }
+
+  [id$='__hero_G7CAX9'] .hero__content-wrapper > .text-block h2 {
+    font-size: clamp(1.875rem, 3.4vw, 2.75rem);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  [id$='__hero_G7CAX9'] .hero__content-wrapper > .button {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 200px;
+    padding-inline: 12px;
+  }
+
+  @media screen and (max-width: 749px) {
+    [id$='__hero_G7CAX9'] .hero__content-wrapper {
+      width: calc(100% - 32px);
+      margin: 0 16px 16px;
+      padding: 20px;
+    }
+
+    [id$='__hero_G7CAX9'] .hero__content-wrapper > .button {
+      max-width: none;
+    }
+  }
+
+  /* Trust strip: four columns split by thin lines, no tiles or circles */
+  .pp-trust {
+    border-block: 1px solid var(--fn-sand-line);
+  }
+
+  .pp-trust .pp-trust__list {
+    gap: 0;
+  }
+
+  .pp-trust .pp-trust__item {
+    padding: 4px 16px;
+  }
+
+  .pp-trust .pp-trust__item + .pp-trust__item {
+    border-left: 1px solid var(--fn-sand-line);
+  }
+
+  .pp-trust__icon {
+    color: var(--fn-camel);
+    stroke-width: 1.3;
+  }
+
+  .pp-trust__title {
+    color: var(--fn-navy);
+    letter-spacing: 0.06em;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-trust .pp-trust__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: 1fr;
+      padding: 0 16px;
+    }
+
+    .pp-trust .pp-trust__item {
+      padding: 16px 8px;
+    }
+
+    .pp-trust .pp-trust__item + .pp-trust__item {
+      border-left: 0;
+    }
+
+    .pp-trust .pp-trust__item:nth-child(odd) {
+      border-right: 1px solid var(--fn-sand-line);
+    }
+
+    .pp-trust .pp-trust__item:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--fn-sand-line);
+    }
+  }
+
+  /* Product benefits: camel check marks */
+  .pp-benefit__icon {
+    display: none;
+  }
+
+  .pp-benefit::before {
+    content: '';
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    background: var(--fn-camel);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5l5 5 10-11'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5l5 5 10-11'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  /* Tier progress: numbered stepper (2 · 3 · 4+), a line fills up to each step,
+     the step turns navy with a check mark once reached */
+  .pp-tierbar .pp-tierbar__steps {
+    gap: 0;
+    padding-bottom: 18px;
+  }
+
+  .pp-tierbar .pp-tierbar__step {
+    position: relative;
+    padding-right: 26px;
+  }
+
+  .pp-tierbar .pp-tierbar__steps .pp-tierbar__track {
+    margin-top: 12px;
+    height: 2px;
+    border-radius: 0;
+    background: var(--fn-sand-line);
+  }
+
+  .pp-tierbar__fill {
+    background: var(--fn-navy);
+  }
+
+  .pp-tierbar__step::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--fn-navy);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--fn-navy);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .pp-tierbar__step.is-reached::before {
+    content: '✓';
+    background: var(--fn-navy);
+    color: #fff;
+    font-size: 0.8125rem;
+  }
+
+  .pp-tierbar__step::after {
+    content: attr(data-off);
+    position: absolute;
+    top: 30px;
+    right: -6px;
+    width: 38px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    color: var(--fn-muted);
+  }
+
+  .pp-tierbar__step.is-reached::after {
+    color: var(--fn-navy);
+  }
+
+  .pp-tierbar__msg strong {
+    color: var(--fn-navy);
+  }
+
+  /* Product cards: sand photo background, camel "Save £X" label on the photo */
+  .pp-card__media {
+    background-color: var(--fn-sand);
+    border-radius: 4px;
+  }
+
+  .pp-card__save {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    padding: 3px 8px;
+    border-radius: 2px;
+    background: var(--fn-camel);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    pointer-events: none;
+  }
+
+  .pp-card .pp-card__now--sale {
+    color: var(--fn-navy);
+    font-weight: 600;
+  }
+
+  .pp-card .pp-card__was {
+    color: #8a8f9c;
+  }
+
+  .pp-qp__badge {
+    background: var(--fn-camel);
+    border-radius: 2px;
+  }
+
+  /* Colour swatches: square photos with small rounded corners */
+  .variant-option--swatches .swatch {
+    border-radius: 6px;
+  }
+
+  /* Collection chips and gender tabs: outlined, navy when active */
+  .pp-chip,
+  .pp-tab {
+    border-radius: 4px;
+    border-color: var(--fn-sand-line);
+  }
+
+  .pp-chip.is-active,
+  .pp-tab.is-active {
+    border-color: var(--fn-navy);
+    background-color: var(--fn-navy);
+    color: #fff;
+  }
+
+  /* Home categories: rounded photos, label with an arrow underneath */
+  .pp-home-cat__media {
+    border-radius: 6px;
+  }
+
+  .pp-home-cat__label::after {
+    content: ' →';
+    color: var(--fn-camel);
+  }
+
+  /* About image (home + product page): thin camel frame, slightly offset */
+  [id$='__section_fD89zp'] .image-block__image,
+  [id$='__section_AL69qQ'] .image-block__image {
+    box-shadow: 14px 14px 0 -1px #fff, 14px 14px 0 0 var(--fn-camel);
+  }
+
+  [id$='__section_fD89zp'] .image-block,
+  [id$='__section_AL69qQ'] .image-block {
+    padding: 0 14px 14px 0;
+  }
+
+  /* How it works: timeline, outlined numbers joined by a line */
+  .pp-steps .pp-steps__list {
+    position: relative;
+  }
+
+  .pp-steps .pp-steps__num {
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    border: 1px solid var(--fn-navy);
+    background: #fff;
+    color: var(--fn-navy);
+    font-family: var(--font-heading--family);
+  }
+
+  @media screen and (min-width: 750px) {
+    .pp-steps .pp-steps__list::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 16.6%;
+      right: 16.6%;
+      height: 1px;
+      background: var(--fn-camel);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-steps .pp-steps__list::before {
+      content: '';
+      position: absolute;
+      top: 16px;
+      bottom: 16px;
+      left: 16px;
+      width: 1px;
+      background: var(--fn-camel);
+    }
+  }
+
+  /* FAQ: sand band, one column, numbered 01–06, chevrons */
+  .pp-faq {
+    background: var(--fn-sand);
+    counter-reset: fn-faq;
+  }
+
+  .pp-faq__inner {
+    max-width: 760px;
+  }
+
+  .pp-faq__item {
+    counter-increment: fn-faq;
+  }
+
+  .pp-faq__item,
+  .pp-faq__item:first-of-type {
+    border-color: var(--fn-sand-line);
+  }
+
+  .pp-faq__q {
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 14px 36px 14px 0;
+    text-align: left;
+  }
+
+  .pp-faq__q::before {
+    content: counter(fn-faq, decimal-leading-zero);
+    flex: 0 0 auto;
+    font-family: var(--font-heading--family);
+    font-size: 0.875rem;
+    color: var(--fn-camel);
+  }
+
+  .pp-faq__icon {
+    right: 6px;
+    width: 10px;
+    height: 10px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-70%) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+
+  .pp-faq__icon::before,
+  .pp-faq__icon::after {
+    display: none;
+  }
+
+  .pp-faq__item[open] .pp-faq__icon {
+    transform: translateY(-30%) rotate(-135deg);
+  }
+
+  .pp-faq__a {
+    padding: 0 36px 18px 32px;
+    text-align: left;
+  }
+
+  /* Footer: text headings get the same spacing as the menu headings, so all columns line up */
+  .shopify-section-group-footer-group .group-block-content > .text-block.h4:first-child {
+    padding-block: 0.8em;
+  }
+
+  /* Product page accordions: readable headings */
+  .product-details details > summary {
+    font-size: 0.9375rem;
+  }
+{% endstylesheet %}
