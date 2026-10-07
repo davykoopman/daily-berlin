@@ -1,0 +1,674 @@
+[
+ {
+  "productId": "gid://shopify/Product/15817849241940",
+  "handle": "womens-short-coat-with-high-collar-for-autumn-and-winter",
+  "variants": [
+   {
+    "id": "gid://shopify/ProductVariant/57363563118932",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563151700",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563184468",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563217236",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563250004",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563282772",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563315540",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563348308",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563381076",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563413844",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563446612",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563479380",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563512148",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563544916",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563577684",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563610452",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563643220",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563675988",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563708756",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563741524",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563774292",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563807060",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563839828",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563872596",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563905364",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563938132",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563970900",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564003668",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564036436",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564069204",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564101972",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564134740",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564167508",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564200276",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564233044",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363564265812",
+    "compareAtPrice": "72.95"
+   }
+  ]
+ },
+ {
+  "productId": "gid://shopify/Product/15817849176404",
+  "handle": "womens-hooded-jacket-with-drawstring-waist-for-spring-days",
+  "variants": [
+   {
+    "id": "gid://shopify/ProductVariant/57363562103124",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562135892",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562168660",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562201428",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562234196",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562266964",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562299732",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562332500",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562365268",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562398036",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562430804",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562463572",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562496340",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562529108",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562561876",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562594644",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562627412",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562660180",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562692948",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562725716",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562758484",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562791252",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562824020",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562856788",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562889556",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562922324",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562955092",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363562987860",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563020628",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363563053396",
+    "compareAtPrice": "76.95"
+   }
+  ]
+ },
+ {
+  "productId": "gid://shopify/Product/15817837805908",
+  "handle": "womens-belted-ski-jacket-with-hood-for-snowy-days",
+  "variants": [
+   {
+    "id": "gid://shopify/ProductVariant/57363525304660",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525337428",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525370196",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525402964",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525435732",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525468500",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525501268",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525534036",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525566804",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525599572",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525632340",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525665108",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525697876",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525730644",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525763412",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525796180",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525828948",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363525861716",
+    "compareAtPrice": "81.95"
+   }
+  ]
+ },
+ {
+  "productId": "gid://shopify/Product/15817833152852",
+  "handle": "womens-cropped-double-breasted-jacket-with-wide-lapels-for-autumn-days",
+  "variants": [
+   {
+    "id": "gid://shopify/ProductVariant/57363512492372",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512525140",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512557908",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512590676",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512623444",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512656212",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512688980",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512721748",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512754516",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512787284",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512820052",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512852820",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512885588",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512918356",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512951124",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363512983892",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363513016660",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363513049428",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363513082196",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363513114964",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363513147732",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363513180500",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363513213268",
+    "compareAtPrice": "69.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363513246036",
+    "compareAtPrice": "69.95"
+   }
+  ]
+ },
+ {
+  "productId": "gid://shopify/Product/15817827582292",
+  "handle": "womens-cropped-belted-trench-jacket-with-stand-collar-for-spring-days",
+  "variants": [
+   {
+    "id": "gid://shopify/ProductVariant/57363492798804",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363492831572",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363492864340",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363492897108",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363492929876",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363492962644",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363492995412",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493028180",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493060948",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493093716",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493126484",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493159252",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493192020",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493224788",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493257556",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493290324",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493323092",
+    "compareAtPrice": "76.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363493355860",
+    "compareAtPrice": "76.95"
+   }
+  ]
+ },
+ {
+  "productId": "gid://shopify/Product/15817824010580",
+  "handle": "womens-leather-look-biker-jacket-with-quilted-sleeves-for-autumn-days",
+  "variants": [
+   {
+    "id": "gid://shopify/ProductVariant/57363480609108",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363480641876",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363480674644",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363480707412",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363480740180",
+    "compareAtPrice": "81.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57363480772948",
+    "compareAtPrice": "81.95"
+   }
+  ]
+ },
+ {
+  "productId": "gid://shopify/Product/15814523552084",
+  "handle": "womens-oversized-leather-look-jacket-with-collar-for-autumn-days",
+  "variants": [
+   {
+    "id": "gid://shopify/ProductVariant/57353189720404",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353189753172",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353189785940",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353189818708",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353189851476",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353189884244",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353189917012",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353189949780",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353189982548",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353190015316",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353190048084",
+    "compareAtPrice": "72.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57353190080852",
+    "compareAtPrice": "72.95"
+   }
+  ]
+ },
+ {
+  "productId": "gid://shopify/Product/15807739789652",
+  "handle": "womens-hooded-puffer-jacket-with-zip-front-for-cold-days",
+  "variants": [
+   {
+    "id": "gid://shopify/ProductVariant/57321264841044",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321264873812",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321264906580",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321264939348",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321264972116",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321265004884",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321265037652",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321265070420",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321265103188",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321265135956",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321265168724",
+    "compareAtPrice": "64.95"
+   },
+   {
+    "id": "gid://shopify/ProductVariant/57321265201492",
+    "compareAtPrice": "64.95"
+   }
+  ]
+ }
+]
