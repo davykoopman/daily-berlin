@@ -76,6 +76,16 @@
   .r.h { color: var(--high); background: var(--high-bg); }
   .who { font-family: var(--f-mono); font-size: 0.66rem; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; }
   .who.c { border-color: var(--accent); color: var(--accent); }
+  .wait { font-family: var(--f-mono); font-size: 0.66rem; padding: 2px 6px; border-radius: 4px; background: var(--mid-bg); color: var(--mid); white-space: nowrap; letter-spacing: 0.02em; }
+  .done { font-family: var(--f-mono); font-size: 0.66rem; padding: 2px 6px; border-radius: 4px; background: var(--low-bg); color: var(--low); white-space: nowrap; }
+  .status3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .status3 .panel h3 { display: flex; align-items: center; gap: 8px; }
+  .count { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+  .stat { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .stat div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: grid; gap: 2px; }
+  .stat b { font-family: var(--f-display); font-size: 1.4rem; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--muted); font-size: 0.85rem; }
+  .appendix { border-top: 2px solid var(--line); margin-top: 32px; }
   .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.9rem; color: var(--muted); align-items: center; }
   .key { display: inline-flex; align-items: center; gap: 6px; }
   .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
@@ -159,14 +169,16 @@
     <h1>Q4 Roadmap 2026</h1>
     <p class="lede">Het plan voor de stores zelf tijdens Black Friday, Cyber Monday, Kerst en de uitverkoop: wanneer we elk onderdeel op de site opzetten, hoe het eruitziet, welke informatie erin moet en welke data we nodig hebben. E-mail en advertenties liggen bij de agencies; hier staat alleen wat zij van de stores nodig hebben. Dit is een plan; er wordt nog niets gebouwd.</p>
     <div class="meta">
-      <span>Versie 4 · 7 oktober 2026</span>
+      <span>Versie 5 · 7 oktober 2026</span>
       <span>Basis: Q4 Offer Menu (37) · On-Site Signals (50) · marktonderzoek 2023–2025 · jullie antwoorden</span>
     </div>
   </header>
 
   <nav class="phases" aria-label="Onderdelen">
+    <a href="#status">Status</a>
     <a href="#tijdlijn">Tijdlijn</a>
     <a href="#opzetten">Opzetmomenten</a>
+    <a href="#risicos-dropship">Dropship-risico's</a>
     <a href="#mockups">Zo ziet het eruit</a>
     <a href="#bfcm">BF & CM per dag</a>
     <a href="#korting">Korting</a>
@@ -175,11 +187,56 @@
     <a href="#kpi">KPI's</a>
     <a href="#banners">Bannerpakket</a>
     <a href="#stores">Per store</a>
-    <a href="#offers">Offer Menu 37</a>
-    <a href="#signals">Signals 50</a>
+    <a href="#voorbeeld">Voorbeeld Davento</a>
+    <a href="#concurrenten">Concurrenten</a>
+    <a href="#offers">Bijlage: Offer Menu</a>
+    <a href="#signals">Bijlage: Signals</a>
     <a href="#risico">Risico's</a>
     <a href="#open">Beslissingen</a>
   </nav>
+
+  <!-- STATUS -->
+  <section id="status">
+    <div class="intro">
+      <span class="eyebrow">Status · 7 oktober</span>
+      <h2>Waar we staan</h2>
+      <p>Wat besloten is, waar we op wachten en wat nog open staat. Onderdelen die op een antwoord wachten, zijn in het hele plan gemarkeerd met <span class="wait">wacht</span>.</p>
+    </div>
+    <div class="status3">
+      <div class="panel">
+        <h3><span class="done">BESLOTEN</span><span class="count">9</span></h3>
+        <ul>
+          <li>Alle 6 stores doen mee.</li>
+          <li>Dit plan gaat alleen over de stores; e-mail en ads liggen bij de agencies.</li>
+          <li>Black Friday Month 1–19 nov · <b>Black Friday vr 20 nov – di 1 dec</b> (met Cyber Monday).</li>
+          <li>Geen Early Access, geen sms, geen mystery box.</li>
+          <li>Kerstdeadline zo 6 dec 23:59 · Stellamea Reyes vr 18 dec.</li>
+          <li>Cadeaus van €1–3 en cadeauverpakking via de leverancier.</li>
+          <li>Sale vanaf za 26 dec, tot 70% vanaf ma 28 dec, einde zo 17 jan.</li>
+          <li>11.11 alleen bij Davento (Italiaanse site) en Niaali.</li>
+          <li>Verhoogde "was"-prijs: jullie keuze, hoog risico.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3><span class="wait">WACHTEN OP</span><span class="count">4</span></h3>
+        <ul>
+          <li><b>Leverancier</b> · gevraagd wo 7 okt, antwoord uiterlijk vr 16 okt: levertijd en kerstdeadline per land, capaciteit, voorraad bestsellers, cadeauvoorraad en -kosten, cadeauverpakking, invoerkosten CH en US.</li>
+          <li><b>Jij</b> · reserve of uitbetalingsvertraging bij PayPal / Shopify Payments per store.</li>
+          <li><b>Jij</b> · contactpersoon bij de e-mail- en ad-agency.</li>
+          <li><b>Ad-agency</b> · ad spend per product voor de doorbusters, uiterlijk vr 6 nov.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3><span class="who">NOG TE BESLISSEN</span><span class="count">4</span></h3>
+        <ul>
+          <li>GO op dit plan (opzetten start ma 12 okt).</li>
+          <li>Wie maakt de 5 beeldbanners (designer of jij)?</li>
+          <li>Staffels: 15/20/25 in november · 20/30/40 voor Black Friday · CYBER +10%.</li>
+          <li>Verlengde retourtermijn voor kerstaankopen (tot 31 jan): ja of nee? Zo ja, policy vóór 1 nov aanpassen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 
   <!-- OVERZICHT -->
   <section id="overzicht">
@@ -188,7 +245,7 @@
         <h3>Vastgelegd</h3>
         <ul>
           <li>Alle 6 stores, eigen taal, munt en huiskleur.</li>
-          <li>Kerstdeadline <b>zo 6 dec 23:59</b> overal (2,5 week vóór 24 dec). Stellamea Reyes: <b>vr 18 dec 23:59</b>.</li>
+          <li>Kerstdeadline <b>zo 6 dec 23:59</b> overal <span class="wait">wacht: leverancier</span> (2,5 week vóór 24 dec). Stellamea Reyes: <b>vr 18 dec 23:59</b>.</li>
           <li>Levertijd volgens de verzendpolicies.</li>
           <li>Cadeaus van €1–3 (portemonnees, sjaaltjes, sieraden), cadeauverpakking en kaartje.</li>
           <li>E-mail en advertenties: agencies. Dit plan gaat over de stores; de agencies krijgen data, codes en banners op vaste momenten.</li>
@@ -200,8 +257,7 @@
         <ul>
           <li><b>okt</b> opzetten en Winter Edit</li>
           <li><b>1 nov</b> Black Friday Month</li>
-          <li><b>16 nov</b> Black Friday Early Deals (voor iedereen)</li>
-          <li><b>23 nov</b> Black Friday Week → <b>27</b> Black Friday → Weekend</li>
+          <li><b>vr 20 nov</b> Black Friday → <b>27</b> de dag zelf → Weekend</li>
           <li><b>30 nov – 1 dec</b> Cyber Monday</li>
           <li><b>2–6 dec</b> Laatste kans voor Kerst → Gift Shop</li>
           <li><b>26 dec – 17 jan</b> Sale tot 50%, daarna tot 70%</li>
@@ -244,15 +300,40 @@
           <tr><td>Echte aftelklok</td><td class="day">ma 12 okt</td><td class="day">vr 23 okt</td><td class="day">zo 1 nov</td><td><span class="who c">Claude</span></td><td>Einddatum en -tijd per campagne en tijdzone per store</td></tr>
           <tr><td>Popup "10% op je eerste order" (conversiehulp voor nieuwe bezoekers)</td><td class="day">ma 12 okt</td><td class="day">vr 16 okt</td><td class="day">ma 19 okt</td><td><span class="who c">Claude</span></td><td>Code per store; koppeling met de e-mailtool van de agency</td></tr>
           <tr><td>Herinnering verlaten checkout (standaard in Shopify) aan, als de agency dit niet al doet</td><td class="day">ma 12 okt</td><td class="day">vr 16 okt</td><td class="day">ma 19 okt</td><td><span class="who">Jij</span></td><td>Afstemmen met de e-mailagency</td></tr>
-          <tr><td>Cadeaumodule (drempel, ladder, kies je cadeau)</td><td class="day">ma 12 okt</td><td class="day">vr 16 okt</td><td class="day">ma 19 okt</td><td><span class="who c">Claude</span></td><td>Cadeausoorten, aantallen per store, drempels per munt, foto per cadeau</td></tr>
+          <tr><td>Cadeaumodule (drempel, ladder, kies je cadeau) <span class="wait">wacht: leverancier 3.1–3.3</span></td><td class="day">ma 12 okt</td><td class="day">vr 16 okt</td><td class="day">ma 19 okt</td><td><span class="who c">Claude</span></td><td>Cadeausoorten, aantallen per store, drempels per munt, foto per cadeau</td></tr>
           <tr><td>Staffels en codes per fase (automatische kortingen, uit)</td><td class="day">ma 19 okt</td><td class="day">do 29 okt</td><td class="day">per fase</td><td><span class="who c">Claude</span></td><td>Akkoord op 15/20/25 · 20/25/30 · 20/30/40 · CYBER +10% · 1111</td></tr>
-          <tr><td>Kerstregel onder de knop</td><td class="day">ma 2 nov</td><td class="day">vr 20 nov</td><td class="day">wo 2 dec</td><td><span class="who c">Claude</span></td><td>Deadlines 6 dec en 18 dec, tekst per taal</td></tr>
+          <tr><td>Kerstregel onder de knop <span class="wait">wacht: leverancier 1.3</span></td><td class="day">ma 2 nov</td><td class="day">vr 20 nov</td><td class="day">wo 2 dec</td><td><span class="who c">Claude</span></td><td>Deadlines 6 dec en 18 dec, tekst per taal</td></tr>
           <tr><td>Bundels en sets als eigen product</td><td class="day">ma 19 okt</td><td class="day">vr 30 okt</td><td class="day">zo 1 nov</td><td><span class="who">Jij</span></td><td>Welke producten samen, setprijs, foto</td></tr>
-          <tr><td>Doorbuster-lijst (8–10 bestsellers)</td><td class="day">ma 9 nov</td><td class="day">vr 13 nov</td><td class="day">di 24 nov</td><td><span class="who c">Claude</span></td><td>Verkoop per product uit Shopify + ad spend per product van de ad-agency</td></tr>
-                    <tr><td>Testbestelling per store (staffels, cadeau, code)</td><td class="day">do 19 nov</td><td class="day">vr 20 nov</td><td class="day">—</td><td><span class="who">Jij</span></td><td>Eén testorder per store met BF-staffel en cadeau</td></tr>
+          <tr><td>Doorbuster-lijst (8–10 bestsellers) <span class="wait">wacht: leverancier 2.2 · ad-agency</span></td><td class="day">ma 2 nov</td><td class="day">vr 13 nov</td><td class="day">vr 20 nov</td><td><span class="who c">Claude</span></td><td>Verkoop per product uit Shopify + ad spend per product van de ad-agency</td></tr>
+                    <tr><td>Testbestelling per store (staffels, cadeau, code)</td><td class="day">ma 16 nov</td><td class="day">wo 18 nov</td><td class="day">—</td><td><span class="who">Jij</span></td><td>Eén testorder per store met BF-staffel en cadeau</td></tr>
+          <tr><td>Cadeauverpakking + kaartje <span class="wait">wacht: leverancier 4.1–4.3</span></td><td class="day">ma 16 nov</td><td class="day">vr 27 nov</td><td class="day">wo 2 dec</td><td><span class="who">Jij</span></td><td>Kosten, kaarttekst per taal, extra verwerkingstijd</td></tr>
           <tr><td>Gift Shop-collecties</td><td class="day">ma 23 nov</td><td class="day">vr 27 nov</td><td class="day">ma 7 dec</td><td><span class="who">Jij</span></td><td>Prijsgrenzen per munt, voor haar/hem</td></tr>
           <tr><td>Sale-lijst (welke 50%, welke 70%)</td><td class="day">ma 14 dec</td><td class="day">ma 21 dec</td><td class="day">za 26 dec</td><td><span class="who c">Claude</span> <span class="who">Jij</span></td><td>Verkoop per product, voorraad, ad spend per product</td></tr>
           <tr><td>Sale-prijzen klaarzetten in Shopify (gaan za 26 dec 00:01 in)</td><td class="day">ma 21 dec</td><td class="day">do 24 dec</td><td class="day">za 26 dec</td><td><span class="who">Jij</span> <span class="who c">Claude</span></td><td>Goedgekeurde sale-lijst; de ad-agency zet de einddatum in de feed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- DROPSHIP-RISICO'S -->
+  <section id="risicos-dropship">
+    <div class="intro">
+      <span class="eyebrow">Dropship-risico's</span>
+      <h2>Wat bij dropshipping misgaat in de piek</h2>
+      <p>Deze punten bepalen of het schalen op Black Friday kan doorgaan. De meeste hangen af van het antwoord van de leverancier.</p>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Risico</th><th>Wat er gebeurt</th><th>Wat we doen</th><th>Wanneer</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><b>Cashflow</b></td><td>Ads en leverancier betaal je dagelijks; uitbetalingen komen later. Bij een piek kan PayPal of Shopify Payments een deel vasthouden.</td><td>Per store nagaan of er een reserve of vertraging is; buffer voor ongeveer 10 dagen piekbudget plus inkoop</td><td class="day">vóór 1 nov</td><td><span class="wait">wacht: jij</span></td></tr>
+          <tr><td><b>Vertraging rond 11.11</b></td><td>Singles Day is in China de drukste verzenddag; half november loopt de logistiek vol.</td><td>Levertijd in november navragen; zo nodig "verzonden binnen" onder de knop tijdelijk verlengen</td><td class="day">vr 16 okt</td><td><span class="wait">wacht: leverancier 1.1</span></td></tr>
+          <tr><td><b>Uitverkochte bestsellers</b></td><td>Ads lopen door op een product dat de leverancier niet meer heeft.</td><td>Voorraad doorbusters bevestigen; dagelijkse update 20 nov – 1 dec; vervanger per doorbuster</td><td class="day">vr 13 nov</td><td><span class="wait">wacht: leverancier 2.2–2.4</span></td></tr>
+          <tr><td><b>Capaciteit</b></td><td>3–5× zoveel orders → langere verwerkingstijd → late levering en geschillen.</td><td>Capaciteit bevestigen; bij twijfel minder doorbusters</td><td class="day">vr 16 okt</td><td><span class="wait">wacht: leverancier 2.1</span></td></tr>
+          <tr><td><b>Klantenservice</b></td><td>"Waar is mijn pakket?"-vragen stijgen; antwoord binnen 12 uur haal je niet alleen.</td><td>Hulp of standaardantwoorden klaarzetten voor 20 nov – 15 dec</td><td class="day">vr 13 nov</td><td><span class="who">open</span></td></tr>
+          <tr><td><b>Retourpiek januari</b></td><td>60 dagen retour (en eventueel tot 31 jan) → veel retouren naar Venray in januari.</td><td>Verwerking en capaciteit van het retouradres regelen</td><td class="day">vr 4 dec</td><td><span class="who">open</span></td></tr>
+          <tr><td><b>Invoerkosten CH en US</b></td><td>US: sinds augustus 2025 geen vrijstelling meer voor kleine pakketten. Betaalt de klant bij levering, dan volgen weigeringen en geschillen (Newmae, Davento CH).</td><td>DDP navragen; anders duidelijk vermelden</td><td class="day">vr 16 okt</td><td><span class="wait">wacht: leverancier 5.1</span></td></tr>
+          <tr><td><b>Assortiment</b></td><td>Feest- en kerstproducten te laat online → Google heeft te weinig tijd om te leren.</td><td>Feestkleding, kersttruien en sets uiterlijk vr 13 nov online</td><td class="day">vr 13 nov</td><td><span class="who">open</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -280,12 +361,12 @@
       </figure>
 
       <figure class="mock" style="margin:0">
-        <span class="when">zo 1 – zo 15 nov</span>
+        <span class="when">zo 1 – do 19 nov</span>
         <h3>Black Friday Month</h3>
         <div class="phone" aria-hidden="true">
           <div class="ann" style="background:#16171d">Black Friday Month · tot 25% korting</div>
           <div class="nav"><span>store</span><span>☰</span></div>
-          <div class="hero" style="background:#16171d"><span class="h">Black Friday Month</span><span class="s">Heel november: 2 = −15% · 3 = −20% · 4+ = −25%</span><span class="clock"><span>Early Deals over</span><span>08d</span><span>14u</span><span>22m</span></span><span class="btn">Shop nu</span></div>
+          <div class="hero" style="background:#16171d"><span class="h">Black Friday Month</span><span class="s">Heel november: 2 = −15% · 3 = −20% · 4+ = −25%</span><span class="clock"><span>Black Friday over</span><span>08d</span><span>14u</span><span>22m</span></span><span class="btn">Shop nu</span></div>
           <div class="cards"><div class="card"><div class="img"><span class="tag" style="background:#16171d">Gratis sieraad</span></div><span class="pn">Midi-jurk</span><span class="pr">€59,95</span></div><div class="card"><div class="img"></div><span class="pn">Blazer</span><span class="pr">€64,95</span></div></div>
           <div class="bar"><b>Koop 2, bespaar 15%</b><span>Gratis portemonnee vanaf €50 · sieraad vanaf €80</span></div>
         </div>
@@ -293,21 +374,8 @@
       </figure>
 
       <figure class="mock" style="margin:0">
-        <span class="when">ma 16 – zo 22 nov</span>
-        <h3>Black Friday Early Deals</h3>
-        <div class="phone" aria-hidden="true">
-          <div class="ann" style="background:#16171d">Black Friday Early Deals · tot 30%</div>
-          <div class="nav"><span>store</span><span>☰</span></div>
-          <div class="hero" style="background:linear-gradient(160deg,#16171d,#2c2350)"><span class="h">Early Deals</span><span class="s">Nu al: 2 = −20% · 3 = −25% · 4+ = −30%</span><span class="clock"><span>BF Week over</span><span>03d</span><span>09u</span><span>41m</span></span><span class="btn">Shop de deals</span></div>
-          <div class="cards"><div class="card"><div class="img"></div><span class="pn">Kabeltrui</span><span class="pr">€49,95</span></div><div class="card"><div class="img"></div><span class="pn">Wollen jas</span><span class="pr">€79,95</span></div></div>
-          <div class="bar"><b>Koop 3, bespaar 25%</b><span>Gratis portemonnee vanaf €50 · sieraad vanaf €80</span></div>
-        </div>
-        <dl><dt>Info nodig</dt><dd>Staffels 20/25/30, einddatum zo 22 nov</dd><dt>Doel</dt><dd>BF-zoekverkeer uit de ads al vangen</dd></dl>
-      </figure>
-
-      <figure class="mock" style="margin:0">
-        <span class="when">ma 23 – zo 29 nov</span>
-        <h3>Black Friday Week</h3>
+        <span class="when">vr 20 – zo 29 nov</span>
+        <h3>Black Friday</h3>
         <div class="phone" aria-hidden="true">
           <div class="ann" style="background:#16171d">Black Friday · tot 40% + gratis cadeau</div>
           <div class="nav"><span>store</span><span>☰</span></div>
@@ -315,7 +383,7 @@
           <div class="cards"><div class="card"><div class="img"><span class="tag" style="background:#b3261e">Doorbuster −50%</span></div><span class="pn">Bestseller trui</span><span class="pr"><s>€49,95</s>€24,98</span></div><div class="card"><div class="img"><span class="tag" style="background:#16171d">Kies je cadeau</span></div><span class="pn">Midi-jurk</span><span class="pr">€59,95</span></div></div>
           <div class="bar"><b>Kies je gratis cadeau</b><span>Portemonnee · sjaaltje · sieraad — nog 214 over</span></div>
         </div>
-        <dl><dt>Info nodig</dt><dd>Doorbuster-lijst, cadeautelling, staffels 20/30/40</dd><dt>Doel</dt><dd>Hoogste omzet van het jaar</dd></dl>
+        <dl><dt>Info nodig</dt><dd>Doorbuster-lijst, cadeautelling, staffels 20/30/40 <span class="wait">wacht: leverancier</span></dd><dt>Doel</dt><dd>Hoogste omzet van het jaar</dd></dl>
       </figure>
 
       <figure class="mock" style="margin:0">
@@ -341,7 +409,7 @@
           <div class="cards"><div class="card"><div class="img"><span class="tag" style="background:#5a1f2a">Cadeau onder €50</span></div><span class="pn">Sjaal-set</span><span class="pr">€34,95</span></div><div class="card"><div class="img"></div><span class="pn">Kabeltrui</span><span class="pr">€49,95</span></div></div>
           <div class="bar"><b>Op tijd voor Kerst als je vóór zo 6 dec bestelt</b><span>Na de deadline: cadeaukaart komt direct per e-mail</span></div>
         </div>
-        <dl><dt>Info nodig</dt><dd>Deadline per store, cadeauverpakking bij leverancier</dd><dt>Doel</dt><dd>Eerlijke urgency, dan cadeaukaarten</dd></dl>
+        <dl><dt>Info nodig</dt><dd>Deadline per store, cadeauverpakking <span class="wait">wacht: leverancier</span></dd><dt>Doel</dt><dd>Eerlijke urgency, dan cadeaukaarten</dd></dl>
       </figure>
 
       <figure class="mock" style="margin:0">
@@ -369,21 +437,21 @@
       <table>
         <thead><tr><th>Dag</th><th>Site</th><th>Aanbod</th><th>Product en winkelwagen</th><th>Check</th></tr></thead>
         <tbody>
-          <tr><td class="day">ma 16 nov</td><td>Early Deals</td><td>Staffels 20/25/30 voor iedereen + cadeau-ladder</td><td>Staffelregel en aftelklok naar ma 23 nov</td><td>Kortingen werken in elke store</td></tr>
-          <tr><td class="day">do 19 nov</td><td>Early Deals</td><td>Zelfde</td><td>—</td><td>BF Week, BF, Weekend, CM en Kerst staan klaar in de thema's</td></tr>
-          <tr><td class="day">vr 20 nov</td><td>Early Deals</td><td>Zelfde</td><td>—</td><td>Testbestelling per store met BF-staffel en cadeau</td></tr>
-          <tr class="peak"><td class="day">ma 23 nov</td><td>Black Friday Week</td><td>Staffels 20/30/40 + kies je cadeau</td><td>"[X] cadeaus over" op echte telling; aftelklok naar ma 30 nov 23:59</td><td>Cadeauvoorraad per store</td></tr>
-          <tr><td class="day">di 24 nov</td><td>Doorbuster-rij #1</td><td>8–10 bestsellers −50% tot do 23:59</td><td>Doorbuster-label op de kaart</td><td>Prijzen en codes kloppen</td></tr>
-          <tr><td class="day">do 26 nov</td><td>Newmae: Black Friday (Thanksgiving)</td><td>US: alles zoals BF</td><td>—</td><td>—</td></tr>
-          <tr class="peak"><td class="day">vr 27 nov</td><td>Black Friday + doorbuster-rij #2 om 10:00</td><td>Alle aanbiedingen</td><td>—</td><td>Afgebroken checkouts en betalingen elke paar uur</td></tr>
-          <tr><td class="day">za 28 nov</td><td>Black Friday Weekend</td><td>Zelfde</td><td>"Ends Monday midnight"</td><td>Cadeauvoorraad</td></tr>
+          <tr><td class="day">ma 16 nov</td><td>Black Friday Month</td><td>15/20/25 + cadeau-ladder</td><td>Aftelklok "Black Friday begint vr 20 nov"</td><td>Doorbuster-voorraad bij leverancier bevestigd</td></tr>
+          <tr><td class="day">wo 18 nov</td><td>Black Friday Month</td><td>Zelfde</td><td>—</td><td>Testbestelling per store met BF-staffel en cadeau; alle BF-, CM- en Kerst-instellingen klaar</td></tr>
+          <tr class="peak"><td class="day">vr 20 nov</td><td>Black Friday 00:01</td><td>Staffels 20/30/40 + kies je cadeau + doorbusters −50%</td><td>"[X] cadeaus over" op echte telling; aftelklok naar ma 30 nov 23:59</td><td>Kortingen werken; cadeauvoorraad</td></tr>
+          <tr><td class="day">ma 23 nov</td><td>Black Friday</td><td>Zelfde</td><td>—</td><td>Voorraad doorbusters bij leverancier (vanaf nu dagelijks)</td></tr>
+          <tr><td class="day">do 26 nov</td><td>Newmae: Thanksgiving-banner</td><td>US: zoals BF</td><td>—</td><td>—</td></tr>
+          <tr class="peak"><td class="day">vr 27 nov</td><td>Black Friday (de dag)</td><td>Alle aanbiedingen</td><td>—</td><td>Afgebroken checkouts, mislukte betalingen en uitbetalingen elke paar uur</td></tr>
+          <tr><td class="day">za 28 nov</td><td>Black Friday Weekend</td><td>Zelfde</td><td>"Eindigt maandag 23:59"</td><td>Cadeauvoorraad</td></tr>
           <tr class="peak"><td class="day">ma 30 nov</td><td>Cyber Monday</td><td>+ code CYBER 10%</td><td>Code zichtbaar in banner en winkelwagen</td><td>CYBER combineert met de staffels</td></tr>
-          <tr><td class="day">di 1 dec</td><td>"Final hours"</td><td>Eindigt 23:59</td><td>—</td><td>Om 23:59 staffels en CYBER uit</td></tr>
+          <tr><td class="day">di 1 dec</td><td>"Laatste uren"</td><td>Eindigt 23:59</td><td>—</td><td>Om 23:59 staffels en CYBER uit</td></tr>
           <tr><td class="day">wo 2 dec</td><td>Laatste kans voor Kerst</td><td>15/20/25 + gratis cadeauverpakking</td><td>Kerstregel "Bestel vóór zo 6 dec"</td><td>BF/CM-cijfers per store</td></tr>
         </tbody>
       </table>
     </div>
   </section>
+
 
   <!-- KORTING -->
   <section id="korting">
@@ -456,11 +524,12 @@
           <tr><td class="day">wk 41</td><td>Nulmeting per store (30 dagen): conversie, orderwaarde, items per order, % orders met 2+ items, retour %</td><td>Basis om elke fase tegen af te zetten</td></tr>
           <tr><td class="day">wk 41</td><td>Verkoop per product en variant (30 en 90 dagen)</td><td>Bestsellers, hero-cadeaus, Winter Edit-selectie</td></tr>
           <tr><td class="day">wk 44</td><td>Cadeau-gebruik en orderwaarde rond de drempel (Winter Edit)</td><td>Drempel en ladder voor BF Month bijstellen</td></tr>
-          <tr><td class="day">wk 46</td><td>Orderwaarde en staffelgebruik in BF Month</td><td>Staffels BF Week bevestigen</td></tr>
+          <tr><td class="day">wk 46</td><td>Orderwaarde en staffelgebruik in BF Month</td><td>Staffels Black Friday bevestigen</td></tr>
           <tr><td class="day">wk 46</td><td>Verkoop per product + ad spend van de agency</td><td>Doorbuster-lijst</td></tr>
-          <tr><td class="day">23 nov – 1 dec</td><td>Dagelijks: orders, afgebroken checkouts, mislukte betalingen, cadeauvoorraad</td><td>Problemen direct oplossen, cadeauteller kloppend</td></tr>
+          <tr><td class="day">20 nov – 1 dec</td><td>Dagelijks: orders, afgebroken checkouts, mislukte betalingen, cadeauvoorraad</td><td>Problemen direct oplossen, cadeauteller kloppend</td></tr>
           <tr><td class="day">wo 2 dec</td><td>BF/CM per store: omzet, orderwaarde, beste staffel, cadeau-effect</td><td>Wat werkt door naar Kerst en Sale</td></tr>
           <tr><td class="day">ma 14 dec</td><td>Langzame producten, restvoorraad, verkoop sinds 1 nov</td><td>Sale-lijst 50% / 70%</td></tr>
+          <tr><td class="day">wekelijks vanaf 1 nov</td><td>Uitbetalingen en reserves (Shopify Payments, PayPal) tegen ad spend en inkoop</td><td>Kan het budget omhoog zonder geldtekort?</td></tr>
           <tr><td class="day">ma 18 jan</td><td>Q4 per store: omzet, orderwaarde, retouren, chargebacks (PayPal)</td><td>Evaluatie en plan Q1</td></tr>
         </tbody>
       </table>
@@ -480,8 +549,7 @@
         <tbody>
           <tr><td>Winter Edit</td><td>Orderwaarde · cadeau-gebruik</td><td><span class="blank">—</span></td><td>+10% orderwaarde</td><td>Weinig orders boven de drempel → drempel lager</td></tr>
           <tr><td>BF Month</td><td>Orderwaarde · % orders met 2+ items</td><td><span class="blank">—</span></td><td>+15% orderwaarde</td><td>Geen stijging → staffel of ladder aanpassen vóór 23 nov</td></tr>
-          <tr><td>Early Deals</td><td>Conversie · staffelgebruik</td><td><span class="blank">—</span></td><td>Boven BF Month</td><td>Lager → banner en staffel duidelijker op de productpagina</td></tr>
-          <tr class="peak"><td>BF Week</td><td>Omzet per dag · conversie · afgebroken checkouts</td><td><span class="blank">—</span></td><td>Hoogste week van het jaar</td><td>Afgebroken checkouts stijgen → betaal- of kortingsprobleem nakijken</td></tr>
+          <tr class="peak"><td>Black Friday (20 nov – 1 dec)</td><td>Omzet per dag · conversie · afgebroken checkouts</td><td><span class="blank">—</span></td><td>Hoogste week van het jaar</td><td>Afgebroken checkouts stijgen → betaal- of kortingsprobleem nakijken</td></tr>
           <tr class="peak"><td>Cyber Monday</td><td>Omzet · gebruik CYBER</td><td><span class="blank">—</span></td><td>Newmae: hoogste dag</td><td>Laag gebruik → code zichtbaarder in de banner</td></tr>
           <tr><td>Kerstdeadline</td><td>Orders 2–6 dec</td><td><span class="blank">—</span></td><td>Boven BF Month-niveau</td><td>—</td></tr>
           <tr><td>Gift Shop</td><td>Verkochte cadeaukaarten</td><td><span class="blank">—</span></td><td>—</td><td>—</td></tr>
@@ -495,24 +563,18 @@
   <section id="banners">
     <div class="intro">
       <span class="eyebrow">Bannerpakket</span>
-      <h2>Wat er per campagne gemaakt moet worden</h2>
-      <p>Per campagne en per store: desktop-hero 2400×1000, mobiel 1080×1350 en een announcement bar (tekst). Dezelfde beelden gaan naar de agencies voor e-mail en ads. Geen tekst of kortingslabels op productfoto's in de feed.</p>
+      <h2>5 beeldbanners, de rest is tekst</h2>
+      <p>Per store vijf beeldbanners (desktop 2400×1000, mobiel 1080×1350). Black Friday Month, Black Friday en Weekend gebruiken hetzelfde beeld; alleen de tekst in de hero en de announcement bar wisselt via het thema. Dat scheelt zo'n 30 bannersets over 6 stores. Dezelfde beelden gaan naar de agencies voor e-mail en ads. Geen tekst of kortingslabels op productfoto's in de feed.</p>
     </div>
     <div class="tbl">
       <table>
         <thead><tr><th>#</th><th>Campagne</th><th>Kop (EN, vertaald per store)</th><th>Kleur</th><th>Klaar op</th></tr></thead>
         <tbody>
           <tr><td class="n">1</td><td>Winter Edit</td><td>"The Winter Edit" · "Free delivery · Buy more, save up to 20%"</td><td>Huiskleuren</td><td class="day">vr 16 okt</td></tr>
-          <tr><td class="n">2</td><td>Black Friday Month</td><td>"Black Friday Month" · "Up to 25% all November"</td><td>Zwart + accent</td><td class="day">vr 23 okt</td></tr>
-          <tr><td class="n">2b</td><td>11.11</td><td>"11.11 · Extra 11% · ends Wed midnight"</td><td>Zwart + accent</td><td class="day">vr 30 okt</td></tr>
-          <tr><td class="n">3</td><td>Early Deals</td><td>"Black Friday Early Deals · Up to 30%"</td><td>Zwart + accent</td><td class="day">vr 6 nov</td></tr>
-          <tr><td class="n">4</td><td>Black Friday Week</td><td>"Black Friday Week · Up to 40% + free gift"</td><td>Zwart</td><td class="day">vr 13 nov</td></tr>
-          <tr><td class="n">5</td><td>Black Friday</td><td>"Black Friday · Up to 50% on bestsellers"</td><td>Zwart</td><td class="day">vr 13 nov</td></tr>
-          <tr><td class="n">6</td><td>Black Friday Weekend</td><td>"Black Friday Weekend · Ends Monday midnight"</td><td>Zwart</td><td class="day">vr 13 nov</td></tr>
-          <tr><td class="n">7</td><td>Cyber Monday</td><td>"Cyber Monday · Extra 10% with CYBER" · "Final hours"</td><td>Diepblauw</td><td class="day">vr 20 nov</td></tr>
-          <tr><td class="n">8</td><td>Laatste kans voor Kerst</td><td>"Order by Sun 6 Dec for Christmas · Free gift wrap"</td><td>Diepgroen/bordeaux</td><td class="day">vr 20 nov</td></tr>
-          <tr><td class="n">9</td><td>Gift Shop</td><td>"Too late for delivery? Gift cards arrive instantly"</td><td>Kerstkleuren</td><td class="day">vr 27 nov</td></tr>
-          <tr><td class="n">10</td><td>Sale</td><td>"Sale up to 50%" → "Sale up to 70% · ends Sun 17 Jan"</td><td>Rood/wit</td><td class="day">vr 18 dec</td></tr>
+          <tr><td class="n">2</td><td>Black Friday (één ontwerp)</td><td>Tekst wisselt in het thema: "Black Friday Month · up to 25%" (1 nov) → "Black Friday · up to 40% + free gift" (20 nov) → "Ends Monday midnight" (28 nov)</td><td>Zwart + accent</td><td class="day">vr 23 okt</td></tr>
+          <tr><td class="n">3</td><td>Cyber Monday</td><td>"Cyber Monday · Extra 10% with CYBER" → "Final hours"</td><td>Diepblauw</td><td class="day">vr 13 nov</td></tr>
+          <tr><td class="n">4</td><td>Kerst</td><td>"Order by Sun 6 Dec for Christmas · Free gift wrap" → "Gift cards arrive instantly"</td><td>Diepgroen/bordeaux</td><td class="day">vr 20 nov</td></tr>
+          <tr><td class="n">5</td><td>Sale</td><td>"Sale up to 50%" → "Sale up to 70% · ends Sun 17 Jan"</td><td>Rood/wit</td><td class="day">vr 18 dec</td></tr>
         </tbody>
       </table>
     </div>
@@ -537,6 +599,88 @@
       </table>
     </div>
   </section>
+  <!-- VOORBEELD DAVENTO -->
+  <section id="voorbeeld">
+    <div class="intro">
+      <span class="eyebrow">Voorbeeld · Davento</span>
+      <h2>Het plan op één store, met echte cijfers</h2>
+      <p>Uit Shopify, laatste 30 dagen (tot 7 okt). Zo werken we straks elke store uit.</p>
+    </div>
+    <div class="stat">
+      <div><b>409</b><span>orders</span></div>
+      <div><b>€22.553</b><span>netto omzet</span></div>
+      <div><b>€57,43</b><span>gemiddelde orderwaarde</span></div>
+      <div><b>50% / 50%</b><span>Duitsland 206 · Italië 202 · Zwitserland 1</span></div>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <h3>Bestsellers → doorbuster-kandidaten</h3>
+        <div class="tbl" style="border:0">
+          <table>
+            <thead><tr><th>Product</th><th>Orders</th><th>Omzet</th><th>Prijs</th><th>−50%</th></tr></thead>
+            <tbody>
+              <tr><td>Giacca Invernale Donna con Cappuccio</td><td class="num">48</td><td class="num">€3.063</td><td class="num">€59,95</td><td class="num">€29,98</td></tr>
+              <tr><td>Giacca da Uomo per Mezze Stagioni</td><td class="num">16</td><td class="num">€1.135</td><td class="num">€69,95</td><td class="num">€34,98</td></tr>
+              <tr><td>Giacca Uomo Trapuntata</td><td class="num">14</td><td class="num">€909</td><td class="num">€64,95</td><td class="num">€32,48</td></tr>
+              <tr><td>Bermuda Cargo da Uomo</td><td class="num">12</td><td class="num">€607</td><td class="num">€39,95</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="src">Bermuda is een zomerproduct: geen doorbuster in november. Eén jas draagt 14% van de omzet; dat is precies het product waarvan de leverancier de voorraad moet bevestigen <span class="wait">wacht: leverancier 2.2</span></p>
+      </div>
+      <div class="panel">
+        <h3>Wat dit verandert</h3>
+        <ul>
+          <li><b>Cadeaudrempel:</b> de gemiddelde order is €57. Een drempel van €50 geeft bijna iedereen een cadeau zonder dat ze meer kopen. Zet de drempels net erboven: <b>€65</b> (portemonnee of sjaaltje) en <b>€100</b> (+ sieraad).</li>
+          <li><b>Rekenvoorbeeld Black Friday:</b> 2 jassen (€59,95 + €64,95 = €124,90) − 20% = <b>€99,92</b>: net onder €100. De winkelwagen toont dan "nog €0,08 voor een gratis sieraad". De drempel telt na korting; daarom moet de winkelwagen het verschil laten zien.</li>
+          <li><b>3 jassen:</b> €194,85 − 30% = <b>€136,40</b> + 2 cadeaus.</li>
+          <li><b>11.11:</b> Duitsland is de helft van de omzet en daar leeft Singles Day nauwelijks. Code 1111 alleen op de Italiaanse site; voor Duitsland en Zwitserland Nikolaus op 6 dec.</li>
+          <li><b>Doorgestreepte prijzen:</b> de bestsellers tonen nu al een "was"-prijs van €99,95. De BF-staffels komen daar bovenop; ook dat staat onder het hoge risico.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Campagne</th><th>Italiaans</th><th>Duits</th></tr></thead>
+        <tbody>
+          <tr><td>Black Friday Month</td><td>Black Friday Month · fino al 25%</td><td>Black Friday Month · bis zu 25 %</td></tr>
+          <tr><td>Black Friday</td><td>Black Friday · fino al 40% + regalo</td><td>Black Friday · bis zu 40 % + Geschenk</td></tr>
+          <tr><td>Weekend</td><td>Termina lunedì a mezzanotte</td><td>Endet Montag um Mitternacht</td></tr>
+          <tr><td>Cyber Monday</td><td>Cyber Monday · 10% extra con CYBER</td><td>Cyber Monday · 10 % extra mit CYBER</td></tr>
+          <tr><td>Kerst</td><td>Ordina entro dom 6 dic per Natale</td><td>Bis So., 6. Dez. bestellen – pünktlich zu Weihnachten</td></tr>
+          <tr><td>Sale</td><td>Saldi fino al 70% · fino al 17 gennaio</td><td>Sale bis zu 70 % · bis 17. Januar</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CONCURRENTEN -->
+  <section id="concurrenten">
+    <div class="intro">
+      <span class="eyebrow">Concurrenten · Black Friday 2025</span>
+      <h2>Wat de markt vorig jaar deed</h2>
+      <p>Ons plan ligt in lijn: november opbouwen, 20–40% in de piek, 50% op een paar topproducten, staffels en cadeaus in plaats van één vlakke korting.</p>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Markt</th><th>Wie</th><th>Wat ze deden</th><th>Voor ons</th></tr></thead>
+        <tbody>
+          <tr><td>UK</td><td>ASOS, Boohoo, TK Maxx</td><td>ASOS 28 nov – 1 dec met vooraf 25% in de app; Boohoo vanaf 28 nov; TK Maxx een hele maand</td><td>Black Friday Month + piek vanaf 20 nov past (Alove, Fashionnovo)</td></tr>
+          <tr><td>ES</td><td>Zara / Inditex</td><td>Pas do 27 nov 21:00 in de app; korte, harde piek</td><td>Stellamea: grootste push vr–ma; november rustig opbouwen</td></tr>
+          <tr><td>IT</td><td>Amazon, Zalando, OVS</td><td>Amazon Black Friday Week 20 nov – 1 dec; veel "Black November"; tot 60% op kleding</td><td>Davento: zelfde venster als Amazon</td></tr>
+          <tr><td>PL</td><td>Reserved</td><td>Black Week tot Cyber Monday; 20–40% op een groot deel, 50–60% op een selectie</td><td>Niaali: staffels 20/30/40 + doorbusters zitten precies hier</td></tr>
+          <tr><td>Breed</td><td>Ganni, Tommy Hilfiger, J.Crew</td><td>Start al 24 okt; diepste kortingen iets lager dan in 2024; bestsellers minder korting, langzame producten meer</td><td>Bevestigt: bestsellers via staffels en cadeaus, diepe korting pas in de sale</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">Bronnen: <a href="https://www.t3.com/news/black-friday-sales" target="_blank" rel="noopener">T3</a> · <a href="https://www.elindependiente.com/sociedad/2025/11/25/cuando-empieza-black-friday-2025-zara-mango-corte-ingles/" target="_blank" rel="noopener">El Independiente</a> · <a href="https://www.idealista.it/en/news/lifestyle-in-italy/2025/11/19/286545-black-friday-italy-2025-dates-deals-and-where-to-shop" target="_blank" rel="noopener">Idealista</a> · <a href="https://fashionbiznes.pl/black-friday-2025-w-reserved-jakie-promocje-szykuje-polska-marka/" target="_blank" rel="noopener">Fashionbiznes</a> · <a href="https://fashionunited.com/news/business/black-friday-2025-how-eu-and-us-brands-are-reshaping-discount-strategies/2025112569352" target="_blank" rel="noopener">FashionUnited</a> · <a href="https://talon.one/blog/black-friday-trends-2025" target="_blank" rel="noopener">Talon.One</a></p>
+  </section>
+
+  <div class="appendix intro" style="padding-top:32px">
+    <span class="eyebrow">Bijlage</span>
+    <h2>Offer Menu en Signals, volledig</h2>
+    <p>Ter naslag. Wat we doen staat hierboven in het plan.</p>
+  </div>
   <section id="offers">
     <div class="intro">
       <span class="eyebrow">Offer Menu · alle 37</span>
@@ -547,7 +691,7 @@
       <table>
         <thead><tr><th>#</th><th>Aanbieding</th><th>Inzet</th><th>Wanneer / hoe</th><th>Risico</th></tr></thead>
         <tbody>
-          <tr><td class="n">01</td><td>Kies je gratis cadeau</td><td><span class="use y">JA</span></td><td>23 nov – 1 dec, uit 3 cadeaus</td><td><span class="r l">laag</span></td></tr>
+          <tr><td class="n">01</td><td>Kies je gratis cadeau</td><td><span class="use y">JA</span></td><td>20 nov – 1 dec, uit 3 cadeaus</td><td><span class="r l">laag</span></td></tr>
           <tr><td class="n">02</td><td>Mystery gift</td><td><span class="use y">JA</span></td><td>2–24 dec: verrassingscadeau in de order (leverancier voegt toe)</td><td><span class="r l">laag</span></td></tr>
           <tr><td class="n">03</td><td>Benoemd cadeau bij hero-product</td><td><span class="use y">JA</span></td><td>Bestsellers in BF Month: sieraad bij jurk, sjaaltje bij jas</td><td><span class="r l">laag</span></td></tr>
           <tr><td class="n">04</td><td>Cadeau-ladder op orderwaarde</td><td><span class="use y">JA</span></td><td>19 okt – 22 nov</td><td><span class="r l">laag</span></td></tr>
@@ -573,7 +717,7 @@
           <tr><td class="n">24</td><td>Code na aankoop</td><td><span class="use d">AGENCY</span></td><td>E-mailagency (bedankflow)</td><td><span class="r l">laag</span></td></tr>
           <tr><td class="n">25</td><td>Referral-ladder</td><td><span class="use d">AGENCY</span></td><td>E-mailagency, Q1</td><td><span class="r l">laag</span></td></tr>
           <tr><td class="n">26</td><td>Stempelkaart</td><td><span class="use d">LATER</span></td><td>Q1</td><td><span class="r l">laag</span></td></tr>
-          <tr><td class="n">27</td><td>VIP early access</td><td><span class="use n">NEE</span></td><td>Niet als aparte fase; Early Deals is voor iedereen</td><td><span class="r l">laag</span></td></tr>
+          <tr><td class="n">27</td><td>VIP early access</td><td><span class="use n">NEE</span></td><td>Geen aparte fase (dropship, kleine lijsten)</td><td><span class="r l">laag</span></td></tr>
           <tr><td class="n">28</td><td>Inruilen voor tegoed</td><td><span class="use n">NEE</span></td><td>Geen eigen magazijn</td><td>—</td></tr>
           <tr><td class="n">29</td><td>Achteraf betalen als kop</td><td><span class="use y">JA</span></td><td>Vanaf 19 okt op product en winkelwagen</td><td><span class="r m">EU middel</span></td></tr>
           <tr><td class="n">30</td><td>Vaste prijs add-on in winkelwagen</td><td><span class="use y">JA</span></td><td>BF-week: accessoire voor 9 in de winkelwagen</td><td><span class="r l">laag</span></td></tr>
@@ -682,18 +826,19 @@
     <div class="intro">
       <span class="eyebrow">Beslissingen</span>
       <h2>Wat nog van jullie nodig is</h2>
-      <p>Om op ma 12 okt te kunnen beginnen met opzetten.</p>
+      <p>Om op ma 12 okt te kunnen beginnen met opzetten. Het antwoord van de leverancier (uiterlijk vr 16 okt) vult de gemarkeerde punten in.</p>
     </div>
     <ol class="q">
-      <li>GO op het plan, en daarna per onderdeel een GO om het op te zetten.</li>
-      <li>Wie maakt de beeldbanners (designer of jij)? Anders worden het tekstbanners in het thema.</li>
-      <li>Cadeauvoorraad per soort en per store.</li>
-      <li>Akkoord op de staffels per fase: 15/20/25 · Early Deals 20/25/30 · BF 20/30/40 · CYBER +10%.</li>
-      <li>Contactpersoon bij de e-mail- en ad-agency voor de aanlevermomenten.</li>
+      <li>GO op dit plan; opzetten start ma 12 okt.</li>
+      <li>Wie maakt de 5 beeldbanners (designer of jij)? Anders tekstbanners in het thema.</li>
+      <li>Akkoord op de staffels: 15/20/25 in november · 20/30/40 Black Friday · CYBER +10%.</li>
+      <li>Verlengde retourtermijn voor kerstaankopen: ja of nee.</li>
+      <li>Reserve of uitbetalingsvertraging bij PayPal / Shopify Payments per store.</li>
+      <li>Contactpersoon bij beide agencies.</li>
     </ol>
   </section>
 
-  <footer>Q4 Roadmap 2026 · versie 4 · 7 oktober 2026. Cijfers uit openbare rapporten van Adobe, Salesforce, Klaviyo, Google, Barclays, Adyen, Optmyzr, Triple Whale, NRF, Deloitte en Baymard (2023–2025), het Q4 Offer Menu en On-Site Signals. Kortingslijnen zijn planwaarden, geen meetdata.</footer>
+  <footer>Q4 Roadmap 2026 · versie 5 · 7 oktober 2026. Cijfers uit openbare rapporten van Adobe, Salesforce, Klaviyo, Google, Barclays, Adyen, Optmyzr, Triple Whale, NRF, Deloitte en Baymard (2023–2025), het Q4 Offer Menu en On-Site Signals. Kortingslijnen zijn planwaarden, geen meetdata.</footer>
 </div>
 
 <div class="tip" id="tip" hidden></div>
@@ -733,7 +878,8 @@
     var L = 120, R = 990, T = 34;
     var x = function (t) { return L + (t - START) / (END - START) * (R - L); };
     // peak band
-    el('rect', { x: x(d('2026-11-23')), y: T - 6, width: x(d('2026-12-02')) - x(d('2026-11-23')), height: 340, 'class': 'peak' }, svg);
+    el('rect', { x: x(d('2026-11-20')), y: T - 6, width: x(d('2026-12-02')) - x(d('2026-11-20')), height: 340, 'class': 'peak' }, svg);
+    var pk = el('text', { x: (x(d('2026-11-20')) + x(d('2026-12-02'))) / 2, y: T + 4, 'text-anchor': 'middle', 'class': 'lbl' }, svg); pk.textContent = 'BF · CM';
     // week grid + month labels
     for (var t = START; t <= END; t += 7 * DAY) el('line', { x1: x(t), x2: x(t), y1: T - 6, y2: T + 334, 'class': 'gridline' }, svg);
     [['2026-10-01','okt'],['2026-11-01','nov'],['2026-12-01','dec'],['2027-01-01','jan']].forEach(function (m) {
@@ -744,9 +890,8 @@
     var rows = [
       { name: 'Campagne', items: [
         ['2026-10-19','2026-11-01','Winter Edit','--c-winter','Huiskleuren, jassen en breigoed vooraan.'],
-        ['2026-11-01','2026-11-16','BF Month','--c-bf','Zwarte banners, staffels 15/20/25, aftelklok naar Early Deals.'],
-        ['2026-11-16','2026-11-23','Early Deals','--c-bf','Black Friday Early Deals voor iedereen: staffels 20/25/30.'],
-        ['2026-11-23','2026-11-27','BF Week','--c-bf','Staffels 20/30/40, doorbusters, kies je cadeau.'],
+        ['2026-11-01','2026-11-20','BF Month','--c-bf','Zwarte banners, staffels 15/20/25, aftelklok naar vr 20 nov.'],
+        ['2026-11-20','2026-11-27','Black Friday','--c-bf','Staffels 20/30/40, doorbusters, kies je cadeau.'],
         ['2026-11-27','2026-11-28','BF','--c-bf','Black Friday: hoogste budget, doorbuster-drop 2.'],
         ['2026-11-28','2026-11-30','Wknd','--c-bf','Black Friday Weekend.'],
         ['2026-11-30','2026-12-02','CM','--c-bf','Cyber Monday + code CYBER 10%, tot di 1 dec 23:59.'],
@@ -757,16 +902,15 @@
       ]},
       { name: 'Staffels', items: [
         ['2026-10-05','2026-11-01','10/15/20','--c-neutral','Huidige staffels.'],
-        ['2026-11-01','2026-11-16','15/20/25','--c-neutral','Black Friday Month. 11.11: code +11% (Davento IT, Niaali PL).'],
-        ['2026-11-16','2026-11-23','20/25/30','--c-neutral','Early Deals voor iedereen.'],
-        ['2026-11-23','2026-12-02','20/30/40','--c-neutral','BF-staffels; CM +10%.'],
+        ['2026-11-01','2026-11-20','15/20/25','--c-neutral','Black Friday Month. 11.11: code +11% (Davento IT, Niaali PL).'],
+        ['2026-11-20','2026-12-02','20/30/40','--c-neutral','BF-staffels; CM +10%.'],
         ['2026-12-02','2026-12-25','15/20/25','--c-neutral','Kersttoon.'],
         ['2026-12-26','2027-01-18','prijs omlaag','--c-neutral','Echte prijsverlaging, sale_price in feed.']
       ]},
       { name: 'Cadeaus', items: [
         ['2026-10-19','2026-11-01','vanaf 60','--c-neutral','Gratis cadeau vanaf 60.'],
-        ['2026-11-01','2026-11-23','ladder 50/80','--c-neutral','Portemonnee vanaf 50, + sieraad vanaf 80.'],
-        ['2026-11-23','2026-12-02','kies je cadeau','--c-neutral','Keuze uit 3, telling op echte voorraad.'],
+        ['2026-11-01','2026-11-20','ladder','--c-neutral','Cadeau-ladder: drempel net boven de gemiddelde orderwaarde per store (Davento: 65 / 100).'],
+        ['2026-11-20','2026-12-02','kies je cadeau','--c-neutral','Keuze uit 3, telling op echte voorraad (wacht op cadeauvoorraad leverancier).'],
         ['2026-12-02','2026-12-25','verpakking','--c-neutral','Gratis cadeauverpakking + kaartje, mystery gift.']
       ]},
       { name: 'Site', items: [
@@ -800,14 +944,14 @@
     var my = T + 10 + rows.length * rowH;
     var mlab = el('text', { x: 0, y: my + 14, 'class': 'row' }, svg); mlab.textContent = 'Klaar op';
     var ms = [
-      ['2026-10-16','Popup, cadeaumodule, banners Winter Edit'],
-      ['2026-10-23','Campagnelaag + aftelklok, banners BF Month'],
-      ['2026-10-29','Staffels per fase klaar (uit); codes naar de agencies'],
-      ['2026-11-06','Banners Early Deals'],
-      ['2026-11-13','Banners BF Week, BF, Weekend; doorbuster-lijst'],
-      ['2026-11-20','Kerstregel, banners CM + Kerst, testbestelling per store'],
-      ['2026-11-27','Gift Shop + banners'],
-      ['2026-12-18','Banners Sale'],
+      ['2026-10-16','Antwoord leverancier · popup, cadeaumodule, banner Winter'],
+      ['2026-10-23','Campagnelaag + aftelklok, banner Black Friday (één ontwerp voor Month en BF)'],
+      ['2026-10-29','Staffels per fase klaar (uit); codes en kalender naar de agencies'],
+      ['2026-11-13','Doorbuster-lijst + voorraad bevestigd door leverancier; banner Cyber Monday'],
+      ['2026-11-18','Testbestelling per store met BF-staffel en cadeau'],
+      ['2026-11-20','Kerstregel en banner Kerst klaar'],
+      ['2026-11-27','Gift Shop'],
+      ['2026-12-18','Banner Sale'],
       ['2026-12-21','Sale-lijst 50%/70%'],
       ['2026-12-24','Sale-prijzen klaar in Shopify (uit)']
     ];
@@ -864,8 +1008,8 @@
   var xTicksDates = [[d('2026-10-15'),'okt'],[d('2026-11-15'),'nov'],[d('2026-12-15'),'dec'],[d('2027-01-10'),'jan']];
 
   /* ---------- discount steps ---------- */
-  var best = [[d('2026-10-05'),20],[d('2026-11-01'),25],[d('2026-11-09'),33],[d('2026-11-12'),25],[d('2026-11-16'),30],[d('2026-11-23'),50],[d('2026-11-30'),55],[d('2026-12-02'),25],[d('2026-12-26'),50],[d('2027-01-18'),20]];
-  var rest = [[d('2026-10-05'),20],[d('2026-11-01'),25],[d('2026-11-09'),33],[d('2026-11-12'),25],[d('2026-11-16'),30],[d('2026-11-23'),40],[d('2026-11-30'),46],[d('2026-12-02'),25],[d('2026-12-26'),50],[d('2026-12-28'),70],[d('2027-01-18'),20]];
+  var best = [[d('2026-10-05'),20],[d('2026-11-01'),25],[d('2026-11-09'),33],[d('2026-11-12'),25],[d('2026-11-20'),50],[d('2026-11-30'),55],[d('2026-12-02'),25],[d('2026-12-26'),50],[d('2027-01-18'),20]];
+  var rest = [[d('2026-10-05'),20],[d('2026-11-01'),25],[d('2026-11-09'),33],[d('2026-11-12'),25],[d('2026-11-20'),40],[d('2026-11-30'),46],[d('2026-12-02'),25],[d('2026-12-26'),50],[d('2026-12-28'),70],[d('2027-01-18'),20]];
   lineChart('disc', {
     w: 520, h: 260, x0: START, x1: END, y0: 0, y1: 80,
     yTicks: [0, 20, 40, 60, 80], yFmt: function (v) { return v + '%'; },
@@ -887,9 +1031,9 @@
       var t = el('text', { x: R - 4, y: y(2.2) - 6, 'text-anchor': 'end' }, svg); t.textContent = 'doel-ROAS 2,2';
     },
     marks: function (svg, x, y) {
-      [[20,'kerst 20%'],[25,'BF Month 25%'],[40,'BF 40%'],[50,'doorbuster 50%']].forEach(function (m) {
+      [[20,'kerst 20%',1],[25,'BF Month 25%',-1],[40,'BF 40%',-1],[50,'doorbuster 50%',-1]].forEach(function (m) {
         el('circle', { cx: x(m[0]), cy: y(be(m[0] / 100)), r: 4.5, fill: css('--c-sale'), stroke: css('--surface'), 'stroke-width': 2 }, svg);
-        var t = el('text', { x: x(m[0]) - 6, y: y(be(m[0] / 100)) - 9, 'text-anchor': 'end' }, svg); t.textContent = m[1];
+        var t = el('text', { x: x(m[0]) + (m[2] > 0 ? 0 : -6), y: y(be(m[0] / 100)) + (m[2] > 0 ? 20 : -9), 'text-anchor': m[2] > 0 ? 'middle' : 'end' }, svg); t.textContent = m[1];
       });
     },
     tipFn: function (v) { var k = Math.max(0, Math.min(55, v)); return '<b>' + Math.round(k) + '% korting</b>Break-even ROAS ' + be(k / 100).toFixed(2).replace('.', ','); }
