@@ -35,7 +35,8 @@
   (pagamenti): mailto links, Labelique → Fashionnovo, empty Labelique links removed, payment list = checkout,
   "(UK time)", withdrawal section rewritten for the UK (14-day legal right from order + 60 days from delivery).
   About image copied from the Davento CDN to Fashionnovo Files (fashionnovo-about-us.png). Originals: orig-texts/.
-- Policies: no write_legal_policies scope → corrected texts in policies/*.html to paste in Settings → Policies.
+- Policies: no write_legal_policies scope → corrected texts in policies/*.html, pasted by the user and verified (2026-10-07):
+  no Labelique left, all email links mailto, "(UK time)".
 - Work theme "Fashionnovo - kit (werk)" #205357056340 (copy of live, unpublished).
 
 ## Kit in work theme "Fashionnovo - kit (werk)" #205357056340 (not published)
