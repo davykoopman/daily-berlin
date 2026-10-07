@@ -44,3 +44,14 @@ Apex differences vs Horizon (Niaali):
 - Product page desktop: photo column sticky under the header (Apex sets sticky but
   floats + `overflow-x: hidden` on #MainContent broke it; now flex + `overflow-x: clip`).
 - `staged-upload.py`: helper for big theme files (stagedUploadsCreate → curl → themeFilesUpsert type URL).
+
+## Switzerland / TWINT prep (2026-10-07, after GO)
+Markets and domains are handled by the media buyer: CH market (CHF, /ch, German) and free shipping zone CH already exist.
+- Footer menu "Politiche": added "Note legali" → /policies/legal-notice (after "Condizioni di servizio").
+- Page "Domande Frequenti": "in Italia e Germania" → "in Italia, Germania e Svizzera" (free shipping
+  answer and "Spedite anche all'estero?" answer, which was "soltanto in Italia e Germania").
+- Page "Pagamenti": "Accettiamo pagamenti in EUR (€) tramite…" → "…in EUR (€) e, per gli ordini in Svizzera,
+  in franchi svizzeri (CHF) tramite…". TWINT not listed yet (add once it is active).
+- Open: legal notice needs owner name + legal form (API has no write_legal_policies, user pastes);
+  shipping policy still says Italy and Germany only; homepage FAQ block in the live theme still says
+  "Italia e Germania" (live theme can't be written via API); German translations of the changed pages.
