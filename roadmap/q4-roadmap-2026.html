@@ -1,0 +1,728 @@
+<title>Q4 Roadmap 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  /* Layout: a planning document — sticky phase nav, week cards down one column, wide tables scroll in their own box */
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --ink: #1c1d24;
+    --muted: #5d5f6b;
+    --line: #e2e0da;
+    --accent: #3b3fa8;
+    --accent-soft: #ebebf8;
+    --low: #1f7a4d;
+    --low-bg: #e3f3ea;
+    --mid: #8a5a00;
+    --mid-bg: #fbf0d9;
+    --high: #b3261e;
+    --high-bg: #fbe5e3;
+    --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15161b; --surface: #1d1f26; --ink: #ecebe7; --muted: #a3a4ae; --line: #2f313b;
+      --accent: #a9acff; --accent-soft: #262844;
+      --low: #6fd3a0; --low-bg: #16301f; --mid: #f0c46a; --mid-bg: #33280f; --high: #ff9b92; --high-bg: #3a1b19;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15161b; --surface: #1d1f26; --ink: #ecebe7; --muted: #a3a4ae; --line: #2f313b;
+    --accent: #a9acff; --accent-soft: #262844;
+    --low: #6fd3a0; --low-bg: #16301f; --mid: #f0c46a; --mid-bg: #33280f; --high: #ff9b92; --high-bg: #3a1b19;
+    color-scheme: dark;
+  }
+
+  body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 32px 80px; }
+  h1, h2, h3 { font-family: var(--f-display); line-height: 1.15; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; letter-spacing: -0.01em; }
+  h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; margin-bottom: 8px; }
+  h3 { font-size: 1.15rem; font-weight: 700; }
+  p { margin: 0; max-width: 68ch; }
+  a { color: var(--accent); }
+  .eyebrow { font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .lede { font-size: 1.125rem; color: var(--muted); margin-top: 12px; }
+  .mono { font-family: var(--f-mono); font-size: 0.85em; font-variant-numeric: tabular-nums; }
+
+  header.top { display: grid; gap: 14px; padding-block: 8px 28px; border-bottom: 1px solid var(--line); }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: 0.9rem; }
+
+  nav.phases {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: var(--bg); border-bottom: 1px solid var(--line);
+    display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: thin;
+  }
+  nav.phases a {
+    flex: 0 0 auto; text-decoration: none; color: var(--ink); font-size: 0.85rem; font-weight: 600;
+    padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+  }
+  nav.phases a:hover, nav.phases a:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+
+  section { display: grid; gap: 16px; padding-block: 40px 8px; scroll-margin-top: 64px; }
+  .intro { display: grid; gap: 8px; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: grid; gap: 10px; min-width: 0; }
+  .panel ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+  .panel li { max-width: 70ch; }
+  .src { color: var(--muted); font-size: 0.82rem; }
+
+  /* Dates strip */
+  .dates { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .date { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+  .date b { font-family: var(--f-mono); font-size: 0.85rem; color: var(--accent); }
+  .date span { font-size: 0.9rem; }
+  .date.peak { border-color: var(--accent); background: var(--accent-soft); }
+
+  /* Risk chips */
+  .risks { display: inline-flex; flex-wrap: wrap; gap: 4px; vertical-align: middle; }
+  .r { font-family: var(--f-mono); font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; white-space: nowrap; font-weight: 500; }
+  .r.l { color: var(--low); background: var(--low-bg); }
+  .r.m { color: var(--mid); background: var(--mid-bg); }
+  .r.h { color: var(--high); background: var(--high-bg); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.9rem; color: var(--muted); align-items: center; }
+
+  /* Week cards */
+  .week { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .week > header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; padding: 14px 20px; border-bottom: 1px solid var(--line); }
+  .week > header .wk { font-family: var(--f-mono); font-size: 0.8rem; color: var(--accent); }
+  .week > header p { color: var(--muted); font-size: 0.95rem; flex-basis: 100%; }
+  .tracks { display: grid; grid-template-columns: 140px 1fr; }
+  .tracks > dt { padding: 12px 20px; font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-top: 1px solid var(--line); }
+  .tracks > dd { margin: 0; padding: 12px 20px 12px 0; border-top: 1px solid var(--line); min-width: 0; }
+  .tracks > dt:first-of-type, .tracks > dd:first-of-type { border-top: 0; }
+  .tracks ul { margin: 0; padding-left: 18px; display: grid; gap: 7px; }
+  @media (max-width: 640px) {
+    .tracks { grid-template-columns: 1fr; }
+    .tracks > dt { padding-bottom: 2px; }
+    .tracks > dd { padding: 4px 20px 14px; border-top: 0; }
+  }
+
+  /* Tables */
+  .tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .day { font-family: var(--f-mono); white-space: nowrap; color: var(--accent); }
+
+  .note { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; color: var(--ink); }
+  .warn { border-left-color: var(--high); }
+
+  /* Questions */
+  ol.q { margin: 0; padding-left: 26px; display: grid; gap: 8px; }
+  ol.q li::marker { font-family: var(--f-mono); color: var(--accent); font-size: 0.85em; }
+  .qgroup { display: grid; gap: 8px; }
+
+  footer { margin-top: 48px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); padding-top: 16px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Alove · Fashionnovo · Stellamea · Newmae · Davento · Niaali</span>
+    <h1>Q4 Roadmap 2026</h1>
+    <p class="lede">Van nu (week 41) tot de januarisales: per week en per dag wat we aanzetten aan aanbiedingen, urgency, signalen, design en ads. Elk punt heeft een risicoscore voor Google Merchant Center en voor de regels in UK/EU en US. Versie 1, gebaseerd op aannames; de vragen onderaan bepalen versie 2.</p>
+    <div class="meta">
+      <span>Opgesteld 7 oktober 2026</span>
+      <span>Basis: Q4 Offer Menu (37 aanbiedingen) + On-Site Signals (50 signalen) + marktonderzoek 2023–2025</span>
+    </div>
+  </header>
+
+  <nav class="phases" aria-label="Fases">
+    <a href="#samenvatting">Samenvatting</a>
+    <a href="#data">Kalender</a>
+    <a href="#f0">Fase 0 · Fundament</a>
+    <a href="#f1">Fase 1 · Opwarmen</a>
+    <a href="#f2">Fase 2 · Singles Day</a>
+    <a href="#f3">Fase 3 · Black Friday</a>
+    <a href="#piek">Dagplan piek</a>
+    <a href="#f4">Fase 4 · Kerst</a>
+    <a href="#f5">Fase 5 · Uitverkoop 70%</a>
+    <a href="#korting">Kortingsladder</a>
+    <a href="#stores">Per store</a>
+    <a href="#design">Design</a>
+    <a href="#risico">Risico's</a>
+    <a href="#onderzoek">Onderzoek</a>
+    <a href="#vragen">Vragen</a>
+  </nav>
+
+  <!-- Summary -->
+  <section id="samenvatting">
+    <div class="intro">
+      <span class="eyebrow">Samenvatting</span>
+      <h2>Zes fases, één regel: korting via de winkelwagen, prijzen pas in de laatste fase omlaag</h2>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <h3>Zo werkt het plan</h3>
+        <ul>
+          <li><b>Tot Kerst</b> geven we korting via staffels, codes en cadeaus in de winkelwagen. De productprijzen blijven gelijk, dus Google ziet geen prijswisselingen en de "laagste prijs van 30/60 dagen" blijft hoog voor later.</li>
+          <li><b>Pas vanaf Boxing Day (26 dec)</b> gaan de productprijzen zelf omlaag, met de diepste korting (tot 70%) alleen in de laatste fase en alleen op geselecteerde producten.</li>
+          <li><b>Urgency komt uit echte deadlines</b>: einddata van acties, de laatste besteldag voor Kerst per store en een beperkte voorraad gratis cadeaus. Geen nep-voorraad of resettende timers.</li>
+          <li><b>Elke store krijgt een "Black Friday-modus" en een "Kerst-modus"</b> in het werkthema, zodat elke fase met één klik live gaat.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Wat het onderzoek zegt (kort)</h3>
+        <ul>
+          <li>Kopers beginnen vroeg: eind oktober is de kerstinkoop al ~29% klaar (Google, 2024). Black Friday is in de UK de grootste online dag; in de US is dat Cyber Monday.</li>
+          <li>Kleding kreeg in de US gemiddeld 23–25% korting op de piekdag (Adobe 2024–2025); in de UK ~17%. Dieper dan 30–40% is buiten uitverkoop niet de norm.</li>
+          <li>E-mail en sms leveren ~42% van de omzet in de BF-periode (Klaviyo 2025). Vroege toegang voor vaste klanten verhoogt de conversie.</li>
+          <li>Google-klikken worden in BF-week 25–30% duurder. 70% korting is met advertenties altijd verlieslatend bij jullie marge (zie kortingsladder).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="legend">
+      <span>Risicoscore per punt:</span>
+      <span class="risks"><span class="r l">GMC laag</span><span class="r m">GMC middel</span><span class="r h">GMC hoog</span></span>
+      <span>en daarnaast <span class="r l">UK/EU</span> en <span class="r l">US</span> voor de wet- en regelgeving (volgens jullie verzoek tellen we die niet mee in de keuze, maar ze staan er wel bij).</span>
+    </div>
+  </section>
+
+  <!-- Key dates -->
+  <section id="data">
+    <div class="intro">
+      <span class="eyebrow">Kalender</span>
+      <h2>Belangrijke data 2026–2027</h2>
+    </div>
+    <div class="dates">
+      <div class="date"><b>wo 11 nov</b><span>Singles Day 11.11 (sterk in PL/IT)</span></div>
+      <div class="date"><b>ma 16 nov</b><span>VIP early access start</span></div>
+      <div class="date"><b>ma 23 nov</b><span>Black Friday-week start</span></div>
+      <div class="date"><b>do 26 nov</b><span>Thanksgiving (Newmae)</span></div>
+      <div class="date peak"><b>vr 27 nov</b><span>Black Friday</span></div>
+      <div class="date peak"><b>ma 30 nov</b><span>Cyber Monday</span></div>
+      <div class="date"><b>zo 6 dec</b><span>Nikolaus (DE) · Mikołajki (PL)</span></div>
+      <div class="date"><b>di 8 dec</b><span>Immacolata (IT)</span></div>
+      <div class="date"><b>wo 9 dec</b><span>Laatste kerstbesteldag UK-stores (voorlopig)</span></div>
+      <div class="date"><b>do 10 dec</b><span>Christmas Jumper Day (UK)</span></div>
+      <div class="date"><b>ma 14 dec</b><span>Green Monday (US)</span></div>
+      <div class="date"><b>za 19 dec</b><span>Super Saturday</span></div>
+      <div class="date"><b>vr 25 dec</b><span>Kerst</span></div>
+      <div class="date peak"><b>za 26 dec</b><span>Boxing Day · uitverkoop start</span></div>
+      <div class="date"><b>wo 6 jan</b><span>Driekoningen (ES) · rebajas</span></div>
+      <div class="date"><b>zo 17 jan</b><span>Einde uitverkoop, prijzen terug</span></div>
+    </div>
+  </section>
+
+  <!-- Phase 0 -->
+  <section id="f0">
+    <div class="intro">
+      <span class="eyebrow">Fase 0 · week 41–42 · 7–18 oktober</span>
+      <h2>Fundament: alles klaarzetten</h2>
+      <p>Doel: elke volgende fase is alleen nog "aanzetten". Nu niets met prijzen doen.</p>
+    </div>
+    <article class="week">
+      <header><span class="wk">wk 41–42</span><h3>Voorbereiding</h3><p>Geen zichtbare actie voor klanten, behalve de e-mailpopup.</p></header>
+      <dl class="tracks">
+        <dt>Prijzen</dt>
+        <dd><ul>
+          <li>Productprijzen bevriezen tot 26 december. Dan blijft de huidige prijs de echte "was"-prijs voor de uitverkoop (Google: 30 van de laatste 200 dagen; US: ook 60-dagenregel voor "Deal ends"). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Doorgestreepte prijzen die nooit echt gerekend zijn: laten staan (jullie keuze) of opschonen. Laten staan blijft een risico, zeker als we er in december korting vanaf rekenen. <span class="risks"><span class="r m">GMC middel</span><span class="r h">UK/EU hoog</span><span class="r m">US middel</span></span></li>
+        </ul></dd>
+        <dt>Aanbod klaarzetten</dt>
+        <dd><ul>
+          <li>Cadeaukaarten aanzetten in alle stores (ook als "last minute"-cadeau na de besteldeadline). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Bundels als eigen product: "Winter Set" (trui + sjaal), "Party Look", "Cosy Trio". Een bundel heeft een eigen prijs, dus geen doorstreepregels. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Gratis cadeaus inkopen bij de leverancier (sjaal, sokken, scrunchie, haarclip) voor "gratis cadeau vanaf £60" en "kies je cadeau". Echte, getelde voorraad. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Mystery box in drie prijzen (bijv. 30/50/70) met een eerlijke minimumwaarde, voor langzame voorraad. <span class="risks"><span class="r l">GMC laag</span><span class="r m">UK/EU middel</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>E-mail &amp; sms</dt>
+        <dd><ul>
+          <li>Popup "Black Friday 48 uur eerder – meld je aan", met een spin-to-win van echte codes (10 of 15%). Doel: zo groot mogelijke VIP-lijst voor 16 november. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Flows bouwen: welkom, verlaten winkelwagen, bedankt + tweede-order-code. Automatische mails leveren ~30% van de e-mailomzet bij 2% van de verzendingen (Omnisend 2025). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Fashionnovo: vooraf aangevinkt marketingvakje in de checkout uitzetten. <span class="risks"><span class="r l">GMC laag</span><span class="r h">UK/EU hoog zolang aan</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>Site &amp; design</dt>
+        <dd><ul>
+          <li>Per store in het werkthema een <b>BF-modus</b> en <b>Kerst-modus</b> voorbereiden: announcement bar, hero, kleuren, cadeau- en deadline-regels. Live zetten is dan één klik.</li>
+          <li>Leverdatum onder de knop uitbreiden met de echte kerstdeadline: "Order by Wed 9 Dec for Christmas delivery" (volgt automatisch de datum). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Reviews: alleen echte, geverifieerde reviews tonen. Reviews van AliExpress importeren is snel, maar riskant. <span class="risks"><span class="r m">GMC middel</span><span class="r h">UK/EU hoog</span><span class="r h">US hoog (FTC)</span></span></li>
+          <li>Bannerproductie starten (zie <a href="#design">Design</a>): per store en per fase een desktop-, mobiel- en e-mailversie.</li>
+        </ul></dd>
+        <dt>Ads &amp; GMC</dt>
+        <dd><ul>
+          <li>Merchant Center Promotions per store controleren/aanvragen (codes en cadeaus tonen bij de advertentie). Promoties minstens 24 uur vooraf indienen.</li>
+          <li>Feed controleren: levertijden in de feed gelijk aan de policy (bij dropshipping een veelvoorkomende schorsingsreden). <span class="risks"><span class="r h">GMC hoog als het niet klopt</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Nulmeting per store: conversie, orderwaarde, ROAS, kosten per klik van de laatste 30 dagen.</li>
+        </ul></dd>
+      </dl>
+    </article>
+  </section>
+
+  <!-- Phase 1 -->
+  <section id="f1">
+    <div class="intro">
+      <span class="eyebrow">Fase 1 · week 43–45 · 19 oktober – 8 november</span>
+      <h2>Opwarmen: Winter Edit en lijst bouwen</h2>
+      <p>Doel: verkopen zonder korting, VIP-lijst laten groeien, advertenties leren laten.</p>
+    </div>
+    <article class="week">
+      <header><span class="wk">wk 43–44</span><h3>Winter Edit</h3><p>19 okt – 1 nov. Jassen en breigoed vooraan; de kerstinkoop is eind oktober al ~29% klaar.</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>Staffels blijven 10/15/20%.</li>
+          <li>Gratis cadeau vanaf een drempel (bijv. £/€60): sjaal of sokken, zolang de cadeauvoorraad strekt. Verhoogt de orderwaarde zonder prijsverlaging. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Klarna/achteraf betalen als kop: "3 × £16,65 with Klarna" op product en in de winkelwagen. Rente/voorwaarden correct tonen. <span class="risks"><span class="r l">GMC laag</span><span class="r m">UK/EU middel</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>Signalen</dt>
+        <dd><ul>
+          <li>"Order before 5 PM and we start preparing it today" (alleen waar de cut-off echt is). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>"Black Friday early access opens Mon 16 Nov – join the list" in de announcement bar.</li>
+        </ul></dd>
+        <dt>Site &amp; design</dt>
+        <dd><ul>
+          <li>Homepage-hero "The Winter Edit" met jassen/breigoed; categorieën jassen en knit vooraan.</li>
+          <li>Eigen huiskleuren blijven; alleen de foto's worden winters.</li>
+        </ul></dd>
+        <dt>Ads</dt>
+        <dd><ul>
+          <li>Budget elke week +10–15% zolang de ROAS boven doel blijft; catalogus en creatives met prijs laten leren voor de piek.</li>
+        </ul></dd>
+      </dl>
+    </article>
+    <article class="week">
+      <header><span class="wk">wk 45</span><h3>Black November teaser</h3><p>2–8 nov. De verkoop spreidt zich over heel november (Italië: +14% over de maand tegen +3% op Black Friday zelf).</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>"Black November": staffels tijdelijk 15/20/25%, alleen via de winkelwagen. Einddatum zichtbaar (zo 8 nov). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>Signalen</dt>
+        <dd><ul>
+          <li>Echte aftelklok naar de start van VIP early access (ma 16 nov 09:00). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>Site &amp; design</dt>
+        <dd><ul>
+          <li>Teaserbanners in zwart met het accent van de store. Announcement bar zwart.</li>
+        </ul></dd>
+      </dl>
+    </article>
+  </section>
+
+  <!-- Phase 2 -->
+  <section id="f2">
+    <div class="intro">
+      <span class="eyebrow">Fase 2 · week 46–47 · 9–22 november</span>
+      <h2>Singles Day en VIP early access</h2>
+    </div>
+    <article class="week">
+      <header><span class="wk">wk 46</span><h3>Singles Day 11.11</h3><p>ma 9 – wo 11 nov 23:59. Vooral sterk in Polen (Niaali) en Italië (Davento).</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>Code "1111": 11% extra bovenop de staffels, 72 uur, echte einddatum. Als code, niet als prijsverlaging: dan blijft de laagste prijs van 30 dagen hoog voor Black Friday. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>UK/US: alternatief "gratis cadeau bij elke order" (11.11 leeft daar minder).</li>
+        </ul></dd>
+        <dt>Signalen</dt>
+        <dd><ul>
+          <li>"Ends Wed 11 Nov, midnight. It won't be extended." <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Wo 11 nov 18:00: "Last 6 hours" (alleen e-mail/sms, klopt met de echte einddatum).</li>
+        </ul></dd>
+        <dt>Design</dt>
+        <dd><ul><li>Banner "11.11" in de huiskleur met wit; daarna terug naar de BF-teaser.</li></ul></dd>
+      </dl>
+    </article>
+    <article class="week">
+      <header><span class="wk">wk 47</span><h3>VIP early access</h3><p>ma 16 nov 09:00 – zo 22 nov. Vroege toegang verhoogde in 2024 de conversie en orderwaarde per ontvanger (Klaviyo).</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>VIP-code (alleen e-mail/sms): staffels 20/25/30%. Iedereen op de lijst krijgt hem, dus geen schijnexclusiviteit. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Publiek blijft 15/20/25% met de teaser "Black Friday starts Monday".</li>
+        </ul></dd>
+        <dt>Ads</dt>
+        <dd><ul>
+          <li>Vanaf vr 20 nov budget +30%; tROAS 10–15% lager (Google-advies voor de dagen vóór de piek).</li>
+          <li>Seizoensaanpassing in Google Ads instellen voor 23 nov – 1 dec (max. 14 dagen per aanpassing).</li>
+          <li>Merchant Center-promotie voor BF-week indienen (vóór vr 20 nov).</li>
+        </ul></dd>
+      </dl>
+    </article>
+  </section>
+
+  <!-- Phase 3 -->
+  <section id="f3">
+    <div class="intro">
+      <span class="eyebrow">Fase 3 · week 48–49 · 23 november – 6 december</span>
+      <h2>Black Friday-week en Cyber Week</h2>
+      <p>Het belangrijkste blok van het jaar. In Spanje zit ~25% van de jaarlijkse online omzet in de BF-week (Flipflow 2025).</p>
+    </div>
+    <article class="week">
+      <header><span class="wk">wk 48</span><h3>Black Friday-week</h3><p>ma 23 – zo 29 nov. Details per dag in het <a href="#piek">dagplan</a>.</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>Staffels in de winkelwagen: <b>2 = −20%, 3 = −30%, 4+ = −40%</b>. Staffels deden het bij een Shopify-winkel beter dan een vlakke 30% (orderwaarde $43 → $58, omzet +40%; één praktijkvoorbeeld). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Doorbusters: 8–10 topproducten 50% via codes of een collectie-korting, met een echte einddatum per drop. Productprijs niet aanpassen. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>"Kies je gratis cadeau" vanaf een drempel (2–3 opties). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Mystery box live (30/50/70). <span class="risks"><span class="r l">GMC laag</span><span class="r m">UK/EU middel</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>Signalen</dt>
+        <dd><ul>
+          <li>"Black Friday prices end Mon 30 Nov, midnight" met echte aftelklok (dezelfde eindtijd voor iedereen). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>"[X] free gifts left" alleen met echte telling van de cadeauvoorraad. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>"Most bought this week" alleen op basis van echte verkoopcijfers. <span class="risks"><span class="r l">GMC laag</span><span class="r m">UK/EU middel</span><span class="r m">US middel</span></span></li>
+        </ul></dd>
+        <dt>Site &amp; design</dt>
+        <dd><ul>
+          <li>Homepage-takeover: zwarte hero met het store-accent, staffels groot in beeld, aftelklok, doorbuster-rij bovenaan.</li>
+          <li>Collectie "Black Friday Deals" bovenaan het menu.</li>
+        </ul></dd>
+        <dt>Ads &amp; e-mail</dt>
+        <dd><ul>
+          <li>Klikken 25–30% duurder: budget op de dagen met de hoogste ROAS (Black Friday had in 2023 én 2024 een hogere ROAS dan Cyber Monday; Optmyzr).</li>
+          <li>Dagelijks e-mail, sms op vr, zo en ma. Verzenden 1–2 uur vóór het piekuur per land (zie dagplan).</li>
+        </ul></dd>
+      </dl>
+    </article>
+    <article class="week">
+      <header><span class="wk">wk 49</span><h3>Cyber Monday → kersttoon</h3><p>ma 30 nov – zo 6 dec. In de US is Cyber Monday de grootste dag ($14,25 mrd, Adobe 2025).</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>Ma 30 nov: extra code "CYBER" (10% bovenop de staffels) óf gratis expressverzending, tot di 1 dec 23:59. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Wo 2 dec: staffels terug naar 15/20/25% (kersttoon), cadeaus blijven.</li>
+          <li>Za 5 / zo 6 dec: Nikolaus (Davento DE) en Mikołajki (Niaali PL): "cadeau voor jezelf"-mail met gratis cadeau.</li>
+        </ul></dd>
+        <dt>Signalen</dt>
+        <dd><ul>
+          <li>"Cyber Monday ends tonight. It will not quietly extend." <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>Design</dt>
+        <dd><ul><li>Do 3 dec: overschakelen naar de Kerst-modus (zie <a href="#design">Design</a>).</li></ul></dd>
+      </dl>
+    </article>
+  </section>
+
+  <!-- Daily plan peak -->
+  <section id="piek">
+    <div class="intro">
+      <span class="eyebrow">Dagplan · 23 november – 2 december</span>
+      <h2>Wat er per dag gebeurt</h2>
+      <p>Verzendtijden volgen de piekuren van Black Friday 2025 (Adyen): US 12:00, UK 18:00, PL 18:00, IT 19:00, DE 21:00.</p>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Dag</th><th>Site</th><th>Aanbod</th><th>E-mail / sms</th><th>Ads</th></tr></thead>
+        <tbody>
+          <tr><td class="day">ma 23 nov</td><td>BF-modus live 07:00</td><td>Staffels 20/30/40, cadeau vanaf drempel</td><td>"Black Friday is here" (UK 16:00, ES 17:00)</td><td>Seizoensaanpassing aan, budget +50%</td></tr>
+          <tr><td class="day">di 24 nov</td><td>Doorbuster-rij #1</td><td>8 topproducten −50% tot do 23:59</td><td>Doorbuster-mail</td><td>Promotie in Merchant Center actief</td></tr>
+          <tr><td class="day">wo 25 nov</td><td>Mystery box op de homepage</td><td>Mystery box 30/50/70</td><td>Mystery box-mail</td><td>—</td></tr>
+          <tr><td class="day">do 26 nov</td><td>Newmae: BF start (Thanksgiving)</td><td>US: alles zoals BF</td><td>US 10:00 "Black Friday starts now"</td><td>US-budget ×2</td></tr>
+          <tr><td class="day">vr 27 nov</td><td>Doorbuster-rij #2 om 10:00 lokale tijd</td><td>Alle aanbiedingen + "kies je cadeau"</td><td>2× mail + sms vóór het piekuur per land</td><td>Hoogste budget van het jaar</td></tr>
+          <tr><td class="day">za 28 nov</td><td>"Weekend deals"</td><td>Zelfde</td><td>Reminder verlaten winkelwagen extra</td><td>Budget volgt de ROAS van vrijdag</td></tr>
+          <tr><td class="day">zo 29 nov</td><td>Aftelklok naar ma 23:59</td><td>Zelfde</td><td>"Last day of Black Friday weekend"</td><td>—</td></tr>
+          <tr><td class="day">ma 30 nov</td><td>Cyber Monday-banner</td><td>+ code CYBER 10% of gratis express</td><td>US 10:00 · UK 16:00 · IT 17:00 · DE 19:00</td><td>US-budget ×2 (grootste US-dag)</td></tr>
+          <tr><td class="day">di 1 dec</td><td>"Final hours"</td><td>Laatste dag, eindigt 23:59</td><td>sms 18:00 "6 hours left"</td><td>Seizoensaanpassing uit om 23:59</td></tr>
+          <tr><td class="day">wo 2 dec</td><td>Terug naar 15/20/25</td><td>Cadeaus blijven</td><td>"Thank you" + bounce-back-tegoed</td><td>Budget terug naar +20% boven oktober</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Phase 4 -->
+  <section id="f4">
+    <div class="intro">
+      <span class="eyebrow">Fase 4 · week 50–52 · 7–24 december</span>
+      <h2>Kerstcadeaus en echte besteldeadlines</h2>
+      <p>De sterkste urgency van het jaar is gratis en echt: "na deze datum komt het niet meer op tijd".</p>
+    </div>
+    <article class="week">
+      <header><span class="wk">wk 50</span><h3>Gift shop en eerste deadlines</h3><p>7–13 dec.</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>Collectie "Gift Shop": "Gifts under £30", "under £50", "for him", "for her", cadeaukaarten. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Gratis cadeauverpakking en cadeaukaartje bij de order (als de leverancier dat kan). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Bounce-back: "Spend £60, get £10 to spend in January" (tegoed per e-mail). Tweede order in januari. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Verlengde retourtermijn voor kerstaankopen: alles vanaf 1 nov retour tot 31 jan. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Di 8 dec Immacolata (Davento IT): korte actie met gratis cadeau.</li>
+          <li>Do 10 dec Christmas Jumper Day (UK): jumpers vooraan bij Alove en Fashionnovo.</li>
+        </ul></dd>
+        <dt>Signalen</dt>
+        <dd><ul>
+          <li>Vanaf 3 dec: "Order by Wed 9 Dec for Christmas delivery" (UK-stores) met echte aftelklok naar die datum. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Na de deadline: "Too late for delivery? A gift card arrives instantly by email." <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>Ads</dt>
+        <dd><ul>
+          <li>Na de deadline per store: budget omlaag naar retargeting en cadeaukaarten; feed-levertijd blijft eerlijk.</li>
+        </ul></dd>
+      </dl>
+    </article>
+    <article class="week">
+      <header><span class="wk">wk 51–52</span><h3>Last minute</h3><p>14–24 dec.</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>Ma 14 dec Green Monday (Newmae): 24 uur extra code. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>Stellamea: tweede deadline voor Driekoningen: "Llega antes de Reyes" tot ma 21 dec.</li>
+          <li>21–24 dec: alleen cadeaukaarten en "arrives in the new year + 60-day returns".</li>
+        </ul></dd>
+        <dt>Design</dt>
+        <dd><ul><li>Kerst-modus blijft; banner wisselt naar "Gift cards: instant delivery".</li></ul></dd>
+        <dt>E-mail</dt>
+        <dd><ul><li>Vr 25 dec 18:00: "Our sale starts tomorrow 8 AM – early access tonight for subscribers".</li></ul></dd>
+      </dl>
+    </article>
+  </section>
+
+  <!-- Phase 5 -->
+  <section id="f5">
+    <div class="intro">
+      <span class="eyebrow">Fase 5 · 25 december – 17 januari</span>
+      <h2>Uitverkoop tot 70% (de enige fase met prijsverlaging)</h2>
+      <p>Pas hier gaan de productprijzen zelf omlaag. De huidige prijzen zijn dan al maanden echt gerekend, dus de doorgestreepte prijs klopt.</p>
+    </div>
+    <article class="week">
+      <header><span class="wk">wk 52–53</span><h3>Boxing Day en eindejaar</h3><p>vr 25 dec (vroege toegang) – zo 3 jan. Boxing Day online in de UK ruim £500 mln (Adobe 2025).</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>Za 26 dec: uitverkoop "up to 50%" op een brede selectie, prijs in de productfeed (sale_price + einddatum). <span class="risks"><span class="r l">GMC laag</span><span class="r m">UK/EU middel</span><span class="r l">US laag</span></span></li>
+          <li>Ma 28 dec: "Final clearance up to 70%" op langzame producten en restanten. Met advertenties is 70% verlieslatend; dus alleen e-mail, sms en organisch, of als bewuste voorraadopruiming. <span class="risks"><span class="r l">GMC laag</span><span class="r m">UK/EU middel</span><span class="r l">US laag</span></span></li>
+          <li>EU-stores (Stellamea, Davento, Niaali): de korting telt vanaf de laagste prijs van de laatste 30 dagen. Omdat we tot Kerst geen productprijzen verlaagd hebben, is dat de normale prijs. <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag als de regel klopt</span><span class="r l">US laag</span></span></li>
+        </ul></dd>
+        <dt>Signalen</dt>
+        <dd><ul>
+          <li>"Sale ends Sun 17 Jan. Prices go back up on Monday." (echt). <span class="risks"><span class="r l">GMC laag</span><span class="r l">UK/EU laag</span><span class="r l">US laag</span></span></li>
+          <li>"Last one in your size" alleen bij echte voorraad per maat (bij dropshipping meestal niet beschikbaar). <span class="risks"><span class="r h">GMC hoog zonder echte voorraad</span><span class="r h">UK/EU hoog</span><span class="r h">US hoog</span></span></li>
+        </ul></dd>
+        <dt>Design</dt>
+        <dd><ul><li>Sale-modus: rood/wit sale-banners, "up to 70%" groot, collectie "Sale" vooraan.</li></ul></dd>
+      </dl>
+    </article>
+    <article class="week">
+      <header><span class="wk">jan wk 1–2</span><h3>Januari en Driekoningen</h3><p>ma 4 – zo 17 jan.</p></header>
+      <dl class="tracks">
+        <dt>Aanbod</dt>
+        <dd><ul>
+          <li>Stellamea: Reyes (wo 6 jan) en rebajas vanaf 7 jan. Davento: saldi begin januari.</li>
+          <li>Bounce-back-tegoeden inwisselen ("Your £10 is waiting – valid until 31 Jan").</li>
+          <li>Zo 17 jan 23:59: uitverkoop stopt, prijzen terug naar normaal. Daarna 30+ dagen geen nieuwe prijsverlaging, zodat de normale prijs weer de referentie wordt.</li>
+        </ul></dd>
+      </dl>
+    </article>
+  </section>
+
+  <!-- Discount ladder -->
+  <section id="korting">
+    <div class="intro">
+      <span class="eyebrow">Kortingsladder</span>
+      <h2>Hoe diep per fase, en wat het kost</h2>
+      <p>Rekenvoorbeeld met de marge uit het Offer Menu (break-even ROAS 1,5 = ~66% bijdrage). Break-even ROAS bij korting <i>k</i> = (1 − k) ÷ (0,66 − k). Vul jullie echte marge in, dan reken ik het per store door.</p>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Fase</th><th>Periode</th><th>Max. korting</th><th>Hoe</th><th>Break-even ROAS</th></tr></thead>
+        <tbody>
+          <tr><td>Nu</td><td>t/m 1 nov</td><td class="num">10–20%</td><td>Staffels in winkelwagen</td><td class="num">1,62–1,74</td></tr>
+          <tr><td>Black November</td><td>2–15 nov</td><td class="num">15–25% (+11% 11.11)</td><td>Staffels + code</td><td class="num">1,70–1,83</td></tr>
+          <tr><td>VIP / BF-week</td><td>16 nov – 1 dec</td><td class="num">20–40%</td><td>Staffels, codes, cadeaus</td><td class="num">1,74–2,31</td></tr>
+          <tr><td>Doorbusters</td><td>24–29 nov</td><td class="num">50%</td><td>8–10 topproducten, code</td><td class="num">3,13</td></tr>
+          <tr><td>Kerst</td><td>2–24 dec</td><td class="num">15–25%</td><td>Staffels + cadeaus</td><td class="num">1,70–1,83</td></tr>
+          <tr><td>Boxing Day</td><td>26–27 dec</td><td class="num">tot 50%</td><td>Productprijs (feed)</td><td class="num">3,13</td></tr>
+          <tr><td>Final clearance</td><td>28 dec – 17 jan</td><td class="num">tot 70%</td><td>Productprijs, selectie</td><td class="num">verlies bij elke order (k &gt; 66%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note warn">Bij 66% korting of meer verdien je op geen enkele order meer, ook zonder advertentiekosten. 70% alleen gebruiken om voorraad of restanten op te ruimen, of als jullie marge hoger is dan 66%.</p>
+  </section>
+
+  <!-- Per store -->
+  <section id="stores">
+    <div class="intro">
+      <span class="eyebrow">Per store</span>
+      <h2>Deadlines en lokale dagen</h2>
+      <p>Laatste besteldag = maximale levertijd uit de eigen verzendpolicy, teruggerekend vanaf do 24 dec (werkdagen). Te bevestigen met de leverancier.</p>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Store</th><th>Markt</th><th>Levertijd</th><th>Laatste kerstbesteldag</th><th>Sterkste momenten</th></tr></thead>
+        <tbody>
+          <tr><td>Alove</td><td>UK · GBP</td><td class="num">7–11 wd</td><td class="num">wo 9 dec</td><td>Black Friday (grootste UK-dag), Jumper Day, Boxing Day</td></tr>
+          <tr><td>Fashionnovo</td><td>UK · GBP</td><td class="num">4–11 wd</td><td class="num">wo 9 dec</td><td>Black Friday, Jumper Day, Boxing Day</td></tr>
+          <tr><td>Stellamea</td><td>ES · EUR</td><td class="num">4–9 wd</td><td class="num">vr 11 dec · Reyes: ma 21 dec</td><td>BF-week (~25% jaaromzet online), Reyes 6 jan, rebajas</td></tr>
+          <tr><td>Newmae</td><td>US · USD</td><td class="num">? (vraag 3)</td><td class="num">?</td><td>Thanksgiving, Cyber Monday (grootste US-dag), Green Monday; "Deal ends"-badge in Google</td></tr>
+          <tr><td>Davento</td><td>IT + DE · EUR</td><td class="num">? (vraag 3)</td><td class="num">?</td><td>Heel november (IT), Nikolaus 6 dec, Immacolata 8 dec, saldi</td></tr>
+          <tr><td>Niaali</td><td>PL (te bevestigen)</td><td class="num">? (vraag 3)</td><td class="num">? (24 dec feestdag)</td><td>Singles Day, Mikołajki 6 dec, Wigilia</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Design -->
+  <section id="design">
+    <div class="intro">
+      <span class="eyebrow">Design per fase</span>
+      <h2>Homepages, banners, kleuren en afbeeldingen</h2>
+      <p>Elke store houdt zijn eigen identiteit; per fase verandert alleen de "laag" erover. Alles staat klaar in het werkthema en gaat met één klik live.</p>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Fase</th><th>Kleuren</th><th>Homepage</th><th>Announcement bar</th><th>Banners &amp; foto's</th></tr></thead>
+        <tbody>
+          <tr><td>Winter Edit<br><span class="mono">19 okt</span></td><td>Huiskleuren</td><td>Hero jassen/breigoed, categorieën winter vooraan</td><td>Gratis levering · staffels · retour</td><td>Winterse lifestylefoto's; geen tekst op productfoto's</td></tr>
+          <tr><td>BF-teaser<br><span class="mono">2 nov</span></td><td>Zwart + store-accent (navy/camel, terracotta, olijf …)</td><td>Teaserblok met aftelklok naar 16 nov</td><td>"Early access opens Mon 16 Nov"</td><td>Zwarte banners, groot cijfer "up to 40%"</td></tr>
+          <tr><td>BF / Cyber<br><span class="mono">23 nov</span></td><td>Zwart, accent voor knoppen en staffels</td><td>Takeover: staffels groot, doorbuster-rij, aftelklok, mystery box</td><td>"Black Friday: up to 40% · ends Mon"</td><td>Desktop 2400×1000, mobiel 1080×1350, e-mail 1200×600</td></tr>
+          <tr><td>Kerst<br><span class="mono">3 dec</span></td><td>Diepgroen of bordeaux + goud, binnen de huisstijl</td><td>Gift Shop-tegels (onder £30/£50, him/her), deadline-balk</td><td>"Order by Wed 9 Dec for Christmas"</td><td>Kerstsfeer-lifestyle, cadeauverpakking in beeld</td></tr>
+          <tr><td>Sale<br><span class="mono">26 dec</span></td><td>Rood/wit</td><td>Sale-hero "up to 70%", sale-collectie vooraan</td><td>"Sale ends Sun 17 Jan"</td><td>Sale-banners; productfoto's blijven schoon</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note warn">Geen tekst, kortingslabels of watermerken op productfoto's in de feed: Google keurt die af. Promotieteksten alleen op banners op de site.</p>
+  </section>
+
+  <!-- Risk register -->
+  <section id="risico">
+    <div class="intro">
+      <span class="eyebrow">Risicoregister</span>
+      <h2>Agressieve tactieken en hun risico</h2>
+      <p>Op jullie verzoek staan ook de risicovolle opties erin. De score staat erbij; de keuze is aan jullie.</p>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Tactiek</th><th>GMC</th><th>UK/EU</th><th>US</th><th>Toelichting</th></tr></thead>
+        <tbody>
+          <tr><td>Staffels / codes in de winkelwagen</td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td>Geen prijswijziging in de feed.</td></tr>
+          <tr><td>Echte aftelklok naar echte einddatum</td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td>Zelfde eindtijd voor iedereen, geen verlenging.</td></tr>
+          <tr><td>Gratis cadeau, telling van echte cadeauvoorraad</td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td>Geen opgeblazen "waarde" noemen.</td></tr>
+          <tr><td>Doorbusters 50% vanaf echte prijs</td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td>Basisprijs moet lang genoeg live zijn geweest.</td></tr>
+          <tr><td>Uitverkoop 70% vanaf echte prijs</td><td><span class="r l">laag</span></td><td><span class="r m">middel</span></td><td><span class="r l">laag</span></td><td>EU: vanaf laagste prijs 30 dagen; marge negatief.</td></tr>
+          <tr><td>Spin-to-win met echte codes</td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td>Buiten de feed; kansen eerlijk.</td></tr>
+          <tr><td>Mystery box met minimumwaarde</td><td><span class="r l">laag</span></td><td><span class="r m">middel</span></td><td><span class="r l">laag</span></td><td>Minimumwaarde moet aantoonbaar kloppen.</td></tr>
+          <tr><td>Doorgestreepte prijs die nooit gerekend is</td><td><span class="r h">hoog</span></td><td><span class="r h">hoog</span></td><td><span class="r m">middel</span></td><td>Grootste schorsingsreden (misleiding).</td></tr>
+          <tr><td>Prijs eerst verhogen, dan "korting"</td><td><span class="r h">hoog</span></td><td><span class="r h">hoog</span></td><td><span class="r m">middel</span></td><td>Google toont dan geen doorstreping; EU 30-dagenregel.</td></tr>
+          <tr><td>Aftelklok die reset bij herladen of elke dag</td><td><span class="r h">hoog</span></td><td><span class="r h">hoog</span></td><td><span class="r m">middel</span></td><td>UK CMA beboet dit actief sinds 2025.</td></tr>
+          <tr><td>"Nog 3 op voorraad" zonder echte voorraad</td><td><span class="r h">hoog</span></td><td><span class="r h">hoog</span></td><td><span class="r h">hoog</span></td><td>Bij dropshipping niet te onderbouwen.</td></tr>
+          <tr><td>"12 mensen bekijken dit nu" (nep)</td><td><span class="r h">hoog</span></td><td><span class="r h">hoog</span></td><td><span class="r h">hoog</span></td><td>Alleen met echte live data.</td></tr>
+          <tr><td>"Winkelwagen 10 min gereserveerd" (nep)</td><td><span class="r m">middel</span></td><td><span class="r h">hoog</span></td><td><span class="r m">middel</span></td><td>Valse urgency.</td></tr>
+          <tr><td>Reviews importeren van AliExpress</td><td><span class="r m">middel</span></td><td><span class="r h">hoog</span></td><td><span class="r h">hoog</span></td><td>FTC: tot $53.088 per overtreding.</td></tr>
+          <tr><td>Levertijd in feed/ads korter dan echt</td><td><span class="r h">hoog</span></td><td><span class="r m">middel</span></td><td><span class="r m">middel</span></td><td>Veelvoorkomende reden bij dropshipping.</td></tr>
+          <tr><td>Tekst/kortingslabel op productfoto in feed</td><td><span class="r h">hoog</span></td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td>Afkeuring van producten.</td></tr>
+          <tr><td>Exit-popup met extra korting</td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td><span class="r l">laag</span></td><td>Buiten de feed.</td></tr>
+          <tr><td>"Deal ends"-badge in Google (alleen US)</td><td><span class="r l">laag</span></td><td><span class="r l">n.v.t.</span></td><td><span class="r l">laag</span></td><td>Min. 10% korting én laagste prijs 60 dagen.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section id="onderzoek">
+    <div class="intro">
+      <span class="eyebrow">Onderzoek 2023–2025</span>
+      <h2>Wat werkte en wat niet</h2>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <h3>Werkte</h3>
+        <ul>
+          <li>Vroeg beginnen: 34% van de US-kopers begon al in juli (Google 2024); de verkoop spreidt zich over heel november.</li>
+          <li>E-mail en sms: 42% van de omzet in de BF-periode; vaste klanten groeiden harder dan nieuwe (+13,9% tegen +8,3% bij kledingmerken; Klaviyo 2025).</li>
+          <li>Vroege toegang voor de lijst: hogere conversie en orderwaarde (Klaviyo 2024).</li>
+          <li>Achteraf betalen: Klarna US +45% tussen 1 nov en BF (2025); 82% van de BNPL-uitgaven via mobiel (Adobe).</li>
+          <li>Mobiel: 56–70% van de orders. Alles eerst op mobiel testen.</li>
+          <li>Kleding en accessoires zijn de grootste cadeaucategorie; cadeaukaarten groeien (Deloitte 2025).</li>
+        </ul>
+        <p class="src">Bronnen: Google Think, Klaviyo, Adobe Digital Insights, Salesforce, Deloitte, Klarna (2024–2025).</p>
+      </div>
+      <div class="panel">
+        <h3>Werkte niet / kost geld</h3>
+        <ul>
+          <li>Kortingsmoeheid: UK-kledinguitgaven op Black Friday 2025 slechts +1,3%; Duitsland verwachtte voor het eerst een daling (HDE).</li>
+          <li>Klikken duurder: Google CPC +22% tussen half nov en half dec (2024); kosten per aankoop +34% in BF 2025.</li>
+          <li>Retouren: 19% van online kerstaankopen retour (NRF 2025); bij kleding is pasvorm de hoofdreden (61%).</li>
+          <li>Te diepe korting levert niet automatisch meer op: uitgaven +11% terwijl kortingen 10% minder diep waren (Klaviyo 2025).</li>
+          <li>Extra kosten aan het eind zijn de grootste reden van afhaken (39%; Baymard), dus gratis levering vooraan tonen.</li>
+        </ul>
+        <p class="src">Bronnen: Barclays, HDE, Triple Whale, NRF, Salesforce, Baymard (2024–2025).</p>
+      </div>
+    </div>
+    <p class="note">Niet gevonden in openbare bronnen: conversie per dag per land, harde cijfers over cadeau-bij-aankoop tegenover procentkorting, en de echte kerstdeadlines van Chinese verzendlijnen (YunExpress/4PX). Die moeten van jullie leverancier komen.</p>
+  </section>
+
+  <!-- Questions -->
+  <section id="vragen">
+    <div class="intro">
+      <span class="eyebrow">Vragen voor versie 2</span>
+      <h2>Wat ik van jullie nodig heb</h2>
+      <p>Antwoord gerust met de nummers. Niet alles is nodig om te starten; 1–9 bepalen het meeste.</p>
+    </div>
+    <div class="grid2">
+      <div class="panel qgroup">
+        <h3>Stores en levering</h3>
+        <ol class="q" start="1">
+          <li>Doen alle zes stores mee, of een selectie?</li>
+          <li>Wat is de echte last-order-datum van de leverancier voor Kerst per land?</li>
+          <li>Wat zijn de levertijden van Newmae, Davento en Niaali? Is Niaali Polen?</li>
+          <li>Kan de leverancier gratis cadeaus meesturen (sjaal, sokken, scrunchie)? Wat kosten ze?</li>
+          <li>Kan de leverancier cadeauverpakking of een kaartje toevoegen?</li>
+        </ol>
+      </div>
+      <div class="panel qgroup">
+        <h3>Marge en budget</h3>
+        <ol class="q" start="6">
+          <li>Wat is de inkoopprijs inclusief verzending als percentage van de verkoopprijs?</li>
+          <li>Wat is het huidige advertentiebudget per dag per store, en hoeveel mag het omhoog in de BF-week?</li>
+          <li>Welke ROAS is het doel per store (Offer Menu: 2,2–2,5)?</li>
+          <li>70%: op het hele assortiment of alleen langzame producten? Vanaf 28 dec?</li>
+          <li>Mogen doorbusters (50%) al in de BF-week, op 8–10 topproducten?</li>
+        </ol>
+      </div>
+      <div class="panel qgroup">
+        <h3>Aanbod</h3>
+        <ol class="q" start="11">
+          <li>Akkoord met BF-staffels 20/30/40%, of liever anders?</li>
+          <li>Mogen bundels als eigen product worden aangemaakt?</li>
+          <li>Mystery box: ja of nee?</li>
+          <li>Cadeaukaarten aanzetten in alle stores?</li>
+          <li>Bounce-back-tegoed in januari (£/€10 bij £/€60)?</li>
+          <li>Verlengde retourtermijn tot 31 januari voor kerstaankopen?</li>
+          <li>Spin-to-win-popup voor e-mailadressen: ja of nee?</li>
+        </ol>
+      </div>
+      <div class="panel qgroup">
+        <h3>E-mail, reviews en data</h3>
+        <ol class="q" start="18">
+          <li>Welke e-mail- en sms-tool gebruiken jullie (Klaviyo, Shopify Email, Omnisend)?</li>
+          <li>Hoe groot zijn de lijsten per store?</li>
+          <li>Welke stores hebben echte reviews of een review-app?</li>
+          <li>Wat zijn conversie, orderwaarde en ROAS per store van de laatste 30 dagen? Ik kan ze ophalen als je me per store verbindt.</li>
+          <li>Hoeveel procent van de orders komt retour (voor eerlijke vertrouwenssignalen)?</li>
+        </ol>
+      </div>
+      <div class="panel qgroup">
+        <h3>Uitvoering en design</h3>
+        <ol class="q" start="23">
+          <li>Wie maakt banners en foto's: ik, jullie of een designer?</li>
+          <li>Mogen de kleuren per fase wijzigen (zwart voor BF, kerstkleur, rood voor sale)?</li>
+          <li>Zal ik per store BF-, Kerst- en Sale-modus klaarzetten in de werkthema's, zodat jullie per fase alleen publiceren?</li>
+          <li>Adverteren jullie ook op Meta of TikTok, of alleen Google?</li>
+          <li>Wie beslist en controleert per fase (jij alleen, of een team)?</li>
+        </ol>
+      </div>
+      <div class="panel qgroup">
+        <h3>Risicobereidheid</h3>
+        <ol class="q" start="28">
+          <li>Welke "hoog"-tactieken uit het risicoregister willen jullie bewust toch inzetten, en in welke stores?</li>
+          <li>Mogen stores met een GMC-waarschuwing in het verleden agressiever of juist voorzichtiger?</li>
+          <li>Hebben jullie reservestores of -accounts als een Merchant Center geschorst wordt?</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Q4 Roadmap 2026 · versie 1 · opgesteld 7 oktober 2026. Cijfers uit openbare rapporten van Adobe, Salesforce, Klaviyo, Google, Barclays, Adyen, Optmyzr, Triple Whale, NRF, Deloitte en Baymard (2023–2025); deadlines per store voorlopig.
+  </footer>
+</div>
