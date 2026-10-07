@@ -1,6 +1,6 @@
 {%- doc -%}
   Fashionnovo look on top of the kit: navy, sand and camel. Trust strip with thin
-  dividers, camel check marks, numbered tier stepper, "Save £X" labels on sand
+  dividers, camel benefit icons on sand tiles, numbered tier stepper, "Save £X" labels on sand
   card backgrounds, square photo swatches, framed About image, steps timeline and
   a numbered FAQ. Only styles, no markup.
 {%- enddoc -%}
@@ -143,19 +143,53 @@
     }
   }
 
-  /* Product benefits: camel check marks */
-  .pp-benefit__icon {
-    display: none;
+  /* Product benefits: line icons (truck, shield, tag) in camel on a small sand tile */
+  .pp-benefits {
+    gap: 10px;
   }
 
-  .pp-benefit::before {
-    content: '';
-    flex: 0 0 18px;
-    width: 18px;
-    height: 18px;
-    background: var(--fn-camel);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5l5 5 10-11'/%3E%3C/svg%3E") center / contain no-repeat;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 12.5l5 5 10-11'/%3E%3C/svg%3E") center / contain no-repeat;
+  .pp-benefit {
+    gap: 12px;
+  }
+
+  .pp-benefit .pp-benefit__icon {
+    box-sizing: border-box;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    border-radius: 4px;
+    background: var(--fn-sand);
+    color: var(--fn-camel);
+    stroke-width: 1.6;
+  }
+
+  /* Product photos: navy dots on a small white pill instead of thumbnails, active dot wider */
+  media-gallery slideshow-controls:has(.slideshow-controls__dots) {
+    mix-blend-mode: normal;
+  }
+
+  media-gallery .slideshow-controls__dots {
+    gap: 0.5rem;
+    padding: 6px 12px;
+    background: rgb(255 255 255 / 0.85);
+  }
+
+  media-gallery .slideshow-controls__dots button {
+    --size: 0.5rem;
+    --color: rgb(31 42 68 / 0.25);
+    --color-active: var(--fn-navy);
+    --color-hover: rgb(31 42 68 / 0.5);
+  }
+
+  media-gallery .slideshow-controls__dots button::after {
+    box-shadow: none;
+    transition: width 0.2s ease, background-color 0.2s ease;
+  }
+
+  media-gallery .slideshow-controls__dots button[aria-selected='true']::after {
+    width: calc(var(--size) * 2.5);
+    box-shadow: none;
   }
 
   /* Tier progress: numbered stepper (2 · 3 · 4+), a line fills up to each step,
