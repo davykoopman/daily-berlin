@@ -1,0 +1,96 @@
+{%- doc -%}
+  Product photos: some supplier photos are a portrait shot on a square white canvas.
+  On load each gallery photo is sampled (small 160px copy); when it has white bands
+  on the left and right next to a full-height photo, the photo zooms in (max 1.35x)
+  until the bands are out of the frame. Photos without bands and product shots on a
+  white background are left alone. Rendered from pp-benefits.
+{%- enddoc -%}
+
+<script>
+  (function () {
+    if (window.ppPhotoTrim) return;
+    window.ppPhotoTrim = true;
+
+    var MAX_ZOOM = 1.35;
+
+    function fit(img) {
+      var src = img.currentSrc || img.src;
+      if (!src || img.dataset.ppTrim === src || img.closest('dialog')) return;
+      img.dataset.ppTrim = src;
+
+      var url = new URL(src, location.href);
+      url.searchParams.set('width', '160');
+      var probe = new Image();
+      probe.crossOrigin = 'anonymous';
+      probe.onload = function () {
+        var w = probe.naturalWidth;
+        var h = probe.naturalHeight;
+        var canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext('2d', { willReadFrequently: true });
+        ctx.drawImage(probe, 0, 0);
+        var data;
+        try {
+          data = ctx.getImageData(0, 0, w, h).data;
+        } catch (e) {
+          return;
+        }
+
+        function whiteShare(col) {
+          var white = 0;
+          var rows = 0;
+          for (var y = 0; y < h; y += 2) {
+            var i = (y * w + col) * 4;
+            rows++;
+            if (data[i] > 242 && data[i + 1] > 242 && data[i + 2] > 242) white++;
+          }
+          return white / rows;
+        }
+
+        var left = 0;
+        while (left < w / 2 && whiteShare(left) > 0.985) left++;
+        var right = 0;
+        while (right < w / 2 && whiteShare(w - 1 - right) > 0.985) right++;
+        if (left < w * 0.03 && right < w * 0.03) return;
+
+        // A band only counts when a full-height photo starts right after it. A product
+        // shot on a white background has mostly white columns there and stays as it is.
+        var edge = Math.max(1 - whiteShare(Math.min(w - 1, left + 1)), 1 - whiteShare(Math.max(0, w - 2 - right)));
+        if (edge < 0.8) return;
+
+        var box = img.getBoundingClientRect();
+        var frameRatio = box.width > 0 && box.height > 0 ? box.width / box.height : 0.8;
+        var visible = Math.min(1, frameRatio / (w / h));
+        var content = (w - left - right) / w;
+        if (content >= visible) return;
+
+        var centre = (left + (w - left - right) / 2) / w;
+        img.style.transformOrigin = (centre * 100).toFixed(1) + '% 50%';
+        // 3% extra so the soft edge of the band never shows as a hairline
+        img.style.transform = 'scale(' + Math.min(MAX_ZOOM, (visible / content) * 1.03).toFixed(3) + ')';
+      };
+      probe.src = url.href;
+    }
+
+    function run() {
+      document.querySelectorAll('media-gallery img.product-media__image').forEach(function (img) {
+        if (img.complete && img.naturalWidth) fit(img);
+        else img.addEventListener('load', function () { fit(img); }, { once: true });
+      });
+    }
+
+    function start() {
+      run();
+      var queued = false;
+      new MutationObserver(function () {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(function () { queued = false; run(); });
+      }).observe(document.body, { childList: true, subtree: true });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
+  })();
+</script>
