@@ -1,9 +1,20 @@
 {%- doc -%}
   Payment icons on one row (phone and desktop). Uses the payment methods that
   are enabled in the checkout, so the icons always match what customers can use.
+  TWINT only works in Switzerland (CHF), so its icon only shows for visitors there.
 {%- enddoc -%}
 
-{%- assign types = shop.enabled_payment_types -%}
+{%- liquid
+  assign country = localization.country.iso_code
+  assign list = ''
+  for type in shop.enabled_payment_types
+    if type == 'twint' and country != 'CH'
+      continue
+    endif
+    assign list = list | append: type | append: ','
+  endfor
+  assign types = list | split: ','
+-%}
 {%- if types.size > 0 -%}
   <ul class="pp-pay" role="list" style="--pp-pay-count: {{ types.size }};">
     {%- for type in types -%}
