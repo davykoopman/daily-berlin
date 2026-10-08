@@ -63,3 +63,15 @@ no footer link. Customs/import costs left out of the texts on request.
   (localization.country), FAQ names it "TWINT"; disabled Apex FAQ in index.json made country-neutral.
   The visible homepage FAQ (pp-faq) was already country-neutral.
 - Full shipping policy to paste: policies/shipping_policy.it.html (German via T-Lab).
+
+## Kleuren (2026-10-08) – theme "Davento - kleuren (werk)" #206722826583 (copy of live, unpublished)
+Based on 10 dropship competitors (Drune, Harper & Wells, Karlson Berlin, Nordheim Mode, Moreau Lyon → Beaumont Nice,
+Lumière Boutique, Laurent Monaco, Leon Boutique, Look de Paris, Wilson & Carter): white base, near-black text,
+square buttons, one consistent accent; the high-volume ones use a green add-to-cart button.
+Only config/settings_data.json changed:
+- text, header text, announcement bar, footer, drawer text: #000/#0f0f0f → #1c1d1d (softer near-black)
+- discount stays dark red #C20000 everywhere (A/B tested)
+- custom CSS: add-to-cart + cart-drawer checkout button green #1f6b47 (hover #18563a); trust and benefit icons green;
+  variant labels letter-spacing 0.04em; broken rule `.product__price.on-sale {color: #11b96f;` (no closing brace) replaced
+  by `.product__price.on-sale{color:#c20000}` (the product page price keeps its own inline color from the price block)
+- type_product_capitalize: true → false (product names in the grid no longer all caps)
