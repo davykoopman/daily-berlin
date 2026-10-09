@@ -534,14 +534,14 @@
   },
   "ES": {
    "autumn": {
-    "Winterjas": 0.3,
+    "Winterjas": 0.2,
     "Tussenjas": 0.8,
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 1.0,
     "Blazer": 1.0,
     "Laarzen": 0.7,
     "Broek": 0.9,
-    "Jurk": 0.6,
+    "Jurk": 0.85,
     "Blouse / shirt": 0.8,
     "Set": 0.8,
     "Schoenen": 0.8,
@@ -674,7 +674,7 @@
   },
   "PL": {
    "autumn": {
-    "Winterjas": 1.0,
+    "Winterjas": 0.8,
     "Tussenjas": 0.9,
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 0.9,
@@ -749,7 +749,7 @@
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 1.0,
     "Blazer": 1.0,
-    "Laarzen": 0.9,
+    "Laarzen": 1.0,
     "Broek": 0.9,
     "Jurk": 0.6,
     "Blouse / shirt": 0.8,
@@ -821,7 +821,7 @@
     "Blazer": 0.7,
     "Laarzen": 1.0,
     "Broek": 0.8,
-    "Jurk": 0.6,
+    "Jurk": 0.8,
     "Blouse / shirt": 0.6,
     "Set": 0.8,
     "Schoenen": 0.6,
@@ -960,5 +960,6 @@
   "CH": "DE",
   "PT": "ES"
  },
- "_listvenster": "Voor een lijst van 20-25 dagen vanaf begin oktober: in koude markten (DE, PL, UK, US, CA) telt de 2e helft als half herfst / half winter."
+ "_listvenster": "Voor een lijst van 20-25 dagen vanaf begin oktober: in koude markten (DE, PL, UK, US, CA) telt de 2e helft als half herfst / half winter.",
+ "_bijgesteld": "9 okt: ES jurken↑ winterjassen↓, IT laarzen↑, PL winterjassen↓, US jurken↑ (op basis van season_report.py)"
 }

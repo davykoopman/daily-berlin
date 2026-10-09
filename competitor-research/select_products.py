@@ -37,7 +37,8 @@ CAT_EN = {"Winterjas": "Winter coat", "Tussenjas": "Transition jacket", "Trui / 
 # Alleen deze competitors mogen bronlink zijn: geverifieerd ≥75K bezoekers/mnd (SimilarWeb-hoofdcijfer),
 # match-score ≥4 (zelfde dropship-model, geen eigen label) en geen onbevestigde/geschatte cijfers.
 MIN_SOURCE_VISITS = 75000
-ELIGIBLE, VISITS = set(), {}
+MIN_SOURCE_PAID = 0.58   # ≥60% paid search; Leon Boutique (59%) op verzoek binnen, Karlson (30%) eruit
+ELIGIBLE, VISITS, TREND = set(), {}, {}
 
 
 def load_eligible():
@@ -46,7 +47,9 @@ def load_eligible():
         v = int(r["Bezoekers per maand"] or 0)
         n = r["Notities"].lower()
         VISITS[r["Domein"]] = v
-        if (v >= MIN_SOURCE_VISITS and int(r["Match-score"] or 0) >= 4 and "referentie" not in n
+        TREND[r["Domein"]] = float(r["Trend vorige maand"]) if r["Trend vorige maand"] not in ("", None) else 0.0
+        paid = float(r["Paid search"]) if r["Paid search"] not in ("", None) else 0.0
+        if (v >= MIN_SOURCE_VISITS and paid >= MIN_SOURCE_PAID and int(r["Match-score"] or 0) >= 4 and "referentie" not in n
                 and "onbevestigd" not in n and "schatting" not in n):
             ELIGIBLE.add(r["Domein"])
 
@@ -126,6 +129,8 @@ def evaluate(members, markets, store_visits_rank):
     reach = math.log10(max(best["visits"], 10000)) / math.log10(1_500_000)
     bonus = {"A": 1.0, "B": 0.9, "C": 0.8, "D": 0.4, "E": 0.6}[strat]
     score = season * (35 * best["pct"] + 15 * min(len(stores_all) - 1, 3) / 3 + 20 * newness + 15 * bonus + 15 * reach)
+    # Trend van de bron: dalers tellen gewoon mee (blijven grote stores), alleen een kleine correctie (±5%).
+    score *= 1 + 0.075 * max(-0.7, min(TREND.get(best["store"], 0.0), 0.7))
     if len(stores_in) == 2:
         score -= 15
     if strat == "D":
@@ -218,6 +223,18 @@ def photo_advice(ev, src, markets, media):
 
 def price_advice(ev, store_cur, fx, bands):
     src = ev["best"]
+    if src["market"] in ev.get("markets", ()):
+        # Bron adverteert in jouw land: iets onder zijn prijs, maar nooit meer dan €5 / 5% (marge beschermen).
+        base = src["price"] if src["cur"] == store_cur else src["price_eur"] / fx.get(store_cur, 1.0)
+        drop = min(5.0 / fx.get(store_cur, 1.0) if store_cur != "EUR" else 5.0, 0.05 * base)
+        adv = round_price((base - drop) * fx.get(store_cur, 1.0), store_cur, fx)
+        if adv < base - drop - 0.01:          # afronding mag nooit verder omlaag dan de grens
+            adv = round_price((base - drop + 1) * fx.get(store_cur, 1.0), store_cur, fx)
+        band = ""
+        p25, p50, p75 = bands.get(src["cat"], (None, None, None))
+        if p25:
+            band = f"{round_price(p25, store_cur, fx):.0f}–{round_price(p75, store_cur, fx):.0f}"
+        return adv, band, f"source advertises in your market: slightly below its price ({base:.2f}), max €5 / 5% lower", None
     p25, p50, p75 = bands.get(src["cat"], (None, None, None))
     if src["cur"] == store_cur:
         advies = src["price"]
@@ -353,7 +370,7 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
             continue
         per_cat[c] = per_cat.get(c, 0) + 1
         picked.append(e)
-        if len(picked) >= int(n_target * 1.6) + 10:
+        if len(picked) >= int(n_target * (2.4 if len(markets) > 1 else 1.8)) + 15:
             break
     bands = price_bands(pool, markets)
     media = fetch_media([m for e in picked for m in e["members"]])
@@ -362,11 +379,15 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
         # Foto's wegen mee: 1e foto bepaalt de klikratio. ±8 punten rond een gemiddelde score van 70.
         e["score"] = round(e["score"] + (e["best"]["img_score"] - 70) / 3.75, 1)
     picked = [e for e in picked if e["best"]["img_score"] >= 45] or picked
+    # Bron in eigen markt alleen bij sterke trend + volledige match (top 15% bestseller, strategie B of C, goede foto's).
+    picked = [e for e in picked if e["best"]["market"] not in markets
+              or (e["strat"] in ("B", "C") and e["best"]["pct"] >= 0.85 and e["best"]["img_score"] >= 70)]
     picked.sort(key=lambda e: -e["score"])
     picked = final_checks(picked, own, existing, media, n_target)
     for m in markets:
         taken.setdefault(m, set()).update(e["key"] for e in picked)
     for e in picked:
+        e["markets"] = markets
         e["foto_advies"] = photo_advice(e, e["best"], markets, media)
         e["bron_in_markt"] = e["best"]["market"] in markets
         e["advies"], e["band"], e["prijs_why"], e["hoger"] = price_advice(e, store["valuta"], fx, bands)
@@ -603,8 +624,9 @@ def write_workbook(results, pool, names, path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--store", nargs="*")
-    ap.add_argument("--aantal", type=int, default=300, help="aantal OPEN (Not listed) producten per store")
+    ap.add_argument("--aantal", type=int, default=200, help="max aantal OPEN (Not listed) producten per store")
     ap.add_argument("--merge", help="teruggestuurde Launch File: statussen behouden en lijst aanvullen")
+    ap.add_argument("--update", action="store_true", help="aanvullen vanuit launch_state.json (al opgeschoond)")
     a = ap.parse_args()
     cfg = json.loads((BASE / "config/stores.json").read_text())
     fx = cfg["fx_naar_eur"]
@@ -626,6 +648,12 @@ def main():
         stores = [s for s in stores if s["naam"] in a.store]
 
     old = {}
+    if a.update and STATE.exists():
+        old = json.loads(STATE.read_text())
+        for rows in old.values():
+            for x in rows:
+                x["status"] = x.get("status") or "Not listed"
+        print(f"Update: {sum(len(v) for v in old.values())} bestaande regels uit launch_state.json", file=sys.stderr)
     if a.merge:
         state = json.loads(STATE.read_text()) if STATE.exists() else {}
         import clean_returned as cr

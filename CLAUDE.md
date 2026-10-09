@@ -35,8 +35,16 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
   bestaande regels blijven staan en elke store wordt aangevuld tot 300 'Not listed'. Nieuwe regels krijgen 'Added on' = vandaag.
   Draai NOOIT zonder --merge als er al een Launch File in gebruik is (dan gaan statussen verloren).
   Stuur daarna het bestand terug met SendUserFile (display: attach).
-- Bronlinks ALLEEN van competitors met geverifieerd ≥75K bezoekers/mnd (SimilarWeb-hoofdcijfer), match ≥4,
-  geen eigen label; onbevestigd/geschat = nooit bron (alleen bevestiging). Controleer na elke run dat er 0 bronnen <75K zijn.
+- Bronlinks ALLEEN van competitors met ≥75K bezoekers/mnd volgens SimilarWeb (sinds sept toont SW alleen nog het
+  cijfer in het vergelijkingsblok; akkoord Davy 9-10), ≥60% paid search (Leon Boutique 59% bewust binnen), match ≥4,
+  geen eigen label. Dalers blijven bron (kleine correctie ±5% op score). Controleer na elke run dat er 0 bronnen buiten de regel zijn.
+- Bron die in het eigen land van de store adverteert: alleen bij sterke trend + volledige match; adviesprijs dan
+  iets onder de bron, maximaal €5 / 5% lager.
+- **Wekelijkse cyclus** (max 200 open per store): (1) teruggestuurde file → `python3 clean_returned.py <file> --autocheck`
+  (statussen Not listed/Draft/Live/Issues/Duplicate, Listed=Live, ontbrekende lister bij status = Dhafnie,
+  'Already in store' = Duplicate); (2) SimilarWeb-check bronnen + nieuwe competitors (Tranco-nieuwkomers);
+  (3) `pool.py --extra …`; (4) `season_report.py` en `config/seasons.json` bijstellen; (5) eerst met Davy bespreken;
+  (6) `python3 select_products.py --update --aantal 200`; (7) controleren, committen, file sturen.
 - Regels van de gebruiker: bron liefst NIET uit de eigen markt (zelfde foto+prijs = concurrentie);
   adviesprijs = prijs van de bronlink (niet onderprijzen, hoger is beter; alleen 'kan hoger' bij te lage prijs);
   foto's wegen zwaar (vooral de 1e); ~300 per store voor 20-25 dagen, koudere items later in de lijst.
