@@ -75,3 +75,13 @@ Only config/settings_data.json changed:
   variant labels letter-spacing 0.04em; broken rule `.product__price.on-sale {color: #11b96f;` (no closing brace) replaced
   by `.product__price.on-sale{color:#c20000}` (the product page price keeps its own inline color from the price block)
 - type_product_capitalize: true → false (product names in the grid no longer all caps)
+
+## TWINT live (2026-10-09)
+TWINT is active in the checkout (CH only, CHF). Checked on the live kit theme:
+- Product page /de-ch/: 11 payment icons incl. TWINT; IT and /de-de/: 10 icons, no TWINT (pp-payment-icons, no change needed).
+- Homepage FAQ (pp-faq) on /de-ch/ already names TWINT; not on IT/DE (no change needed).
+- Policies: no policy lists payment methods (refunds go "to the payment method used", which covers TWINT) → no policy change.
+Changed (pages, IT source text; German via T-Lab):
+- "Pagamenti": list item "TWINT (solo per ordini in Svizzera)" after Klarna → pages/pagamenti.it.html
+- "Domande Frequenti", payment answer: "…PayPal e Klarna. Per gli ordini in Svizzera puoi pagare anche con TWINT. …"
+  (also removed the stray comma in "PayPal, e Klarna") → pages/faq-payment-answer.it.html
