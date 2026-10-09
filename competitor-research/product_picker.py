@@ -146,7 +146,9 @@ def hash_images(urls):
     with cf.ThreadPoolExecutor(24) as ex:
         for k, v in ex.map(one, todo):
             cache[k] = v
-    cf_path.write_text(json.dumps(cache))
+    tmp = cf_path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(cache))
+    tmp.replace(cf_path)          # atomair: nooit een half geschreven cache
     return {u: cache.get(u.split("?")[0]) for u in urls if u}
 
 
