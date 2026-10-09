@@ -364,6 +364,10 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
     per_cat, picked = {}, []
     # links die al in de Launch File staan (ook na een foto-upgrade naar een andere versie) meteen overslaan
     have = {"/".join(x["url"].split("/")[2:5:2]).split("?")[0] for x in existing}
+    # door quality_gate.py afgekeurd (dode link / te weinig foto's / merknaam): nooit opnieuw voorstellen
+    rej = OUT / "rejected.json"
+    if rej.exists():
+        have |= {"/".join(r["url"].split("/")[2:5:2]).split("?")[0] for r in json.loads(rej.read_text())}
     for e in cands:
         if any(e["key"] in taken.get(m, set()) for m in markets):
             continue  # al toegewezen aan een andere eigen store in dezelfde markt

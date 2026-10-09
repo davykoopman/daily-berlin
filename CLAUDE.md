@@ -48,7 +48,7 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
   (3) `pool.py --extra …`; (4) `season_report.py` en `config/seasons.json` bijstellen; (5) eerst met Davy bespreken;
   (6) `python3 select_products.py --update --aantal 200`; (7) `python3 photo_upgrade.py` (beste fotoversie van
   hetzelfde product: conversie 55% + fotokwaliteit 45%, prijs blijft van de bewezen ≥75K-bron) en `python3 quality_gate.py`
-  (dode link = alleen echte 404, <3 foto's, merknaam → Issues); herhaal 6-7 tot elke store 200 open heeft;
+  (dode link = alleen echte 404, <3 foto's, merknaam → regel gaat UIT de file naar `listings/rejected.json` en komt nooit terug; Issues is alleen voor listers); herhaal 6-7 tot elke store 200 open heeft;
   (8) controleren, committen, file sturen. Geen nieuwe kolommen in de files.
 - Regels van de gebruiker: bron liefst NIET uit de eigen markt (zelfde foto+prijs = concurrentie);
   adviesprijs = prijs van de bronlink (niet onderprijzen, hoger is beter; alleen 'kan hoger' bij te lage prijs);
