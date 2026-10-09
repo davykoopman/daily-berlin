@@ -128,13 +128,16 @@ def main():
         conv = 0.6 * pct + 0.4 * min(math.log10(v) / math.log10(1_700_000), 1.0)
         q, nd = quality(g, hashes)
         dom = market_of.get(k[0]) in markets
-        return dict(total=0.55 * conv + 0.45 * q - (0.5 if dom else 0), conv=conv, q=q, nd=nd, dom=dom, res=medres(g))
+        first = min(g["imgs"][0][1], g["imgs"][0][2]) if g["imgs"] else 0
+        return dict(total=0.55 * conv + 0.45 * q - (0.5 if dom else 0), conv=conv, q=q, nd=nd, dom=dom, res=medres(g),
+                    n=len(g["imgs"]), first=first)
 
     def acceptable(new, old, same_main):
-        """Alleen wisselen bij echte winst; nooit naar >20% lagere resolutie."""
+        """Alleen wisselen bij echte winst (regel Davy 9-10): nooit minder foto's, nooit een minder scherpe
+        eerste foto, nooit naar >20% lagere mediaan-resolutie."""
         if new["dom"] and not old["dom"]:
             return False
-        if new["res"] < 0.8 * old["res"]:
+        if new["res"] < 0.8 * old["res"] or new["n"] < old["n"] or new["first"] < old["first"]:
             return False
         better_photos = new["q"] >= old["q"] + 0.05
         better_main = (not same_main) and new["conv"] >= old["conv"] + 0.10 and new["q"] >= old["q"] - 0.03
