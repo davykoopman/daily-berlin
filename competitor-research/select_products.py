@@ -362,15 +362,19 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
     # Categoriespreiding: max ~30% per categorie, zodat je niet 300 truien krijgt.
     cap = max(int(n_target * 0.3), 20)
     per_cat, picked = {}, []
+    # links die al in de Launch File staan (ook na een foto-upgrade naar een andere versie) meteen overslaan
+    have = {"/".join(x["url"].split("/")[2:5:2]).split("?")[0] for x in existing}
     for e in cands:
         if any(e["key"] in taken.get(m, set()) for m in markets):
             continue  # al toegewezen aan een andere eigen store in dezelfde markt
+        if any(f'{m["store"]}/{m["handle"]}' in have for m in e["members"]):
+            continue
         c = e["best"]["cat"]
         if per_cat.get(c, 0) >= cap:
             continue
         per_cat[c] = per_cat.get(c, 0) + 1
         picked.append(e)
-        if len(picked) >= int(n_target * (2.4 if len(markets) > 1 else 1.8)) + 15:
+        if len(picked) >= int(n_target * (2.4 if len(markets) > 1 else 1.8)) + (40 if existing else 15):
             break
     bands = price_bands(pool, markets)
     media = fetch_media([m for e in picked for m in e["members"]])

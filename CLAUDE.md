@@ -27,9 +27,9 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
 - Eigen stores en markten: `competitor-research/config/stores.json`; seizoenen: `config/seasons.json`.
 - Stap 1 `python3 pool.py --extra <domein:MARKT ...>` haalt alle competitors op (≥25K bezoekers + extra's),
   vergelijkt foto's en groepeert hetzelfde product over stores (`.cache/pool.json`).
-- Stap 2 `python3 select_products.py --aantal 300` maakt `listings/Launch File Davy Koopman.xlsx` (ENGELS):
+- Stap 2 `python3 select_products.py --aantal 200` maakt `listings/Launch File Davy Koopman.xlsx` (ENGELS):
   'Strategy & explanation' + per store een producttab en een '<Store> – Links'-tab met Lister (Dhafnie/Fatima/Davy),
-  Status (Not listed/Listed/Issues) en Comment. De lijst staat ook in `listings/launch_state.json` (altijd committen).
+  Status (Not listed/Draft/Live/Issues/Duplicate) en Comment. De lijst staat ook in `listings/launch_state.json` (altijd committen).
 - **Teruggestuurde Launch File** (van de gebruiker): sla hem op en draai
   `python3 select_products.py --aantal 300 --merge <pad>`: Lister/Status/Comment blijven behouden (per store + link),
   bestaande regels blijven staan en elke store wordt aangevuld tot 300 'Not listed'. Nieuwe regels krijgen 'Added on' = vandaag.
@@ -44,7 +44,10 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
   (statussen Not listed/Draft/Live/Issues/Duplicate, Listed=Live, ontbrekende lister bij status = Dhafnie,
   'Already in store' = Duplicate); (2) SimilarWeb-check bronnen + nieuwe competitors (Tranco-nieuwkomers);
   (3) `pool.py --extra …`; (4) `season_report.py` en `config/seasons.json` bijstellen; (5) eerst met Davy bespreken;
-  (6) `python3 select_products.py --update --aantal 200`; (7) controleren, committen, file sturen.
+  (6) `python3 select_products.py --update --aantal 200`; (7) `python3 photo_upgrade.py` (beste fotoversie van
+  hetzelfde product: conversie 55% + fotokwaliteit 45%, prijs blijft van de bewezen ≥75K-bron) en `python3 quality_gate.py`
+  (dode link = alleen echte 404, <3 foto's, merknaam → Issues); herhaal 6-7 tot elke store 200 open heeft;
+  (8) controleren, committen, file sturen. Geen nieuwe kolommen in de files.
 - Regels van de gebruiker: bron liefst NIET uit de eigen markt (zelfde foto+prijs = concurrentie);
   adviesprijs = prijs van de bronlink (niet onderprijzen, hoger is beter; alleen 'kan hoger' bij te lage prijs);
   foto's wegen zwaar (vooral de 1e); ~300 per store voor 20-25 dagen, koudere items later in de lijst.
