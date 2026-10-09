@@ -16,6 +16,8 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
   cd competitor-research && python3 build_excel.py
   python3 <xlsx-skill-dir>/scripts/recalc.py Competitor_Research.xlsx 120
   ```
+  Let op: recalc.py slaat het bestand opnieuw op via LibreOffice. Bij de Launch File draai je recalc daarom ALLEEN op een
+  kopie (in de scratchpad), anders gaan statuskleuren/opmaak verloren.
   (openpyxl en `libreoffice-calc` zijn nodig; installeer ze als ze ontbreken.)
 - **Wanneer de gebruiker om de sheet vraagt** ("stuur de competitor sheet", "stuur de excel",
   e.d.): bouw de sheet opnieuw vanuit de CSV's, controleer dat recalc `total_errors: 0` geeft,
