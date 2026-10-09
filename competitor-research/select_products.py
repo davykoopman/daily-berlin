@@ -67,11 +67,13 @@ def round_price(eur, cur, fx):
 def own_catalog(domain):
     prods = pp.fetch_products(domain)
     imgs = [pp.img_url(p) for p in prods if p.get("images")]
+    gal = [im["src"] + ("&" if "?" in im["src"] else "?") + "width=240" for p in prods for im in (p.get("images") or [])[:6]]
     hashes = pp.hash_images(imgs)
+    all_hashes = [h for h in pp.hash_images(gal).values() if h]
     g = [gender(p["title"], p.get("product_type") or "") for p in prods]
     share_w = g.count("W") / max(g.count("W") + g.count("M"), 1)
     prices = sorted(float(p["variants"][0]["price"]) for p in prods if p.get("variants"))
-    return dict(n=len(prods), hashes=[h for h in hashes.values() if h], share_w=share_w,
+    return dict(n=len(prods), hashes=[h for h in hashes.values() if h], all_hashes=all_hashes, share_w=share_w,
                 median=prices[len(prices) // 2] if prices else None,
                 handles={p["handle"] for p in prods}, titles=[p["title"] for p in prods])
 
@@ -271,7 +273,50 @@ def listweek(ev, markets):
     return 1 if b["cat"] in ("Tussenjas", "Blazer", "Vest / cardigan", "Blouse / shirt", "Jurk", "Set") else 2
 
 
-def select_for_store(store, pool, groups, fx, names, taken, n_target):
+def final_checks(picked, own, existing, media, n_target):
+    """Strengere dubbelcheck + bron-check (lessen uit de eerste ronde):
+    - eerste 3 foto's van de bron vs ALLE foto's van je eigen producten (listers kiezen soms een andere hoofdfoto);
+    - eerste 3 foto's vs alle regels die al in de Launch File staan en vs elkaar (kleurvarianten = zelfde product);
+    - bronlink moet nog actief zijn en ≥50% van de maten leverbaar."""
+    import imagehash
+    own_h = [imagehash.hex_to_hash(h) for h in own["all_hashes"]]
+    gal = lambda m: [x["src"] + ("&" if "?" in (x["src"] or "") else "?") + "width=240" for x in (m or [])[:3] if x.get("src")]
+    ex_imgs = []
+    for x in existing:
+        k = "/".join(x["url"].split("/")[2:5:2])
+        ex_imgs += gal(media.get(k)) or ([x["img"]] if x.get("img") else [])
+    cand_imgs = [u for e in picked for u in gal(media.get(f'{e["best"]["store"]}/{e["best"]["handle"]}'))]
+    hs = pp.hash_images(ex_imgs + cand_imgs)
+    seen = [imagehash.hex_to_hash(h) for u in ex_imgs if (h := hs.get(u))]
+
+    def avail(e):
+        b = e["best"]
+        try:
+            d = json.loads(pp.get(f'https://{b["store"]}/products/{b["handle"]}.js', timeout=20))
+            v = d.get("variants") or []
+            return bool(v) and sum(1 for x in v if x.get("available")) >= max(1, 0.5 * len(v))
+        except Exception:
+            return False
+    with cf.ThreadPoolExecutor(12) as ex:
+        ok = list(ex.map(avail, picked))
+    out, drop = [], {"al in store": 0, "dubbel in lijst": 0, "bron niet leverbaar": 0}
+    for e, a in zip(picked, ok):
+        if not a:
+            drop["bron niet leverbaar"] += 1; continue
+        hh = [imagehash.hex_to_hash(h) for u in gal(media.get(f'{e["best"]["store"]}/{e["best"]["handle"]}')) if (h := hs.get(u))]
+        if any(h - o <= 8 for h in hh for o in own_h):
+            drop["al in store"] += 1; continue
+        if any(h - o <= 6 for h in hh for o in seen):
+            drop["dubbel in lijst"] += 1; continue
+        seen += hh
+        out.append(e)
+        if len(out) >= n_target:
+            break
+    print(f"   final checks: {drop} → {len(out)}", file=sys.stderr)
+    return out
+
+
+def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=()):
     markets = store["markten"]
     print(f"\n== {store['naam']} ({'/'.join(markets)}) ...", file=sys.stderr)
     own = own_catalog(store["domein"])
@@ -308,7 +353,7 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target):
             continue
         per_cat[c] = per_cat.get(c, 0) + 1
         picked.append(e)
-        if len(picked) >= int(n_target * 1.2):
+        if len(picked) >= int(n_target * 1.6) + 10:
             break
     bands = price_bands(pool, markets)
     media = fetch_media([m for e in picked for m in e["members"]])
@@ -318,7 +363,7 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target):
         e["score"] = round(e["score"] + (e["best"]["img_score"] - 70) / 3.75, 1)
     picked = [e for e in picked if e["best"]["img_score"] >= 45] or picked
     picked.sort(key=lambda e: -e["score"])
-    picked = picked[:n_target]
+    picked = final_checks(picked, own, existing, media, n_target)
     for m in markets:
         taken.setdefault(m, set()).update(e["key"] for e in picked)
     for e in picked:
@@ -343,7 +388,7 @@ STRAT_TXT = {
 
 
 LISTERS = ["Dhafnie", "Fatima", "Davy"]
-STATUSES = ["Not listed", "Listed", "Issues"]
+STATUSES = ["Not listed", "Draft", "Live", "Issues", "Duplicate"]
 FILE_NAME = "Launch File Davy Koopman.xlsx"
 STATE = OUT / "launch_state.json"
 
@@ -357,7 +402,7 @@ def to_row(e, store, names):
                 source=f"{names.get(b['store'], b['store'])} ({VISITS.get(b['store'], 0)/1000:.0f}K)",
                 market=b["market"], own_market=e["bron_in_markt"], img_score=b.get("img_score"), img_txt=b.get("img_txt"),
                 photo_note=e["foto_advies"], alts=[f'https://{m["store"]}/products/{m["handle"]}' for m in e["big"] if m is not b][:3],
-                img=b["img"], added=dt.date.today().isoformat(), lister="", status="Not listed", comment="")
+                img=b["img"], added=dt.date.today().isoformat(), lister="", status="Not listed", comment="", name="")
 
 
 def read_statuses(path):
@@ -395,7 +440,8 @@ def write_workbook(results, pool, names, path):
     thin = Border(bottom=Side(style="thin", color="D9DDE3"))
     hdr_fill = PatternFill("solid", fgColor=navy)
     sfill = {"A": "C6EFCE", "B": "DDEBF7", "C": "FCE4D6", "D": "FFF2CC", "E": "EDE7F6"}
-    st_col = {"Not listed": ("F2F2F2", "595959"), "Listed": ("C6EFCE", "006100"), "Issues": ("FFC7CE", "9C0006")}
+    st_col = {"Not listed": ("F2F2F2", "595959"), "Draft": ("FFF2CC", "7F6000"), "Live": ("C6EFCE", "006100"),
+              "Issues": ("FFC7CE", "9C0006"), "Duplicate": ("D9D9D9", "404040")}
     wb = Workbook()
 
     def thumb(u):
@@ -418,7 +464,7 @@ def write_workbook(results, pool, names, path):
     big = sorted(ELIGIBLE, key=lambda d: -VISITS.get(d, 0))
     rules = [
         ("How to use (listers)", "1) Open the '– Links' tab of your store. 2) Pick your name under Lister. 3) List the product from the link "
-         "at the advised price. 4) Set Status to Listed, or Issues + a Comment if something is wrong. Work from top to bottom (list order)."),
+         "at the advised price. 4) Set Status: Live (published), Draft (prepared, not yet live), Duplicate (already in store) or Issues + a Comment. Work from top to bottom (list order). Always reach your daily target: skip duplicates and list the next one."),
         ("Sources (import links)", f"Only {len(big)} competitors with a verified SimilarWeb figure of ≥75K visits/month, the same dropshipping "
          "model and no own label. Smaller or unverified stores only count as confirmation ('also at …, small') and for saturation, never as source."),
         ("Source choice per product", "Preferably a competitor in a different country than your market (same photo + price at a domestic "
@@ -494,7 +540,7 @@ def write_workbook(results, pool, names, path):
             vals = [i + 1, "", f"Week {x['week']}", STRAT_TXT[x["strat"]][0], x["score"], x["title"], x["cat"], x["gender"],
                     x["why"], x["price"], x["band"], x["price_note"], None, None, "Open", x["source"],
                     x["market"] + (" ⚠ own market" if x["own_market"] else ""), x["img_score"], x["img_txt"],
-                    x["photo_note"], "\n".join(x["alts"]), f"='{lt}'!G{r}", x["added"]]
+                    x["photo_note"], "\n".join(x["alts"]), f"='{lt}'!H{r}", x["added"]]
             for j, v in enumerate(vals, 1):
                 c = ws.cell(row=r, column=j, value=v)
                 c.font, c.border = f(), thin
@@ -525,8 +571,8 @@ def write_workbook(results, pool, names, path):
         ls.sheet_properties.tabColor = "A9D08E"
         ls["A1"] = f"{store['naam']}: import links in list order – list 15-25 per day, then set Lister and Status"
         ls["A1"].font = f(bold=True)
-        lh = ["#", "List week", "Link", f"Advised price ({cur})", "Source", "Lister", "Status", "Comment", "Added on"]
-        for c, (h, w) in enumerate(zip(lh, (5, 10, 90, 14, 22, 12, 13, 45, 11)), 1):
+        lh = ["#", "List week", "Product Name", "Link", f"Advised price ({cur})", "Source", "Lister", "Status", "Comment", "Added on"]
+        for c, (h, w) in enumerate(zip(lh, (5, 10, 40, 80, 14, 22, 12, 13, 45, 11)), 1):
             x_ = ls.cell(row=3, column=c, value=h); x_.font, x_.fill = f(bold=True, color="FFFFFF"), hdr_fill
             ls.column_dimensions[x_.column_letter].width = w
         # Links row = product row + 0 (both start at row 5 for item 1? product tab starts at 5, links at 4) → keep aligned:
@@ -535,22 +581,22 @@ def write_workbook(results, pool, names, path):
         ls.add_data_validation(dv_l); ls.add_data_validation(dv_s)
         for i, x in enumerate(rows):
             r = H + 1 + i   # zelfde rij als op het producttabblad
-            for c, v in enumerate([i + 1, f"Week {x['week']}", x["url"], x["price"], x["source"], x["lister"] or None,
+            for c, v in enumerate([i + 1, f"Week {x['week']}", x.get("name") or None, x["url"], x["price"], x["source"], x["lister"] or None,
                                    x["status"] or "Not listed", x["comment"] or None, x["added"]], 1):
                 ls.cell(row=r, column=c, value=v).font = f()
-            ls.cell(row=r, column=3).hyperlink = x["url"]
-            ls.cell(row=r, column=3).font = f(color="1F5FBF", underline="single")
-            ls.cell(row=r, column=4).number_format = "0.00"
-            for c in (6, 7, 8):
+            ls.cell(row=r, column=4).hyperlink = x["url"]
+            ls.cell(row=r, column=4).font = f(color="1F5FBF", underline="single")
+            ls.cell(row=r, column=5).number_format = "0.00"
+            for c in (3, 7, 8, 9):
                 ls.cell(row=r, column=c).fill = PatternFill("solid", fgColor="FFF2CC")
-            dv_l.add(ls.cell(row=r, column=6)); dv_s.add(ls.cell(row=r, column=7))
+            dv_l.add(ls.cell(row=r, column=7)); dv_s.add(ls.cell(row=r, column=8))
         lastl = H + max(len(rows), 1)
         for name, (bg, fg) in st_col.items():
-            ls.conditional_formatting.add(f"G{H+1}:G{lastl}", FormulaRule(formula=[f'$G{H+1}="{name}"'],
+            ls.conditional_formatting.add(f"H{H+1}:H{lastl}", FormulaRule(formula=[f'$H{H+1}="{name}"'],
                                           fill=PatternFill("solid", fgColor=bg), font=Font(name=F, bold=True, color=fg)))
         ls.row_dimensions[4].height = 6   # lege rij zodat rijnummers gelijk lopen met het producttabblad
-        ls.freeze_panes = "D5"
-        ls.auto_filter.ref = f"A3:I{lastl}"
+        ls.freeze_panes = "E5"
+        ls.auto_filter.ref = f"A3:J{lastl}"
     wb.save(path)
 
 
@@ -582,7 +628,8 @@ def main():
     old = {}
     if a.merge:
         state = json.loads(STATE.read_text()) if STATE.exists() else {}
-        stat = read_statuses(a.merge)
+        import clean_returned as cr
+        stat = {(f"{k[:22]} – Links", u): cr.clean(v) for k, rows in cr.read_file(a.merge).items() for u, v in rows.items()}
         for sn, rows in state.items():
             lt = f"{sn[:22]} – Links"
             for x in rows:
@@ -600,7 +647,8 @@ def main():
         prev = old.get(s["naam"], [])
         open_prev = sum(1 for x in prev if (x.get("status") or "Not listed") == "Not listed")
         need = max(a.aantal - open_prev, 0)
-        picks, own = select_for_store(s, pool, groups, fx, names, taken, need) if need else ([], own_catalog(s["domein"]))
+        picks, own = (select_for_store(s, pool, groups, fx, names, taken, need, existing=prev) if need
+                      else ([], own_catalog(s["domein"])))
         rows = prev + [to_row(e, s, names) for e in picks]
         print(f"   {s['naam']}: {len(prev)} bestaand ({open_prev} open) + {len(picks)} nieuw", file=sys.stderr)
         results.append((s, rows, own))
