@@ -49,3 +49,16 @@ Foto's: carousel in 4:5 staand kader, begrensd op schermhoogte, bolletjes op mob
 
 ## Policies
 `policies/` bevat de verzendpolicy (Pools en Engels) met algemene landen-zin en gratis verzending, plus back-ups (`*.original.*`).
+
+## Drafted 20 summer products (2026-10-12, after GO)
+Active products with an SS/summer tag and 0 sales since 2025-01-01 (all added Sep–Oct 2026). Active 639 → 619.
+Reactivate in spring. IDs (gid://shopify/Product/…):
+16091118534988 sandały na obcasie letnie · 16091822948684 sandały z paskiem · 16148222738764 klapki japonki ·
+16124809969996 chodaki letnie · 16091823112524 sukienka midi na lato · 16148241023308 letnie spodnie szerokie ·
+16145868816716 szerokie spodnie z gumką · 16126307828044 długa spódnica · 16129830158668 sweter na lato ·
+16169668018508 komplet sukienka w kwiaty + kardigan · 16080385147212 komplet bluzka + spodnie ·
+16091096809804 półbuty wiosenne · 16091096908108 sneakersy wiosenne · 16091823243596 mokasyny z klamrą ·
+16179474170188 polo golfista · 16080381018444 zestaw koszulka + szorty · 16145829790028 komplet sportowy szorty ·
+16148217856332 czapka z siateczki · 16132408672588 koszula wielobarwna · 16143363670348 garnitur na letnie uroczystości
+Kept active: the 13 summer-tagged products with sales (e.g. eleganckie mokasyny 33×, sukienka koronkowa 13×) and
+year-round items (trousers, suits, pumps, sneakers, long-sleeve shirts, pyjamas, party sets).
