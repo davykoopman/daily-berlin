@@ -44,3 +44,7 @@
   inputs_border_radius 4→0 (quantity selector, discount field), variant_swatch_radius 4→0; kit buttons .pp-chip, .pp-tab,
   .pp-card__quick, .pp-qp__add, .pp-row__arrow, .pp-home-cat__arrow → 0 (doubled class, the kit files load later).
 - Kept round on purpose: trust icon circles, tier dots, badges, photo-slider dots, the X close icon, the quick-pick sheet corners.
+- Product photos (same work theme, after GO): source photos are 1080×1080 squares, the gallery showed them portrait (1/1.25,
+  cropped) at 2/3 of the width (895×1119 at 1440px → upscaled, blurry). templates/product.json: media-gallery aspect_ratio
+  "1/1.25" → "1" (square, nothing cropped), main equal_columns false → true (50/50). Now 588px (1280), 668px (1440),
+  708px (1920), full width on phones; no horizontal scroll.

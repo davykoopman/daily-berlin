@@ -36,7 +36,7 @@
             "thumbnail_position": "right",
             "thumbnail_width": 44,
             "thumbnail_radius": 0,
-            "aspect_ratio": "1/1.25",
+            "aspect_ratio": "1",
             "constrain_to_viewport": false,
             "media_fit": "cover",
             "media_radius": 0,
@@ -426,7 +426,7 @@
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
-        "equal_columns": false,
+        "equal_columns": true,
         "limit_details_width": true,
         "gap": 24,
         "enable_sticky_add_to_cart": true,
