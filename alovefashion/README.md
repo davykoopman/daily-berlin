@@ -35,3 +35,12 @@
 - Product page: colour option shows the variant photo as swatch (snippets/variant-main-picker.liquid, settings
   show_variant_image + 44×55 swatches). Checkout texts in locales/en.default.json ("or pay securely below",
   free tracked UK delivery). About us page: "modern European style" sentence replaced (rest unchanged).
+
+## Icons + square buttons (2026-10-12) – theme "Alove - iconen + vierkant (werk)" #202787815771 (copy of live kit, unpublished)
+- Product benefits: olive check circles replaced by olive line icons (truck / return arrows / price tag), same 20px size,
+  same 8px gap, rows stay 20px high on phone and desktop (blocks/pp-benefits.liquid: returns icon = same arrows as the cart;
+  snippets/pp-alove-style.liquid: check-circle ::before removed).
+- Square buttons store-wide: theme settings button_border_radius_primary/secondary 40→0, variant_button_radius 40→0,
+  inputs_border_radius 4→0 (quantity selector, discount field), variant_swatch_radius 4→0; kit buttons .pp-chip, .pp-tab,
+  .pp-card__quick, .pp-qp__add, .pp-row__arrow, .pp-home-cat__arrow → 0 (doubled class, the kit files load later).
+- Kept round on purpose: trust icon circles, tier dots, badges, photo-slider dots, the X close icon, the quick-pick sheet corners.

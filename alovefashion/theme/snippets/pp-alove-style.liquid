@@ -1,6 +1,6 @@
 {%- doc -%}
   Alove Fashion look on top of the kit: olive and cream, round trust icons,
-  check circles, dot tier bar, calm type weights. Only styles, no markup.
+  olive benefit icons, square buttons, dot tier bar, calm type weights. Only styles, no markup.
 {%- enddoc -%}
 
 {% stylesheet %}
@@ -50,22 +50,24 @@
     letter-spacing: 0.02em;
   }
 
-  /* Product benefits: olive check circles instead of line icons */
+  /* Product benefits: olive line icons, same 20px size and spacing as before */
   .pp-benefit__icon {
-    display: none;
-  }
-
-  .pp-benefit::before {
-    content: '';
-    flex: 0 0 20px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--al-olive) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 12px no-repeat;
+    color: var(--al-olive);
+    stroke-width: 1.6;
   }
 
   .pp-benefits {
     gap: 8px;
+  }
+
+  /* Square buttons everywhere (theme buttons and variant buttons via theme settings) */
+  .pp-chip.pp-chip,
+  .pp-tab.pp-tab,
+  .pp-card__quick.pp-card__quick,
+  .pp-qp__add.pp-qp__add,
+  .pp-row__arrow.pp-row__arrow,
+  .pp-home-cat__arrow.pp-home-cat__arrow {
+    border-radius: 0;
   }
 
   /* Tier progress: three dots on a thin line, olive when reached */
