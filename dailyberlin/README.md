@@ -20,3 +20,9 @@ To paste by the user (policies/ = new, policies-orig/ = before):
   terms §20 + refund policy: new "Rücksendeadresse" with the China address; refund + shipping: company block at the end.
 - legal-notice.html: Impressum, only if the user wants it (did not exist).
 - Footer "Unsere Informationen" block: text in footer.txt. French (fr) translations via T-Lab afterwards.
+
+## Check 2026-10-13 (after user pasted)
+- DE live: all 6 policies match policies/*.html word for word; footer block updated; Widerrufsformular has the return address.
+- Open: /pages/kontakt still shows the old address (not in scope); French (fr-fr) footer, policies and legal notice are
+  still the old translations (old address, no company number; FR legal notice still says "Représenté par: Davy Koopman");
+  work theme "Daily Berlin - footer adressen (werk)" still exists.
