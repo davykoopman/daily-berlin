@@ -26,3 +26,5 @@ To paste by the user (policies/ = new, policies-orig/ = before):
 - Open: /pages/kontakt still shows the old address (not in scope); French (fr-fr) footer, policies and legal notice are
   still the old translations (old address, no company number; FR legal notice still says "Représenté par: Davy Koopman");
   work theme "Daily Berlin - footer adressen (werk)" still exists.
+- Recheck: FR footer, Widerrufsformular, refund, terms, contact, shipping OK. Still open: FR privacy policy and FR legal notice
+  (old address, "Représenté par: Davy Koopman"), Kontakt page DE+FR old address, work theme not deleted.
