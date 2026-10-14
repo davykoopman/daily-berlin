@@ -78,3 +78,13 @@ store/sender email.
 - Policies pasted by the user and verified (2026-10-14): all 5 identical to the paste files, no Fashionnovo left.
 - Vendor (after "GO vendor"): all 349 products "Fashionnovo" → "Dujje" (productUpdate in 7 batches, bulk mutation is
   blocked by the MCP). Check: vendor:Fashionnovo 0, vendor:Dujje 349. IDs in dujje-rebrand/vendor-changed-product-ids.json.
+
+## Rebrand to Dujje – domain switch checks + SEO (2026-10-14)
+- After the user's steps 1–3: primary domain www.dujje.com, fashionnovo.com (www and bare) 301 → same path on
+  www.dujje.com, store name Dujje, store email support@dujje.com, theme "Dujje - rebrand (werk)" live. Live check of
+  11 pages (home, collection, product, 5 pages, 2 policies, cart): no Fashionnovo in the HTML, titles "… – Dujje",
+  canonical + og:site_name Dujje. Still open: customer/sender email (contactEmail) support@fashionnovo.com.
+- SEO (after "GO SEO"): 345 product SEO titles "… | Fashionnovo" → "… | Dujje", 148 SEO descriptions
+  ("Shop it at Fashionnovo" → Dujje). productUpdate in 7 batches, title + description sent together (sending only the
+  title clears the description). Verified: first 250 identical to seo-new.json / unchanged originals, last 99 titles
+  "| Dujje"; no Fashionnovo left. Before/after in dujje-rebrand/seo-orig.json and seo-new.json. Collections had no SEO.
