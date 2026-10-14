@@ -48,3 +48,17 @@
   cropped) at 2/3 of the width (895×1119 at 1440px → upscaled, blurry). templates/product.json: media-gallery aspect_ratio
   "1/1.25" → "1" (square, nothing cropped), main equal_columns false → true (50/50). Now 588px (1280), 668px (1440),
   708px (1920), full width on phones; no horizontal scroll.
+
+## Rebrand to Migesi (www.migesi.com) – step 1, theme only (2026-10-14, after GO)
+Live theme "Alove - iconen + vierkant (werk)" #202787815771 untouched (checksum verified). Work theme
+"Migesi - rebrand (werk)" #202938876251 (copy of live, unpublished). Changed files in migesi-rebrand/theme:
+- settings_data: logo Migesi_Logo_White.png (white copy of Elegant_Migesi_Serif_Wordmark.png, the header is dark
+  green and the old Alove logo was white), favicon Migesi_Favicon_M.png (Elegant_Serif_Monogram_M.png padded to a
+  square, 1536×1536, so the 32×32 crop does not cut the M). Logo heights unchanged (50 / 44).
+- footer-group, index, product, page.contact: "ALOVE Fashion"/"Alove Fashion"/"ALOVE" → "Migesi",
+  support@alovefashion.com → support@migesi.com, https://alovefashion.com/ → https://www.migesi.com/,
+  Instagram link (alove__fashion) removed (user: "Haal link weg voor nu"). Business details (DK Interim Management,
+  Venray address, KvK, VAT, phone) unchanged. CSS file name pp-alove-style left as is (not visible).
+Still Alove in the preview (step 2+): store name (copyright, logo alt, titles), page bodies (FAQ, About, Terms,
+Refund, Shipping, Payment, Contact Information), Shopify policies (Privacy, Contact information), vendor, SEO.
+Noted: Payment page says prices are in Euros (EUR) while the store currency is GBP.
