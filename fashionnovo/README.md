@@ -75,4 +75,6 @@ store/sender email.
   About image → dujje-about-us.png. Originals in dujje-rebrand/orig/, new texts in dujje-rebrand/new/.
 - Policies: shopPolicyUpdate still denied (write_legal_policies) → paste files dujje-rebrand/new/policy-*.html
   (contact_information, privacy_policy, refund_policy, shipping_policy, terms_of_service).
-- Product vendor (349 × "Fashionnovo") not changed yet: waits for the user's GO (GMC brand field).
+- Policies pasted by the user and verified (2026-10-14): all 5 identical to the paste files, no Fashionnovo left.
+- Vendor (after "GO vendor"): all 349 products "Fashionnovo" → "Dujje" (productUpdate in 7 batches, bulk mutation is
+  blocked by the MCP). Check: vendor:Fashionnovo 0, vendor:Dujje 349. IDs in dujje-rebrand/vendor-changed-product-ids.json.
