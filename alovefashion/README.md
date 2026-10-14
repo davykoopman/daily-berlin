@@ -102,3 +102,12 @@ Not done yet (waiting): pages (migesi-rebrand/new), vendor (584), store name/ema
 - Vendor "Alove Fashion" → "Migesi" on 584 products (IDs in `migesi-rebrand/vendor-ids.txt`). Check: Alove Fashion 0, Migesi 584, "Mijn winkel" 23 (untouched), total 607.
 - Shopify privacy policy (`new/policy-privacy_policy.html`): phone number +44 745 4750470 added to "please call … or email us". The user pastes it themselves.
 - Still to do (user): primary domain www.migesi.com, store name/email, publish theme "Migesi - rebrand (werk)", checkout logo.
+
+## Migesi live – check (2026-10-14)
+
+- Shopify: name Migesi, email support@migesi.com, primary domain www.migesi.com, live theme "Migesi - rebrand (werk)" #202938876251.
+- Redirects: migesi.com, alovefashion.com and old paths (e.g. /pages/faq, /products/…) → 301 to https://www.migesi.com/… with the same path.
+- 19 live URLs (home, collection, product, 9 pages, 5 policies, cart, search): 0× "Alove", 0× old business details, 0× Instagram link.
+- Title "Migesi", product titles end in "| Migesi", vendor Migesi, favicon Migesi_Favicon_M.png, logo Migesi_Logo_White.png; desktop and mobile checked.
+- Privacy policy live with "please call +44 745 4750470 or email us".
+- Still to do (user): GMC (online store, verify/claim, name, email), Simprosys re-sync, sender authentication, ads back on once products are green.
