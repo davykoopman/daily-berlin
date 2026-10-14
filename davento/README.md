@@ -85,3 +85,9 @@ Changed (pages, IT source text; German via T-Lab):
 - "Pagamenti": list item "TWINT (solo per ordini in Svizzera)" after Klarna → pages/pagamenti.it.html
 - "Domande Frequenti", payment answer: "…PayPal e Klarna. Per gli ordini in Svizzera puoi pagare anche con TWINT. …"
   (also removed the stray comma in "PayPal, e Klarna") → pages/faq-payment-answer.it.html
+
+## Privacy policy restore (2026-10-14)
+The user accidentally pasted the Migesi (Alove) privacy policy into Davento. Live check: default /policies/privacy-policy
+showed "Migesi operates this store…"; the German translation (/de-de/, /de-ch/) still showed the Davento text.
+Restore file policies/privacy_policy.it.restore.html = Shopify privacy template HTML with Davento values; text checked
+word for word against the backup policies/privacy_policy.it.txt (2026-10-02): 2,725 words, 0 differences.
