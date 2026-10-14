@@ -89,3 +89,9 @@ migesi-rebrand/fix-entity/:
 - Storefront check (19 URLs incl. 5 products and both Shopify policies): no RVG/Schijndel/old KvK/VAT/claude link/EUR.
 - Prepared Migesi texts (migesi-rebrand/new/) carry the same fixes; privacy policy paste file also gets the missing
   house number ("Merseloseweg 62").
+
+## Migesi switch day – SEO (2026-10-14, user: "ga daarna aan de slag met de SEO teksten")
+Ads off, migesi.com connected (www OK with SSL and 301 → alovefashion.com; apex SSL still being issued), alovefashion.com
+still primary. Policy paste files sent (privacy, contact information). 130 product SEO titles/descriptions
+"| Alove Fashion" → "| Migesi" in 3 batches; verified: 130/130 identical to seo-new.json, no Alove left in SEO.
+Not done yet (waiting): pages (migesi-rebrand/new), vendor (584), store name/email, primary domain, theme publish.

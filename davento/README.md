@@ -91,3 +91,6 @@ The user accidentally pasted the Migesi (Alove) privacy policy into Davento. Liv
 showed "Migesi operates this store…"; the German translation (/de-de/, /de-ch/) still showed the Davento text.
 Restore file policies/privacy_policy.it.restore.html = Shopify privacy template HTML with Davento values; text checked
 word for word against the backup policies/privacy_policy.it.txt (2026-10-02): 2,725 words, 0 differences.
+- Italian version policies/privacy_policy.it.italiano.html (same structure: 13 headings, 28 bullets, same 3 links and
+  contact details; date 14 October 2026). The other Davento policies were already Italian; the privacy policy was the
+  untranslated English Shopify template. The German translation (T-Lab) still holds the old Davento text.
