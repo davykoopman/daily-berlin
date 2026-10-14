@@ -95,3 +95,10 @@ Ads off, migesi.com connected (www OK with SSL and 301 → alovefashion.com; ape
 still primary. Policy paste files sent (privacy, contact information). 130 product SEO titles/descriptions
 "| Alove Fashion" → "| Migesi" in 3 batches; verified: 130/130 identical to seo-new.json, no Alove left in SEO.
 Not done yet (waiting): pages (migesi-rebrand/new), vendor (584), store name/email, primary domain, theme publish.
+
+## Migesi switch day – pages + vendor (live, 2026-10-14)
+
+- 8 pages updated with `migesi-rebrand/new/page-*.html` (about-us, faq, terms-of-service, privacy-policy, refund-and-return-policy, shipping-policy, contact-information, payment-policy). Contact had no body and was left alone. Read back from Shopify: identical, apart from one line break Shopify adds.
+- Vendor "Alove Fashion" → "Migesi" on 584 products (IDs in `migesi-rebrand/vendor-ids.txt`). Check: Alove Fashion 0, Migesi 584, "Mijn winkel" 23 (untouched), total 607.
+- Shopify privacy policy (`new/policy-privacy_policy.html`): phone number +44 745 4750470 added to "please call … or email us". The user pastes it themselves.
+- Still to do (user): primary domain www.migesi.com, store name/email, publish theme "Migesi - rebrand (werk)", checkout logo.
