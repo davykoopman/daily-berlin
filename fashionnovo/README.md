@@ -55,3 +55,16 @@
   sand card backgrounds, square photo swatches, framed About image, steps timeline, numbered FAQ with chevrons,
   navy footer with payment icons. Hero: Shop women / Shop men (Our Collection no longer linked).
 - Verified on the preview: home, collection, product (sale), basket (2 items → "Buy 2, save 10%", −£10.39), checkout.
+
+## Rebrand to Dujje – step 1, theme only (2026-10-14, after GO)
+Live theme "Fashionnovo - kit (werk)" #205357056340 untouched (checksums verified). Work theme "Dujje - rebrand (werk)"
+#205973455188 (copy of live, unpublished). Changed files in dujje-rebrand/theme:
+- settings_data: logo Dujje_Luxury_Serif_Wordmark.png, logo_inverse Dujje_Logo_White.png (white copy made from the
+  wordmark), favicon Elegant_Black_Serif_D.png, logo_height_mobile 78 → 58 (desktop 56 unchanged).
+- footer-group, index, product, page.faq, page.contact, page.our-story: "Fashionnovo" → "Dujje",
+  support@fashionnovo.com → support@dujje.com, about image → dujje-about-us.png (copy of fashionnovo-about-us.png).
+  London address unchanged. Code comments mentioning Fashionnovo left as is (not visible).
+- New files in Shopify Files: Dujje_Logo_White.png, dujje-about-us.png.
+Still shows Fashionnovo in the preview (store-wide, step 2 on the switch day): store name (copyright "© FASHIONNOVO",
+logo alt, title), page content Withdrawal Form + Payments (+ About/FAQ/Contact bodies), policies, product vendor (349),
+store/sender email.

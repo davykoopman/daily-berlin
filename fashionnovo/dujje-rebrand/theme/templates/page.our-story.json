@@ -1,0 +1,159 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "Title",
+          "settings": {
+            "text": "<h1>{{ closest.page.title }}</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-primary--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "text_color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "page-content": {
+          "type": "page-content",
+          "settings": {
+            "text_color": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
+      "disabled": true,
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "background_color": "{{ settings.color_palette.background }}",
+        "padding-block-start": 40,
+        "padding-block-end": 80
+      }
+    },
+    "blocks_dNyR3w": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_f916469_teRfkk": {
+          "type": "ai_gen_block_f916469",
+          "settings": {
+            "layout": "image-left",
+            "vertical_alignment": "center",
+            "container_width": 1200,
+            "content_gap": 60,
+            "mobile_content_gap": 30,
+            "mobile_image_first": true,
+            "background_color": "#ffffff",
+            "heading_color": "#000000",
+            "subheading_color": "#666666",
+            "description_color": "#333333",
+            "subheading": "",
+            "subheading_size": 14,
+            "mobile_subheading_size": 12,
+            "subheading_transform": "uppercase",
+            "subheading_spacing": 12,
+            "heading": "Our Story",
+            "heading_size": 48,
+            "mobile_heading_size": 32,
+            "heading_spacing": 24,
+            "description": "<p><strong>Dujje</strong> was born from a simple idea: dressing well shouldn’t be complicated.</p><p>We are an online fashion store that brings together carefully selected clothing for those who appreciate a clean, timeless style. We believe the right clothes make everyday life easier, not more complicated, and we build our collection around that philosophy.</p><p>Every piece is chosen with three things in mind: how it fits, how it feels to wear, and how well it stands the test of time. We favor clean lines and comfortable, high-quality materials over fast-changing seasonal trends.</p><p>Behind Dujje is a small, dedicated team that takes care of every detail—from curating our collection to answering your questions whenever you reach out. We want every shopping experience to be simple, seamless, and supported from start to finish.</p><p>Whether you're looking for an everyday essential or something for a special occasion, we hope you'll find something here that feels like you. And if you ever need assistance, we're just an email away at <a href=\"mailto:support@labelique.com\" title=\"support@fasionnovo.com\"><strong>support@fasionnovo.com</strong></a>.</p>",
+            "description_size": 16,
+            "mobile_description_size": 14,
+            "description_spacing": 32,
+            "button_text": "Learn more",
+            "button_link": "",
+            "button_font_size": 14,
+            "button_padding_vertical": 14,
+            "button_padding_horizontal": 32,
+            "button_border_radius": 8,
+            "button_border_width": 0,
+            "button_background": "#000000",
+            "button_text_color": "#ffffff",
+            "button_border_color": "#000000",
+            "button_hover_background": "#333333",
+            "button_hover_text_color": "#ffffff",
+            "button_hover_border_color": "#333333",
+            "image": "shopify://shop_images/WOMEN_MOCKUP.png",
+            "image_shape": "rounded",
+            "image_border_radius": 20,
+            "image_border_width": 0,
+            "image_border_color": "#000000",
+            "image_shadow": true,
+            "image_shadow_offset": 10,
+            "image_shadow_blur": 30,
+            "image_shadow_opacity": 0.2,
+            "section_padding_top": 80,
+            "section_padding_bottom": 80,
+            "mobile_section_padding_top": 40,
+            "mobile_section_padding_bottom": 40
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_f916469_teRfkk"
+      ],
+      "name": "About us",
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "blocks_dNyR3w"
+  ]
+}
