@@ -62,3 +62,18 @@ Live theme "Alove - iconen + vierkant (werk)" #202787815771 untouched (checksum 
 Still Alove in the preview (step 2+): store name (copyright, logo alt, titles), page bodies (FAQ, About, Terms,
 Refund, Shipping, Payment, Contact Information), Shopify policies (Privacy, Contact information), vendor, SEO.
 Noted: Payment page says prices are in Euros (EUR) while the store currency is GBP.
+
+## Rebrand to Migesi – steps 3+ prepared only (2026-10-14, nothing changed in the store)
+User: no live/product changes until the domain switch can be done; prepare only.
+- migesi-rebrand/orig/ = current page bodies + Shopify policies, migesi-rebrand/new/ = ready texts:
+  Alove Fashion/ALOVE Fashion → Migesi, support@migesi.com, alovefashion.com → migesi.com (links www.migesi.com),
+  Payment page EUR → GBP (user: "GBP"), phone links that pointed to a claude.ai/cowork URL (FAQ ×2, Contact
+  Information page ×1) → tel:+447454750470 (user: "weghalen"). page-ids.json for pageUpdate.
+  Pages (9) can be set with pageUpdate; Shopify policies (contact_information, privacy_policy) must be pasted.
+- seo-new.json: 130 products with "| Alove Fashion" in SEO title/description → "| Migesi" (send title + description
+  together). seo-orig.json = all 607 before. Most other products have no own SEO (follow the store name).
+- Vendor: 584 × "Alove Fashion" → "Migesi" (query the IDs at execution time). 23 × "Mijn winkel" (5 active): open.
+- Open, conflicting business details in page texts (unchanged, needs the user's decision):
+  FAQ "based at Van Tuijllaan 29, 5481RA Schijndel"; Contact Information page: RVG Online, Schijndel,
+  KvK 42123100, VAT NL005511870B13; Terms: "operated by RVG Online". Footer/Terms contact block/Contact information
+  policy: DK Interim Management, Merseloseweg 62 Venray, KvK 87566168, VAT NL004438970B54.
