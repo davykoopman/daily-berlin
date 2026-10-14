@@ -68,3 +68,11 @@ Live theme "Fashionnovo - kit (werk)" #205357056340 untouched (checksums verifie
 Still shows Fashionnovo in the preview (store-wide, step 2 on the switch day): store name (copyright "© FASHIONNOVO",
 logo alt, title), page content Withdrawal Form + Payments (+ About/FAQ/Contact bodies), policies, product vendor (349),
 store/sender email.
+
+## Rebrand to Dujje – step 3, pages + policies (2026-10-14, after GO)
+- Pages updated live via pageUpdate and verified word for word: contact, modulo-di-recesso (Withdrawal Form),
+  chi-siamo (About), domande-frequenti (FAQ), pagamenti (Payments): Fashionnovo → Dujje, support@dujje.com,
+  About image → dujje-about-us.png. Originals in dujje-rebrand/orig/, new texts in dujje-rebrand/new/.
+- Policies: shopPolicyUpdate still denied (write_legal_policies) → paste files dujje-rebrand/new/policy-*.html
+  (contact_information, privacy_policy, refund_policy, shipping_policy, terms_of_service).
+- Product vendor (349 × "Fashionnovo") not changed yet: waits for the user's GO (GMC brand field).
