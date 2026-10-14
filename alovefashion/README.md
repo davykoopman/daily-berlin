@@ -77,3 +77,15 @@ User: no live/product changes until the domain switch can be done; prepare only.
   FAQ "based at Van Tuijllaan 29, 5481RA Schijndel"; Contact Information page: RVG Online, Schijndel,
   KvK 42123100, VAT NL005511870B13; Terms: "operated by RVG Online". Footer/Terms contact block/Contact information
   policy: DK Interim Management, Merseloseweg 62 Venray, KvK 87566168, VAT NL004438970B54.
+
+## Business details made consistent – live (2026-10-14, user: "Dit moet snel veranderd worden")
+All pages now name DK Interim Management, Merseloseweg 62, 5801CE Venray, KvK 87566168, VAT NL004438970B54
+(pageUpdate, verified live; Alove name unchanged until the switch). Originals in migesi-rebrand/orig/, live versions in
+migesi-rebrand/fix-entity/:
+- Terms: "operated by RVG Online" → "operated by DK Interim Management".
+- FAQ: business address Schijndel → DK Interim Management, Merseloseweg 62, 5801CE Venray, Netherlands.
+- Contact Information page: RVG Online / Schijndel / KvK 42123100 / VAT NL005511870B13 → DK Interim details.
+- Same pages: phone links to a claude.ai/cowork URL → tel:+447454750470; Payment page EUR → GBP (approved earlier).
+- Storefront check (19 URLs incl. 5 products and both Shopify policies): no RVG/Schijndel/old KvK/VAT/claude link/EUR.
+- Prepared Migesi texts (migesi-rebrand/new/) carry the same fixes; privacy policy paste file also gets the missing
+  house number ("Merseloseweg 62").
