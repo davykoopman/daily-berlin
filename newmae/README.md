@@ -62,3 +62,5 @@
 - Round 4: product page sale bar replaced by "You save $X · Sale ends October 31" under the price (block pp-sale-badge,
   amount per selected variant = compare-at minus price). Top bar cleaner: more padding (11px), thin divider between
   headline and details on desktop, two lines on mobile; one section in the header group, so it changes on every page.
+- Round 5: top bar has the same thin divider between every part (headline | Buy more, save more | Ends in … →).
+  Collection head tier bar back on (show_tiers true): "Add 2 more items and save 10%" → follows the cart.
