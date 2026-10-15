@@ -1,0 +1,95 @@
+{%- liquid
+  assign bs = block.settings
+  assign p = closest.product
+  assign v = p.selected_or_first_available_variant
+  assign end_unix = bs.end | date: '%s' | times: 1
+  assign now_unix = 'now' | date: '%s' | times: 1
+  assign live = true
+  if bs.end != blank and now_unix >= end_unix
+    assign live = false
+  endif
+  assign on_sale = false
+  if p.compare_at_price_max > p.price_min
+    assign on_sale = true
+  endif
+-%}
+
+{%- if on_sale and live or request.design_mode -%}
+  <p class="pp-sale-badge" data-pp-sale-end-hide {{ block.shopify_attributes }}>
+    <span class="pp-sale-badge__label">{{ bs.label }}</span>
+    {%- if bs.show_countdown and bs.end != blank -%}
+      <span class="pp-sale-badge__end">{{ bs.countdown_label }} {% render 'pp-countdown', end: bs.end %}</span>
+    {%- endif -%}
+  </p>
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-sale-badge {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .pp-sale-badge__label {
+    padding: 4px 8px;
+    background: #c2410c;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .pp-sale-badge__end {
+    color: #c2410c;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Sale badge",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows only on products with a compare-at price, until the end moment."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Fall Clearance"
+    },
+    {
+      "type": "text",
+      "id": "end",
+      "label": "Sale ends (ISO with offset)",
+      "default": "2026-10-31T23:59:59-04:00"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show countdown",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "countdown_label",
+      "label": "Countdown label",
+      "default": "Ends in"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Sale badge",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

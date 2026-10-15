@@ -1,0 +1,49 @@
+{%- doc -%}
+  Countdown to the real end of a sale. Prints the time left as "16d 08h 12m 33s"
+  and updates every second. When the end has passed, every element with
+  data-pp-sale-end-hide on the page is hidden (the server also stops rendering
+  them after the end).
+
+  @param {string} end - End moment as ISO 8601 with offset, e.g. 2026-10-31T23:59:59-04:00
+  @param {boolean} [short] - Only days, hours and minutes
+{%- enddoc -%}
+
+{%- assign pp_end_unix = end | date: '%s' -%}
+<span class="pp-countdown" data-pp-countdown="{{ pp_end_unix }}"{% if short %} data-short{% endif %} aria-live="off">
+  {%- liquid
+    assign pp_now = 'now' | date: '%s' | times: 1
+    assign pp_left = pp_end_unix | times: 1 | minus: pp_now
+    if pp_left < 0
+      assign pp_left = 0
+    endif
+    assign pp_d = pp_left | divided_by: 86400
+    assign pp_h = pp_left | modulo: 86400 | divided_by: 3600
+    assign pp_m = pp_left | modulo: 3600 | divided_by: 60
+    assign pp_s = pp_left | modulo: 60
+  -%}
+  <span data-u="d">{{ pp_d }}</span>d <span data-u="h">{% if pp_h < 10 %}0{% endif %}{{ pp_h }}</span>h <span data-u="m">{% if pp_m < 10 %}0{% endif %}{{ pp_m }}</span>m
+  {%- unless short %} <span data-u="s">{% if pp_s < 10 %}0{% endif %}{{ pp_s }}</span>s{% endunless -%}
+</span>
+
+<script>
+  (function () {
+    if (window.ppCountdown) { window.ppCountdown.scan(); return; }
+    var pad = function (n) { return n < 10 ? '0' + n : String(n); };
+    var tick = function () {
+      var now = Math.floor(Date.now() / 1000);
+      var ended = false;
+      document.querySelectorAll('[data-pp-countdown]').forEach(function (el) {
+        var left = parseInt(el.getAttribute('data-pp-countdown'), 10) - now;
+        if (left <= 0) { ended = true; left = 0; }
+        var parts = { d: Math.floor(left / 86400), h: pad(Math.floor(left % 86400 / 3600)), m: pad(Math.floor(left % 3600 / 60)), s: pad(left % 60) };
+        el.querySelectorAll('[data-u]').forEach(function (u) { u.textContent = parts[u.getAttribute('data-u')]; });
+      });
+      if (ended) {
+        document.querySelectorAll('[data-pp-sale-end-hide]').forEach(function (el) { el.hidden = true; el.style.display = 'none'; });
+      }
+    };
+    window.ppCountdown = { scan: tick };
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>

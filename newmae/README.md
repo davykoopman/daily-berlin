@@ -26,3 +26,26 @@
   total (snippets/tax-info.liquid), no currency code, prices in the body font (config/settings_data.json).
 - Checkout texts (locales/en.default.json, shopify.checkout.*): free tracked shipping before the address,
   shipping line "Free", express divider "or pay securely below".
+
+## Fall Clearance (theme "Newmae - Fall Clearance (werk)" #208681304389, unpublished, copy of the kit)
+- Collections (smart, best selling, on Online Store): fall-clearance (compare-at > 0, 506 products),
+  fall-clearance-women (+ type starts with Womens), fall-clearance-men (+ type starts with Mens).
+- Sale ends 2026-10-31T23:59:59-04:00 (US Eastern). Banner, badge and countdown hide themselves after that.
+  Prices and compare-at prices do not change by themselves: end the sale in the admin too.
+- Colors: base #1A1A1A, accent burnt orange #C2410C (white text 5.2:1), #F97316 on black (7.5:1).
+  Sale price and -X% box (snippets/price.liquid, snippets/pp-card.liquid) red → #C2410C.
+- Announcement bar (4 s): FALL CLEARANCE · UP TO 50% OFF (orange) / BUY MORE, SAVE MORE · ENDS OCT 31 /
+  FREE SHIPPING ON ALL US ORDERS / 60-DAY RETURNS.
+- Home: hero with FALL CLEARANCE label, UP TO 50% OFF, orange buttons to the women/men sale collections →
+  pp-sale-banner (countdown) → trust → categories → "Fall Clearance Bestsellers" (pp-home-best with
+  sale_prefix fall-clearance-, sale_only) → about → FAQ.
+- Collection: slim black pp-sale-banner with tiers and countdown above the head; tier bar in the head off.
+- Product: pp-sale-badge (label + countdown, only on products with compare-at) → pp-rating (DISABLED) → title
+  → price → benefits → variants → pp-stock (pulsing orange dot, "In stock, ready to ship", "Low in stock:
+  only [n] left" only with real Shopify stock ≤ threshold 5, note "Popular styles sell out fast…") → buy buttons.
+  Section pp-ugc "Styled by our customers" after the trust icons: hidden until it has a photo block.
+- pp-rating: source "Review app" (reviews.rating / reviews.rating_count metafields) or "Manual" (4.7, "Rated
+  by 2,000+ happy customers" prefilled at the user's request). Disabled in the template; only switch it on
+  when the numbers are real (FTC review rule, GMC misrepresentation). Stock is ±99,999 per variant now, so
+  the low stock line never shows until real stock is entered.
+- Files: fall-clearance/theme (uploaded, md5 verified), fall-clearance/orig (before), screenshots/.

@@ -1,0 +1,218 @@
+{%- liquid
+  assign ss = section.settings
+  assign end_unix = ss.end | date: '%s' | times: 1
+  assign now_unix = 'now' | date: '%s' | times: 1
+  assign live = true
+  if ss.end != blank and now_unix >= end_unix
+    assign live = false
+  endif
+-%}
+
+{%- if live or request.design_mode -%}
+  <div class="pp-sale-banner" data-pp-sale-end-hide style="--pp-sale-bg: {{ ss.background }}; --pp-sale-accent: {{ ss.accent }}; --pp-sale-pad: {{ ss.padding }}px;">
+    {%- if ss.link != blank -%}<a class="pp-sale-banner__link" href="{{ ss.link }}" aria-label="{{ ss.label | escape }} {{ ss.headline | escape }}"></a>{%- endif -%}
+    <div class="pp-sale-banner__inner page-width">
+      <p class="pp-sale-banner__main">
+        {%- if ss.label != blank -%}<span class="pp-sale-banner__label">{{ ss.label }}</span>{%- endif -%}
+        <span class="pp-sale-banner__headline">{{ ss.headline }}</span>
+      </p>
+      {%- if ss.subline != blank -%}
+        <p class="pp-sale-banner__sub">{{ ss.subline }}</p>
+      {%- endif -%}
+      <p class="pp-sale-banner__end">
+        {%- if ss.show_countdown and ss.end != blank -%}
+          <span class="pp-sale-banner__clock">{{ ss.countdown_label }} {% render 'pp-countdown', end: ss.end %}</span>
+        {%- endif -%}
+        {%- if ss.link != blank and ss.link_label != blank -%}
+          <span class="pp-sale-banner__cta">{{ ss.link_label }} <span aria-hidden="true">→</span></span>
+        {%- endif -%}
+      </p>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-sale-banner {
+    position: relative;
+    background: var(--pp-sale-bg, #1a1a1a);
+    color: #fff;
+    padding-block: var(--pp-sale-pad, 12px);
+    text-align: center;
+  }
+
+  .pp-sale-banner__link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .pp-sale-banner__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px 18px;
+  }
+
+  .pp-sale-banner p {
+    margin: 0;
+  }
+
+  .pp-sale-banner__main {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .pp-sale-banner__label {
+    padding: 4px 8px;
+    background: var(--pp-sale-accent, #c2410c);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .pp-sale-banner__headline {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .pp-sale-banner__sub {
+    font-size: 13px;
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  .pp-sale-banner__end {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 4px 14px;
+    font-size: 13px;
+  }
+
+  .pp-sale-banner__clock {
+    color: #f97316;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .pp-sale-banner__cta {
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-sale-banner__inner {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .pp-sale-banner__headline {
+      font-size: 15px;
+    }
+
+    .pp-sale-banner__sub,
+    .pp-sale-banner__end {
+      font-size: 12px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Sale banner",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Slim sale banner with a countdown. It hides itself after the end moment. Only use real discounts and a real end date."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Fall Clearance"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Up to 50% off"
+    },
+    {
+      "type": "text",
+      "id": "subline",
+      "label": "Sub line",
+      "default": "Buy more, save more: 2 items 10% off · 3 items 15% · 4+ items 20%"
+    },
+    {
+      "type": "text",
+      "id": "end",
+      "label": "Sale ends (ISO with offset)",
+      "info": "Example: 2026-10-31T23:59:59-04:00 (US Eastern time)",
+      "default": "2026-10-31T23:59:59-04:00"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show countdown",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "countdown_label",
+      "label": "Countdown label",
+      "default": "Ends in"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link text",
+      "default": "Shop the sale"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Accent",
+      "default": "#C2410C"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Padding top and bottom",
+      "min": 4,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Sale banner"
+    }
+  ]
+}
+{% endschema %}
