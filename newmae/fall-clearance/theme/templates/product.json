@@ -94,7 +94,8 @@
                 "end_text": "Sale ends October 31",
                 "end": "2026-10-31T23:59:59-04:00"
               },
-              "blocks": {}
+              "blocks": {},
+              "disabled": true
             },
             "pp_rating": {
               "type": "pp-rating",
@@ -487,7 +488,7 @@
             "text": "<h2>Mix &amp; Save</h2>",
             "width": "fit-content",
             "max_width": "normal",
-            "alignment": "left",
+            "alignment": "center",
             "type_preset": "h3",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
@@ -822,8 +823,8 @@
   },
   "order": [
     "main",
-    "pp_bundle",
     "pp_trust",
+    "pp_bundle",
     "pp_ugc",
     "section_AL69qQ",
     "pp_steps",

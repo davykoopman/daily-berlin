@@ -64,3 +64,7 @@
   headline and details on desktop, two lines on mobile; one section in the header group, so it changes on every page.
 - Round 5: top bar has the same thin divider between every part (headline | Buy more, save more | Ends in … →).
   Collection head tier bar back on (show_tiers true): "Add 2 more items and save 10%" → follows the cart.
+- Round 6: "You save" line disabled (block kept, disabled). Mix & Save heading, tier text and bar centred
+  (sections/pp-bundle.liquid + text_mix alignment). Product page order: main → trust icons → Mix & Save → customer
+  photos → about → steps → FAQ. Note: customer photo section renders nothing because the image files were renamed
+  in Files (CustomerPicture1–8) and the template still points to the old names.
