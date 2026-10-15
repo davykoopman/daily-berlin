@@ -197,26 +197,9 @@
         "padding-block-start": 8,
         "padding-block-end": 32
       }
-    },
-    "pp_sale_banner": {
-      "type": "pp-sale-banner",
-      "settings": {
-        "label": "Fall Clearance",
-        "headline": "Up to 50% off",
-        "subline": "Buy more, save more: 2 items 10% off · 3 items 15% · 4+ items 20%",
-        "end": "2026-10-31T23:59:59-04:00",
-        "show_countdown": true,
-        "countdown_label": "Ends in",
-        "link": "shopify://collections/fall-clearance",
-        "link_label": "Shop the sale",
-        "background": "#C2410C",
-        "accent": "#C2410C",
-        "padding": 10
-      }
     }
   },
   "order": [
-    "pp_sale_banner",
     "pp_head",
     "main"
   ]

@@ -54,3 +54,8 @@
   Product badge as orange text "FALL CLEARANCE · ENDS IN …". One orange everywhere (#F97316 removed, announcement
   text white). Hero height 100% → 80%. Product photo desktop: max 560px wide / fits the screen height
   (CSS in blocks/pp-title.liquid), equal columns. Colour options: screenshots/kleur-opties.png.
+- Round 3: sale banner moved into the header group (every page), compact: "FALL CLEARANCE · UP TO 50% OFF" +
+  small "Buy more, save more · Ends in 16d 15h 19m →", whole bar links to /collections/fall-clearance. Removed from
+  the index and collection templates; the two sale messages left the announcement bar (shipping + returns stay).
+  Product: sale badge is now a full-width orange bar. templates/product.json synced with the user's editor version
+  (customer photo blocks added by the user).

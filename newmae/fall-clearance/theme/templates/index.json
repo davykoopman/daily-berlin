@@ -385,26 +385,9 @@
         "return_days": 60,
         "late_days": 7
       }
-    },
-    "pp_sale_banner": {
-      "type": "pp-sale-banner",
-      "settings": {
-        "label": "Fall Clearance",
-        "headline": "Up to 50% off",
-        "subline": "",
-        "end": "2026-10-31T23:59:59-04:00",
-        "show_countdown": true,
-        "countdown_label": "Ends in",
-        "link": "shopify://collections/fall-clearance",
-        "link_label": "Shop the sale",
-        "background": "#C2410C",
-        "accent": "#C2410C",
-        "padding": 12
-      }
     }
   },
   "order": [
-    "pp_sale_banner",
     "hero_G7CAX9",
     "pp_trust",
     "pp_home_categories",

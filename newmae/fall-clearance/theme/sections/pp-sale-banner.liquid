@@ -8,114 +8,87 @@
   endif
 -%}
 
+{%- comment -%}
+  Two short lines, centered: big "FALL CLEARANCE · UP TO 50% OFF", small "Buy more, save more · Ends in 16d 15h 24m →".
+  Desktop: one line. The whole bar links to the sale. In the header group, so it shows on every page.
+{%- endcomment -%}
 {%- if live or request.design_mode -%}
-  <div class="pp-sale-banner" data-pp-sale-end-hide style="--pp-sale-bg: {{ ss.background }}; --pp-sale-accent: {{ ss.accent }}; --pp-sale-pad: {{ ss.padding }}px;">
-    {%- if ss.link != blank -%}<a class="pp-sale-banner__link" href="{{ ss.link }}" aria-label="{{ ss.label | escape }} {{ ss.headline | escape }}"></a>{%- endif -%}
-    <div class="pp-sale-banner__inner page-width">
-      <p class="pp-sale-banner__main">
-        {%- if ss.label != blank -%}<span class="pp-sale-banner__label">{{ ss.label }}</span><span class="pp-sale-banner__sep" aria-hidden="true">·</span>{%- endif -%}
-        <span class="pp-sale-banner__headline">{{ ss.headline }}</span>
-      </p>
-      {%- if ss.subline != blank -%}
-        <p class="pp-sale-banner__sub">{{ ss.subline }}</p>
-      {%- endif -%}
-      <p class="pp-sale-banner__end">
+  <div class="pp-sale-banner" data-pp-sale-end-hide style="--pp-sale-bg: {{ ss.background }}; --pp-sale-pad: {{ ss.padding }}px;">
+    <a class="pp-sale-banner__inner"{% if ss.link != blank %} href="{{ ss.link }}"{% endif %}>
+      <span class="pp-sale-banner__headline">
+        {%- if ss.label != blank -%}{{ ss.label }} · {% endif -%}{{ ss.headline -}}
+      </span>
+      <span class="pp-sale-banner__small">
+        {%- if ss.subline != blank -%}<span>{{ ss.subline }}</span>{%- endif -%}
         {%- if ss.show_countdown and ss.end != blank -%}
-          <span class="pp-sale-banner__clock">{{ ss.countdown_label }} {% render 'pp-countdown', end: ss.end %}</span>
+          {%- if ss.subline != blank %}<span aria-hidden="true"> · </span>{% endif -%}
+          <span class="pp-sale-banner__clock">{{ ss.countdown_label }} {% render 'pp-countdown', end: ss.end, short: true %}</span>
         {%- endif -%}
-        {%- if ss.link != blank and ss.link_label != blank -%}
-          <span class="pp-sale-banner__cta">{{ ss.link_label }} <span aria-hidden="true">→</span></span>
-        {%- endif -%}
-      </p>
-    </div>
+        {%- if ss.link != blank %} <span class="pp-sale-banner__arrow" aria-hidden="true">→</span>{% endif -%}
+      </span>
+    </a>
   </div>
 {%- endif -%}
 
 {% stylesheet %}
   .pp-sale-banner {
-    position: relative;
     background: var(--pp-sale-bg, #c2410c);
     color: #fff;
-    padding-block: var(--pp-sale-pad, 12px);
-    text-align: center;
-  }
-
-  .pp-sale-banner__link {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
   }
 
   .pp-sale-banner__inner {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
-    gap: 6px 18px;
+    gap: 2px 14px;
+    padding: var(--pp-sale-pad, 9px) 16px;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
   }
 
-  .pp-sale-banner p {
-    margin: 0;
-  }
-
-  .pp-sale-banner__main {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .pp-sale-banner__label,
-  .pp-sale-banner__headline,
-  .pp-sale-banner__sep {
-    font-size: 16px;
+  .pp-sale-banner__headline {
+    font-size: 14px;
     font-weight: 800;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     white-space: nowrap;
   }
 
-  .pp-sale-banner__sub {
-    font-size: 13px;
-    color: rgb(255 255 255 / 0.9);
-  }
-
-  .pp-sale-banner__end {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 4px 14px;
-    font-size: 13px;
+  .pp-sale-banner__small {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.95;
+    white-space: nowrap;
   }
 
   .pp-sale-banner__clock {
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    white-space: nowrap;
   }
 
-  .pp-sale-banner__cta {
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    white-space: nowrap;
+  .pp-sale-banner__arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .pp-sale-banner__inner:hover .pp-sale-banner__arrow {
+    transform: translateX(3px);
   }
 
   @media screen and (max-width: 749px) {
     .pp-sale-banner__inner {
       flex-direction: column;
-      gap: 4px;
+      align-items: center;
     }
 
-    .pp-sale-banner__label,
-    .pp-sale-banner__headline,
-    .pp-sale-banner__sep {
-      font-size: 15px;
+    .pp-sale-banner__headline {
+      font-size: 13px;
     }
 
-    .pp-sale-banner__sub,
-    .pp-sale-banner__end {
-      font-size: 12px;
+    .pp-sale-banner__small {
+      font-size: 11.5px;
     }
   }
 {% endstylesheet %}
@@ -145,7 +118,7 @@
       "type": "text",
       "id": "subline",
       "label": "Sub line",
-      "default": "Buy more, save more: 2 items 10% off · 3 items 15% · 4+ items 20%"
+      "default": "Buy more, save more"
     },
     {
       "type": "text",
@@ -197,7 +170,7 @@
       "max": 32,
       "step": 1,
       "unit": "px",
-      "default": 12
+      "default": 9
     }
   ],
   "presets": [

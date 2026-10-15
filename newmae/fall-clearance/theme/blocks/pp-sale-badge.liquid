@@ -19,27 +19,34 @@
     <span class="pp-sale-badge__label">{{ bs.label }}</span>
     {%- if bs.show_countdown and bs.end != blank -%}
       <span class="pp-sale-badge__sep" aria-hidden="true">·</span>
-      <span class="pp-sale-badge__end">{{ bs.countdown_label }} {% render 'pp-countdown', end: bs.end %}</span>
+      <span class="pp-sale-badge__end">{{ bs.countdown_label }} {% render 'pp-countdown', end: bs.end, short: true %}</span>
     {%- endif -%}
   </p>
 {%- endif -%}
 
 {% stylesheet %}
+  /* Full-width bar in the product details column */
   .pp-sale-badge {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 2px 8px;
+    width: 100%;
     margin: 0;
-    color: #c2410c;
+    padding: 9px 12px;
+    background: #c2410c;
+    color: #fff;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.06em;
     line-height: 1.3;
+    text-align: center;
     text-transform: uppercase;
   }
 
   .pp-sale-badge__end {
+    font-weight: 600;
     font-variant-numeric: tabular-nums;
   }
 {% endstylesheet %}
