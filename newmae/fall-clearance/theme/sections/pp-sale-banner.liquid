@@ -21,7 +21,7 @@
       <span class="pp-sale-banner__small">
         {%- if ss.subline != blank -%}<span>{{ ss.subline }}</span>{%- endif -%}
         {%- if ss.show_countdown and ss.end != blank -%}
-          {%- if ss.subline != blank %}<span aria-hidden="true"> · </span>{% endif -%}
+          {%- if ss.subline != blank %}<span aria-hidden="true">·</span>{% endif -%}
           <span class="pp-sale-banner__clock">{{ ss.countdown_label }} {% render 'pp-countdown', end: ss.end, short: true %}</span>
         {%- endif -%}
         {%- if ss.link != blank %} <span class="pp-sale-banner__arrow" aria-hidden="true">→</span>{% endif -%}
@@ -39,28 +39,37 @@
   .pp-sale-banner__inner {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: center;
-    gap: 2px 14px;
-    padding: var(--pp-sale-pad, 9px) 16px;
+    gap: 4px 0;
+    padding: var(--pp-sale-pad, 11px) 16px;
     color: inherit;
     text-align: center;
     text-decoration: none;
   }
 
   .pp-sale-banner__headline {
+    padding-inline-end: 24px;
     font-size: 14px;
     font-weight: 800;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     white-space: nowrap;
   }
 
+  /* Desktop: thin divider between the headline and the details, more air */
   .pp-sale-banner__small {
-    font-size: 12px;
+    padding-inline-start: 24px;
+    border-inline-start: 1px solid rgb(255 255 255 / 0.45);
+    font-size: 13px;
     font-weight: 500;
-    opacity: 0.95;
+    letter-spacing: 0.02em;
     white-space: nowrap;
+  }
+
+  .pp-sale-banner__small > span[aria-hidden] {
+    padding-inline: 6px;
+    opacity: 0.7;
   }
 
   .pp-sale-banner__clock {
@@ -70,6 +79,7 @@
 
   .pp-sale-banner__arrow {
     display: inline-block;
+    margin-inline-start: 6px;
     transition: transform 0.2s ease;
   }
 
@@ -80,15 +90,19 @@
   @media screen and (max-width: 749px) {
     .pp-sale-banner__inner {
       flex-direction: column;
-      align-items: center;
+      gap: 3px;
+      padding-block: 10px;
     }
 
     .pp-sale-banner__headline {
+      padding-inline-end: 0;
       font-size: 13px;
     }
 
     .pp-sale-banner__small {
-      font-size: 11.5px;
+      padding-inline-start: 0;
+      border-inline-start: 0;
+      font-size: 12px;
     }
   }
 {% endstylesheet %}
@@ -170,7 +184,7 @@
       "max": 32,
       "step": 1,
       "unit": "px",
-      "default": 9
+      "default": 11
     }
   ],
   "presets": [

@@ -90,10 +90,9 @@
             "pp_sale_badge": {
               "type": "pp-sale-badge",
               "settings": {
-                "label": "Fall Clearance",
-                "end": "2026-10-31T23:59:59-04:00",
-                "show_countdown": true,
-                "countdown_label": "Ends in"
+                "save_label": "You save",
+                "end_text": "Sale ends October 31",
+                "end": "2026-10-31T23:59:59-04:00"
               },
               "blocks": {}
             },
@@ -449,10 +448,10 @@
             }
           },
           "block_order": [
-            "pp_sale_badge",
             "pp_rating",
             "pp_title",
             "price_a7krng",
+            "pp_sale_badge",
             "pp_benefits",
             "variant_picker_R3rGDr",
             "pp_stock",

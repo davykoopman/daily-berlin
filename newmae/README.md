@@ -59,3 +59,6 @@
   the index and collection templates; the two sale messages left the announcement bar (shipping + returns stay).
   Product: sale badge is now a full-width orange bar. templates/product.json synced with the user's editor version
   (customer photo blocks added by the user).
+- Round 4: product page sale bar replaced by "You save $X · Sale ends October 31" under the price (block pp-sale-badge,
+  amount per selected variant = compare-at minus price). Top bar cleaner: more padding (11px), thin divider between
+  headline and details on desktop, two lines on mobile; one section in the header group, so it changes on every page.
