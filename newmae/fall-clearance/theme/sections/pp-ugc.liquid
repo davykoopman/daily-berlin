@@ -24,7 +24,9 @@
             {%- if b.settings.image == blank -%}{%- continue -%}{%- endif -%}
             <li class="pp-ugc__item" {{ b.shopify_attributes }}>
               <figure class="pp-ugc__card">
-                {{ b.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 25vw, 70vw', widths: '360, 540, 800', class: 'pp-ugc__img', alt: b.settings.name | default: ss.heading }}
+                <div class="pp-ugc__frame">
+                  {{ b.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 20vw, 40vw', widths: '240, 360, 480, 600', class: 'pp-ugc__img', alt: b.settings.name | default: ss.heading }}
+                </div>
                 {%- if b.settings.name != blank or b.settings.caption != blank -%}
                   <figcaption class="pp-ugc__caption">
                     {%- if b.settings.caption != blank -%}<span class="pp-ugc__quote">{{ b.settings.caption }}</span>{%- endif -%}
@@ -35,6 +37,7 @@
             </li>
           {%- endfor -%}
         </ul>
+        <div class="pp-ugc__dots" aria-hidden="true" data-pp-ugc-dots></div>
         <button type="button" class="pp-ugc__arrow pp-ugc__arrow--prev" data-pp-ugc-arrow="-1" aria-label="Previous photos">←</button>
         <button type="button" class="pp-ugc__arrow pp-ugc__arrow--next" data-pp-ugc-arrow="1" aria-label="Next photos">→</button>
       </div>
@@ -51,10 +54,20 @@
         var track = root.querySelector('[data-pp-ugc-track]');
         if (!track) return;
         var arrows = root.querySelectorAll('[data-pp-ugc-arrow]');
+        var dotsEl = root.querySelector('[data-pp-ugc-dots]');
         var update = function () {
           var max = track.scrollWidth - track.clientWidth - 2;
           arrows[0].disabled = track.scrollLeft <= 2;
           arrows[1].disabled = track.scrollLeft >= max;
+          if (!dotsEl) return;
+          var pages = Math.max(1, Math.ceil(track.scrollWidth / track.clientWidth - 0.05));
+          if (dotsEl.children.length !== pages) {
+            dotsEl.innerHTML = '';
+            for (var i = 0; i < pages; i++) dotsEl.appendChild(document.createElement('i'));
+          }
+          var cur = max > 0 ? Math.round(track.scrollLeft / max * (pages - 1)) : 0;
+          [].forEach.call(dotsEl.children, function (d, i) { d.classList.toggle('is-active', i === cur); });
+          dotsEl.hidden = pages < 2;
         };
         arrows.forEach(function (a) {
           a.addEventListener('click', function () {
@@ -113,10 +126,13 @@
   }
 
   .pp-ugc__card {
-    position: relative;
     margin: 0;
-    aspect-ratio: 4 / 5;
+  }
+
+  .pp-ugc__frame {
+    aspect-ratio: 3 / 4;
     overflow: hidden;
+    border-radius: 12px;
     background: #e9e4e0;
   }
 
@@ -128,20 +144,38 @@
   }
 
   .pp-ugc__caption {
-    position: absolute;
-    inset: auto 0 0 0;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 28px 12px 10px;
-    background: linear-gradient(to top, rgb(0 0 0 / 0.6), rgb(0 0 0 / 0));
-    color: #fff;
-    font-size: 13px;
-    line-height: 1.35;
+    padding: 8px 2px 0;
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+
+  .pp-ugc__quote {
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.8);
   }
 
   .pp-ugc__name {
     font-weight: 700;
+  }
+
+  .pp-ugc__dots {
+    display: none;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .pp-ugc__dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d0cac4;
+  }
+
+  .pp-ugc__dots i.is-active {
+    background: #000;
   }
 
   .pp-ugc__arrow {
@@ -181,7 +215,12 @@
 
   @media screen and (max-width: 749px) {
     .pp-ugc__track {
-      grid-auto-columns: 70%;
+      grid-auto-columns: 40%;
+      gap: 10px;
+    }
+
+    .pp-ugc__dots:not([hidden]) {
+      display: flex;
     }
 
     .pp-ugc__arrow {
@@ -218,7 +257,7 @@
       "min": 2,
       "max": 6,
       "step": 1,
-      "default": 4
+      "default": 5
     },
     {
       "type": "range",

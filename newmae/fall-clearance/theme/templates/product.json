@@ -87,19 +87,8 @@
             "padding-inline-end": 12
           },
           "blocks": {
-            "pp_sale_badge": {
-              "type": "pp-sale-badge",
-              "settings": {
-                "save_label": "You save",
-                "end_text": "Sale ends October 31",
-                "end": "2026-10-31T23:59:59-04:00"
-              },
-              "blocks": {},
-              "disabled": true
-            },
             "pp_rating": {
               "type": "pp-rating",
-              "disabled": true,
               "settings": {
                 "source": "manual",
                 "app_text": "[count] reviews",
@@ -134,6 +123,16 @@
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "pp_sale_badge": {
+              "type": "pp-sale-badge",
+              "disabled": true,
+              "settings": {
+                "save_label": "You save",
+                "end_text": "Sale ends October 31",
+                "end": "2026-10-31T23:59:59-04:00"
               },
               "blocks": {}
             },
@@ -177,7 +176,7 @@
                 "low_text": "Low in stock: only [n] left",
                 "threshold": 5,
                 "note": "Popular styles sell out fast. If you can add it to your cart, it's still available.",
-                "dot_color": "#c2410c"
+                "dot_color": "#a94416"
               },
               "blocks": {}
             },
@@ -478,6 +477,13 @@
         "padding-block-end": 0
       }
     },
+    "pp_trust": {
+      "type": "pp-trust",
+      "settings": {
+        "return_days": 60,
+        "email": "support@newmae.com"
+      }
+    },
     "pp_bundle": {
       "type": "pp-bundle",
       "blocks": {
@@ -525,27 +531,13 @@
         "padding-block-end": 20
       }
     },
-    "pp_trust": {
-      "type": "pp-trust",
-      "settings": {
-        "return_days": 60,
-        "email": "support@newmae.com"
-      }
-    },
     "pp_ugc": {
       "type": "pp-ugc",
       "blocks": {
-        "photo_48RGMx": {
-          "type": "photo",
-          "settings": {
-            "name": "",
-            "caption": ""
-          }
-        },
         "photo_39DbJH": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/Sunlit_Cafe_Stroll_with_Iced_Coffee.png",
+            "image": "shopify://shop_images/CustomerPicture1.png",
             "name": "Nancy Thompson",
             "caption": "\"Very pleased! Cute design and comfortable to wear.\""
           }
@@ -553,7 +545,7 @@
         "photo_AFNRKk": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/Cozy_Shoe_Unboxing_with_Dog_1.png",
+            "image": "shopify://shop_images/CustomerPicture2.png",
             "name": "Michael T.",
             "caption": "\"Great fit and very comfortable.\""
           }
@@ -561,7 +553,7 @@
         "photo_qPfWpn": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/Cozy_Gray_Loungewear_at_Home.png",
+            "image": "shopify://shop_images/CustomerPicture3.png",
             "name": "Patricia WL.",
             "caption": "\"Super cute and comfortable. Shipping was fine!\""
           }
@@ -569,7 +561,7 @@
         "photo_epHik3": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/Candid_Garden_Moments_with_a_Mug.png",
+            "image": "shopify://shop_images/CustomerPicture4.png",
             "name": "Susan M.",
             "caption": "\"Love the daisy pattern! Fits great and arrived safely.\""
           }
@@ -577,7 +569,7 @@
         "photo_AjAeqb": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/Cozy_Neutral_Bedroom_Mirror_Selfie.png",
+            "image": "shopify://shop_images/CustomerPicture5.png",
             "name": "Deborah R.",
             "caption": "\"Exactly the style I wanted. Happy with my purchase!\""
           }
@@ -585,43 +577,33 @@
         "photo_TUjhbF": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/Casual_Outfit_in_a_Lived-In_Bedroom_1.png",
+            "image": "shopify://shop_images/CustomerPicture6.png",
             "name": "Robert H.",
             "caption": "\"Really happy with the fit. Took a little longer to arrive.\""
-          }
-        },
-        "photo_xwUVF9": {
-          "type": "photo",
-          "settings": {
-            "image": "shopify://shop_images/Cozy_Newmae_Trouser_Unboxing.png",
-            "name": "\"Super cute and comfortable. Shipping was fine!\"",
-            "caption": "\"Nice relaxed fit. Arrived well packaged.\""
           }
         },
         "photo_td3cyJ": {
           "type": "photo",
           "settings": {
-            "image": "shopify://shop_images/Cozy_Entryway_Chelsea_Boot_Selfie.png",
+            "image": "shopify://shop_images/CustomerPicture8.png",
             "name": "Emily R.",
             "caption": "\"Super comfortable and easy to style. Love it!\""
           }
         }
       },
       "block_order": [
-        "photo_48RGMx",
         "photo_39DbJH",
         "photo_AFNRKk",
         "photo_qPfWpn",
         "photo_epHik3",
         "photo_AjAeqb",
         "photo_TUjhbF",
-        "photo_xwUVF9",
         "photo_td3cyJ"
       ],
       "settings": {
         "heading": "Styled by our customers",
         "subheading": "Real photos from Newmae customers",
-        "columns": 4,
+        "columns": 5,
         "padding_top": 32,
         "padding_bottom": 32
       }
