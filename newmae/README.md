@@ -68,3 +68,17 @@
   (sections/pp-bundle.liquid + text_mix alignment). Product page order: main → trust icons → Mix & Save → customer
   photos → about → steps → FAQ. Note: customer photo section renders nothing because the image files were renamed
   in Files (CustomerPicture1–8) and the template still points to the old names.
+
+## Cart and checkout (Fall Clearance theme copy, 2026-10-15)
+- Drawer: pp-cart-saleline at the top (FALL CLEARANCE | Ends in …, hides after Oct 31) → items → pp-cart-upsell
+  "Add 1 more & save X%" (pp-cards from fall-clearance-women/-men by cart gender, fallback fall-clearance, products
+  in the cart left out, Choose opens pp-quick-pick, adds without leaving the cart). pp-quick-pick rendered once in
+  snippets/cart-drawer.liquid so it works on every page.
+- Cart page: same upsell row (8 products, 4 per row desktop) under the items (sections/main-cart.liquid).
+- Under the total (snippets/tax-info.liquid): "You're saving $X on this order" = compare-at minus price per line +
+  cart.total_discount (Mix & Save). Tier bar orange (#c2410c), texts: "10% off unlocked · add 1 more item to save 15%",
+  max "You unlocked the maximum 20% off ✓".
+- Quick pick sheet sale price and -X% box orange like the rest.
+- Live store change: automatic discounts renamed "Mix & Save – 10/15/20% off" (rules unchanged: 2+/3+/4+).
+- Tested in preview (desktop + mobile): add product → drawer shows sale line, upsell "save 10%", saving $44.95 →
+  add shirt via upsell → 2 items, "save 15%", saving $104.39 (= 44.95 + 49.95 + 10% of 94.90), cart page the same.

@@ -1,0 +1,52 @@
+{%- doc -%}
+  Slim sale line at the top of the cart drawer: "Fall Clearance · Ends in 16d 15h 04m".
+  Same end moment as the header sale banner; hides itself after the end.
+
+  @param {string} [end] - ISO end moment with offset
+{%- enddoc -%}
+
+{%- liquid
+  assign end = end | default: '2026-10-31T23:59:59-04:00'
+  assign end_unix = end | date: '%s' | times: 1
+  assign now_unix = 'now' | date: '%s' | times: 1
+-%}
+
+{%- if now_unix < end_unix -%}
+  <p class="pp-cart-saleline" data-pp-sale-end-hide>
+    <span class="pp-cart-saleline__label">Fall Clearance</span>
+    <span class="pp-cart-saleline__sep" aria-hidden="true"></span>
+    <span class="pp-cart-saleline__clock">Ends in {% render 'pp-countdown', end: end, short: true %}</span>
+  </p>
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-cart-saleline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 0 12px;
+    padding: 8px 12px;
+    background: #c2410c;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .pp-cart-saleline__label {
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .pp-cart-saleline__sep {
+    width: 1px;
+    height: 12px;
+    background: rgb(255 255 255 / 0.45);
+  }
+
+  .pp-cart-saleline__clock {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+{% endstylesheet %}

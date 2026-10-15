@@ -1,0 +1,148 @@
+{%- doc -%}
+  "Add 1 more & save" row in the cart (drawer and cart page). Sale best sellers of the
+  shopper's gender (fall-clearance-women / -men, fallback fall-clearance), without the
+  products already in the cart. Cards are pp-card, so "Choose" opens the pp quick pick
+  sheet and adds without leaving the cart. The heading follows the real bundle tiers.
+  Re-rendered by the theme on every cart change (section rendering), so it stays current.
+
+  @param {string} [tiers] - "quantity:percent" pairs, must match the automatic discounts
+  @param {number} [limit] - Number of products (default 6)
+  @param {string} [context] - 'drawer' or 'page'
+{%- enddoc -%}
+
+{%- liquid
+  assign limit = limit | default: 6
+  assign pairs = tiers | default: '2:10,3:15,4:20' | split: ','
+  assign count = cart.item_count
+
+  # Gender of the cart: most items decide, women first on a tie
+  assign w = 0
+  assign m = 0
+  assign in_cart = ','
+  for item in cart.items
+    assign t = item.product.type | downcase
+    if t contains 'womens'
+      assign w = w | plus: item.quantity
+    elsif t contains 'mens'
+      assign m = m | plus: item.quantity
+    endif
+    assign in_cart = in_cart | append: item.product_id | append: ','
+  endfor
+  assign source = collections['fall-clearance-women']
+  if m > w
+    assign source = collections['fall-clearance-men']
+  endif
+  if source == blank or source.products_count == 0
+    assign source = collections['fall-clearance']
+  endif
+
+  # Next tier for the heading
+  assign next_q = 0
+  assign next_p = 0
+  for pair in pairs
+    assign p = pair | strip | split: ':'
+    assign q = p[0] | times: 1
+    if count < q
+      assign next_q = q
+      assign next_p = p[1]
+      break
+    endif
+  endfor
+-%}
+
+{%- if count > 0 and source != blank -%}
+  {%- capture cards -%}
+    {%- assign shown = 0 -%}
+    {%- for product in source.products -%}
+      {%- assign key = ',' | append: product.id | append: ',' -%}
+      {%- if product.available == false or in_cart contains key -%}{%- continue -%}{%- endif -%}
+      <li class="pp-upsell__item">{% render 'pp-card', product: product, sizes: '(min-width: 750px) 200px, 45vw' %}</li>
+      {%- assign shown = shown | plus: 1 -%}
+      {%- if shown >= limit -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if cards != blank -%}
+    <div class="pp-upsell pp-upsell--{{ context | default: 'drawer' }}" data-pp-upsell>
+      <p class="pp-upsell__title">
+        {%- if next_q > 0 -%}
+          {%- assign more = next_q | minus: count -%}
+          Add {{ more }} more &amp; save <span class="pp-upsell__pct">{{ next_p }}%</span>
+        {%- else -%}
+          You unlocked <span class="pp-upsell__pct">20% off</span> · complete your look
+        {%- endif -%}
+      </p>
+      <p class="pp-upsell__sub">Fall Clearance picks · mix any styles</p>
+      <ul class="pp-upsell__track" role="list">
+        {{ cards }}
+      </ul>
+    </div>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-upsell {
+    width: 100%;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+  .pp-upsell__title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .pp-upsell__pct {
+    color: #c2410c;
+  }
+
+  .pp-upsell__sub {
+    margin: 2px 0 12px;
+    font-size: 12px;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.65);
+  }
+
+  .pp-upsell__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 42%;
+    gap: 10px;
+    margin: 0;
+    padding: 0 0 6px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .pp-upsell--page .pp-upsell__track {
+    grid-auto-columns: calc((100% - 30px) / 4);
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-upsell--page .pp-upsell__track {
+      grid-auto-columns: 42%;
+    }
+  }
+
+  .pp-upsell__item {
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+
+  /* Compact cards: no colour thumbnails, smaller text */
+  .pp-upsell .pp-card__swatches {
+    display: none;
+  }
+
+  .pp-upsell .pp-card__title {
+    font-size: 12px;
+  }
+
+  .pp-upsell .pp-card__price {
+    font-size: 13px;
+  }
+{% endstylesheet %}
