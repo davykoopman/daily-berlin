@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -78,6 +87,34 @@
             "padding-inline-end": 12
           },
           "blocks": {
+            "pp_sale_badge": {
+              "type": "pp-sale-badge",
+              "settings": {
+                "label": "Fall Clearance",
+                "end": "2026-10-31T23:59:59-04:00",
+                "show_countdown": true,
+                "countdown_label": "Ends in"
+              },
+              "blocks": {}
+            },
+            "pp_rating": {
+              "type": "pp-rating",
+              "disabled": true,
+              "settings": {
+                "source": "manual",
+                "app_text": "[count] reviews",
+                "manual_rating": 4.7,
+                "manual_text": "Rated by 2,000+ happy customers"
+              },
+              "blocks": {}
+            },
+            "pp_title": {
+              "type": "pp-title",
+              "settings": {
+                "uppercase": false
+              },
+              "blocks": {}
+            },
             "price_a7krng": {
               "type": "price",
               "settings": {
@@ -100,6 +137,17 @@
               },
               "blocks": {}
             },
+            "pp_benefits": {
+              "type": "pp-benefits",
+              "settings": {
+                "show_divider": true,
+                "show_shipping": true,
+                "show_guarantee": true,
+                "return_days": 60,
+                "show_buy_more": true
+              },
+              "blocks": {}
+            },
             "variant_picker_R3rGDr": {
               "type": "variant-picker",
               "settings": {
@@ -119,6 +167,17 @@
                 "padding-block-end": 12,
                 "padding-inline-start": 0,
                 "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "pp_stock": {
+              "type": "pp-stock",
+              "settings": {
+                "in_stock_text": "In stock, ready to ship",
+                "low_text": "Low in stock: only [n] left",
+                "threshold": 5,
+                "note": "Popular styles sell out fast. If you can add it to your cart, it's still available.",
+                "dot_color": "#c2410c"
               },
               "blocks": {}
             },
@@ -182,6 +241,25 @@
                 }
               },
               "block_order": []
+            },
+            "pp_delivery": {
+              "type": "pp-delivery",
+              "settings": {
+                "dispatch_days": "1–2"
+              },
+              "blocks": {}
+            },
+            "payment_icons_pp": {
+              "type": "payment-icons",
+              "settings": {
+                "horizontal_alignment": "center",
+                "gap": 6,
+                "padding-block-start": 4,
+                "padding-block-end": 4,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             },
             "accordion_Yd4U4w": {
               "type": "accordion",
@@ -368,72 +446,6 @@
                 "pp_row_ret",
                 "pp_row_mix"
               ]
-            },
-            "pp_title": {
-              "type": "pp-title",
-              "settings": {
-                "uppercase": false
-              },
-              "blocks": {}
-            },
-            "pp_benefits": {
-              "type": "pp-benefits",
-              "settings": {
-                "show_shipping": true,
-                "show_guarantee": true,
-                "return_days": 60,
-                "show_buy_more": true,
-                "show_divider": true
-              },
-              "blocks": {}
-            },
-            "pp_delivery": {
-              "type": "pp-delivery",
-              "settings": {
-                "dispatch_days": "1–2"
-              },
-              "blocks": {}
-            },
-            "payment_icons_pp": {
-              "type": "payment-icons",
-              "settings": {
-                "horizontal_alignment": "center",
-                "gap": 6,
-                "padding-block-start": 4,
-                "padding-block-end": 4,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "pp_sale_badge": {
-              "type": "pp-sale-badge",
-              "settings": {
-                "label": "Fall Clearance",
-                "end": "2026-10-31T23:59:59-04:00",
-                "show_countdown": true,
-                "countdown_label": "Ends in"
-              }
-            },
-            "pp_rating": {
-              "type": "pp-rating",
-              "disabled": true,
-              "settings": {
-                "source": "manual",
-                "app_text": "[count] reviews",
-                "manual_rating": 4.7,
-                "manual_text": "Rated by 2,000+ happy customers"
-              }
-            },
-            "pp_stock": {
-              "type": "pp-stock",
-              "settings": {
-                "in_stock_text": "In stock, ready to ship",
-                "low_text": "Low in stock: only [n] left",
-                "threshold": 5,
-                "note": "Popular styles sell out fast. If you can add it to your cart, it's still available.",
-                "dot_color": "#C2410C"
-              }
             }
           },
           "block_order": [
@@ -501,6 +513,7 @@
       ],
       "settings": {
         "menu": "main-menu",
+        "fallback_collection": "",
         "tiers": "2:10,3:15,4:20",
         "show_see_all": true,
         "max_products": 8,
@@ -517,6 +530,100 @@
       "settings": {
         "return_days": 60,
         "email": "support@newmae.com"
+      }
+    },
+    "pp_ugc": {
+      "type": "pp-ugc",
+      "blocks": {
+        "photo_48RGMx": {
+          "type": "photo",
+          "settings": {
+            "name": "",
+            "caption": ""
+          }
+        },
+        "photo_39DbJH": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/Sunlit_Cafe_Stroll_with_Iced_Coffee.png",
+            "name": "Nancy Thompson",
+            "caption": "\"Very pleased! Cute design and comfortable to wear.\""
+          }
+        },
+        "photo_AFNRKk": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/Cozy_Shoe_Unboxing_with_Dog_1.png",
+            "name": "Michael T.",
+            "caption": "\"Great fit and very comfortable.\""
+          }
+        },
+        "photo_qPfWpn": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/Cozy_Gray_Loungewear_at_Home.png",
+            "name": "Patricia WL.",
+            "caption": "\"Super cute and comfortable. Shipping was fine!\""
+          }
+        },
+        "photo_epHik3": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/Candid_Garden_Moments_with_a_Mug.png",
+            "name": "Susan M.",
+            "caption": "\"Love the daisy pattern! Fits great and arrived safely.\""
+          }
+        },
+        "photo_AjAeqb": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/Cozy_Neutral_Bedroom_Mirror_Selfie.png",
+            "name": "Deborah R.",
+            "caption": "\"Exactly the style I wanted. Happy with my purchase!\""
+          }
+        },
+        "photo_TUjhbF": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/Casual_Outfit_in_a_Lived-In_Bedroom_1.png",
+            "name": "Robert H.",
+            "caption": "\"Really happy with the fit. Took a little longer to arrive.\""
+          }
+        },
+        "photo_xwUVF9": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/Cozy_Newmae_Trouser_Unboxing.png",
+            "name": "\"Super cute and comfortable. Shipping was fine!\"",
+            "caption": "\"Nice relaxed fit. Arrived well packaged.\""
+          }
+        },
+        "photo_td3cyJ": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/Cozy_Entryway_Chelsea_Boot_Selfie.png",
+            "name": "Emily R.",
+            "caption": "\"Super comfortable and easy to style. Love it!\""
+          }
+        }
+      },
+      "block_order": [
+        "photo_48RGMx",
+        "photo_39DbJH",
+        "photo_AFNRKk",
+        "photo_qPfWpn",
+        "photo_epHik3",
+        "photo_AjAeqb",
+        "photo_TUjhbF",
+        "photo_xwUVF9",
+        "photo_td3cyJ"
+      ],
+      "settings": {
+        "heading": "Styled by our customers",
+        "subheading": "Real photos from Newmae customers",
+        "columns": 4,
+        "padding_top": 32,
+        "padding_bottom": 32
       }
     },
     "section_AL69qQ": {
@@ -711,16 +818,6 @@
         "delivery_days": "4–9",
         "return_days": 60,
         "late_days": 7
-      }
-    },
-    "pp_ugc": {
-      "type": "pp-ugc",
-      "settings": {
-        "heading": "Styled by our customers",
-        "subheading": "Real photos from Newmae customers",
-        "columns": 4,
-        "padding_top": 32,
-        "padding_bottom": 32
       }
     }
   },
