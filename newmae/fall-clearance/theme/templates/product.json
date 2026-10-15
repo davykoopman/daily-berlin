@@ -37,7 +37,7 @@
             "thumbnail_width": 44,
             "thumbnail_radius": 0,
             "aspect_ratio": "1/1.25",
-            "constrain_to_viewport": false,
+            "constrain_to_viewport": true,
             "media_fit": "cover",
             "media_radius": 0,
             "extend_media": false,
@@ -432,7 +432,7 @@
                 "low_text": "Low in stock: only [n] left",
                 "threshold": 5,
                 "note": "Popular styles sell out fast. If you can add it to your cart, it's still available.",
-                "dot_color": "#F97316"
+                "dot_color": "#C2410C"
               }
             }
           },
@@ -457,7 +457,7 @@
       "settings": {
         "content_width": "content-center-aligned",
         "desktop_media_position": "left",
-        "equal_columns": false,
+        "equal_columns": true,
         "limit_details_width": true,
         "gap": 24,
         "enable_sticky_add_to_cart": true,

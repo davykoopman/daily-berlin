@@ -13,7 +13,7 @@
     {%- if ss.link != blank -%}<a class="pp-sale-banner__link" href="{{ ss.link }}" aria-label="{{ ss.label | escape }} {{ ss.headline | escape }}"></a>{%- endif -%}
     <div class="pp-sale-banner__inner page-width">
       <p class="pp-sale-banner__main">
-        {%- if ss.label != blank -%}<span class="pp-sale-banner__label">{{ ss.label }}</span>{%- endif -%}
+        {%- if ss.label != blank -%}<span class="pp-sale-banner__label">{{ ss.label }}</span><span class="pp-sale-banner__sep" aria-hidden="true">·</span>{%- endif -%}
         <span class="pp-sale-banner__headline">{{ ss.headline }}</span>
       </p>
       {%- if ss.subline != blank -%}
@@ -34,7 +34,7 @@
 {% stylesheet %}
   .pp-sale-banner {
     position: relative;
-    background: var(--pp-sale-bg, #1a1a1a);
+    background: var(--pp-sale-bg, #c2410c);
     color: #fff;
     padding-block: var(--pp-sale-pad, 12px);
     text-align: center;
@@ -61,32 +61,22 @@
   .pp-sale-banner__main {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
 
-  .pp-sale-banner__label {
-    padding: 4px 8px;
-    background: var(--pp-sale-accent, #c2410c);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    line-height: 1.2;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .pp-sale-banner__headline {
+  .pp-sale-banner__label,
+  .pp-sale-banner__headline,
+  .pp-sale-banner__sep {
     font-size: 16px;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     white-space: nowrap;
   }
 
   .pp-sale-banner__sub {
     font-size: 13px;
-    color: rgb(255 255 255 / 0.85);
+    color: rgb(255 255 255 / 0.9);
   }
 
   .pp-sale-banner__end {
@@ -99,7 +89,6 @@
   }
 
   .pp-sale-banner__clock {
-    color: #f97316;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
@@ -118,7 +107,9 @@
       gap: 4px;
     }
 
-    .pp-sale-banner__headline {
+    .pp-sale-banner__label,
+    .pp-sale-banner__headline,
+    .pp-sale-banner__sep {
       font-size: 15px;
     }
 
@@ -190,7 +181,7 @@
       "type": "color",
       "id": "background",
       "label": "Background",
-      "default": "#1A1A1A"
+      "default": "#C2410C"
     },
     {
       "type": "color",

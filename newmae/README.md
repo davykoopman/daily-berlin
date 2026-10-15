@@ -49,3 +49,8 @@
   when the numbers are real (FTC review rule, GMC misrepresentation). Stock is ±99,999 per variant now, so
   the low stock line never shows until real stock is entered.
 - Files: fall-clearance/theme (uploaded, md5 verified), fall-clearance/orig (before), screenshots/.
+- Round 2 (user feedback): the sale banner now sits between the menu and the hero photo (home) and is written out in
+  one colour (#C2410C background, white text, "FALL CLEARANCE · UP TO 50% OFF"). Hero label written out, no box.
+  Product badge as orange text "FALL CLEARANCE · ENDS IN …". One orange everywhere (#F97316 removed, announcement
+  text white). Hero height 100% → 80%. Product photo desktop: max 560px wide / fits the screen height
+  (CSS in blocks/pp-title.liquid), equal columns. Colour options: screenshots/kleur-opties.png.
