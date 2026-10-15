@@ -82,3 +82,7 @@
 - Live store change: automatic discounts renamed "Mix & Save – 10/15/20% off" (rules unchanged: 2+/3+/4+).
 - Tested in preview (desktop + mobile): add product → drawer shows sale line, upsell "save 10%", saving $44.95 →
   add shirt via upsell → 2 items, "save 15%", saving $104.39 (= 44.95 + 49.95 + 10% of 94.90), cart page the same.
+- Hero fix: desktop height follows the photo (1960x802 → min(100vw*802/1960, 88svh)), photo anchored at the top;
+  mobile 1.5× width (max 82svh), text at the bottom so faces stay free (CSS in sections/pp-home-best.liquid,
+  scoped to hero_G7CAX9). Hero label "FALL CLEARANCE" without bold (h4 style), so the hero uses one serif heading
+  and one sans font at one weight. templates/index.json built on the user's editor version (13:07).

@@ -12,6 +12,32 @@
     "hero_G7CAX9": {
       "type": "hero",
       "blocks": {
+        "text_sale_kicker": {
+          "type": "text",
+          "name": "Sale label",
+          "settings": {
+            "text": "<p>FALL CLEARANCE</p>",
+            "width": "fit-content",
+            "max_width": "narrow",
+            "alignment": "center",
+            "type_preset": "h4",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "uppercase",
+            "wrap": "pretty",
+            "text_color": "#ffffff",
+            "background": false,
+            "background_color": "#c2410c",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
         "text_KJqzT8": {
           "type": "text",
           "settings": {
@@ -41,7 +67,7 @@
           "type": "text",
           "name": "t:names.text",
           "settings": {
-            "text": "<p>Plus buy more, save more: up to 20% extra. Ends October 31.</p>",
+            "text": "<p>Plus buy more, save more: up to 20% extra.&nbsp;<br/>Ends October 31.</p>",
             "width": "100%",
             "max_width": "narrow",
             "alignment": "center",
@@ -71,9 +97,9 @@
             "link": "shopify://collections/fall-clearance-women",
             "open_in_new_tab": false,
             "style_class": "button-custom",
-            "custom_button_background": "#C2410C",
-            "custom_button_text": "#FFFFFF",
-            "custom_button_border": "#C2410C",
+            "custom_button_background": "#c2410c",
+            "custom_button_text": "#ffffff",
+            "custom_button_border": "#c2410c",
             "link_text_color": "",
             "width": "custom",
             "custom_width": 18,
@@ -90,40 +116,14 @@
             "link": "shopify://collections/fall-clearance-men",
             "open_in_new_tab": false,
             "style_class": "button-custom",
-            "custom_button_background": "#C2410C",
-            "custom_button_text": "#FFFFFF",
-            "custom_button_border": "#C2410C",
+            "custom_button_background": "#c2410c",
+            "custom_button_text": "#ffffff",
+            "custom_button_border": "#c2410c",
             "link_text_color": "",
             "width": "custom",
             "custom_width": 18,
             "width_mobile": "fit-content",
             "custom_width_mobile": 100
-          },
-          "blocks": {}
-        },
-        "text_sale_kicker": {
-          "type": "text",
-          "name": "Sale label",
-          "settings": {
-            "text": "<p><strong>FALL CLEARANCE</strong></p>",
-            "width": "fit-content",
-            "max_width": "narrow",
-            "alignment": "center",
-            "type_preset": "h4",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "uppercase",
-            "wrap": "pretty",
-            "text_color": "#ffffff",
-            "background": false,
-            "background_color": "#C2410C",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
           },
           "blocks": {}
         }
@@ -185,6 +185,9 @@
     "pp_home_best": {
       "type": "pp-home-best",
       "settings": {
+        "heading": "Fall Clearance Bestsellers",
+        "sale_prefix": "fall-clearance-",
+        "sale_only": true,
         "menu": "main-menu",
         "show_tiers": true,
         "tiers": "2:10,3:15,4:20",
@@ -193,10 +196,7 @@
         "columns_gap": 12,
         "section_width": "page-width",
         "padding-block-start": 24,
-        "padding-block-end": 40,
-        "heading": "Fall Clearance Bestsellers",
-        "sale_prefix": "fall-clearance-",
-        "sale_only": true
+        "padding-block-end": 40
       }
     },
     "section_fD89zp": {

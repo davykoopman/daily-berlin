@@ -118,6 +118,30 @@
     margin-bottom: 0;
   }
 
+  /* Home hero (hero_G7CAX9): the banner photo is 1960x802. Desktop height follows the photo,
+     so wide screens no longer cut off the heads; the photo is anchored at the top. */
+  [id$='hero_G7CAX9'] .hero__media {
+    object-position: center top;
+  }
+
+  @media screen and (min-width: 750px) {
+    [id$='hero_G7CAX9'] {
+      min-height: min(calc(100vw * 802 / 1960), 88svh) !important;
+    }
+  }
+
+  /* Mobile: faces stay free at the top, the text sits on the lower part of the photo */
+  @media screen and (max-width: 749px) {
+    [id$='hero_G7CAX9'] {
+      min-height: min(calc(100vw * 1.5), 82svh) !important;
+    }
+
+    [id$='hero_G7CAX9'] .hero__content-wrapper {
+      justify-content: flex-end;
+      padding-block-end: 28px;
+    }
+  }
+
 {% endstylesheet %}
 
 {% schema %}
