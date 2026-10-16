@@ -49,7 +49,8 @@ def main():
         for h in hh:
             if all(h - d > 4 for d in distinct):
                 distinct.append(h)
-        if len(distinct) < 3:
+        own_link = st_ in {x["domein"] for x in stores.values()}
+        if not own_link and not pu.enough_photos(g, len(distinct)):
             print("  x <3 foto's:", it["url"], file=sys.stderr); continue
         first6 = [int(str(h), 16) for h in hh[:6]]
         try:
@@ -61,7 +62,7 @@ def main():
             s = stores[n]
             if any(x["url"].split("?")[0] == it["url"] for x in state.get(n, [])):
                 continue
-            if len(own[n]) and any(int(np.min(np.bitwise_count(own[n] ^ np.uint64(h)))) <= 12 for h in first6[:4]):
+            if not it.get("presence_checked") and len(own[n]) and any(int(np.min(np.bitwise_count(own[n] ^ np.uint64(h)))) <= 12 for h in first6[:4]):
                 continue
             floor = src_price * fx.get(src_cur, 1.0)
             eur = max(it["base_eur"], floor)

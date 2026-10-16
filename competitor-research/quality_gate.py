@@ -67,7 +67,7 @@ def main():
         for h in hs:
             if all(h - d > 4 for d in distinct):
                 distinct.append(h)
-        if len(distinct) < a.min_fotos:
+        if not pu.enough_photos(g, len(distinct), a.min_fotos):
             x["_rej"] = f"Too few photos: {len(distinct)}"; n["few"] += 1
         elif BRAND.search(title_rest):
             x["_rej"] = "Brand name in title"; n["brand"] += 1

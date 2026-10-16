@@ -40,8 +40,17 @@ def gallery(store, handle, tries=3):
         return None
     med = [m for m in d.get("media", []) if m.get("media_type") == "image"]
     v = d.get("variants") or []
+    import re
+    col = [o for o in d.get("options") or [] if re.search(r"colou?r|farbe|couleur|colore|kolor|kleur|cor\b", o.get("name", ""), re.I)]
     return dict(imgs=[(fix(m["src"]), m.get("width") or 0, m.get("height") or 0) for m in med],
-                avail=bool(v) and sum(1 for x in v if x.get("available")) >= max(1, 0.5 * len(v)))
+                avail=bool(v) and sum(1 for x in v if x.get("available")) >= max(1, 0.5 * len(v)),
+                n_colors=len(col[0]["values"]) if col else 1, title=d.get("title", ""))
+
+
+def enough_photos(g, distinct, minimum=3):
+    """≥3 verschillende foto's, of ≥3 foto's bij een product met meerdere kleuren (kleurfoto's op dezelfde pose
+    lijken voor de foto-vergelijking op elkaar, maar zijn voor de lister wél bruikbaar)."""
+    return distinct >= minimum or (len(g["imgs"]) >= minimum and g.get("n_colors", 1) >= 2)
 
 
 _WF = {}
