@@ -50,8 +50,18 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
   hetzelfde product: conversie 55% + fotokwaliteit 45%, prijs blijft van de bewezen ≥75K-bron) en `python3 quality_gate.py`
   (dode link = alleen echte 404, <3 foto's, merknaam → regel gaat UIT de file naar `listings/rejected.json` en komt nooit terug; Issues is alleen voor listers); herhaal 6-7 tot elke store 200 open heeft;
   (8) controleren, committen, file sturen. Geen nieuwe kolommen in de files.
+- **Google-data (akkoord Davy 16-10):** productrapporten (UTF-16 TSV uit Google Ads) in `data/google/`;
+  `python3 bestsellers_google.py <csv>:<domein> ...` geeft de bestsellers. Uitschieters = top 5 + alles met ≥2 conversies
+  en (≥2% van de omzet bij ROAS ≥0,8× gemiddeld, of ROAS ≥1,5× gemiddeld) → `data/google/standouts.json`.
+  Data van de best presterende stores wordt overgezet: een uitschieter die in een andere eigen store ontbreekt, komt daar
+  bovenaan (beste versie van hetzelfde product, anders de eigen-store-link). Bewezen producttypes krijgen voorrang via
+  `config/store_mix.json` (doelmix per categorie + dames-aandeel + boost; quota in final_checks).
+- **Tassen:** alleen bewezen bestsellers (top 40% bij een ≥75K-bron, geen tier0), China-bewijs, geen merk/logo-kopie,
+  max ~20 per store, prijs = bronprijs.
+- **Rondes van 300 nieuw:** `add_prio.py <items.json>` (bestsellers/varianten/tassen bovenaan de nieuwe regels), dan
+  `select_products.py --update --nieuw 300` (telt alle regels met Added on = vandaag mee).
 - **Bestseller-varianten (vaste taak, akkoord Davy 16-10):** neem de top 5 bestsellers van Davento en Niaali
-  (omzet uit het Google-productrapport van Davy). Zoek per bestseller (1) hetzelfde product in kleuren die de store nog
+  (omzet uit het Google-productrapport van Davy) en andere uitschieters. Zoek per bestseller (1) hetzelfde product in kleuren die de store nog
   niet heeft, (2) 5-8 look-alikes (zelfde type, andere pasvorm/kraag/stiksel/stof/glans) bij alle dropshipstores, ook
   kleine, en (3) is het product (bijna) unisex: ook de heren- resp. damesversie. Eisen: aantoonbaar uit China
   (zelfde leveranciersfoto's bij ≥2 dropshipstores of 1688/Alibaba-foto's), niet al in de store of de file, ≥3 foto's,

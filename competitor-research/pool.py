@@ -117,7 +117,7 @@ def main():
         if d not in known:
             comps.append(dict(domain=d, market=m, visits=0, name=d, score=4))
     print(f"{len(comps)} competitors ophalen ...", file=sys.stderr)
-    with cf.ThreadPoolExecutor(6) as ex:
+    with cf.ThreadPoolExecutor(3) as ex:
         stores = [s for s in ex.map(fetch_store, comps) if s]
 
     cfg = json.loads((BASE / "config/seasons.json").read_text())

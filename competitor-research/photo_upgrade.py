@@ -44,6 +44,24 @@ def gallery(store, handle, tries=3):
                 avail=bool(v) and sum(1 for x in v if x.get("available")) >= max(1, 0.5 * len(v)))
 
 
+_WF = {}
+
+
+def white_frac(url):
+    """Aandeel bijna-witte, kleurloze pixels: hoog = studio-packshot op wit, laag = sfeer-/scènefoto."""
+    if url not in _WF:
+        import io
+        import numpy as np
+        from PIL import Image
+        try:
+            im = np.asarray(Image.open(io.BytesIO(pp.get(W(url), binary=True))).convert("RGB").resize((120, 150)), dtype=float)
+            mx, mn = im.max(2), im.min(2)
+            _WF[url] = float(((mx > 232) & (mx - mn < 18)).mean())
+        except Exception:
+            _WF[url] = None
+    return _WF[url]
+
+
 def quality(g, hashes):
     imgs = g["imgs"]
     if not imgs:
@@ -130,7 +148,7 @@ def main():
         dom = market_of.get(k[0]) in markets
         first = min(g["imgs"][0][1], g["imgs"][0][2]) if g["imgs"] else 0
         return dict(total=0.55 * conv + 0.45 * q - (0.5 if dom else 0), conv=conv, q=q, nd=nd, dom=dom, res=medres(g),
-                    n=len(g["imgs"]), first=first)
+                    n=len(g["imgs"]), first=first, main=g["imgs"][0][0] if g["imgs"] else "")
 
     def acceptable(new, old, same_main):
         """Alleen wisselen bij echte winst (regel Davy 9-10): nooit minder foto's, nooit een minder scherpe
@@ -138,6 +156,10 @@ def main():
         if new["dom"] and not old["dom"]:
             return False
         if new["res"] < 0.8 * old["res"] or new["n"] < old["n"] or new["first"] < old["first"]:
+            return False
+        # sfeerfoto als hoofdfoto nooit inruilen voor een losse productfoto op wit
+        wo, wn = white_frac(old["main"]), white_frac(new["main"])
+        if wo is not None and wn is not None and wo < 0.15 and wn > 0.5:
             return False
         better_photos = new["q"] >= old["q"] + 0.05
         better_main = (not same_main) and new["conv"] >= old["conv"] + 0.10 and new["q"] >= old["q"] - 0.03

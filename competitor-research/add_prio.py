@@ -68,11 +68,12 @@ def main():
             price = sp.round_price(eur, s["valuta"], fx)
             in_m = market_of.get(st_) in s["markten"]
             row = dict(key=f"prio/{st_}/{hd}", url=it["url"], title=g.get("title") or it["title"], cat=sp.CAT_EN.get(it["cat"], it["cat"]),
-                       gender=it["gender"], week="1", strat="P", score=999, why=it["why"], price=price, band="",
-                       price_note="price level of your own bestseller" + (f" (source sells at {src_price:.2f} {src_cur})" if src_price else ""),
+                       gender=it["gender"], week="1", strat=it.get("strat", "P"), score=999 if it.get("strat", "P") == "P" else 500, why=it["why"], price=price, band="",
+                       price_note=("take over the source link price" if it.get("strat") == "A" else
+                                   "price level of your own bestseller" + (f" (source sells at {src_price:.2f} {src_cur})" if src_price else "")),
                        source=it.get("source_label") or st_, market=market_of.get(st_, ""), own_market=in_m,
                        img_score=round(100 * pu.quality(g, hs)[0]), img_txt=f"{len(g['imgs'])} photos, 1st {g['imgs'][0][1]}×{g['imgs'][0][2]}",
-                       photo_note="Proven type in your own stores – list first", alts=[], img=pu.W(g["imgs"][0][0]), added=today,
+                       photo_note=("Proven bestseller bag – list early" if it.get("strat") == "A" else "Proven type in your own stores – list first"), alts=[], img=pu.W(g["imgs"][0][0]), added=today,
                        lister="", status="Not listed", comment="", name="", prio=True)
             added[n].append(row)
     for n, rows in added.items():
