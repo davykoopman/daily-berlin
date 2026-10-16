@@ -50,6 +50,13 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
   hetzelfde product: conversie 55% + fotokwaliteit 45%, prijs blijft van de bewezen ≥75K-bron) en `python3 quality_gate.py`
   (dode link = alleen echte 404, <3 foto's, merknaam → regel gaat UIT de file naar `listings/rejected.json` en komt nooit terug; Issues is alleen voor listers); herhaal 6-7 tot elke store 200 open heeft;
   (8) controleren, committen, file sturen. Geen nieuwe kolommen in de files.
+- **Bestseller-varianten (vaste taak, akkoord Davy 16-10):** neem de top 5 bestsellers van Davento en Niaali
+  (omzet uit het Google-productrapport van Davy). Zoek per bestseller (1) hetzelfde product in kleuren die de store nog
+  niet heeft, (2) 5-8 look-alikes (zelfde type, andere pasvorm/kraag/stiksel/stof/glans) bij alle dropshipstores, ook
+  kleine, en (3) is het product (bijna) unisex: ook de heren- resp. damesversie. Eisen: aantoonbaar uit China
+  (zelfde leveranciersfoto's bij ≥2 dropshipstores of 1688/Alibaba-foto's), niet al in de store of de file, ≥3 foto's,
+  geen logo/merk, ≥50% maten leverbaar, liefst geen bron uit de eigen markt. Deze regels komen bovenaan de Links-tab
+  van die store, zonder extra kolom of label.
 - Regels van de gebruiker: bron liefst NIET uit de eigen markt (zelfde foto+prijs = concurrentie);
   adviesprijs = prijs van de bronlink (niet onderprijzen, hoger is beter; alleen 'kan hoger' bij te lage prijs);
   foto's wegen zwaar (vooral de 1e); ~300 per store voor 20-25 dagen, koudere items later in de lijst.
