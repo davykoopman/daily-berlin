@@ -42,13 +42,15 @@ def read_file(path):
                 continue
             g = lambda k: (r[ix[k]] if k in ix and ix[k] < len(r) else None)
             rows[str(link).strip()] = dict(name=g("Product Name"), lister=g("Lister"), status=g("Status"), comment=g("Comment"))
-        out[ws.title.split(" – ")[0]] = rows
+        out[ws.title.split(" – ")[0].strip()] = rows
     return out
 
 
 def clean(rec):
     st = norm_status(rec["status"])
     com = str(rec["comment"]).strip() if rec["comment"] not in (None, "") else ""
+    if st in ("Not active", "Inactive"):
+        st, com = "Issues", com or "Source link not active"
     if ALREADY.search(com):
         st, com = "Duplicate", "Already in store"
     elif SAME.search(com) and st in ("Issues", "Not listed", "Duplicate"):

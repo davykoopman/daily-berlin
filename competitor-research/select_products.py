@@ -13,7 +13,7 @@ Strategieën (in volgorde van voorkeur):
 Gebruik:  python3 select_products.py            (alle stores uit config/stores.json)
           python3 select_products.py --store Stellamea --aantal 300
 """
-import argparse, concurrent.futures as cf, datetime as dt, io, json, math, re, statistics as st, sys
+import argparse, math, concurrent.futures as cf, datetime as dt, io, json, math, re, statistics as st, sys
 from pathlib import Path
 
 import product_picker as pp
@@ -290,7 +290,7 @@ def listweek(ev, markets):
     return 1 if b["cat"] in ("Tussenjas", "Blazer", "Vest / cardigan", "Blouse / shirt", "Jurk", "Set") else 2
 
 
-def final_checks(picked, own, existing, media, n_target):
+def final_checks(picked, own, existing, media, n_target, quota=None):
     """Strengere dubbelcheck + bron-check (lessen uit de eerste ronde):
     - eerste 3 foto's van de bron vs ALLE foto's van je eigen producten (listers kiezen soms een andere hoofdfoto);
     - eerste 3 foto's vs alle regels die al in de Launch File staan en vs elkaar (kleurvarianten = zelfde product);
@@ -316,19 +316,32 @@ def final_checks(picked, own, existing, media, n_target):
             return False
     with cf.ThreadPoolExecutor(12) as ex:
         ok = list(ex.map(avail, picked))
-    out, drop = [], {"al in store": 0, "dubbel in lijst": 0, "bron niet leverbaar": 0}
+    out, drop = [], {"al in store": 0, "dubbel in lijst": 0, "bron niet leverbaar": 0, "categorie vol": 0}
+    ok_e = []
     for e, a in zip(picked, ok):
         if not a:
             drop["bron niet leverbaar"] += 1; continue
         hh = [imagehash.hex_to_hash(h) for u in gal(media.get(f'{e["best"]["store"]}/{e["best"]["handle"]}')) if (h := hs.get(u))]
-        if any(h - o <= 8 for h in hh for o in own_h):
+        # ≤12: ook iets bewerkte/bijgesneden foto's tellen als 'al in store' (les uit de file van 16-10)
+        if any(h - o <= 12 for h in hh for o in own_h):
             drop["al in store"] += 1; continue
-        if any(h - o <= 6 for h in hh for o in seen):
-            drop["dubbel in lijst"] += 1; continue
-        seen += hh
-        out.append(e)
-        if len(out) >= n_target:
-            break
+        ok_e.append((e, hh))
+    # twee rondes: eerst binnen de doelmix per categorie, daarna aanvullen als er te weinig zijn
+    per = {}
+    for strict in (True, False):
+        for e, hh in ok_e:
+            if len(out) >= n_target:
+                break
+            if e in out:
+                continue
+            c = e["best"]["cat"]
+            if strict and quota and per.get(c, 0) >= quota.get(c, 1):
+                continue
+            if any(h - o <= 8 for h in hh for o in seen):
+                drop["dubbel in lijst"] += 1; continue
+            seen += hh
+            per[c] = per.get(c, 0) + 1
+            out.append(e)
     print(f"   final checks: {drop} → {len(out)}", file=sys.stderr)
     return out
 
@@ -339,6 +352,8 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
     own = own_catalog(store["domein"])
     import imagehash
     own_h = [imagehash.hex_to_hash(h) for h in own["hashes"]]
+    mixes = json.loads((BASE / "config/store_mix.json").read_text())
+    mix = mixes.get(store["naam"], mixes["_default"])
     cands = []
     for k, mem in groups.items():
         ev = evaluate(mem, markets, None)
@@ -347,20 +362,24 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
         ph = ev["best"].get("phash")
         if ph:
             h = imagehash.hex_to_hash(ph)
-            if any(h - o <= 8 for o in own_h):
-                continue  # heb je al
+            if any(h - o <= 10 for o in own_h):
+                continue  # heb je al (ook met iets bewerkte foto's)
         g = gender(ev["best"]["title"])
-        # Laat de mix aansluiten bij je store: dames/heren-verhouding als lichte weging.
+        # Laat de mix aansluiten bij je store: dames/heren-verhouding als lichte weging (doel uit store_mix.json
+        # als die er is, anders de huidige verhouding in je catalogus) + boost voor bewezen producttypes.
+        sw = mix.get("share_w", own["share_w"])
         if g == "W":
-            ev["score"] *= 0.75 + 0.5 * own["share_w"]
+            ev["score"] *= 0.75 + 0.5 * sw
         elif g == "M":
-            ev["score"] *= 0.75 + 0.5 * (1 - own["share_w"])
+            ev["score"] *= 0.75 + 0.5 * (1 - sw)
+        ev["score"] *= mix.get("boost", {}).get(f'{g}|{ev["best"]["cat"]}', 1.0)
         ev["gender"], ev["key"] = g, k
         ev["score"] = round(ev["score"], 1)
         cands.append(ev)
     cands.sort(key=lambda e: -e["score"])
     # Categoriespreiding: max ~30% per categorie, zodat je niet 300 truien krijgt.
     cap = max(int(n_target * 0.3), 20)
+    over = int(n_target * (2.4 if len(markets) > 1 else 1.8)) + (40 if existing else 15)
     per_cat, picked = {}, []
     # links die al in de Launch File staan (ook na een foto-upgrade naar een andere versie) meteen overslaan
     have = {"/".join(x["url"].split("/")[2:5:2]).split("?")[0] for x in existing}
@@ -374,11 +393,12 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
         if any(f'{m["store"]}/{m["handle"]}' in have for m in e["members"]):
             continue
         c = e["best"]["cat"]
-        if per_cat.get(c, 0) >= cap:
+        cap_c = (math.ceil(mix["mix"].get(c, 0.01) * over * 1.3) + 2) if mix.get("mix") else cap
+        if per_cat.get(c, 0) >= cap_c:
             continue
         per_cat[c] = per_cat.get(c, 0) + 1
         picked.append(e)
-        if len(picked) >= int(n_target * (2.4 if len(markets) > 1 else 1.8)) + (40 if existing else 15):
+        if len(picked) >= over:
             break
     bands = price_bands(pool, markets)
     media = fetch_media([m for e in picked for m in e["members"]])
@@ -391,7 +411,8 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
     picked = [e for e in picked if e["best"]["market"] not in markets
               or (e["strat"] in ("B", "C") and e["best"]["pct"] >= 0.85 and e["best"]["img_score"] >= 70)]
     picked.sort(key=lambda e: -e["score"])
-    picked = final_checks(picked, own, existing, media, n_target)
+    quota = {c: math.ceil(v * n_target) + 2 for c, v in mix.get("mix", {}).items()}
+    picked = final_checks(picked, own, existing, media, n_target, quota)
     for m in markets:
         taken.setdefault(m, set()).update(e["key"] for e in picked)
     for e in picked:
@@ -412,6 +433,7 @@ STRAT_TXT = {
     "B": ("B · Broadly proven", "Sold by 3+ competitors and a bestseller at a big one. Several strong stores bet on it: low risk."),
     "C": ("C · New & rising", "Live ≤21 days at a big competitor and already in the top 40% of its ranking. Get in early before it is everywhere."),
     "D": ("D · Proven in your market", "Bestseller at one competitor in your country (3+ competitors there = skipped). Demand is proven; you compete on ads and photos, not on price."),
+    "P": ("P · Proven in your own stores", "Bestseller in Davento/Niaali (Google Ads data), or a colour/look-alike/men-women version of such a bestseller. Always at the top of the list: the type is proven to convert in your own stores."),
     "E": ("E · New at a top competitor", "Just added (≤14 days) by a store with 150K+ visits. Not yet proven, but these stores test deliberately."),
 }
 
@@ -468,7 +490,7 @@ def write_workbook(results, pool, names, path):
     f = lambda **k: Font(name=F, size=k.pop("size", 10), **k)
     thin = Border(bottom=Side(style="thin", color="D9DDE3"))
     hdr_fill = PatternFill("solid", fgColor=navy)
-    sfill = {"A": "C6EFCE", "B": "DDEBF7", "C": "FCE4D6", "D": "FFF2CC", "E": "EDE7F6"}
+    sfill = {"P": "F8CBAD", "A": "C6EFCE", "B": "DDEBF7", "C": "FCE4D6", "D": "FFF2CC", "E": "EDE7F6"}
     st_col = {"Not listed": ("F2F2F2", "595959"), "Draft": ("FFF2CC", "7F6000"), "Live": ("C6EFCE", "006100"),
               "Issues": ("FFC7CE", "9C0006"), "Duplicate": ("D9D9D9", "404040")}
     wb = Workbook()
@@ -635,6 +657,7 @@ def main():
     ap.add_argument("--aantal", type=int, default=200, help="max aantal OPEN (Not listed) producten per store")
     ap.add_argument("--merge", help="teruggestuurde Launch File: statussen behouden en lijst aanvullen")
     ap.add_argument("--update", action="store_true", help="aanvullen vanuit launch_state.json (al opgeschoond)")
+    ap.add_argument("--nieuw", type=int, help="aantal NIEUWE regels per store vandaag (incl. bestseller-varianten); vervangt --aantal")
     a = ap.parse_args()
     cfg = json.loads((BASE / "config/stores.json").read_text())
     fx = cfg["fx_naar_eur"]
@@ -682,7 +705,9 @@ def main():
     for s in sorted(stores, key=lambda s: len(s["markten"])):
         prev = old.get(s["naam"], [])
         open_prev = sum(1 for x in prev if (x.get("status") or "Not listed") == "Not listed")
-        need = max(a.aantal - open_prev, 0)
+        today = dt.date.today().isoformat()
+        need = (max(a.nieuw - sum(1 for x in prev if x.get("added") == today), 0) if a.nieuw is not None
+                else max(a.aantal - open_prev, 0))
         picks, own = (select_for_store(s, pool, groups, fx, names, taken, need, existing=prev) if need
                       else ([], own_catalog(s["domein"])))
         rows = prev + [to_row(e, s, names) for e in picks]

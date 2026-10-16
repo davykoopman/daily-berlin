@@ -24,9 +24,17 @@ CAT_ORDER = ["Badmode", "Sandalen", "Shorts", "Vest / cardigan", "Winterjas", "B
              "Trui / hoodie", "Set", "Jurk", "Broek", "Blouse / shirt", "Schoenen", "T-shirt / top"]
 
 
-def get(url, binary=False, timeout=30):
-    data = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout, context=CTX).read()
-    return data if binary else data.decode("utf8", "ignore")
+def get(url, binary=False, timeout=30, tries=4):
+    """GET met nette retry bij rate limiting (429) en tijdelijke serverfouten (5xx); 404 meteen doorgeven."""
+    import time, urllib.error
+    for i in range(tries):
+        try:
+            data = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout, context=CTX).read()
+            return data if binary else data.decode("utf8", "ignore")
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 500, 502, 503, 504) or i == tries - 1:
+                raise
+            time.sleep(float(e.headers.get("Retry-After") or 0) or 4 * (i + 1))
 
 
 def fetch_products(domain):

@@ -1,0 +1,9 @@
+{
+  "_uitleg": "Doelmix per store voor NIEUWE producten (aandeel per categorie, som ~1) + aandeel dames + boost voor bewezen producttypes. Davento en Niaali op basis van hun Google-productrapporten (1-16 okt 2026); andere stores volgen de bewezen richting gematigd (akkoord Davy 16-10).",
+  "Davento":   {"share_w": 0.45, "boost": {"M|Tussenjas": 1.15, "W|Winterjas": 1.15, "W|Tussenjas": 1.15, "M|Winterjas": 1.05, "W|Set": 1.1, "M|Trui / hoodie": 1.1, "M|Blouse / shirt": 1.05},
+                "mix": {"Tussenjas": 0.30, "Winterjas": 0.25, "Trui / hoodie": 0.10, "Broek": 0.08, "Set": 0.08, "Blouse / shirt": 0.06, "Vest / cardigan": 0.05, "Laarzen": 0.04, "Schoenen": 0.02, "Blazer": 0.02}},
+  "Niaali":    {"share_w": 0.55, "boost": {"W|Tussenjas": 1.15, "W|Winterjas": 1.15, "M|Tussenjas": 1.05, "M|Set": 1.0, "M|Broek": 1.05},
+                "mix": {"Tussenjas": 0.30, "Winterjas": 0.25, "Trui / hoodie": 0.10, "Set": 0.08, "Broek": 0.07, "Vest / cardigan": 0.05, "Laarzen": 0.05, "Schoenen": 0.03, "Blouse / shirt": 0.03, "Blazer": 0.02, "Jurk": 0.02}},
+  "_default":  {"boost": {"W|Winterjas": 1.08, "W|Tussenjas": 1.08, "M|Tussenjas": 1.08, "M|Winterjas": 1.05},
+                "mix": {"Tussenjas": 0.22, "Winterjas": 0.23, "Trui / hoodie": 0.18, "Vest / cardigan": 0.12, "Laarzen": 0.10, "Broek": 0.06, "Set": 0.04, "Blazer": 0.02, "Blouse / shirt": 0.02, "Schoenen": 0.01}}
+}
