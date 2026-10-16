@@ -379,7 +379,8 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
     cands.sort(key=lambda e: -e["score"])
     # Categoriespreiding: max ~30% per categorie, zodat je niet 300 truien krijgt.
     cap = max(int(n_target * 0.3), 20)
-    over = int(n_target * (2.4 if len(markets) > 1 else 1.8)) + (40 if existing else 15)
+    # bij aanvullen: ruim venster, want de bovenste kandidaten zijn vaak al eerder afgekeurd (al in store)
+    over = int(n_target * (2.4 if len(markets) > 1 else 1.8)) + (400 if existing else 15)
     per_cat, picked = {}, []
     # links die al in de Launch File staan (ook na een foto-upgrade naar een andere versie) meteen overslaan
     have = {"/".join(x["url"].split("/")[2:5:2]).split("?")[0] for x in existing}
