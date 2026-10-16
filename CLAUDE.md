@@ -66,7 +66,8 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
   kleine, en (3) is het product (bijna) unisex: ook de heren- resp. damesversie. Eisen: aantoonbaar uit China
   (zelfde leveranciersfoto's bij ≥2 dropshipstores of 1688/Alibaba-foto's), niet al in de store of de file, ≥3 foto's,
   geen logo/merk, ≥50% maten leverbaar, liefst geen bron uit de eigen markt. Deze regels komen bovenaan de Links-tab
-  van die store, zonder extra kolom of label.
+  van die store, zonder extra kolom of label. Prijs = prijsniveau van de eigen bestseller in díe store (Niaali ≈ 0,65×
+  Davento), nooit onder de bronprijs. Kleurvarianten op dezelfde pose tellen mee als foto's (≥3 foto's + ≥2 kleuren).
 - Regels van de gebruiker: bron liefst NIET uit de eigen markt (zelfde foto+prijs = concurrentie);
   adviesprijs = prijs van de bronlink (niet onderprijzen, hoger is beter; alleen 'kan hoger' bij te lage prijs);
   foto's wegen zwaar (vooral de 1e); ~300 per store voor 20-25 dagen, koudere items later in de lijst.
