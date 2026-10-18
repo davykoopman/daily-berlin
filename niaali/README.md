@@ -103,3 +103,5 @@ Built in nl/theme (originals in nl/orig). Tested in preview on PL, NL and GB, mo
 - Live test on mobile, 1–4 items, PL (PLN), NL (EUR) and GB (GBP): 0/10/15/20% applied with the right MIX & MATCH
   title; tier bar in the local language; checkout NL in Dutch, € total discounted, free shipping.
 - Still open: iDEAL not yet shown at NL checkout (owner enables it in Shopify Payments).
+- Swatch King uninstalled by the owner (2026-10-18). Live check PL/NL/GB, mobile and desktop: square photo
+  swatches from the theme code, colour name updates on click, no leftover app code, no script errors.
