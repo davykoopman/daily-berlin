@@ -1,0 +1,327 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign title = 'Kategorie'
+    when 'nl'
+      assign title = 'Categorieën'
+    when 'de'
+      assign title = 'Kategorien'
+    when 'fr'
+      assign title = 'Catégories'
+    when 'it'
+      assign title = 'Categorie'
+    when 'es'
+      assign title = 'Categorías'
+    else
+      assign title = 'Shop by category'
+  endcase
+
+  # Groups and categories come from the menu: a top-level collection link with
+  # sub items is a group (e.g. Kobiety), its collection sub items are the tiles.
+  # Menu links point at the collection itself, so translations cannot break them.
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+-%}
+
+<div class="pp-home-cat" data-pp-gender-root>
+  <div class="pp-home-cat__inner">
+    <div class="pp-home__head">
+      <h2 class="pp-home__title">{{ title }}</h2>
+      {% render 'pp-gender-tabs', menu: menu, label: title %}
+    </div>
+
+    {%- assign first_group = true -%}
+    {%- for group in menu.links -%}
+      {%- if group.type != 'collection_link' or group.links.size == 0 -%}{%- continue -%}{%- endif -%}
+      {%- liquid
+        assign parent = group.object
+        capture see_all_key
+          render 'pp-see-all-key', collection: parent
+        endcapture
+        assign see_all_key = see_all_key | strip
+      -%}
+      <div class="pp-home-cat__panel" role="tabpanel" data-pp-panel="{{ parent.handle }}" {% unless first_group %}hidden{% endunless %}>
+        <div class="pp-home-cat__scroller">
+          <ul class="pp-home-cat__row" role="list">
+            {%- for item in group.links -%}
+              {%- if item.type != 'collection_link' -%}{%- continue -%}{%- endif -%}
+              {%- assign c = item.object -%}
+              {%- if c == blank or c.handle == parent.handle or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+              {%- liquid
+                assign label = item.title
+
+                # The collection image when set in the admin, otherwise its first product photo
+                assign img = c.image | default: c.products.first.featured_image
+              -%}
+              <li class="pp-home-cat__item">
+                <a class="pp-home-cat__tile" href="{{ c.url }}">
+                  <span class="pp-home-cat__media">
+                    {%- if img != blank -%}
+                      {{
+                        img
+                        | image_url: width: 800
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '240, 360, 480, 600, 800',
+                          sizes: '(min-width: 990px) 16vw, (min-width: 750px) 25vw, 42vw',
+                          alt: label
+                      }}
+                    {%- endif -%}
+                  </span>
+                  <span class="pp-home-cat__label">{{ label }}</span>
+                </a>
+              </li>
+            {%- endfor -%}
+            <li class="pp-home-cat__item">
+              <a class="pp-home-cat__tile pp-home-cat__tile--all" href="{{ parent.url }}">
+                <span class="pp-home-cat__media pp-home-cat__all">
+                  <span class="pp-home-cat__all-text">{% render 'pp-i18n', key: see_all_key %}</span>
+                  <span class="pp-home-cat__all-arrow" aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="pp-home-cat__nav" aria-hidden="true">
+          <button type="button" class="pp-home-cat__arrow" data-dir="-1" tabindex="-1">←</button>
+          <button type="button" class="pp-home-cat__arrow" data-dir="1" tabindex="-1">→</button>
+        </div>
+      </div>
+      {%- assign first_group = false -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+<script>
+  (function () {
+    if (window.ppHomeCatInit) return;
+    window.ppHomeCatInit = true;
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('.pp-home-cat__arrow');
+      if (!b) return;
+      var s = b.closest('.pp-home-cat__panel').querySelector('.pp-home-cat__scroller');
+      s.scrollBy({ left: +b.dataset.dir * s.clientWidth * 0.8, behavior: 'smooth' });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-home-cat {
+    padding-block: 40px 24px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .pp-home-cat__inner {
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    padding-inline: var(--page-margin, 40px);
+  }
+
+  .pp-home-cat__panel {
+    position: relative;
+  }
+
+  .pp-home-cat__scroller {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .pp-home-cat__scroller::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pp-home-cat__row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 5 * 12px) / 6);
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-home-cat__item {
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+
+  .pp-home-cat__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .pp-home-cat__media {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.05);
+  }
+
+  .pp-home-cat__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .pp-home-cat__tile:hover .pp-home-cat__media img {
+    transform: scale(1.04);
+  }
+
+  .pp-home-cat__label {
+    overflow: hidden;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* Last tile: link to the whole collection, same look as on the product page */
+  .pp-home-cat__all {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px;
+    text-align: center;
+    transition: background-color 0.25s ease;
+  }
+
+  .pp-home-cat__tile--all:hover .pp-home-cat__all {
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.09);
+  }
+
+  .pp-home-cat__all-text {
+    max-width: 12em;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .pp-home-cat__all-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-foreground-heading, #030302);
+    color: var(--color-background, #fff);
+    font-size: 1.125rem;
+    line-height: 1;
+    transition: transform 0.25s ease;
+  }
+
+  .pp-home-cat__tile--all:hover .pp-home-cat__all-arrow {
+    transform: translateX(4px);
+  }
+
+  .pp-home-cat__nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .pp-home-cat__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.2);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-foreground);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .pp-home-cat__arrow:hover {
+    border-color: var(--color-foreground-heading, #030302);
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .pp-home-cat__row {
+      grid-auto-columns: calc((100% - 3 * 12px) / 4);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-home-cat {
+      padding-block: 28px 16px;
+    }
+
+    .pp-home-cat__inner {
+      padding-inline: 16px;
+    }
+
+    /* Swipe row that bleeds to the screen edge */
+    .pp-home-cat__scroller {
+      margin-inline: -16px;
+      padding-inline: 16px;
+      scroll-padding-inline: 16px;
+    }
+
+    .pp-home-cat__row {
+      grid-auto-columns: 42vw;
+      gap: 10px;
+    }
+
+    .pp-home-cat__label {
+      font-size: 0.875rem;
+    }
+
+    .pp-home-cat__all-text {
+      font-size: 0.875rem;
+    }
+
+    .pp-home-cat__all-arrow {
+      width: 40px;
+      height: 40px;
+    }
+
+    /* Swiping is enough on phones */
+    .pp-home-cat__nav {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Home categories",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Categories come from the menu: each top-level collection link with sub items (e.g. Kobiety, Mężczyźni) becomes a switch, its collection sub items become the tiles, in menu order. Tiles use the collection image, or the first product photo when the collection has no image."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Home categories"
+    }
+  ]
+}
+{% endschema %}

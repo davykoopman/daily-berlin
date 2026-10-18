@@ -1,0 +1,190 @@
+{%- doc -%}
+  Stock line at the add to cart button, with a pulsing dot.
+  - Real stock at or below the threshold (inventory tracked by Shopify): "Only 3 left in stock".
+  - Otherwise, when the variant can be bought: the in stock text.
+  - Sold out: nothing (the button already says sold out).
+  Exact stock numbers above the threshold are never put in the page.
+  Follows the variant picker through the theme's variant:update event.
+{%- enddoc -%}
+
+{%- liquid
+  assign bs = block.settings
+  assign p = closest.product
+  assign v = p.selected_or_first_available_variant
+  assign threshold = bs.threshold | times: 1
+-%}
+
+<div class="pp-stock" data-pp-stock="{{ block.id }}" style="--pp-stock-dot: {{ bs.dot_color }};" {{ block.shopify_attributes }}>
+  <p class="pp-stock__line" data-pp-stock-line{% unless v.available %} hidden{% endunless %}>
+    <span class="pp-stock__dot" aria-hidden="true"></span>
+    <span data-pp-stock-text>
+      {%- if v.inventory_management == 'shopify' and v.inventory_quantity > 0 and v.inventory_quantity <= threshold -%}
+        {{ bs.low_text | replace: '[n]', v.inventory_quantity }}
+      {%- else -%}
+        {{ bs.in_stock_text }}
+      {%- endif -%}
+    </span>
+  </p>
+  {%- if bs.note != blank -%}
+    <p class="pp-stock__note">{{ bs.note }}</p>
+  {%- endif -%}
+  <script type="application/json" data-pp-stock-data>
+    {
+      "low": {{ bs.low_text | json }},
+      "in": {{ bs.in_stock_text | json }},
+      "v": {
+        {%- for x in p.variants -%}
+          {%- liquid
+            assign q = 'null'
+            if x.inventory_management == 'shopify' and x.inventory_quantity > 0 and x.inventory_quantity <= threshold
+              assign q = x.inventory_quantity
+            endif
+          -%}
+          "{{ x.id }}": [{% if x.available %}1{% else %}0{% endif %},{{ q }}]{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      }
+    }
+  </script>
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-pp-stock="{{ block.id }}"]');
+    if (!root || root.dataset.ready) return;
+    root.dataset.ready = '1';
+    var data = JSON.parse(root.querySelector('[data-pp-stock-data]').textContent);
+    var line = root.querySelector('[data-pp-stock-line]');
+    var text = root.querySelector('[data-pp-stock-text]');
+    var show = function (id) {
+      var d = data.v[String(id)];
+      if (!d) return;
+      line.hidden = !d[0];
+      text.textContent = d[1] ? data.low.replace('[n]', d[1]) : data.in;
+    };
+    document.addEventListener('variant:update', function (e) {
+      var r = e.detail && e.detail.resource;
+      if (r && r.id) show(r.id);
+    });
+    document.addEventListener('change', function (e) {
+      if (!e.target.closest || !e.target.closest('variant-picker, .variant-picker, form')) return;
+      setTimeout(function () {
+        var id = new URLSearchParams(location.search).get('variant');
+        if (id) show(id);
+      }, 150);
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-stock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .pp-stock p {
+    margin: 0;
+  }
+
+  .pp-stock__line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .pp-stock__line[hidden] {
+    display: none;
+  }
+
+  .pp-stock__dot {
+    position: relative;
+    flex: 0 0 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--pp-stock-dot, #a94416);
+  }
+
+  .pp-stock__dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--pp-stock-dot, #a94416);
+    animation: pp-stock-pulse 1.6s ease-out infinite;
+  }
+
+  @keyframes pp-stock-pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-stock__dot::after {
+      animation: none;
+    }
+  }
+
+  .pp-stock__note {
+    font-size: 13px;
+    line-height: 1.4;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.75);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Stock",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "'Only [n] left' only shows with real stock tracked in Shopify, at or below the threshold."
+    },
+    {
+      "type": "text",
+      "id": "in_stock_text",
+      "label": "In stock text",
+      "default": "In stock, ready to ship"
+    },
+    {
+      "type": "text",
+      "id": "low_text",
+      "label": "Low stock text",
+      "info": "[n] is replaced by the real number in stock",
+      "default": "Low in stock: only [n] left"
+    },
+    {
+      "type": "range",
+      "id": "threshold",
+      "label": "Low stock threshold",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note under the line",
+      "default": "Popular styles sell out fast. If you can add it to your cart, it's still available."
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color",
+      "default": "#A94416"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Stock",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

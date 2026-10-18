@@ -1,0 +1,313 @@
+{%- liquid
+  assign ss = section.settings
+  assign photos = section.blocks | where: 'type', 'photo'
+  assign has_photo = false
+  for b in photos
+    if b.settings.image != blank
+      assign has_photo = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if has_photo or request.design_mode -%}
+  <div class="section section--page-width pp-ugc" style="--pp-ugc-cols: {{ ss.columns }}; padding-block: {{ ss.padding_top }}px {{ ss.padding_bottom }}px;" data-pp-ugc>
+    <div class="pp-ugc__head">
+      {%- if ss.heading != blank -%}<h2 class="pp-ugc__title">{{ ss.heading }}</h2>{%- endif -%}
+      {%- if ss.subheading != blank -%}<p class="pp-ugc__sub">{{ ss.subheading }}</p>{%- endif -%}
+    </div>
+
+    {%- if has_photo -%}
+      <div class="pp-ugc__wrap">
+        <ul class="pp-ugc__track" role="list" data-pp-ugc-track>
+          {%- for b in photos -%}
+            {%- if b.settings.image == blank -%}{%- continue -%}{%- endif -%}
+            <li class="pp-ugc__item" {{ b.shopify_attributes }}>
+              <figure class="pp-ugc__card">
+                <div class="pp-ugc__frame">
+                  {{ b.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 20vw, 40vw', widths: '240, 360, 480, 600', class: 'pp-ugc__img', alt: b.settings.name | default: ss.heading }}
+                </div>
+                {%- if b.settings.name != blank or b.settings.caption != blank -%}
+                  <figcaption class="pp-ugc__caption">
+                    {%- if b.settings.caption != blank -%}<span class="pp-ugc__quote">{{ b.settings.caption }}</span>{%- endif -%}
+                    {%- if b.settings.name != blank -%}<span class="pp-ugc__name">{{ b.settings.name }}</span>{%- endif -%}
+                  </figcaption>
+                {%- endif -%}
+              </figure>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="pp-ugc__dots" aria-hidden="true" data-pp-ugc-dots></div>
+        <button type="button" class="pp-ugc__arrow pp-ugc__arrow--prev" data-pp-ugc-arrow="-1" aria-label="Previous photos">←</button>
+        <button type="button" class="pp-ugc__arrow pp-ugc__arrow--next" data-pp-ugc-arrow="1" aria-label="Next photos">→</button>
+      </div>
+    {%- else -%}
+      <p class="pp-ugc__empty">Add customer photos with "Add block" → Photo. This section stays hidden on the store until it has a photo.</p>
+    {%- endif -%}
+  </div>
+
+  <script>
+    (function () {
+      document.querySelectorAll('[data-pp-ugc]').forEach(function (root) {
+        if (root.dataset.ready) return;
+        root.dataset.ready = '1';
+        var track = root.querySelector('[data-pp-ugc-track]');
+        if (!track) return;
+        var arrows = root.querySelectorAll('[data-pp-ugc-arrow]');
+        var dotsEl = root.querySelector('[data-pp-ugc-dots]');
+        var update = function () {
+          var max = track.scrollWidth - track.clientWidth - 2;
+          arrows[0].disabled = track.scrollLeft <= 2;
+          arrows[1].disabled = track.scrollLeft >= max;
+          if (!dotsEl) return;
+          var pages = Math.max(1, Math.ceil(track.scrollWidth / track.clientWidth - 0.05));
+          if (dotsEl.children.length !== pages) {
+            dotsEl.innerHTML = '';
+            for (var i = 0; i < pages; i++) dotsEl.appendChild(document.createElement('i'));
+          }
+          var cur = max > 0 ? Math.round(track.scrollLeft / max * (pages - 1)) : 0;
+          [].forEach.call(dotsEl.children, function (d, i) { d.classList.toggle('is-active', i === cur); });
+          dotsEl.hidden = pages < 2;
+        };
+        arrows.forEach(function (a) {
+          a.addEventListener('click', function () {
+            var item = track.querySelector('.pp-ugc__item');
+            var step = item ? item.getBoundingClientRect().width + 12 : track.clientWidth;
+            track.scrollBy({ left: step * parseInt(a.dataset.ppUgcArrow, 10), behavior: 'smooth' });
+          });
+        });
+        track.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-ugc__head {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .pp-ugc__title {
+    margin: 0;
+  }
+
+  .pp-ugc__sub {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.75);
+  }
+
+  .pp-ugc__wrap {
+    position: relative;
+  }
+
+  .pp-ugc__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--pp-ugc-cols) - 1) * 12px) / var(--pp-ugc-cols));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .pp-ugc__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pp-ugc__item {
+    scroll-snap-align: start;
+  }
+
+  .pp-ugc__card {
+    margin: 0;
+  }
+
+  .pp-ugc__frame {
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #e9e4e0;
+  }
+
+  .pp-ugc__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .pp-ugc__caption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 2px 0;
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+
+  .pp-ugc__quote {
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.8);
+  }
+
+  .pp-ugc__name {
+    font-weight: 700;
+  }
+
+  .pp-ugc__dots {
+    display: none;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .pp-ugc__dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d0cac4;
+  }
+
+  .pp-ugc__dots i.is-active {
+    background: #000;
+  }
+
+  .pp-ugc__arrow {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    border: 0;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .pp-ugc__arrow:disabled {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pp-ugc__arrow--prev {
+    left: 8px;
+  }
+
+  .pp-ugc__arrow--next {
+    right: 8px;
+  }
+
+  .pp-ugc__empty {
+    padding: 24px;
+    border: 1px dashed #d0cac4;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-ugc__track {
+      grid-auto-columns: 40%;
+      gap: 10px;
+    }
+
+    .pp-ugc__dots:not([hidden]) {
+      display: flex;
+    }
+
+    .pp-ugc__arrow {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Customer photos",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Use real customer photos only, with their permission."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Styled by our customers"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Sub heading",
+      "default": "Real photos from Newmae customers"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Photos per row (desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "info": "e.g. Sarah, Texas"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Quote (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Customer photos"
+    }
+  ]
+}
+{% endschema %}

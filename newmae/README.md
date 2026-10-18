@@ -86,3 +86,27 @@
   mobile 1.5× width (max 82svh), text at the bottom so faces stay free (CSS in sections/pp-home-best.liquid,
   scoped to hero_G7CAX9). Hero label "FALL CLEARANCE" without bold (h4 style), so the hero uses one serif heading
   and one sans font at one weight. templates/index.json built on the user's editor version (13:07).
+
+## Speed & Premium (theme "Newmae - Speed & Premium (werk)" #208909107525, unpublished, copy of the live Fall Clearance theme)
+- Files: newmae/speed/orig (as copied) and newmae/speed/theme (changed/new). No "Custom liquid" blocks were in use;
+  everything is coded as sections/snippets.
+- Quantity selector: product page only for products with quantity rules (hidden input quantity=1 otherwise,
+  blocks/buy-buttons.liquid). Cart: selector only when a line has 2+, "Remove" text link (snippets/cart-products.liquid).
+- Colour swatches without app/swatch data: colour options render round photo swatches from the variant image,
+  colour dot from the name as fallback (snippets/variant-main-picker, swatch, pp-color-hex). Swatch King app embed is
+  still on in settings but renders nothing; if the app is reactivated, swatches would show twice.
+- Cart upsell: compact rows (64px photo, title, price, "+ Add" → quick pick) in snippets/pp-cart-upsell.
+- Home hero: own section sections/pp-hero (one <picture>, desktop/mobile photo, focal point settings, text left on
+  desktop, bottom on mobile with a shade). Replaces the theme hero on index; old CSS hack removed from pp-home-best.
+- Product: estimated delivery date (4–9 business days, US Eastern, computed in the browser) in blocks/pp-delivery;
+  mobile sticky add to cart shows the button text.
+- Speed: gallery images after the first are lazy (snippets/product-media); pp-card variant JSON moved out of the page
+  (fetched on "Choose" from /products/handle?view=pp-data → templates/product.pp-data.liquid + snippets/pp-card-data);
+  quick pick JS in assets/pp-quick-pick.js (cached, once per page); desktop mega menu no longer preloads its images
+  on phones (assets/header-menu.js); mobile hero max 960px.
+- Measured (mobile, DPR 3, one run): product images 2060 → 1287 KB, home 1357 → 1110 KB, collection 1213 → 998 KB,
+  HTML 40–75 KB smaller per page. Biggest remaining cost: Google tags loaded 4× (~680 KB JS), left to the owner.
+- Look: text colour #1C1714 (warm black), announcement bar #1C1714, cream trust band #F6F1EA, soft fade-in on scroll,
+  slow zoom on product cards (desktop), round swatches on cards.
+- Copied as is from the live theme (owner's decision): pp-rating "Rated by 2,000+ happy customers" and the
+  customer photo section with invented names. FTC / Google Merchant Center risk; switch off before ads.

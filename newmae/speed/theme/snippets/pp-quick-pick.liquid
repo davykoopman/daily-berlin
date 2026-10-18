@@ -1,0 +1,278 @@
+{%- doc -%}
+  Behaviour for pp-card (snippets/pp-card), in assets/pp-quick-pick.js (cached, runs once per page): the quick pick sheet (colour and size,
+  add to cart), colour thumbnails on the card, the hover image and the arrows of
+  the pp scroll rows. Render once per section; the script only runs once per page.
+  Adding uses the standard /cart/add.js and then tells the theme (Dwell/Horizon
+  cart events), so the theme cart drawer and cart count update and the drawer
+  opens. If the theme events are not available, the shopper goes to the cart page.
+{%- enddoc -%}
+
+<script type="application/json" data-pp-qp-i18n>
+  {
+    "add": {{ 'actions.add_to_cart' | t | json }},
+    "soldOut": {{ 'products.product.sold_out' | t | json }},
+    "unavailable": {{ 'products.product.unavailable' | t | json }},
+    "error": {{ 'products.product.add_to_cart_error' | t | json }},
+    "close": {{ 'accessibility.close_dialog' | t | json }},
+    "cartUrl": {{ routes.cart_url | json }},
+    "root": {{ routes.root_url | json }}
+  }
+</script>
+
+<script src="{{ 'pp-quick-pick.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .pp-qp {
+    width: min(440px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: var(--color-background, #fff);
+    color: var(--color-foreground, #030302);
+    box-shadow: 0 10px 40px rgb(0 0 0 / 0.18);
+  }
+
+  .pp-qp::backdrop {
+    background: rgb(0 0 0 / 0.4);
+  }
+
+  .pp-qp[open] {
+    animation: ppQpIn 0.2s ease-out;
+  }
+
+  @keyframes ppQpIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  .pp-qp__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .pp-qp__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .pp-qp__head {
+    display: flex;
+    gap: 14px;
+    padding-right: 36px;
+  }
+
+  .pp-qp__img {
+    flex: 0 0 auto;
+    width: 96px;
+    height: 120px;
+    object-fit: cover;
+    background: rgb(0 0 0 / 0.05);
+  }
+
+  .pp-qp__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .pp-qp__title {
+    display: -webkit-box;
+    overflow: hidden;
+    color: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .pp-qp__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+  }
+
+  .pp-qp__now {
+    font-weight: 700;
+  }
+
+  .pp-qp__now--sale {
+    color: rgb(169 68 22);
+  }
+
+  .pp-qp__was {
+    color: rgb(3 3 2 / 0.6);
+    font-size: 13px;
+  }
+
+  .pp-qp__badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgb(169 68 22);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .pp-qp__options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .pp-qp__option {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .pp-qp__legend {
+    margin-bottom: 8px;
+    padding: 0;
+    font-size: 14px;
+  }
+
+  .pp-qp__chosen {
+    font-weight: 600;
+  }
+
+  .pp-qp__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pp-qp__value {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid rgb(0 0 0 / 0.18);
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .pp-qp__value input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pp-qp__value:has(input:checked) {
+    border-color: #030302;
+    background: #030302;
+    color: #fff;
+  }
+
+  .pp-qp__value:has(input:focus-visible) {
+    outline: 2px solid #030302;
+    outline-offset: 2px;
+  }
+
+  .pp-qp__value.is-unavailable {
+    color: rgb(0 0 0 / 0.35);
+    background-image: linear-gradient(to top right, transparent calc(50% - 0.5px), rgb(0 0 0 / 0.25) 50%, transparent calc(50% + 0.5px));
+  }
+
+  .pp-qp__value.is-unavailable:has(input:checked) {
+    color: #fff;
+  }
+
+  .pp-qp__values--colour .pp-qp__value {
+    width: 50px;
+    height: 62px;
+    min-width: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  .pp-qp__values--colour .pp-qp__value img {
+    width: 48px;
+    height: 60px;
+    object-fit: cover;
+  }
+
+  .pp-qp__values--colour .pp-qp__value:has(input:checked) {
+    background: #fff;
+    outline: 2px solid #030302;
+    outline-offset: 1px;
+  }
+
+  .pp-qp__values--colour .pp-qp__value.is-unavailable img {
+    opacity: 0.4;
+  }
+
+  .pp-qp__error {
+    margin: 0;
+    color: rgb(194 0 0);
+    font-size: 14px;
+  }
+
+  .pp-qp__add {
+    height: 52px;
+    border: 0;
+    border-radius: 6px;
+    background: #030302;
+    color: #fff;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .pp-qp__add[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .pp-qp__add[aria-busy='true'] {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  /* Bottom sheet on phones */
+  @media screen and (max-width: 749px) {
+    .pp-qp {
+      width: 100%;
+      max-width: 100%;
+      max-height: 88dvh;
+      margin: auto 0 0;
+      border-radius: 14px 14px 0 0;
+    }
+
+    .pp-qp__inner {
+      padding: 18px 16px calc(16px + env(safe-area-inset-bottom));
+    }
+
+    @keyframes ppQpIn {
+      from {
+        transform: translateY(100%);
+      }
+    }
+  }
+{% endstylesheet %}

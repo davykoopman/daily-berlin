@@ -1,0 +1,104 @@
+{%- doc -%}
+  NewMae: CSS colour for a colour name, used for a colour dot when a value has no variant image.
+  Outputs nothing for unknown names (the swatch then shows a dashed empty circle).
+
+  @param {string} name - colour value, e.g. "Dark Blue"
+{%- enddoc -%}
+
+{%- liquid
+  assign n = name | downcase | strip
+  assign hex = ''
+  case n
+    when 'black' 
+      assign hex = '#111111'
+    when 'white'
+      assign hex = '#ffffff'
+    when 'off white', 'off-white', 'ivory', 'cream'
+      assign hex = '#f3ede1'
+    when 'beige', 'sand'
+      assign hex = '#d8c6a8'
+    when 'khaki'
+      assign hex = '#b7a57a'
+    when 'apricot'
+      assign hex = '#f2c29b'
+    when 'camel', 'tan'
+      assign hex = '#b98a5a'
+    when 'brown', 'coffee'
+      assign hex = '#6b4630'
+    when 'dark brown', 'chocolate'
+      assign hex = '#4a2f22'
+    when 'gray', 'grey'
+      assign hex = '#9a9a9a'
+    when 'light gray', 'light grey'
+      assign hex = '#cfcfcf'
+    when 'dark gray', 'dark grey', 'charcoal'
+      assign hex = '#4a4a4a'
+    when 'blue'
+      assign hex = '#3b6fb6'
+    when 'light blue', 'sky blue'
+      assign hex = '#a9c8e8'
+    when 'dark blue', 'navy', 'navy blue'
+      assign hex = '#1f2f55'
+    when 'royal blue'
+      assign hex = '#2747a8'
+    when 'green'
+      assign hex = '#3f6b45'
+    when 'army green', 'olive', 'olive green'
+      assign hex = '#5b5e36'
+    when 'dark green'
+      assign hex = '#24402b'
+    when 'mint', 'light green'
+      assign hex = '#b9dcc3'
+    when 'red'
+      assign hex = '#b3262e'
+    when 'wine', 'wine red', 'burgundy'
+      assign hex = '#6b1e2e'
+    when 'pink'
+      assign hex = '#eab6c4'
+    when 'rose', 'rose red', 'hot pink'
+      assign hex = '#d2577f'
+    when 'purple'
+      assign hex = '#6e4a8e'
+    when 'lavender', 'light purple'
+      assign hex = '#c7b6e0'
+    when 'yellow'
+      assign hex = '#f0cf4f'
+    when 'orange'
+      assign hex = '#e07a2e'
+    when 'denim'
+      assign hex = '#5677a0'
+  endcase
+-%}
+{{- hex -}}
+
+{% stylesheet %}
+  /* NewMae colour swatches on the product page: round photo swatches with a ring when selected */
+  .variant-option--pp-color {
+    --variant-picker-swatch-width: 44px;
+    --variant-picker-swatch-height: 44px;
+    --variant-picker-swatch-radius: 50%;
+    --focus-outline-offset: 3px;
+    gap: 10px;
+  }
+
+  .variant-option--pp-color .swatch {
+    border: 1px solid rgb(0 0 0 / 0.12);
+    background-color: #f3efea;
+  }
+
+  .variant-option--pp-color .variant-option__button-label--has-swatch:has(:checked) {
+    outline: 1.5px solid var(--color-foreground);
+    outline-offset: 3px;
+  }
+
+  .variant-option--pp-color .variant-option__swatch-value {
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 749px) {
+    .variant-option--pp-color {
+      --variant-picker-swatch-width: 40px;
+      --variant-picker-swatch-height: 40px;
+    }
+  }
+{% endstylesheet %}

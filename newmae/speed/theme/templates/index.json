@@ -1,0 +1,258 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "pp_hero": {
+      "type": "pp-hero",
+      "settings": {
+        "image": "shopify://shop_images/Golden-Hour_Brownstone_Stroll.png",
+        "focal_x": 60,
+        "focal_y": 60,
+        "image_mobile": "shopify://shop_images/Autumn_Stroll_Through_the_City_1.png",
+        "focal_x_mobile": 50,
+        "focal_y_mobile": 30,
+        "align": "left",
+        "shade": 55,
+        "kicker": "Fall Clearance",
+        "heading": "Up to 50% off",
+        "text": "<p>Plus buy more, save more: up to 20% extra.<br/>Ends October 31.</p>",
+        "button_1": "Shop women's sale",
+        "link_1": "shopify://collections/fall-clearance-women",
+        "button_2": "Shop men's sale",
+        "link_2": "shopify://collections/fall-clearance-men"
+      }
+    },
+    "pp_trust": {
+      "type": "pp-trust",
+      "settings": {
+        "return_days": 60,
+        "email": "support@newmae.com"
+      }
+    },
+    "pp_home_categories": {
+      "type": "pp-home-categories",
+      "settings": {
+        "menu": "main-menu"
+      }
+    },
+    "pp_home_best": {
+      "type": "pp-home-best",
+      "settings": {
+        "heading": "Fall Clearance Bestsellers",
+        "sale_prefix": "fall-clearance-",
+        "sale_only": true,
+        "menu": "main-menu",
+        "show_tiers": true,
+        "tiers": "2:10,3:15,4:20",
+        "max_products": 8,
+        "columns": 4,
+        "columns_gap": 12,
+        "section_width": "page-width",
+        "padding-block-start": 24,
+        "padding-block-end": 40
+      }
+    },
+    "section_fD89zp": {
+      "type": "section",
+      "blocks": {
+        "image_cJKgb9": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Golden_Hour_Autumn_Retreat.png",
+            "link": "",
+            "image_ratio": "square",
+            "width": "custom",
+            "custom_width": 75,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "group_gkXxNM": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "custom",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "background_media": "none",
+            "background_color": "",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_color": "",
+            "border_radius": 0,
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "text_9KyxGt": {
+              "type": "text",
+              "name": "t:names.heading",
+              "settings": {
+                "text": "<p>Everyday Style. <br/>Thoughtfully Selected.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "h2",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "text_cL39Hp": {
+              "type": "text",
+              "settings": {
+                "text": "<p>At Newmae, we believe getting dressed should be simple. Our collection focuses on comfortable, versatile clothing designed to fit seamlessly into everyday life.<br/><br/>Based in Venray, The Netherlands, we proudly serve customers throughout the United States with free shipping, secure checkout, and responsive customer support. Whether you're refreshing your wardrobe or searching for everyday essentials, we're here to make shopping straightforward and enjoyable.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "text_color": "",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "button_hmdwWU": {
+              "type": "button",
+              "settings": {
+                "label": "Learn more",
+                "link": "shopify://pages/about-us",
+                "open_in_new_tab": false,
+                "style_class": "button",
+                "custom_button_background": "{{ settings.color_palette.foreground }}",
+                "custom_button_text": "{{ settings.color_palette.background }}",
+                "custom_button_border": "{{ settings.color_palette.background }}",
+                "link_text_color": "",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "text_9KyxGt",
+            "text_cL39Hp",
+            "button_hmdwWU"
+          ]
+        }
+      },
+      "block_order": [
+        "image_cJKgb9",
+        "group_gkXxNM"
+      ],
+      "name": "t:names.image_with_text",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 32,
+        "section_width": "page-width",
+        "section_height": "small",
+        "section_height_custom": 50,
+        "background_media": "none",
+        "background_color": "",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_color": "",
+        "border_radius": 0,
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "pp_faq": {
+      "type": "pp-faq",
+      "settings": {
+        "heading": "Frequently asked questions",
+        "email": "support@newmae.com",
+        "dispatch_days": "1–2",
+        "delivery_days": "4–9",
+        "return_days": 60,
+        "late_days": 7
+      }
+    }
+  },
+  "order": [
+    "pp_hero",
+    "pp_trust",
+    "pp_home_categories",
+    "pp_home_best",
+    "section_fD89zp",
+    "pp_faq"
+  ]
+}

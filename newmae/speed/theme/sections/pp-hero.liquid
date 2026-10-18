@@ -1,0 +1,424 @@
+{%- doc -%}
+  NewMae home hero, coded as one light section (replaces the theme hero on the home page).
+  One <picture>: phones only download the mobile photo, desktops only the desktop photo,
+  loaded with high priority because it is the first thing people see.
+  The photo keeps its own shape (little cropping); the focal point settings decide what
+  stays in view when it is cropped. Text sits on the photo with a soft shade behind it:
+  desktop on the left (or centre/right), mobile at the bottom.
+{%- enddoc -%}
+
+{%- liquid
+  assign ss = section.settings
+  assign img_d = ss.image
+  assign img_m = ss.image_mobile | default: ss.image
+  assign ratio_d = 0.5625
+  assign ratio_m = 1.25
+  if img_d != blank
+    assign ratio_d = img_d.height | times: 1.0 | divided_by: img_d.width
+  endif
+  assign hero_alt = img_d.alt | default: ss.heading
+  if img_m != blank
+    assign ratio_m = img_m.height | times: 1.0 | divided_by: img_m.width
+  endif
+-%}
+
+<div
+  class="pp-hero pp-hero--{{ ss.align }}"
+  style="
+    --pp-hero-ratio-d: {{ ratio_d }};
+    --pp-hero-ratio-m: {{ ratio_m }};
+    --pp-hero-pos-d: {{ ss.focal_x }}% {{ ss.focal_y }}%;
+    --pp-hero-pos-m: {{ ss.focal_x_mobile }}% {{ ss.focal_y_mobile }}%;
+    --pp-hero-shade: {{ ss.shade | divided_by: 100.0 }};
+  "
+>
+  {%- if img_d != blank -%}
+    <picture class="pp-hero__picture">
+      {%- if ss.image_mobile != blank -%}
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ img_m | image_url: width: 480 }} 480w, {{ img_m | image_url: width: 720 }} 720w, {{ img_m | image_url: width: 960 }} 960w"
+          sizes="100vw"
+          width="{{ img_m.width }}"
+          height="{{ img_m.height }}"
+        >
+      {%- endif -%}
+      {{
+        img_d
+        | image_url: width: 2400
+        | image_tag:
+          class: 'pp-hero__img',
+          widths: '750, 1100, 1500, 1920, 2400',
+          sizes: '100vw',
+          loading: 'eager',
+          fetchpriority: 'high',
+          alt: hero_alt
+      }}
+    </picture>
+  {%- else -%}
+    <div class="pp-hero__img pp-hero__img--placeholder">{{ 'lifestyle-1' | placeholder_svg_tag }}</div>
+  {%- endif -%}
+
+  <div class="pp-hero__shade" aria-hidden="true"></div>
+
+  <div class="pp-hero__content">
+    {%- if ss.kicker != blank -%}<p class="pp-hero__kicker">{{ ss.kicker }}</p>{%- endif -%}
+    {%- if ss.heading != blank -%}<h2 class="pp-hero__heading">{{ ss.heading }}</h2>{%- endif -%}
+    {%- if ss.text != blank -%}<div class="pp-hero__text">{{ ss.text }}</div>{%- endif -%}
+    {%- if ss.button_1 != blank or ss.button_2 != blank -%}
+      <div class="pp-hero__buttons">
+        {%- if ss.button_1 != blank -%}<a class="pp-hero__button" href="{{ ss.link_1 | default: routes.all_products_collection_url }}">{{ ss.button_1 }}</a>{%- endif -%}
+        {%- if ss.button_2 != blank -%}<a class="pp-hero__button" href="{{ ss.link_2 | default: routes.all_products_collection_url }}">{{ ss.button_2 }}</a>{%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .pp-hero {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+    height: min(calc(100vw * var(--pp-hero-ratio-d)), calc(100svh - 150px));
+    min-height: 460px;
+    color: #fff;
+    background: #2b2420;
+  }
+
+  .pp-hero > * {
+    grid-area: 1 / 1;
+  }
+
+  .pp-hero__picture,
+  .pp-hero__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .pp-hero__img {
+    object-fit: cover;
+    object-position: var(--pp-hero-pos-d);
+  }
+
+  .pp-hero__img--placeholder svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Soft shade on the text side only, so the photo stays bright where the models are */
+  .pp-hero__shade {
+    background: linear-gradient(
+      90deg,
+      rgb(0 0 0 / calc(var(--pp-hero-shade) * 1)) 0%,
+      rgb(0 0 0 / calc(var(--pp-hero-shade) * 0.55)) 32%,
+      rgb(0 0 0 / 0) 60%
+    );
+  }
+
+  .pp-hero--center .pp-hero__shade {
+    background: radial-gradient(ellipse 55% 60% at 50% 50%, rgb(0 0 0 / calc(var(--pp-hero-shade) * 0.9)), rgb(0 0 0 / 0) 75%);
+  }
+
+  .pp-hero--right .pp-hero__shade {
+    transform: scaleX(-1);
+  }
+
+  .pp-hero__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 14px;
+    max-width: 680px;
+    padding: 40px max(40px, 6vw);
+    text-align: left;
+    text-shadow: 0 1px 12px rgb(0 0 0 / 0.25);
+  }
+
+  .pp-hero--center .pp-hero__content {
+    align-items: center;
+    justify-self: center;
+    text-align: center;
+  }
+
+  .pp-hero--right .pp-hero__content {
+    justify-self: end;
+  }
+
+  .pp-hero__kicker {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .pp-hero__heading {
+    margin: 0;
+    color: inherit;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight, 400);
+    font-size: clamp(44px, 5vw, 72px);
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+
+  .pp-hero__text {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .pp-hero__text p {
+    margin: 0;
+  }
+
+  .pp-hero__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .pp-hero__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 190px;
+    min-height: 48px;
+    padding: 0 22px;
+    background: #a94416;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-shadow: none;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease;
+  }
+
+  .pp-hero__button:hover {
+    background: #8c3610;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pp-hero__content > * {
+      animation: pp-hero-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+
+    .pp-hero__content > :nth-child(2) {
+      animation-delay: 0.06s;
+    }
+
+    .pp-hero__content > :nth-child(3) {
+      animation-delay: 0.12s;
+    }
+
+    .pp-hero__content > :nth-child(4) {
+      animation-delay: 0.18s;
+    }
+  }
+
+  @keyframes pp-hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  /* Mobile: the photo keeps its shape, the text sits at the bottom on a shade that fades up */
+  @media screen and (max-width: 749px) {
+    .pp-hero {
+      height: min(calc(100vw * var(--pp-hero-ratio-m)), 88svh);
+      min-height: 420px;
+    }
+
+    .pp-hero__img {
+      object-position: var(--pp-hero-pos-m);
+    }
+
+    .pp-hero__shade,
+    .pp-hero--center .pp-hero__shade,
+    .pp-hero--right .pp-hero__shade {
+      transform: none;
+      background: linear-gradient(
+        to top,
+        rgb(0 0 0 / calc(var(--pp-hero-shade) * 1.15)) 0%,
+        rgb(0 0 0 / calc(var(--pp-hero-shade) * 0.6)) 26%,
+        rgb(0 0 0 / 0) 46%
+      );
+    }
+
+    .pp-hero__content,
+    .pp-hero--center .pp-hero__content,
+    .pp-hero--right .pp-hero__content {
+      justify-content: flex-end;
+      justify-self: stretch;
+      align-items: center;
+      gap: 6px;
+      max-width: none;
+      padding: 16px 16px 18px;
+      text-align: center;
+    }
+
+    .pp-hero__kicker {
+      font-size: 11px;
+    }
+
+    .pp-hero__heading {
+      font-size: 36px;
+    }
+
+    .pp-hero__text {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .pp-hero__buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .pp-hero__button {
+      min-width: 0;
+      min-height: 44px;
+      padding: 0 8px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .pp-hero__buttons > :only-child {
+      grid-column: 1 / -1;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Hero",
+  "tag": "section",
+  "class": "pp-hero-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo (desktop)"
+    },
+    {
+      "type": "range",
+      "id": "focal_x",
+      "label": "Focal point desktop, left → right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "focal_y",
+      "label": "Focal point desktop, top → bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Photo (mobile)",
+      "info": "Portrait works best. Empty = desktop photo."
+    },
+    {
+      "type": "range",
+      "id": "focal_x_mobile",
+      "label": "Focal point mobile, left → right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "focal_y_mobile",
+      "label": "Focal point mobile, top → bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Text position (desktop)",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Centre" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "shade",
+      "label": "Shade behind the text",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Small label",
+      "default": "Fall Clearance"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Up to 50% off"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "button_1",
+      "label": "Button 1"
+    },
+    {
+      "type": "url",
+      "id": "link_1",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "text",
+      "id": "button_2",
+      "label": "Button 2"
+    },
+    {
+      "type": "url",
+      "id": "link_2",
+      "label": "Button 2 link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Hero"
+    }
+  ]
+}
+{% endschema %}
