@@ -111,18 +111,17 @@
 {% render 'pp-reveal' %}
 
 {% stylesheet %}
-  /* Trust cards: white cards on cream, rust icon in a soft circle, serif titles.
-     Desktop: four cards in a row (icon on top). Mobile: compact 2 x 2 (icon left, text right). */
+  /* Trust cards: compact white cards with a thin warm border on the page background
+     (no band behind them), rust icon in a soft circle on the left, serif titles. */
   .pp-trust {
-    padding-block: 44px;
-    background: #f6f1ea;
+    padding-block: 24px;
     color: var(--color-foreground);
   }
 
   .pp-trust__list {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
+    gap: 12px;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 40px;
@@ -130,16 +129,16 @@
   }
 
   .pp-trust__item {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
-    gap: 8px;
-    padding: 24px 18px;
+    column-gap: 12px;
+    row-gap: 2px;
+    padding: 14px 16px;
     border: 1px solid #e9dfd2;
-    border-radius: 12px;
+    border-radius: 10px;
     background: #fff;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.03);
-    text-align: center;
+    text-align: left;
   }
 
   @media (hover: hover) {
@@ -150,15 +149,15 @@
     .pp-trust__item:hover,
     .pp-motion .pp-trust__item[data-pp-reveal].pp-in:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgb(60 35 20 / 0.08);
+      box-shadow: 0 8px 20px rgb(60 35 20 / 0.08);
     }
   }
 
   .pp-trust__icon {
-    width: 46px;
-    height: 46px;
-    margin-bottom: 6px;
-    padding: 11px;
+    grid-row: 1 / 3;
+    width: 40px;
+    height: 40px;
+    padding: 9px;
     border-radius: 50%;
     background: rgb(169 68 22 / 0.09);
     color: #a94416;
@@ -170,21 +169,20 @@
   }
 
   .pp-trust__title {
+    align-self: end;
     margin: 0;
     font-family: var(--font-heading--family);
-    font-size: 19px;
+    font-size: 17px;
     font-weight: 500;
     line-height: 1.2;
-    text-wrap: balance;
   }
 
   .pp-trust__text {
+    align-self: start;
     margin: 0;
-    max-width: 240px;
-    font-size: 0.8125rem;
-    line-height: 1.4;
+    font-size: 12.5px;
+    line-height: 1.35;
     color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.7);
-    text-wrap: balance;
   }
 
   .pp-trust__item-link {
@@ -202,9 +200,15 @@
     white-space: nowrap;
   }
 
+  @media screen and (max-width: 989px) and (min-width: 750px) {
+    .pp-trust__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   @media screen and (max-width: 749px) {
     .pp-trust {
-      padding-block: 20px;
+      padding-block: 16px;
     }
 
     .pp-trust__list {
@@ -214,32 +218,24 @@
     }
 
     .pp-trust__item {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: center;
-      column-gap: 10px;
-      row-gap: 1px;
-      padding: 12px 10px;
-      border-radius: 10px;
-      text-align: left;
+      column-gap: 8px;
+      row-gap: 0;
+      padding: 10px 8px;
+      border-radius: 8px;
     }
 
     .pp-trust__icon {
-      grid-row: 1 / 3;
-      width: 34px;
-      height: 34px;
-      margin: 0;
-      padding: 8px;
+      width: 30px;
+      height: 30px;
+      padding: 6px;
     }
 
     .pp-trust__title {
-      align-self: end;
-      font-size: 15px;
+      font-size: 14px;
     }
 
     .pp-trust__text {
-      align-self: start;
-      font-size: 11px;
+      font-size: 10.5px;
       line-height: 1.3;
     }
   }

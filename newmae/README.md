@@ -106,7 +106,7 @@
   on phones (assets/header-menu.js); mobile hero max 960px.
 - Measured (mobile, DPR 3, one run): product images 2060 → 1287 KB, home 1357 → 1110 KB, collection 1213 → 998 KB,
   HTML 40–75 KB smaller per page. Biggest remaining cost: Google tags loaded 4× (~680 KB JS), left to the owner.
-- Look: text colour #1C1714 (warm black), announcement bar #1C1714, trust section as white cards on cream #F6F1EA (rust icon circle, serif titles; mobile compact 2 x 2, icon left), soft fade-in on scroll,
+- Look: text colour #1C1714 (warm black), announcement bar #1C1714, trust section as compact white cards with a warm border, no band behind (rust icon circle left, serif titles; 4 in a row on desktop, 2 x 2 on mobile), soft fade-in on scroll,
   slow zoom on product cards (desktop), square swatches on cards. Mobile hero cropped at 112% of the width (setting "Photo height mobile"), focal point bottom, so the models sit higher.
 - Copied as is from the live theme (owner's decision): pp-rating "Rated by 2,000+ happy customers" and the
   customer photo section with invented names. FTC / Google Merchant Center risk; switch off before ads.
