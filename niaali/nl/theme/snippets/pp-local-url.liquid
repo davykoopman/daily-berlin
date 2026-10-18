@@ -1,0 +1,29 @@
+{%- doc -%}
+  Outputs a menu link URL in the visitor's market/language folder.
+  Menu items of type "web address" (e.g. https://niaali.com/apps/parcelpanel for order tracking)
+  are not localized by Shopify, so a visitor on /nl-nl or /en-gb would land on the Polish page.
+  App proxy links (/apps/…) get the current folder (routes.root_url) in front; all other URLs
+  pass through unchanged.
+
+  @param {string} url - link.url
+{%- enddoc -%}
+
+{%- liquid
+  assign u = url
+  assign root = routes.root_url
+  if root != '/'
+    assign abs = shop.url | append: '/apps/'
+    assign abs_size = abs | size
+    assign head = u | slice: 0, abs_size
+    if head == abs
+      assign localized = shop.url | append: root
+      assign u = u | replace_first: shop.url, localized
+    else
+      assign head = u | slice: 0, 6
+      if head == '/apps/'
+        assign u = root | append: u
+      endif
+    endif
+  endif
+-%}
+{{- u -}}

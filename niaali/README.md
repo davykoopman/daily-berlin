@@ -62,3 +62,19 @@ Reactivate in spring. IDs (gid://shopify/Product/…):
 16148217856332 czapka z siateczki · 16132408672588 koszula wielobarwna · 16143363670348 garnitur na letnie uroczystości
 Kept active: the 13 summer-tagged products with sales (e.g. eleganckie mokasyny 33×, sukienka koronkowa 13×) and
 year-round items (trousers, suits, pumps, sneakers, long-sleeve shirts, pyjamas, party sets).
+
+## NL market review (2026-10-18)
+NL market: niaali.com/nl-nl/, language nl, EUR. Reviewed home, all menu collections, products, filters, quick pick,
+search, cart (drawer + page), all pages and policies, 404, order tracking and checkout, on mobile and desktop.
+- OK in Dutch: theme texts, menus, filters, product titles/descriptions (961 of 962 translated; the one left is archived),
+  collections, pages, policies, SEO title/description, checkout.
+- Fixed live (pages/): FAQ said "we ship to Poland and the UK" in PL/EN/NL → now incl. the Netherlands
+  (source + en/nl translations; backups faq.original.*.html).
+- Theme copy "Niaali - NL (werk)" #208277143884 (unpublished, copy of live "Fabric - Product page v2"), in nl/:
+  snippets/pp-local-url.liquid puts web-address menu links to /apps/… (order tracking, ParcelPanel) in the visitor's
+  folder (/nl-nl, /en-gb); used in header menu, mega menu, mobile drawer and footer menu. BLIK payment icon hidden
+  outside Poland (blocks/payment-icons.liquid).
+- Owner to do in apps/admin: Kaching Cart texts per language (drawer is Polish: "Twój koszyk", "Dodaj jeszcze…",
+  "Oszczędzasz", "Dodaj do koszyka", "Rabaty", "Razem", "PRZEJDŹ DALEJ", "armowa dostawa" missing D, empty state
+  in English); Swatch King: add option name "Kleur" to the colour (image) preset so NL gets photo swatches like
+  PL/GB; Shopify Payments: enable iDEAL for NL; optional: Dutch URL handles, Polish image alt texts.
