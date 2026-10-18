@@ -1,0 +1,117 @@
+{%- doc -%}
+  Niaali: CSS colour for a colour name (Polish, Dutch or English), used for a colour square when
+  a value has no variant image. Outputs nothing for unknown names (the swatch shows an empty square).
+  Also holds the CSS of the product page colour swatches (square photo tiles).
+
+  @param {string} name - colour value, e.g. "Granatowy", "Donkerblauw", "Navy"
+{%- enddoc -%}
+
+{%- liquid
+  assign n = name | downcase | strip
+  assign hex = ''
+  case n
+    when 'czarny', 'zwart', 'black'
+      assign hex = '#111111'
+    when 'biały', 'wit', 'white'
+      assign hex = '#ffffff'
+    when 'kremowy', 'ecru', 'creme', 'crème', 'room', 'cream', 'off white', 'ivory', 'ivoor'
+      assign hex = '#f3ede1'
+    when 'beżowy', 'beige'
+      assign hex = '#d8c6a8'
+    when 'khaki', 'kaki'
+      assign hex = '#b7a57a'
+    when 'camel', 'karmelowy', 'tan'
+      assign hex = '#b98a5a'
+    when 'brązowy', 'bruin', 'brown'
+      assign hex = '#6b4630'
+    when 'ciemnobrązowy', 'donkerbruin', 'dark brown', 'czekoladowy', 'chocolate'
+      assign hex = '#4a2f22'
+    when 'szary', 'grijs', 'gray', 'grey'
+      assign hex = '#9a9a9a'
+    when 'jasnoszary', 'lichtgrijs', 'light gray', 'light grey'
+      assign hex = '#cfcfcf'
+    when 'ciemnoszary', 'grafitowy', 'donkergrijs', 'antraciet', 'dark gray', 'dark grey', 'charcoal'
+      assign hex = '#4a4a4a'
+    when 'niebieski', 'blauw', 'blue'
+      assign hex = '#3b6fb6'
+    when 'jasnoniebieski', 'błękitny', 'lichtblauw', 'light blue', 'sky blue'
+      assign hex = '#a9c8e8'
+    when 'granatowy', 'donkerblauw', 'marineblauw', 'navy', 'dark blue', 'navy blue'
+      assign hex = '#1f2f55'
+    when 'zielony', 'groen', 'green'
+      assign hex = '#3f6b45'
+    when 'oliwkowy', 'olijfgroen', 'olive', 'army green'
+      assign hex = '#5b5e36'
+    when 'ciemnozielony', 'butelkowa zieleń', 'donkergroen', 'dark green'
+      assign hex = '#24402b'
+    when 'miętowy', 'mint', 'mintgroen'
+      assign hex = '#b9dcc3'
+    when 'czerwony', 'rood', 'red'
+      assign hex = '#b3262e'
+    when 'bordowy', 'burgundowy', 'wiśniowy', 'bordeaux', 'bordeauxrood', 'wijnrood', 'burgundy', 'wine'
+      assign hex = '#6b1e2e'
+    when 'różowy', 'roze', 'roos', 'pink'
+      assign hex = '#eab6c4'
+    when 'pudrowy róż', 'oudroze', 'dusty pink'
+      assign hex = '#d8a7a7'
+    when 'fioletowy', 'paars', 'purple'
+      assign hex = '#6e4a8e'
+    when 'liliowy', 'lawendowy', 'lila', 'lavendel', 'lavender'
+      assign hex = '#c7b6e0'
+    when 'żółty', 'geel', 'yellow'
+      assign hex = '#f0cf4f'
+    when 'musztardowy', 'mosterd', 'mosterdgeel', 'mustard'
+      assign hex = '#c99a2e'
+    when 'pomarańczowy', 'oranje', 'orange'
+      assign hex = '#e07a2e'
+    when 'rdzawy', 'roestbruin', 'roest', 'rust'
+      assign hex = '#a94416'
+    when 'srebrny', 'zilver', 'silver'
+      assign hex = '#c0c0c0'
+    when 'złoty', 'goud', 'gold'
+      assign hex = '#c9a64a'
+  endcase
+-%}
+{{- hex -}}
+
+{% stylesheet %}
+  /*
+    Niaali colour swatches on the product page and in quick add: square photo tiles (variant image),
+    thin frame, dark frame when chosen, extra space under the row so colour and size read as two steps.
+  */
+  .variant-option--pp-color {
+    --variant-picker-swatch-width: 52px;
+    --variant-picker-swatch-height: 52px;
+    --variant-picker-swatch-radius: 2px;
+    --focus-outline-offset: 2px;
+    gap: 8px;
+    margin-block-end: 8px;
+  }
+
+  .variant-option--pp-color .swatch {
+    border: 1px solid rgb(0 0 0 / 0.14);
+    background-color: #f3efea;
+  }
+
+  .variant-option--pp-color .variant-option__button-label--has-swatch:hover {
+    outline: 1px solid rgb(0 0 0 / 0.45);
+    outline-offset: 2px;
+  }
+
+  .variant-option--pp-color .variant-option__button-label--has-swatch:has(:checked) {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
+  }
+
+  .variant-option--pp-color .variant-option__swatch-value {
+    font-weight: 600;
+    color: var(--color-foreground);
+  }
+
+  @media screen and (max-width: 749px) {
+    .variant-option--pp-color {
+      --variant-picker-swatch-width: 46px;
+      --variant-picker-swatch-height: 46px;
+    }
+  }
+{% endstylesheet %}

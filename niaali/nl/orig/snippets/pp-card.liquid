@@ -1,0 +1,434 @@
+{%- doc -%}
+  Lightweight product card for the pp-* carousels (home bestsellers, Mix & match).
+  One image (second image on hover, loaded on demand), colour thumbnails rendered
+  by the theme (no app), title, price, compare-at price, discount badge and a
+  "Choose" button that opens the pp quick pick sheet (snippets/pp-quick-pick).
+  The variant data for the sheet sits in a small JSON block that is only parsed on click.
+
+  @param {object} product - The product
+  @param {string} [sizes] - Image sizes attribute
+{%- enddoc -%}
+
+{%- liquid
+  assign sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 42vw'
+  assign variant = product.selected_or_first_available_variant
+  assign image = product.featured_media.preview_image | default: product.featured_image
+  assign hover_image = product.media[1].preview_image
+
+  # Colour option (any language) for the thumbnails and the sheet
+  assign colour_index = -1
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name contains 'kolor' or option_name contains 'color' or option_name contains 'colour' or option_name contains 'farbe' or option_name contains 'couleur' or option_name contains 'kleur' or option_name contains 'colore'
+      assign colour_index = forloop.index0
+      break
+    endif
+  endfor
+
+  assign compare = variant.compare_at_price | default: 0
+  assign discount = 0
+  if compare > variant.price
+    assign discount = compare | minus: variant.price | times: 100 | divided_by: compare
+  endif
+-%}
+
+<div class="pp-card" data-pp-card>
+  <div class="pp-card__media">
+    <a class="pp-card__link" href="{{ product.url }}" data-pp-card-link aria-label="{{ product.title | escape }}">
+      {%- if image != blank -%}
+        {{
+          image
+          | image_url: width: 900
+          | image_tag:
+            class: 'pp-card__img',
+            loading: 'lazy',
+            widths: '240, 360, 480, 600, 900',
+            sizes: sizes,
+            alt: product.title
+        }}
+      {%- endif -%}
+      {%- if hover_image != blank -%}
+        <img
+          class="pp-card__img pp-card__img--hover"
+          alt=""
+          aria-hidden="true"
+          sizes="{{ sizes }}"
+          data-srcset="{{ hover_image | image_url: width: 240 }} 240w, {{ hover_image | image_url: width: 360 }} 360w, {{ hover_image | image_url: width: 480 }} 480w, {{ hover_image | image_url: width: 600 }} 600w, {{ hover_image | image_url: width: 900 }} 900w"
+          width="{{ hover_image.width }}"
+          height="{{ hover_image.height }}"
+        >
+      {%- endif -%}
+    </a>
+    {%- if product.available -%}
+      <button
+        type="button"
+        class="pp-card__quick"
+        data-pp-quick
+        aria-haspopup="dialog"
+        aria-label="{{ 'actions.choose' | t }}: {{ product.title | escape }}"
+      >
+        <span class="pp-card__quick-icon" aria-hidden="true"></span>
+        <span class="pp-card__quick-text">{{ 'actions.choose' | t }}</span>
+      </button>
+    {%- endif -%}
+  </div>
+
+  <div class="pp-card__body">
+    {%- if colour_index >= 0 -%}
+      {%- assign colour_option = product.options_with_values[colour_index] -%}
+      <div class="pp-card__swatches">
+        {%- for value in colour_option.values -%}
+          {%- if forloop.index > 4 -%}
+            <span class="pp-card__more">+{{ colour_option.values.size | minus: 4 }}</span>
+            {%- break -%}
+          {%- endif -%}
+          {%- liquid
+            assign swatch_variant = blank
+            for v in product.variants
+              if v.options[colour_index] == value
+                assign swatch_variant = v
+                break
+              endif
+            endfor
+            assign swatch_image = swatch_variant.featured_image | default: image
+          -%}
+          <button
+            type="button"
+            class="pp-card__swatch{% if variant.options[colour_index] == value %} is-active{% endif %}"
+            data-pp-swatch="{{ forloop.index0 }}"
+            data-img="{{ swatch_image | image_url: width: 900 }}"
+            data-variant="{{ swatch_variant.id }}"
+            aria-label="{{ colour_option.name | escape }}: {{ value | escape }}"
+          >
+            {{- swatch_image | image_url: width: 64 | image_tag: loading: 'lazy', alt: '', width: 26, height: 26 -}}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <a class="pp-card__title" href="{{ product.url }}" data-pp-card-link>{{ product.title }}</a>
+
+    <div class="pp-card__price">
+      <span class="pp-card__now{% if discount > 0 %} pp-card__now--sale{% endif %}">{{ variant.price | money }}</span>
+      {%- if discount > 0 -%}
+        <s class="pp-card__was">{{ compare | money }}</s>
+        <span class="pp-card__badge">-{{ discount }}%</span>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if product.available -%}
+    {%- liquid
+      # Unique prices, so variants only carry an index
+      assign price_list = '|'
+      for v in product.variants
+        assign key = v.price | append: '/' | append: v.compare_at_price
+        assign wrapped = '|' | append: key | append: '|'
+        unless price_list contains wrapped
+          assign price_list = price_list | append: key | append: '|'
+        endunless
+      endfor
+      assign price_keys = price_list | remove_first: '|' | split: '|'
+    -%}
+    <script type="application/json" data-pp-card-data>
+      {
+        "url": {{ product.url | json }},
+        "title": {{ product.title | json }},
+        "colour": {{ colour_index }},
+        "options": [{% for option in product.options_with_values %}{"name": {{ option.name | json }}, "values": {{ option.values | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}],
+        "prices": [{% for key in price_keys %}{%- assign parts = key | split: '/' -%}{%- assign p = parts[0] | plus: 0 -%}{%- assign c = parts[1] | plus: 0 -%}[{{ p | money | json }}, {% if c > p %}{{ c | money | json }}, {{ c | minus: p | times: 100 | divided_by: c }}{% else %}"", 0{% endif %}]{% unless forloop.last %},{% endunless %}{% endfor %}],
+        "image": {{ image | image_url: width: 300 | json }},
+        "images": [{% if colour_index >= 0 %}{% for value in product.options_with_values[colour_index].values %}{%- assign img_url = '' -%}{%- for v in product.variants -%}{%- if v.options[colour_index] == value and v.featured_image -%}{%- assign img_url = v.featured_image | image_url: width: 300 -%}{%- break -%}{%- endif -%}{%- endfor -%}{{ img_url | json }}{% unless forloop.last %},{% endunless %}{% endfor %}{% endif %}],
+        "variants": [{% for v in product.variants %}{%- assign key = v.price | append: '/' | append: v.compare_at_price -%}{%- assign price_index = 0 -%}{%- for k in price_keys -%}{%- if k == key -%}{%- assign price_index = forloop.index0 -%}{%- break -%}{%- endif -%}{%- endfor -%}[{{ v.id }},[{% for value in v.options %}{%- assign option_values = product.options_with_values[forloop.index0].values -%}{%- for ov in option_values -%}{%- if ov == value -%}{{ forloop.index0 }}{%- break -%}{%- endif -%}{%- endfor -%}{% unless forloop.last %},{% endunless %}{% endfor %}],{% if v.available %}1{% else %}0{% endif %},{{ price_index }}]{% unless forloop.last %},{% endunless %}{% endfor %}],
+        "selected": {{ variant.id }}
+      }
+    </script>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .pp-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    color: var(--color-foreground);
+  }
+
+  /* Grid cells may shrink below the title width (titles are one line with an ellipsis) */
+  .product-grid__item:has(> .pp-card) {
+    min-width: 0;
+  }
+
+  .pp-card__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.05);
+  }
+
+  .pp-card__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .pp-card__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pp-card__img--hover {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  @media (hover: hover) {
+    .pp-card:hover .pp-card__img--hover[srcset] {
+      opacity: 1;
+    }
+  }
+
+  /* Choose button: always visible, so shoppers see where to tap */
+  .pp-card__quick {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 14px 0 10px;
+    border: 1px solid rgb(0 0 0 / 0.12);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.92);
+    color: #030302;
+    font: inherit;
+    font-size: 0.875rem;
+    line-height: 1;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .pp-card__quick:hover {
+    background: #fff;
+    transform: scale(1.03);
+  }
+
+  .pp-card__quick:active {
+    transform: scale(0.97);
+  }
+
+  .pp-card__quick-icon {
+    width: 20px;
+    height: 20px;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.2 11.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 8z'/%3E%3Cpath d='M9 8V6.5a3 3 0 0 1 6 0V8'/%3E%3Cpath d='M12 11.5v5M9.5 14h5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 8h14l-1.2 11.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 8z'/%3E%3Cpath d='M9 8V6.5a3 3 0 0 1 6 0V8'/%3E%3Cpath d='M12 11.5v5M9.5 14h5'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .pp-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .pp-card__swatches {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 28px;
+    overflow: hidden;
+  }
+
+  .pp-card__swatch {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+    background: #fff;
+    cursor: pointer;
+  }
+
+  .pp-card__swatch img {
+    display: block;
+    width: 26px;
+    height: 26px;
+    object-fit: cover;
+  }
+
+  .pp-card__swatch.is-active {
+    border-color: var(--color-foreground-heading, #030302);
+  }
+
+  .pp-card__more {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .pp-card__title {
+    overflow: hidden;
+    color: rgb(3 3 2 / 0.76);
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-decoration: none;
+  }
+
+  .pp-card__price {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    font-size: 14px;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .pp-card__now {
+    font-weight: 700;
+  }
+
+  .pp-card__now--sale {
+    color: rgb(194 0 0);
+  }
+
+  .pp-card__was {
+    color: rgb(3 3 2 / 0.76);
+  }
+
+  .pp-card__badge {
+    margin-left: 2px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgb(194 0 0);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-card__quick {
+      right: 8px;
+      bottom: 8px;
+      width: 40px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    .pp-card__quick-text {
+      display: none;
+    }
+
+    .pp-card__title {
+      font-size: 13px;
+    }
+
+    /* Sized so price, old price and badge fit one line on 360px phones */
+    .pp-card__price {
+      gap: 3px;
+      font-size: 12px;
+    }
+
+    .pp-card__was {
+      font-size: 11px;
+    }
+
+    .pp-card__badge {
+      margin-left: 0;
+      padding: 1px 3px;
+      font-size: 10px;
+    }
+  }
+
+  /* Native scroll row used by the pp carousels: no slideshow script, swipe on phones, arrows on desktop */
+  .pp-row {
+    position: relative;
+  }
+
+  .pp-row__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--pp-row-columns, 4) - 1) * var(--pp-row-gap, 12px)) / var(--pp-row-columns, 4));
+    gap: var(--pp-row-gap, 12px);
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+
+  .pp-row__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pp-row__item {
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .pp-row__arrow {
+    position: absolute;
+    top: calc(50% - 40px);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgb(0 0 0 / 0.12);
+    border-radius: 50%;
+    background: #fff;
+    color: #030302;
+    font-size: 1.125rem;
+    line-height: 1;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.08);
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .pp-row__arrow[data-dir='-1'] {
+    left: -14px;
+  }
+
+  .pp-row__arrow[data-dir='1'] {
+    right: -14px;
+  }
+
+  .pp-row__arrow[disabled] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .pp-row__track {
+      grid-auto-columns: calc((100% - 2 * var(--pp-row-gap, 12px)) / 3);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-row__track {
+      grid-auto-columns: 42vw;
+      gap: 10px;
+      margin-inline: -16px;
+      padding-inline: 16px;
+      scroll-padding-inline: 16px;
+    }
+
+    .pp-row__arrow {
+      display: none;
+    }
+  }
+{% endstylesheet %}

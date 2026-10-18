@@ -78,3 +78,22 @@ search, cart (drawer + page), all pages and policies, 404, order tracking and ch
   "Oszczędzasz", "Dodaj do koszyka", "Rabaty", "Razem", "PRZEJDŹ DALEJ", "armowa dostawa" missing D, empty state
   in English); Swatch King: add option name "Kleur" to the colour (image) preset so NL gets photo swatches like
   PL/GB; Shopify Payments: enable iDEAL for NL; optional: Dutch URL handles, Polish image alt texts.
+
+## Without Kaching Cart and Swatch King (theme copy "Niaali - NL (werk)" #208277143884, 2026-10-18)
+Built in nl/theme (originals in nl/orig). Tested in preview on PL, NL and GB, mobile and desktop.
+- Swatches: colour options (kolor/kleur/color/… any language) render square photo swatches from the variant image
+  (snippets/variant-main-picker, swatch, pp-color-hex with PL/NL/EN colour names as fallback and the CSS);
+  works on the product page and in the theme quick add. Swatch King embed switched off in this copy.
+- Cart (theme drawer + cart page, Kaching Cart embed switched off in this copy): tier bar at the top
+  (pp-tier-progress, now also rendered on the server so it is never empty after a redraw), compact upsell rows
+  "Complete your look" from the shopper's group collection (pp-cart-upsell + pp-card-data), "You save €X" and
+  free shipping · 60-day returns · secure checkout under the total (pp-cart-extras), texts via pp-i18n.
+- pp-quick-pick adds via /cart/add.js with the cart sections and fires the theme CartAddEvent (drawer redraws and opens).
+- Shopify discounts created, scheduled for 2027-01-01 (not active yet), same tiers as Kaching:
+  MIX & MATCH -10% (2+) gid://shopify/DiscountAutomaticNode/2289031053644,
+  -15% (3+) …/2289031086412, -20% (4+) …/2289031119180.
+### Switch (one moment)
+1. Owner publishes "Niaali - NL (werk)".
+2. Set the three MIX & MATCH discounts to start now (Claude can do it).
+3. Owner turns off the Kaching Cart discounts in the app (or Discounts → "Kaching Cart - … V2" → deactivate).
+4. Test one order on /nl-nl; after a few days uninstall Swatch King (can go right after publishing) and Kaching Cart.
