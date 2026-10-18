@@ -110,3 +110,6 @@
   slow zoom on product cards (desktop), square swatches on cards. Mobile hero cropped at 112% of the width (setting "Photo height mobile"), focal point bottom, so the models sit higher.
 - Copied as is from the live theme (owner's decision): pp-rating "Rated by 2,000+ happy customers" and the
   customer photo section with invented names. FTC / Google Merchant Center risk; switch off before ads.
+- Home proportions: trust cards, categories and bestsellers share one width (page width, 40px / 16px margins);
+  categories and bestsellers both 5 per row on desktop (3 on tablet, 42vw on mobile), so tiles and product cards
+  are the same size; on mobile the WOMEN/MEN switch sits under the title in both sections.

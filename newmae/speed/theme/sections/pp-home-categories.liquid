@@ -142,7 +142,8 @@
   .pp-home-cat__row {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% - 5 * 12px) / 6);
+    /* Same card width as the bestsellers row below: 5 per row */
+    grid-auto-columns: calc((100% - 4 * 12px) / 5);
     gap: 12px;
     margin: 0;
     padding: 0;
@@ -259,7 +260,7 @@
 
   @media screen and (min-width: 750px) and (max-width: 989px) {
     .pp-home-cat__row {
-      grid-auto-columns: calc((100% - 3 * 12px) / 4);
+      grid-auto-columns: calc((100% - 2 * 12px) / 3);
     }
   }
 

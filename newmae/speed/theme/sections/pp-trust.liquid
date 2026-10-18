@@ -122,9 +122,9 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
-    max-width: 1200px;
+    max-width: var(--page-width, 1400px);
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 var(--page-margin, 40px);
     list-style: none;
   }
 
