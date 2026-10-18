@@ -98,7 +98,7 @@
 - Cart upsell: compact rows (64px photo, title, price, "+ Add" → quick pick) in snippets/pp-cart-upsell.
 - Home hero: own section sections/pp-hero (one <picture>, desktop/mobile photo, focal point settings, text left on
   desktop, bottom on mobile with a shade). Replaces the theme hero on index; old CSS hack removed from pp-home-best.
-- Product: estimated delivery date (4–9 business days, US Eastern, computed in the browser) in blocks/pp-delivery;
+- Product: estimated delivery date available in blocks/pp-delivery (4–9 business days) but switched off at the owner's request (eta_min 0);
   mobile sticky add to cart shows the button text.
 - Speed: gallery images after the first are lazy (snippets/product-media); pp-card variant JSON moved out of the page
   (fetched on "Choose" from /products/handle?view=pp-data → templates/product.pp-data.liquid + snippets/pp-card-data);

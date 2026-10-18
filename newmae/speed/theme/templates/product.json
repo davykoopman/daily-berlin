@@ -245,7 +245,7 @@
               "type": "pp-delivery",
               "settings": {
                 "dispatch_days": "1–2",
-                "eta_min": 4,
+                "eta_min": 0,
                 "eta_max": 9
               },
               "blocks": {}
