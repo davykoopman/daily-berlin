@@ -2,8 +2,8 @@
   NewMae home hero, coded as one light section (replaces the theme hero on the home page).
   One <picture>: phones only download the mobile photo, desktops only the desktop photo,
   loaded with high priority because it is the first thing people see.
-  The photo keeps its own shape (little cropping); the focal point settings decide what
-  stays in view when it is cropped. Text sits on the photo with a soft shade behind it:
+  The photo keeps its own shape (little cropping), unless a mobile height is set; the focal
+  point settings decide what stays in view when it is cropped. Text sits on the photo with a soft shade behind it:
   desktop on the left (or centre/right), mobile at the bottom.
 {%- enddoc -%}
 
@@ -26,7 +26,7 @@
   class="pp-hero pp-hero--{{ ss.align }}"
   style="
     --pp-hero-ratio-d: {{ ratio_d }};
-    --pp-hero-ratio-m: {{ ratio_m }};
+    --pp-hero-ratio-m: {% if ss.mobile_height > 0 %}{{ ss.mobile_height | divided_by: 100.0 }}{% else %}{{ ratio_m }}{% endif %};
     --pp-hero-pos-d: {{ ss.focal_x }}% {{ ss.focal_y }}%;
     --pp-hero-pos-m: {{ ss.focal_x_mobile }}% {{ ss.focal_y_mobile }}%;
     --pp-hero-shade: {{ ss.shade | divided_by: 100.0 }};
@@ -78,6 +78,7 @@
   .pp-hero {
     position: relative;
     display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
     overflow: hidden;
     height: min(calc(100vw * var(--pp-hero-ratio-d)), calc(100svh - 150px));
     min-height: 460px;
@@ -94,6 +95,7 @@
     display: block;
     width: 100%;
     height: 100%;
+    min-height: 0;
   }
 
   .pp-hero__img {
@@ -355,6 +357,17 @@
       "step": 5,
       "unit": "%",
       "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Photo height mobile (% of the screen width)",
+      "info": "Lower = the top of the photo is cut off, so the models move up. 0 = full photo.",
+      "min": 0,
+      "max": 140,
+      "step": 2,
+      "unit": "%",
+      "default": 0
     },
     {
       "type": "select",

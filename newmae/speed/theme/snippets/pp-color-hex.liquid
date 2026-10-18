@@ -72,33 +72,43 @@
 {{- hex -}}
 
 {% stylesheet %}
-  /* NewMae colour swatches on the product page: round photo swatches with a ring when selected */
+  /*
+    NewMae colour swatches on the product page: square photo tiles. They look different from the
+    size buttons below (grey boxes with text): photo, thin frame, dark frame when chosen, extra space under the row.
+  */
   .variant-option--pp-color {
-    --variant-picker-swatch-width: 44px;
-    --variant-picker-swatch-height: 44px;
-    --variant-picker-swatch-radius: 50%;
-    --focus-outline-offset: 3px;
-    gap: 10px;
+    --variant-picker-swatch-width: 48px;
+    --variant-picker-swatch-height: 48px;
+    --variant-picker-swatch-radius: 2px;
+    --focus-outline-offset: 2px;
+    gap: 8px;
+    margin-block-end: 10px;
   }
 
   .variant-option--pp-color .swatch {
-    border: 1px solid rgb(0 0 0 / 0.12);
+    border: 1px solid rgb(0 0 0 / 0.14);
     background-color: #f3efea;
   }
 
+  .variant-option--pp-color .variant-option__button-label--has-swatch:hover {
+    outline: 1px solid rgb(0 0 0 / 0.45);
+    outline-offset: 2px;
+  }
+
   .variant-option--pp-color .variant-option__button-label--has-swatch:has(:checked) {
-    outline: 1.5px solid var(--color-foreground);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 2px;
   }
 
   .variant-option--pp-color .variant-option__swatch-value {
     font-weight: 600;
+    color: var(--color-foreground);
   }
 
   @media screen and (max-width: 749px) {
     .variant-option--pp-color {
-      --variant-picker-swatch-width: 40px;
-      --variant-picker-swatch-height: 40px;
+      --variant-picker-swatch-width: 44px;
+      --variant-picker-swatch-height: 44px;
     }
   }
 {% endstylesheet %}

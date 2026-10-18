@@ -17,7 +17,7 @@
         "focal_y": 60,
         "image_mobile": "shopify://shop_images/Autumn_Stroll_Through_the_City_1.png",
         "focal_x_mobile": 50,
-        "focal_y_mobile": 30,
+        "focal_y_mobile": 100,
         "align": "left",
         "shade": 55,
         "kicker": "Fall Clearance",
@@ -26,7 +26,8 @@
         "button_1": "Shop women's sale",
         "link_1": "shopify://collections/fall-clearance-women",
         "button_2": "Shop men's sale",
-        "link_2": "shopify://collections/fall-clearance-men"
+        "link_2": "shopify://collections/fall-clearance-men",
+        "mobile_height": 112
       }
     },
     "pp_trust": {

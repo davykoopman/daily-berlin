@@ -92,7 +92,7 @@
   everything is coded as sections/snippets.
 - Quantity selector: product page only for products with quantity rules (hidden input quantity=1 otherwise,
   blocks/buy-buttons.liquid). Cart: selector only when a line has 2+, "Remove" text link (snippets/cart-products.liquid).
-- Colour swatches without app/swatch data: colour options render round photo swatches from the variant image,
+- Colour swatches without app/swatch data: colour options render square photo swatches (48px, 44px mobile) from the variant image,
   colour dot from the name as fallback (snippets/variant-main-picker, swatch, pp-color-hex). Swatch King app embed is
   still on in settings but renders nothing; if the app is reactivated, swatches would show twice.
 - Cart upsell: compact rows (64px photo, title, price, "+ Add" → quick pick) in snippets/pp-cart-upsell.
@@ -107,6 +107,6 @@
 - Measured (mobile, DPR 3, one run): product images 2060 → 1287 KB, home 1357 → 1110 KB, collection 1213 → 998 KB,
   HTML 40–75 KB smaller per page. Biggest remaining cost: Google tags loaded 4× (~680 KB JS), left to the owner.
 - Look: text colour #1C1714 (warm black), announcement bar #1C1714, cream trust band #F6F1EA, soft fade-in on scroll,
-  slow zoom on product cards (desktop), round swatches on cards.
+  slow zoom on product cards (desktop), square swatches on cards. Mobile hero cropped at 112% of the width (setting "Photo height mobile"), focal point bottom, so the models sit higher.
 - Copied as is from the live theme (owner's decision): pp-rating "Rated by 2,000+ happy customers" and the
   customer photo section with invented names. FTC / Google Merchant Center risk; switch off before ads.
