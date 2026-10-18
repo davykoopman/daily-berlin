@@ -97,3 +97,9 @@ Built in nl/theme (originals in nl/orig). Tested in preview on PL, NL and GB, mo
 2. Set the three MIX & MATCH discounts to start now (Claude can do it).
 3. Owner turns off the Kaching Cart discounts in the app (or Discounts → "Kaching Cart - … V2" → deactivate).
 4. Test one order on /nl-nl; after a few days uninstall Swatch King (can go right after publishing) and Kaching Cart.
+### Switch done (2026-10-18)
+- "Niaali - NL (werk)" #208277143884 is live (published by the owner).
+- Kaching Cart discounts (Order/Shipping/Product V2) deactivated; MIX & MATCH -10/-15/-20% active from 16:38 UTC.
+- Live test on mobile, 1–4 items, PL (PLN), NL (EUR) and GB (GBP): 0/10/15/20% applied with the right MIX & MATCH
+  title; tier bar in the local language; checkout NL in Dutch, € total discounted, free shipping.
+- Still open: iDEAL not yet shown at NL checkout (owner enables it in Shopify Payments).
