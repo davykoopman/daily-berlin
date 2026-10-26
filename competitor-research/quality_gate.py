@@ -43,6 +43,51 @@ def reject(state):
     REJ.write_text(json.dumps(rej, ensure_ascii=False, indent=0))
 
 
+def dedupe(state, rows, gals, hashes):
+    """Les uit de file van 26-10 (121 x 'Already in store'): na de foto-upgrade opnieuw controleren
+    (1) tegen de ACTUELE store-catalogus (eerste 8 foto's vs eerste 8 van elk eigen product, ≤12) en
+    (2) open regels binnen dezelfde store tegen elkaar (zelfde product via twee links): ≥2 foto's ≤8 of hoofdfoto ≤6.
+    Bij (2) blijft de bovenste regel (prioriteit/lijstvolgorde) staan."""
+    import numpy as np
+    cfg = json.loads((BASE / "config/stores.json").read_text())
+    dom = {x["naam"]: x["domein"] for x in cfg["stores"]}
+    gal_of = {id(x): g for x, g in zip(rows, gals)}
+    n_own = n_dup = 0
+    for store, srows in state.items():
+        prods = pp.fetch_products(dom[store], strict=True)
+        og = [im["src"] + ("&" if "?" in im["src"] else "?") + "width=240" for p in prods for im in (p.get("images") or [])[:8]]
+        oh = pp.hash_images(og)
+        OH = np.array([int(h, 16) for h in oh.values() if h], dtype=np.uint64)
+        seen = []          # (main, [hashes]) van eerdere open regels
+        for x in srows:
+            if x["status"] != "Not listed" or x.get("_rej"):
+                continue
+            g = gal_of.get(id(x))
+            if not g or not g["imgs"]:
+                continue
+            hh = [int(hashes[pu.W(u)], 16) for u, _, _ in g["imgs"][:8] if hashes.get(pu.W(u))]
+            if not hh:
+                continue
+            # generieke foto's (maattabel e.d.) die bij veel eigen producten terugkomen tellen niet mee
+            def hit(h):
+                n = int(np.count_nonzero(np.bitwise_count(OH ^ np.uint64(h)) <= 12))
+                return 0 < n < 15
+            if len(OH) and any(hit(h) for h in hh):
+                x["_rej"] = "Already in store (auto-check)"; n_own += 1
+                continue
+            dup = False
+            for main, prev in seen:
+                same = sum(1 for h in hh if any(bin(h ^ q).count("1") <= 8 for q in prev))
+                if same >= 2 or bin(hh[0] ^ main).count("1") <= 6:
+                    dup = True
+                    break
+            if dup:
+                x["_rej"] = "Same product twice in list (auto-check)"; n_dup += 1
+                continue
+            seen.append((hh[0], hh))
+    print(f"  dedupe: {n_own} al in store, {n_dup} dubbel in lijst", file=sys.stderr)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--min-fotos", type=int, default=3)
@@ -71,6 +116,7 @@ def main():
             x["_rej"] = f"Too few photos: {len(distinct)}"; n["few"] += 1
         elif BRAND.search(title_rest):
             x["_rej"] = "Brand name in title"; n["brand"] += 1
+    dedupe(state, rows, gals, hashes)
     reject(state)
     STATE.write_text(json.dumps(state, ensure_ascii=False))
     print(f"{len(rows)} open regels gecontroleerd: {n}", file=sys.stderr)

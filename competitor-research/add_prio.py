@@ -34,7 +34,7 @@ def main():
     market_of = {s["domain"]: s["market"] for s in pool["stores"]}
     own = {}
     for n, s in stores.items():
-        prods = pp.fetch_products(s["domein"])
+        prods = pp.fetch_products(s["domein"], strict=True)
         gal = [im["src"] + ("&" if "?" in im["src"] else "?") + "width=240" for p in prods for im in (p.get("images") or [])[:6]]
         own[n] = np.array([int(h, 16) for h in pp.hash_images(gal).values() if h], dtype=np.uint64)
     added = {n: [] for n in stores}

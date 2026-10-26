@@ -68,7 +68,7 @@ def round_price(eur, cur, fx):
 
 
 def own_catalog(domain):
-    prods = pp.fetch_products(domain)
+    prods = pp.fetch_products(domain, strict=True)
     imgs = [pp.img_url(p) for p in prods if p.get("images")]
     gal = [im["src"] + ("&" if "?" in im["src"] else "?") + "width=240" for p in prods for im in (p.get("images") or [])[:6]]
     hashes = pp.hash_images(imgs)

@@ -1,9 +1,75 @@
 {
-  "_uitleg": "Doelmix per store voor NIEUWE producten (aandeel per categorie, som ~1) + aandeel dames + boost voor bewezen producttypes. Davento en Niaali op basis van hun Google-productrapporten (1-16 okt 2026); andere stores volgen de bewezen richting gematigd (akkoord Davy 16-10).",
-  "Davento":   {"share_w": 0.45, "boost": {"M|Tussenjas": 1.15, "W|Winterjas": 1.15, "W|Tussenjas": 1.15, "M|Winterjas": 1.05, "W|Set": 1.1, "M|Trui / hoodie": 1.1, "M|Blouse / shirt": 1.05},
-                "mix": {"Tussenjas": 0.30, "Winterjas": 0.25, "Trui / hoodie": 0.10, "Broek": 0.08, "Set": 0.08, "Blouse / shirt": 0.06, "Vest / cardigan": 0.05, "Laarzen": 0.04, "Schoenen": 0.02, "Blazer": 0.02}},
-  "Niaali":    {"share_w": 0.55, "boost": {"W|Tussenjas": 1.15, "W|Winterjas": 1.15, "M|Tussenjas": 1.05, "M|Set": 1.0, "M|Broek": 1.05},
-                "mix": {"Tussenjas": 0.30, "Winterjas": 0.25, "Trui / hoodie": 0.10, "Set": 0.08, "Broek": 0.07, "Vest / cardigan": 0.05, "Laarzen": 0.05, "Schoenen": 0.03, "Blouse / shirt": 0.03, "Blazer": 0.02, "Jurk": 0.02}},
-  "_default":  {"boost": {"W|Winterjas": 1.08, "W|Tussenjas": 1.08, "M|Tussenjas": 1.08, "M|Winterjas": 1.05},
-                "mix": {"Tussenjas": 0.22, "Winterjas": 0.23, "Trui / hoodie": 0.18, "Vest / cardigan": 0.12, "Laarzen": 0.10, "Broek": 0.06, "Set": 0.04, "Blazer": 0.02, "Blouse / shirt": 0.02, "Schoenen": 0.01}}
+ "_uitleg": "Doelmix per store voor NIEUWE producten. Davento op basis van Google-productrapport 12-26 okt 2026 (€28K omzet, ROAS 3,0; heren ~65%, jassen ~66% van de omzet); Niaali op basis van 1-16 okt; andere stores trekken de Davento-richting door (akkoord Davy 26-10).",
+ "Davento": {
+  "share_w": 0.38,
+  "boost": {
+   "M|Tussenjas": 1.2,
+   "W|Tussenjas": 1.15,
+   "M|Winterjas": 1.15,
+   "W|Winterjas": 1.05,
+   "M|Set": 1.1,
+   "W|Set": 1.15,
+   "M|Broek": 1.05,
+   "M|Blazer": 1.1,
+   "M|Trui / hoodie": 1.05
+  },
+  "mix": {
+   "Tussenjas": 0.4,
+   "Winterjas": 0.2,
+   "Broek": 0.09,
+   "Trui / hoodie": 0.08,
+   "Set": 0.08,
+   "Laarzen": 0.05,
+   "Blazer": 0.03,
+   "Vest / cardigan": 0.03,
+   "Schoenen": 0.02,
+   "Blouse / shirt": 0.02
+  }
+ },
+ "Niaali": {
+  "share_w": 0.55,
+  "boost": {
+   "W|Tussenjas": 1.15,
+   "W|Winterjas": 1.15,
+   "M|Tussenjas": 1.05,
+   "M|Set": 1.0,
+   "M|Broek": 1.05
+  },
+  "mix": {
+   "Tussenjas": 0.27,
+   "Winterjas": 0.28,
+   "Trui / hoodie": 0.1,
+   "Set": 0.08,
+   "Broek": 0.07,
+   "Vest / cardigan": 0.05,
+   "Laarzen": 0.05,
+   "Schoenen": 0.03,
+   "Blouse / shirt": 0.03,
+   "Blazer": 0.02,
+   "Jurk": 0.02
+  }
+ },
+ "_default": {
+  "boost": {
+   "M|Tussenjas": 1.12,
+   "W|Tussenjas": 1.1,
+   "M|Winterjas": 1.08,
+   "W|Winterjas": 1.05,
+   "M|Set": 1.05,
+   "W|Set": 1.05,
+   "M|Broek": 1.03
+  },
+  "mix": {
+   "Tussenjas": 0.3,
+   "Winterjas": 0.22,
+   "Trui / hoodie": 0.14,
+   "Laarzen": 0.09,
+   "Vest / cardigan": 0.08,
+   "Broek": 0.07,
+   "Set": 0.05,
+   "Blazer": 0.02,
+   "Blouse / shirt": 0.02,
+   "Schoenen": 0.01
+  }
+ }
 }

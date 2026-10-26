@@ -464,7 +464,7 @@
  "weights": {
   "DE": {
    "autumn": {
-    "Winterjas": 0.9,
+    "Winterjas": 1.0,
     "Tussenjas": 1.0,
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 1.0,
@@ -534,7 +534,7 @@
   },
   "ES": {
    "autumn": {
-    "Winterjas": 0.2,
+    "Winterjas": 0.85,
     "Tussenjas": 0.8,
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 1.0,
@@ -604,12 +604,12 @@
   },
   "UK": {
    "autumn": {
-    "Winterjas": 0.7,
+    "Winterjas": 1.0,
     "Tussenjas": 1.0,
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 1.0,
     "Blazer": 0.8,
-    "Laarzen": 0.9,
+    "Laarzen": 1.0,
     "Broek": 0.8,
     "Jurk": 0.5,
     "Blouse / shirt": 0.6,
@@ -674,7 +674,7 @@
   },
   "PL": {
    "autumn": {
-    "Winterjas": 0.8,
+    "Winterjas": 1.0,
     "Tussenjas": 0.9,
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 0.9,
@@ -744,7 +744,7 @@
   },
   "IT": {
    "autumn": {
-    "Winterjas": 0.6,
+    "Winterjas": 0.85,
     "Tussenjas": 1.0,
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 1.0,
@@ -814,7 +814,7 @@
   },
   "US": {
    "autumn": {
-    "Winterjas": 0.8,
+    "Winterjas": 1.0,
     "Tussenjas": 1.0,
     "Trui / hoodie": 1.0,
     "Vest / cardigan": 1.0,
@@ -961,5 +961,5 @@
   "PT": "ES"
  },
  "_listvenster": "Voor een lijst van 20-25 dagen vanaf begin oktober: in koude markten (DE, PL, UK, US, CA) telt de 2e helft als half herfst / half winter.",
- "_bijgesteld": "9 okt: ES jurken↑ winterjassen↓, IT laarzen↑, PL winterjassen↓, US jurken↑ (op basis van season_report.py)"
+ "_bijgesteld": "9 okt: ES jurken↑ winterjassen↓, IT laarzen↑, PL winterjassen↓, US jurken↑ (op basis van season_report.py) | 26 okt: eind oktober → winterjassen en laarzen vol in seizoen in DE/PL/UK/US, IT/ES winterjassen 0.85; tussenjassen blijven 1.0 (Davento-data: heren tussenjassen ROAS 3,2)"
 }

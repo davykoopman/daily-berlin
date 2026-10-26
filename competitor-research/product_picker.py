@@ -37,13 +37,14 @@ def get(url, binary=False, timeout=30, tries=4):
             time.sleep(float(e.headers.get("Retry-After") or 0) or 4 * (i + 1))
 
 
-def fetch_products(domain):
+def fetch_products(domain, strict=False):
+    """strict=True voor EIGEN stores: een halve catalogus (rate limiting) geeft valse 'ontbreekt'/'niet in store'."""
     out = []
     for page in range(1, 41):
         try:
-            batch = json.loads(get(f"https://{domain}/products.json?limit=250&page={page}"))["products"]
+            batch = json.loads(get(f"https://{domain}/products.json?limit=250&page={page}", tries=8 if strict else 4))["products"]
         except Exception:
-            if out:
+            if out and not strict:
                 break  # sommige stores geven een fout op diepe pagina's: houd wat binnen is
             raise
         out += batch
