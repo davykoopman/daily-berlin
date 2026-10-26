@@ -38,7 +38,23 @@ def main():
     for n, s in stores.items():
         prods = pp.fetch_products(s["domein"], strict=True)
         gal = [im["src"] + ("&" if "?" in im["src"] else "?") + "width=240" for p in prods for im in (p.get("images") or [])[:6]]
-        own[n] = np.array([int(h, 16) for h in pp.hash_images(gal).values() if h], dtype=np.uint64)
+        galp = [(p["handle"], im["src"] + ("&" if "?" in im["src"] else "?") + "width=240") for p in prods for im in (p.get("images") or [])[:6]]
+        gh = pp.hash_images([u for _, u in galp])
+        own[n] = (np.array([int(gh[u], 16) for _, u in galp if gh.get(u)], dtype=np.uint64), [hd for hd, u in galp if gh.get(u)])
+
+    def in_store(n, hh):
+        """≥2 foto's (≤10) bij hetzelfde eigen product, of één bijna identieke foto (≤6); generieke foto's tellen niet."""
+        H, hd = own[n]
+        per = {}
+        for h in hh:
+            d = np.bitwise_count(H ^ np.uint64(h))
+            idx = np.nonzero(d <= 10)[0]
+            if 0 < len(idx) < 15:
+                if int(d.min()) <= 6:
+                    return True
+                for j in idx:
+                    per.setdefault(hd[j], set()).add(h)
+        return any(len(v) >= 2 for v in per.values())
     added = {n: [] for n in stores}
     factor = {k: float(v) for k, v in (f.split("=") for f in a.factor)}
     for it in items:
@@ -65,7 +81,7 @@ def main():
             s = stores[n]
             if any(x["url"].split("?")[0] == it["url"] for x in state.get(n, [])):
                 continue
-            if not it.get("presence_checked") and len(own[n]) and any(int(np.min(np.bitwise_count(own[n] ^ np.uint64(h)))) <= 12 for h in first6[:4]):
+            if not it.get("presence_checked") and in_store(n, first6):
                 continue
             if len(added[n]) >= a.max:
                 continue

@@ -70,13 +70,16 @@ def round_price(eur, cur, fx):
 def own_catalog(domain):
     prods = pp.fetch_products(domain, strict=True)
     imgs = [pp.img_url(p) for p in prods if p.get("images")]
-    gal = [im["src"] + ("&" if "?" in im["src"] else "?") + "width=240" for p in prods for im in (p.get("images") or [])[:6]]
+    galp = [(p["handle"], im["src"] + ("&" if "?" in im["src"] else "?") + "width=240") for p in prods for im in (p.get("images") or [])[:6]]
+    gal = [u for _, u in galp]
     hashes = pp.hash_images(imgs)
-    all_hashes = [h for h in pp.hash_images(gal).values() if h]
+    gh = pp.hash_images(gal)
+    all_hashes = [h for h in gh.values() if h]
+    all_pairs = [(hd, gh[u]) for hd, u in galp if gh.get(u)]
     g = [gender(p["title"], p.get("product_type") or "") for p in prods]
     share_w = g.count("W") / max(g.count("W") + g.count("M"), 1)
     prices = sorted(float(p["variants"][0]["price"]) for p in prods if p.get("variants"))
-    return dict(n=len(prods), hashes=[h for h in hashes.values() if h], all_hashes=all_hashes, share_w=share_w,
+    return dict(n=len(prods), hashes=[h for h in hashes.values() if h], all_hashes=all_hashes, all_pairs=all_pairs, share_w=share_w,
                 median=prices[len(prices) // 2] if prices else None,
                 handles={p["handle"] for p in prods}, titles=[p["title"] for p in prods])
 
@@ -297,6 +300,24 @@ def final_checks(picked, own, existing, media, n_target, quota=None):
     - bronlink moet nog actief zijn en ≥50% van de maten leverbaar."""
     import imagehash
     own_h = [imagehash.hex_to_hash(h) for h in own["all_hashes"]]
+    import numpy as np
+    OP = own.get("all_pairs") or []
+    OH = np.array([int(h, 16) for _, h in OP], dtype=np.uint64)
+    OHh = [hd for hd, _ in OP]
+
+    def in_store(hh):
+        if not len(OH):
+            return False
+        per = {}
+        for h in hh:
+            d = np.bitwise_count(OH ^ np.uint64(int(str(h), 16)))
+            idx = np.nonzero(d <= 10)[0]
+            if 0 < len(idx) < 15:
+                if int(d.min()) <= 6:
+                    return True
+                for j in idx:
+                    per.setdefault(OHh[j], set()).add(str(h))
+        return any(len(v) >= 2 for v in per.values())
     gal = lambda m: [x["src"] + ("&" if "?" in (x["src"] or "") else "?") + "width=240" for x in (m or [])[:3] if x.get("src")]
     ex_imgs = []
     for x in existing:
@@ -322,8 +343,8 @@ def final_checks(picked, own, existing, media, n_target, quota=None):
         if not a:
             drop["bron niet leverbaar"] += 1; continue
         hh = [imagehash.hex_to_hash(h) for u in gal(media.get(f'{e["best"]["store"]}/{e["best"]["handle"]}')) if (h := hs.get(u))]
-        # ≤12: ook iets bewerkte/bijgesneden foto's tellen als 'al in store' (les uit de file van 16-10)
-        if any(h - o <= 12 for h in hh for o in own_h):
+        # al in store = ≥2 foto's (≤10) bij hetzelfde eigen product, of één bijna identieke foto (≤6) (les 26-10)
+        if in_store(hh):
             drop["al in store"] += 1; continue
         ok_e.append((e, hh))
     # twee rondes: eerst binnen de doelmix per categorie, daarna aanvullen als er te weinig zijn
