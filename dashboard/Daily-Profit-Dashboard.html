@@ -341,7 +341,15 @@ function dailyTable(days){
 
 /* ---------- echte bestanden lezen ---------- */
 const MAANDEN=['jan','feb','mrt','mar','apr','mei','may','jun','jul','aug','sep','okt','oct','nov','dec'];
-const num=v=>typeof v==='number'&&isFinite(v)?v:0;
+const num=v=>{
+  if(typeof v==='number')return isFinite(v)?v:0;
+  if(typeof v!=='string')return 0;
+  let t=v.replace(/[€\s\u00A0]/g,'').replace('−','-');
+  if(!/\d/.test(t))return 0;
+  if(t.includes(',')&&t.includes('.'))t=t.lastIndexOf(',')>t.lastIndexOf('.')?t.replace(/\./g,'').replace(',','.'):t.replace(/,/g,'');
+  else if(t.includes(','))t=t.replace(',','.');
+  const n=parseFloat(t);return isFinite(n)?n:0;
+};
 function storeName(f){return f.name.replace(/\.[^.]+$/,'').split(' - ').pop().trim()}
 const norm=h=>String(h).toLowerCase().replace(/\s+/g,' ').trim();
 function toDay(v){
@@ -359,7 +367,7 @@ async function readFiles(list){
   setStatus('Bezig met lezen van '+files.length+' bestanden…');
   const names=[],rows=[];DIAG=[];
   for(const f of files){
-    const d={file:f.name,tabs:[],rows:0,omzet:0,headers:'',err:''};DIAG.push(d);
+    const d={file:f.name,tabs:[],rows:0,omzet:0,calc:0,prof:0,diff:[],headers:'',err:''};DIAG.push(d);
     try{
       const wb=XLSX.read(await f.arrayBuffer(),{type:'array'});
       d.alle=wb.SheetNames.join(', ');
@@ -375,7 +383,10 @@ async function readFiles(list){
           const date=toDay(r['datum']);if(date==null||date>Date.now())return;
           let ads=0;for(const k in r)if(k.startsWith('adspend'))ads+=num(r[k]);
           const row={store:si,date,omzet:num(r['omzet']),cogs:num(r['cost of goods']),ads,mb:num(r['media buyer']),
-            team:num(r['team kosten']),refunds:num(r['refunds']),subs:num(r['subscriptions']),trans:num(r['transactie'])};
+            team:num(r['team kosten']),refunds:num(r['refunds']),subs:num(r['subscriptions']),trans:num(r['transactie']),
+            pSheet:(r['profit']===undefined||r['profit']==='')?null:num(r['profit'])};
+          const c=row.omzet-row.cogs-row.mb-row.ads-row.team-row.refunds-row.subs-row.trans;d.calc+=c;d.prof+=(row.pSheet==null?0:row.pSheet);
+          if(row.pSheet!=null&&Math.abs(c-row.pSheet)>1)d.diff.push(fmtDay(date)+' (sheet '+eur(row.pSheet)+', berekend '+eur(c)+')');
           rows.push(row);n++;d.omzet+=row.omzet});
         d.tabs.push(t+' ('+n+' dagen)');d.rows+=n;
       });
@@ -389,8 +400,8 @@ async function readFiles(list){
 }
 function showDiag(){
   const el=document.getElementById('diag');if(!DIAG.length){el.innerHTML='';return}
-  el.innerHTML='<details><summary>Wat is er per bestand gelezen?</summary><div class="tw"><table style="min-width:600px"><thead><tr><th>Bestand</th><th>Tabs</th><th>Omzet totaal</th><th>Kolommen</th><th>Opmerking</th></tr></thead><tbody>'
-   +DIAG.map(d=>`<tr><td>${d.file}</td><td>${d.tabs.join(', ')||'–'}</td><td class="num">${eur(d.omzet)}</td><td style="white-space:normal;text-align:left">${d.headers||'–'}</td><td style="white-space:normal;text-align:left" class="${d.err||d.omzet===0?'down':''}">${d.err||(d.omzet===0?'Alle omzet is 0, mogelijk geen opgeslagen waarden (zie hulp)':'ok')}${d.err||d.omzet===0?'<br>Tabs in bestand: '+(d.alle||''):''}</td></tr>`).join('')
+  el.innerHTML='<details><summary>Wat is er per bestand gelezen?</summary><div class="tw"><table style="min-width:600px"><thead><tr><th>Bestand</th><th>Tabs</th><th>Omzet totaal</th><th>Winst sheet</th><th>Winst dashboard</th><th>Kolommen</th><th>Opmerking</th></tr></thead><tbody>'
+   +DIAG.map(d=>`<tr><td>${d.file}</td><td>${d.tabs.join(', ')||'–'}</td><td class="num">${eur(d.omzet)}</td><td class="num">${eur(d.prof)}</td><td class="num">${eur(d.calc)}</td><td style="white-space:normal;text-align:left">${d.headers||'–'}</td><td style="white-space:normal;text-align:left" class="${d.err||d.omzet===0||d.diff.length?'down':''}">${d.err||(d.omzet===0?'Alle omzet is 0, mogelijk geen opgeslagen waarden (zie hulp)':(d.diff.length?'Afwijking met de Profit-kolom in de sheet op: '+d.diff.join('; ')+'. Controleer de formule in die rij.':'ok'))}${d.err||d.omzet===0?'<br>Tabs in bestand: '+(d.alle||''):''}</td></tr>`).join('')
    +'</tbody></table></div></details>';
 }
 function setStatus(msg,warn){showDiag();
