@@ -1,0 +1,182 @@
+<title>Product Quality Checks</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a sticky summary and filter bar over one card per product; controls sit to the right of the product on wide screens and under it on phones. */
+:root{--bg:#f4f5f3;--panel:#ffffff;--fg:#1c2330;--muted:#5b6575;--line:#dcdfe3;--accent:#24578a;--accent-soft:#e4edf6;--good:#1d7a4a;--good-soft:#e1f2e8;--bad:#b0372c;--bad-soft:#f8e5e2;--warn:#9a5d0a;--warn-soft:#fbefd9;--none:#6a7381;--none-soft:#eceef1;--shadow:0 1px 2px rgba(20,30,45,.06);--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121821;--panel:#1a222d;--fg:#e6eaf0;--muted:#9aa5b5;--line:#2c3644;--accent:#7db2e8;--accent-soft:#1d2e43;--good:#58c58a;--good-soft:#16352a;--bad:#ef8579;--bad-soft:#40201d;--warn:#e5ad5b;--warn-soft:#3b2d14;--none:#9aa5b5;--none-soft:#232c38;--shadow:none;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121821;--panel:#1a222d;--fg:#e6eaf0;--muted:#9aa5b5;--line:#2c3644;--accent:#7db2e8;--accent-soft:#1d2e43;--good:#58c58a;--good-soft:#16352a;--bad:#ef8579;--bad-soft:#40201d;--warn:#e5ad5b;--warn-soft:#3b2d14;--none:#9aa5b5;--none-soft:#232c38;--shadow:none;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.45}
+*{box-sizing:border-box}
+.pg{max-width:68rem;margin-inline:auto;padding-block:1.25rem 3rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-size:1.5rem;font-weight:600;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:.85rem;margin:.25rem 0 0}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--bg);padding-block:.8rem .7rem;margin-top:.6rem;border-bottom:1px solid var(--line)}
+.sum{display:flex;flex-wrap:wrap;gap:.45rem}
+.sum button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:.3rem .8rem;cursor:pointer;display:inline-flex;gap:.45rem;align-items:baseline}
+.sum button b{font-family:var(--mono);font-weight:500}
+.sum button[aria-pressed=true]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.sum .dot{width:.55rem;height:.55rem;border-radius:50%;display:inline-block;align-self:center}
+.tools{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.6rem}
+.tools input,.tools select{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:6px;padding:.4rem .6rem;min-width:0}
+.tools input{flex:1 1 14rem}
+.notice{margin:.8rem 0 0;padding:.6rem .8rem;border-radius:8px;background:var(--warn-soft);color:var(--fg);font-size:.85rem}
+.legend{margin:.9rem 0 .4rem;color:var(--muted);font-size:.82rem;max-width:56rem}
+.list{display:flex;flex-direction:column;gap:.6rem;margin-top:.6rem}
+.card{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--none);border-radius:8px;padding:.8rem .9rem;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:.8rem 1.2rem;box-shadow:var(--shadow)}
+.card[data-s="Good"]{border-left-color:var(--good)}.card[data-s="Not good"]{border-left-color:var(--bad)}.card[data-s="Needs follow-up"]{border-left-color:var(--warn)}
+.card[hidden]{display:none}
+.top{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-bottom:.3rem}
+.chip{font-size:.72rem;font-weight:500;border-radius:999px;padding:.08rem .55rem;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.chip.high{background:var(--bad-soft);color:var(--bad);border-color:transparent}.chip.med{background:var(--warn-soft);color:var(--warn);border-color:transparent}.chip.both{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.name{font-weight:600;font-size:.98rem;overflow-wrap:anywhere}
+.st{margin-top:.35rem;font-size:.8rem;color:var(--muted);overflow-wrap:anywhere}
+.st b{color:var(--fg);font-weight:500}.st .n{font-family:var(--mono);font-size:.78rem}
+.match{margin-top:.4rem;font-size:.78rem;color:var(--muted)}
+.ctl{display:grid;grid-template-columns:1fr 1fr;gap:.45rem .6rem;align-content:start}
+.ctl label{display:flex;flex-direction:column;gap:.15rem;font-size:.72rem;color:var(--muted);min-width:0}
+.ctl .w2{grid-column:1/-1}
+.ctl input,.ctl select,.ctl textarea{font:inherit;font-size:.85rem;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.35rem .5rem;width:100%;min-width:0}
+.ctl textarea{resize:vertical;min-height:2.4rem}
+.ctl input:focus-visible,.ctl select:focus-visible,.ctl textarea:focus-visible,.sum button:focus-visible,.tools input:focus-visible,.tools select:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.saved{font-size:.72rem;color:var(--muted);min-height:1rem}
+.empty{padding:2rem 0;text-align:center;color:var(--muted)}
+@media (max-width:42rem){.card{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s}}
+</style>
+
+<div class="pg">
+  <h1>Product quality checks</h1>
+  <p class="sub">Daily Berlin, Davento and Niaali. Every product with more than 3 orders, up to 25 October 2026.</p>
+  <div class="bar">
+    <div class="sum" id="sum" role="group" aria-label="Filter by status"></div>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Search a product" aria-label="Search a product">
+      <select id="fs" aria-label="Store"><option value="">All stores</option><option value="Daily Berlin">Daily Berlin</option><option value="Davento">Davento</option><option value="Niaali">Niaali</option><option value="both">Sold in more than one store</option></select>
+      <select id="fp" aria-label="Priority"><option value="">All priorities</option><option value="High">High priority</option><option value="Medium">Medium priority</option><option value="none">No signals</option></select>
+    </div>
+  </div>
+  <div class="notice" id="notice" hidden></div>
+  <p class="legend">Priority comes from refunds for quality or damage and from "not as described" cases. A product sold in both stores is one row, so one check covers both. The two stores have no shared product code, so those rows are matched on translated name, price and colors. Please confirm each match.</p>
+  <div class="list" id="list"></div>
+  <p class="empty" id="empty" hidden>No product matches these filters.</p>
+</div>
+
+<script>
+(function(){
+const ITEMS=__ITEMS__;
+const STATUS=['Not checked yet','Good','Not good','Needs follow-up'];
+const MATCH=['Unconfirmed','Confirmed','Not the same product'];
+const COL={'Not checked yet':'var(--none)','Good':'var(--good)','Not good':'var(--bad)','Needs follow-up':'var(--warn)'};
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const nf=new Intl.NumberFormat('en-GB');
+const st={};            // id -> saved state
+const cards={};         // id -> {root, ctl}
+let db=null,me=null,canWrite=true,filterStatus='';
+const timers={},chain={};
+
+function cur(id){return st[id]||{status:'Not checked yet',checked_on:'',checked_by:'',note:'',match_ok:'Unconfirmed'};}
+function sel(opts,val,label){const s=el('select');s.setAttribute('aria-label',label);opts.forEach(o=>{const op=el('option',null,o);op.value=o;s.appendChild(op);});s.value=val;return s;}
+function field(label,ctl,cls){const l=el('label',cls);l.appendChild(document.createTextNode(label));l.appendChild(ctl);return l;}
+
+function build(){
+  const list=$('#list');
+  ITEMS.forEach(it=>{
+    const c=el('div','card');c.dataset.id=it.id;
+    const left=el('div');
+    const top=el('div','top');
+    if(it.priority)top.appendChild(el('span','chip '+(it.priority==='High'?'high':'med'),it.priority+' priority'));
+    if(it.kind==='both')top.appendChild(el('span','chip both',it.stores.length+' stores'));else top.appendChild(el('span','chip',it.kind));
+    left.appendChild(top);
+    left.appendChild(el('div','name',it.title));
+    it.stores.forEach(s=>{
+      const d=el('div','st');
+      if(it.kind==='both'){const b=el('b',null,s.store+': ');d.appendChild(b);d.appendChild(document.createTextNode(s.product+' '));}
+      const n=el('span','n',nf.format(s.orders)+' orders · '+nf.format(s.refunds)+' refunded · '+nf.format(s.quality)+' quality refunds · '+nf.format(s.nad)+' not as described · problem rate '+Math.round(s.rate*100)+'%');
+      d.appendChild(n);left.appendChild(d);
+    });
+    const ctl={};
+    if(it.kind==='both'){
+      const m=el('div','match');m.appendChild(document.createTextNode('Match confidence '+it.confidence+'. '+it.evidence+'. '));
+      ctl.match=sel(MATCH,'Unconfirmed','Is this the same product in both stores');ctl.match.style.cssText='width:auto;font:inherit;font-size:.78rem;padding:.15rem .3rem;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)';
+      m.appendChild(ctl.match);left.appendChild(m);
+    }
+    const right=el('div','ctl');
+    ctl.status=sel(STATUS,'Not checked yet','Status of '+it.title);
+    ctl.date=el('input');ctl.date.type='date';ctl.date.setAttribute('aria-label','Date checked');
+    ctl.by=el('input');ctl.by.type='text';ctl.by.placeholder='Name';ctl.by.setAttribute('aria-label','Checked by');
+    ctl.note=el('textarea');ctl.note.rows=2;ctl.note.placeholder='What was found';ctl.note.setAttribute('aria-label','Note');
+    right.appendChild(field('Status',ctl.status,'w2'));right.appendChild(field('Date checked',ctl.date));right.appendChild(field('Checked by',ctl.by));right.appendChild(field('Note',ctl.note,'w2'));
+    ctl.msg=el('div','saved w2');right.appendChild(ctl.msg);
+    c.appendChild(left);c.appendChild(right);list.appendChild(c);
+    cards[it.id]={root:c,ctl};
+    const edit=(statusChanged)=>{
+      const s=cur(it.id),n={...s,status:ctl.status.value,checked_on:ctl.date.value,checked_by:ctl.by.value,note:ctl.note.value,match_ok:ctl.match?ctl.match.value:s.match_ok};
+      if(statusChanged&&n.status!=='Not checked yet'){if(!n.checked_on){n.checked_on=new Date().toISOString().slice(0,10);ctl.date.value=n.checked_on;}if(!n.checked_by&&me&&me.name){n.checked_by=me.name;ctl.by.value=n.checked_by;}}
+      st[it.id]=n;paint(it.id);refresh();queue(it.id);
+    };
+    ctl.status.addEventListener('change',()=>edit(true));ctl.date.addEventListener('change',()=>edit(false));ctl.by.addEventListener('input',()=>edit(false));ctl.note.addEventListener('input',()=>edit(false));
+    if(ctl.match)ctl.match.addEventListener('change',()=>edit(false));
+  });
+}
+
+function paint(id,fromRemote){
+  const k=cards[id],s=cur(id),a=document.activeElement;
+  k.root.dataset.s=s.status;
+  const set=(c,v)=>{if(c&&(!fromRemote||a!==c)&&c.value!==v)c.value=v;};
+  set(k.ctl.status,s.status);set(k.ctl.date,s.checked_on||'');set(k.ctl.by,s.checked_by||'');set(k.ctl.note,s.note||'');set(k.ctl.match,s.match_ok||'Unconfirmed');
+}
+
+function queue(id){
+  if(!db||!canWrite)return;
+  const m=cards[id].ctl.msg;m.textContent='Saving…';
+  clearTimeout(timers[id]);timers[id]=setTimeout(()=>{
+    const body={...cur(id),updated_at:new Date().toISOString()};
+    chain[id]=(chain[id]||Promise.resolve()).then(()=>db.doc('status/'+id).set(body)).then(()=>{m.textContent='Saved';},e=>{m.textContent='Could not save'+(e&&e.code==='invalid_argument'?': you need Contributor access to this page.':'.');});
+  },600);
+}
+
+function match(it){
+  const q=$('#q').value.trim().toLowerCase(),fs=$('#fs').value,fp=$('#fp').value,s=cur(it.id).status;
+  if(filterStatus&&s!==filterStatus)return false;
+  if(fs==='both'&&it.kind!=='both')return false;
+  if(fs&&fs!=='both'&&!it.stores.some(x=>x.store===fs))return false;
+  if(fp==='none'&&it.priority)return false;
+  if((fp==='High'||fp==='Medium')&&it.priority!==fp)return false;
+  if(q&&!(it.title+' '+it.stores.map(x=>x.product).join(' ')).toLowerCase().includes(q))return false;
+  return true;
+}
+function refresh(){
+  const counts={};STATUS.forEach(s=>counts[s]=0);ITEMS.forEach(it=>counts[cur(it.id).status]++);
+  const sum=$('#sum');sum.textContent='';
+  const mk=(label,val,n,color)=>{const b=el('button');b.type='button';b.setAttribute('aria-pressed',String(filterStatus===val));if(color){const d=el('span','dot');d.style.background=color;b.appendChild(d);}b.appendChild(document.createTextNode(label));b.appendChild(el('b',null,nf.format(n)));b.addEventListener('click',()=>{filterStatus=val;refresh();});sum.appendChild(b);};
+  mk('All','',ITEMS.length);STATUS.forEach(s=>mk(s,s,counts[s],COL[s]));
+  let shown=0;ITEMS.forEach(it=>{const ok=match(it);cards[it.id].root.hidden=!ok;if(ok)shown++;});
+  $('#empty').hidden=shown>0;
+}
+
+async function init(){
+  build();refresh();
+  ['q','fs','fp'].forEach(i=>$('#'+i).addEventListener('input',refresh));
+  const c=window.claude;
+  if(!c||!c.use){note('Saving is not available here. You can look around, but ticks are not kept.');lock();return;}
+  try{db=await c.use('db');}catch(e){db=null;}
+  try{const u=await c.use('user');if(u){me=await u.me();const w=await u.can('data.write');if(w===false)canWrite=false;}}catch(e){}
+  if(!db){note('Saving is not available in this view. Sign in to the page to tick products off.');lock();return;}
+  if(!canWrite){note('You can read this page but not change it. Ask the owner for Contributor access.');lock();}
+  db.collection('status').onSnapshot(snap=>{
+    snap.docChanges().forEach(ch=>{
+      const id=ch.doc.id;if(!cards[id])return;
+      if(ch.type==='removed'){delete st[id];}else{const d=ch.doc.data()||{};st[id]={status:STATUS.includes(d.status)?d.status:'Not checked yet',checked_on:d.checked_on||'',checked_by:d.checked_by||'',note:d.note||'',match_ok:d.match_ok||'Unconfirmed'};}
+      paint(id,true);
+    });
+    refresh();
+  },e=>{note('Live updates stopped. Reload the page to see the latest ticks.');});
+}
+function note(t){const n=$('#notice');n.textContent=t;n.hidden=false;}
+function lock(){Object.values(cards).forEach(k=>{[k.ctl.status,k.ctl.date,k.ctl.by,k.ctl.note,k.ctl.match].forEach(x=>{if(x)x.disabled=true;});});}
+init();
+})();
+</script>

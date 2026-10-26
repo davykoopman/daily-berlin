@@ -1,0 +1,512 @@
+<style>
+#t-all td:first-child{white-space:normal;min-width:16rem}#t-all tr.hl td{font-weight:600;background:color-mix(in srgb,currentColor 5%,transparent)}
+.fr{--rd:var(--cds-radius);display:flex;flex-direction:column;gap:var(--cds-gap-xl);max-width:80rem;margin-inline:auto;font-family:var(--font-anthropic-sans);position:relative}
+.fr h1{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0;line-height:1.15}
+.fr h2{font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0}
+.fr h3{font-size:var(--cds-font-size-body);font-weight:var(--cds-font-weight-medium);margin:0}
+.fr p{margin:0}
+.fr .muted{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.fr .head{display:flex;flex-direction:column;gap:var(--cds-gap-sm)}
+.fr .take{font-size:var(--cds-font-size-body);line-height:1.5;max-width:62rem}
+.fr .take b,.fr .note b{font-weight:var(--cds-font-weight-medium)}
+.fr .tabs{display:flex;flex-wrap:wrap;gap:.4rem}
+.fr .tab{font:inherit;font-size:var(--cds-font-size-caption);padding:.35rem .9rem;border-radius:999px;border:1px solid var(--color-border-line);background:transparent;color:var(--color-fg);cursor:pointer}
+.fr .tab[aria-pressed=true]{background:var(--color-fg);color:var(--color-bg);border-color:var(--color-fg)}
+.fr .tab:focus-visible,.fr summary:focus-visible,.fr .btn:focus-visible{outline:2px solid var(--color-fg);outline-offset:2px}
+.fr .sec{display:flex;flex-direction:column;gap:var(--cds-gap-md)}
+.fr .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:var(--cds-gap-md)}
+.fr .wide{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,30rem),1fr));gap:var(--cds-gap-md)}
+.fr .card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--rd);padding:var(--cds-pad-lg);display:flex;flex-direction:column;gap:var(--cds-gap-sm);min-width:0}
+.fr .tile{gap:2px}
+.fr .tile .v{font-family:var(--font-anthropic-serif);font-size:var(--cds-font-size-title);font-weight:400;font-variant-numeric:tabular-nums;line-height:1.1}
+.fr .tile .v.bad{color:var(--color-bad)}
+.fr .tile .l,.fr .tile .n{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);font-variant-numeric:tabular-nums}
+.fr .box{min-height:12rem}.fr .box.sm{min-height:6rem}
+.fr svg{display:block;width:100%;height:auto;overflow:visible}
+.fr .legend{display:flex;flex-wrap:wrap;gap:var(--cds-gap-md);font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.fr .legend i{display:inline-block;width:.7rem;height:.7rem;border-radius:2px;margin-right:.35rem;vertical-align:-1px}
+.fr .rows{display:flex;flex-direction:column;gap:.55rem}
+.fr .row{display:grid;grid-template-columns:minmax(7rem,15rem) 1fr auto;gap:var(--cds-gap-sm);align-items:center;font-size:var(--cds-font-size-caption)}
+.fr .row .lb{overflow-wrap:anywhere;line-height:1.25}
+.fr .track{height:.9rem;background:var(--cds-chart-grid);border-radius:4px;overflow:hidden;display:flex}
+.fr .track span{display:block;height:100%}
+.fr .row .rt{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.fr .row .rt b{font-weight:var(--cds-font-weight-medium)}
+.fr .gh{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);margin-top:.5rem}
+.fr .row.total{border-top:1px solid var(--color-border-line);padding-top:.45rem;font-weight:var(--cds-font-weight-medium)}
+.fr table{border-collapse:collapse;width:100%;font-size:var(--cds-font-size-caption);font-variant-numeric:tabular-nums}
+.fr th{text-align:left;font-weight:var(--cds-font-weight-medium);color:var(--color-fg-muted);padding:.35rem .5rem;border-bottom:1px solid var(--color-border-line);position:sticky;top:0;background:var(--color-panel);white-space:nowrap}
+.fr td{padding:.4rem .5rem;border-bottom:1px solid var(--color-border-line);vertical-align:top}
+.fr th.r,.fr td.r{text-align:right}
+.fr td.wrap{white-space:normal;min-width:12rem}
+.fr .scroll{overflow-x:auto}
+.fr .scroll.tall{max-height:30rem;overflow:auto}
+.fr details{border:1px solid var(--color-border-line);border-radius:var(--rd);background:var(--color-panel)}
+.fr details>summary{cursor:pointer;padding:var(--cds-pad-md) var(--cds-pad-lg);display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;align-items:baseline;list-style:none;font-size:var(--cds-font-size-caption)}
+.fr details>summary::-webkit-details-marker{display:none}
+.fr details>summary::before{content:"▸";color:var(--color-fg-muted);width:1rem;display:inline-block}
+.fr details[open]>summary::before{content:"▾"}
+.fr details>summary .mn{font-size:var(--cds-font-size-body);font-weight:var(--cds-font-weight-medium);min-width:7rem}
+.fr details>summary .sv{font-variant-numeric:tabular-nums;color:var(--color-fg-muted)}
+.fr details>summary .sv b{color:var(--color-fg);font-weight:var(--cds-font-weight-medium)}
+.fr details>.inner{padding:0 var(--cds-pad-lg) var(--cds-pad-lg)}
+.fr .btns{display:flex;gap:.5rem;flex-wrap:wrap}
+.fr .btn{font:inherit;font-size:var(--cds-font-size-caption);padding:.3rem .8rem;border-radius:var(--rd);border:1px solid var(--color-border-line);background:var(--color-panel);color:var(--color-fg);cursor:pointer}
+.fr .chip{display:inline-block;padding:.05rem .55rem;border-radius:999px;font-size:var(--cds-font-size-caption);border:1px solid var(--color-border-line)}
+.fr .chip.ok{color:var(--color-ok)}.fr .chip.warn{color:var(--color-warn)}.fr .chip.bad{color:var(--color-bad)}
+.fr .acts{display:flex;flex-direction:column;gap:var(--cds-gap-sm)}
+.fr .act{display:grid;grid-template-columns:2rem 1fr;gap:var(--cds-gap-md)}
+.fr .act .pr{font-family:var(--font-anthropic-serif);font-size:var(--cds-font-size-title);line-height:1;color:var(--color-fg-muted)}
+.fr .tags{display:flex;flex-wrap:wrap;gap:.4rem;font-size:var(--cds-font-size-caption)}
+.fr .tag{border:1px solid var(--color-border-line);border-radius:999px;padding:.1rem .6rem;color:var(--color-fg-muted)}
+.fr .act dl{display:grid;grid-template-columns:6rem 1fr;gap:.25rem var(--cds-gap-md);margin:0;font-size:var(--cds-font-size-caption);line-height:1.45}
+.fr .act dt{color:var(--color-fg-muted)}.fr .act dd{margin:0}
+.fr .fail{display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:inherit;color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.fr .fail::before{content:"";width:.375rem;height:.375rem;border-radius:50%;background:var(--color-bad)}
+.fr [data-dash-source-state=empty]{color:transparent}
+.fr [data-dash-source-state=refreshing]{opacity:.5;transition:opacity var(--cds-dur-slow)}
+.fr .tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:var(--cds-radius);box-shadow:var(--cds-shadow-popover);padding:var(--cds-pad-xs) var(--cds-pad-sm);font-size:var(--cds-font-size-caption);z-index:5;display:none;max-width:17rem}
+.fr .tip .t{color:var(--cds-text-secondary)}
+.fr .tip .li{display:flex;gap:.4rem;align-items:center;font-variant-numeric:tabular-nums}
+.fr .tip .li i{width:.6rem;height:.6rem;border-radius:2px;display:inline-block}
+.fr .note{font-size:var(--cds-font-size-caption);color:var(--color-fg-muted);line-height:1.5;max-width:62rem}
+.fr ul.defs{margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:.35rem;font-size:var(--cds-font-size-caption);line-height:1.5;color:var(--color-fg-muted)}
+.fr ul.defs b{color:var(--color-fg);font-weight:var(--cds-font-weight-medium)}
+@media (max-width:34rem){.fr .row{grid-template-columns:1fr auto}.fr .row .track{grid-column:1/-1;order:3}.fr .act{grid-template-columns:1fr}.fr .act dl{grid-template-columns:1fr}}
+</style>
+
+<div class="fr" id="fr">
+  <header class="head">
+    <h1>Chargebacks and refunds report</h1>
+    <p class="muted" id="sub"></p>
+    <div class="tabs" id="tabs" role="group" aria-label="Store"></div>
+    <p class="take" id="take"></p>
+  </header>
+
+  <div id="v-all" hidden>
+    <section class="sec"><h2>All stores side by side</h2>
+      <div class="card"><div class="scroll"><table id="t-all"><thead><tr></tr></thead><tbody></tbody></table></div>
+      <p class="muted">Refunds on orders that were never shipped are taken off the revenue, because that money was never really earned; they stay visible in their own row so you can keep monitoring them as lost revenue. The loss percentage then covers shipped orders only. Every store uses the same definitions and cut-off date, so the numbers compare directly. A new store appears here as soon as its files are added.</p></div>
+    </section>
+  </div>
+
+  <div id="v-store" style="display:flex;flex-direction:column;gap:var(--cds-gap-xl)">
+    <section class="sec" aria-label="Key figures"><div class="grid" id="tiles"></div></section>
+
+    <section class="sec" id="lost">
+      <h2>Where the money went</h2>
+      <p class="note">Everything that left the business through refunds, chargebacks and disputes. Refunds are split into orders that were <b>never (fully) shipped</b>, which are supplier or stock issues, and orders that were shipped.</p>
+      <div class="wide">
+        <div class="card"><div class="box dash-skeleton" id="c-split" data-source="split"></div></div>
+        <div class="card"><h3>What sits behind the split</h3><ul class="defs" id="split-notes"></ul></div>
+      </div>
+    </section>
+
+    <section class="sec" id="daily">
+      <h2>Loss per day</h2>
+      <p class="note">Shopify Payments is shown on the day the money was debited, PayPal on the transaction date, revenue on the order date. Open a month to see its days. A month with almost no revenue shows no percentage, because its losses belong to orders from earlier months.</p>
+      <div class="card"><div class="legend" id="lg-day"></div><div class="box dash-skeleton" id="c-day" data-source="daily"></div></div>
+      <div class="btns"><button class="btn" id="b-open" type="button">Expand all months</button><button class="btn" id="b-close" type="button">Collapse all months</button></div>
+      <div id="months" style="display:flex;flex-direction:column;gap:var(--cds-gap-sm)"></div>
+    </section>
+
+    <section class="sec" id="refunds">
+      <h2>Refunds</h2>
+      <div class="wide">
+        <div class="card"><h3>Reason for the refund</h3><p class="muted">From the reasons entered by hand in Shopify. Refunds without a reason yet are shown as such. Supplier issues are marked in red.</p><div class="box dash-skeleton" id="c-reasons" data-source="reasons"></div></div>
+        <div class="card"><h3>Full or partial</h3><div class="box sm dash-skeleton" id="c-type" data-source="reasons"></div>
+          <h3 style="margin-top:.8rem">Supplier issues</h3><div class="box sm dash-skeleton" id="c-sup" data-source="reasons"></div></div>
+      </div>
+    </section>
+
+    <section class="sec" id="disputes">
+      <h2>Chargebacks and disputes</h2>
+      <div class="wide">
+        <div class="card"><h3>Shopify Payments chargebacks by payment method</h3><div class="box sm dash-skeleton" id="c-cbm" data-source="reasons"></div>
+          <p class="note" id="cb-note"></p></div>
+        <div class="card"><h3>PayPal cases</h3><p class="note" id="pp-note"></p>
+          <div class="scroll tall"><table id="t-pp" data-source="reasons" data-row-key="store,kind,label"><thead><tr></tr></thead><tbody></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section class="sec" id="opencases">
+      <h2>Open PayPal cases</h2>
+      <div class="card"><p class="note" id="cases-note"></p>
+        <div class="scroll tall"><table id="t-cases" data-source="cases" data-row-key="store,case_id"><thead><tr></tr></thead><tbody></tbody></table></div></div>
+    </section>
+
+    <section class="sec" id="analysis">
+      <h2>Analysis</h2>
+      <p class="note">The bar shows the share of orders that ended in a refund, a chargeback or a PayPal case. Hover for the split.</p>
+      <div class="wide">
+        <div class="card"><h3>Payment method</h3><div class="box sm dash-skeleton" id="d-method" data-source="cuts"></div></div>
+        <div class="card"><h3>Product</h3><p class="muted">Products with at least 20 orders</p><div class="box dash-skeleton" id="d-product" data-source="cuts"></div></div>
+        <div class="card"><h3>Country</h3><div class="box sm dash-skeleton" id="d-country" data-source="cuts"></div></div>
+        <div class="card"><h3>Region</h3><p class="muted">Postcode area in Germany, province in Italy</p><div class="box dash-skeleton" id="d-region" data-source="cuts"></div></div>
+        <div class="card"><h3>Order value</h3><div class="box dash-skeleton" id="d-value" data-source="cuts"></div></div>
+        <div class="card"><h3>Shipping status</h3><div class="box sm dash-skeleton" id="d-ship" data-source="cuts"></div></div>
+      </div>
+    </section>
+
+    <section class="sec" id="quality">
+      <h2>Quality attention</h2>
+      <p class="note">The 20 products per store where quality refunds and "not as described" cases pile up the most. A product is listed with at least 10 orders and at least 2 quality signals. It is high priority with 5 or more signals, or 3 or more signals and a problem rate of 30% or higher. The full list of products, with a tick-off for the quality check, lives in a separate page: <a href="https://claude.ai/artifact/CR2MC49gaZPFfG66Y6FThY" target="_blank" rel="noopener">Product Quality Checks</a>.</p>
+      <div class="card"><div class="scroll"><table id="t-qc" data-source="qc" data-row-key="store,product"><thead><tr></tr></thead><tbody></tbody></table></div><p class="muted" id="qc-empty"></p></div>
+    </section>
+
+    <section class="sec" id="payouts">
+      <h2>Payouts</h2>
+      <p class="note" id="pay-note"></p>
+      <details><summary><span class="mn">Every payout</span><span class="sv">Rebuilt from the individual transactions</span></summary>
+        <div class="inner"><div class="scroll tall"><table id="t-pay" data-source="payouts" data-row-key="store,payout_date"><thead><tr></tr></thead><tbody></tbody></table></div></div></details>
+    </section>
+
+    <section class="sec" id="coverage">
+      <h2>Data coverage and checks</h2>
+      <div class="card"><div class="scroll"><table id="t-cov" data-source="coverage" data-row-key="store,source"><thead><tr></tr></thead><tbody></tbody></table></div></div>
+      <details><summary><span class="mn">Exceptions</span><span class="sv">Orders where the sources disagree or that need action</span></summary>
+        <div class="inner"><div class="scroll tall"><table id="t-exc" data-source="exceptions" data-row-key="store,order,issue"><thead><tr></tr></thead><tbody></tbody></table></div></div></details>
+    </section>
+
+    <section class="sec" id="actions"><h2>Actions, in order of importance</h2><div class="acts" id="acts" data-source="actions"></div></section>
+
+    <section class="sec" id="method">
+      <h2>How this report is built</h2>
+      <div class="card"><ul class="defs">
+        <li><b>Lost</b> is refunds plus chargebacks plus chargeback and dispute fees, minus money won back. Profit, cost of goods and advertising are not part of this report.</li>
+        <li><b>Never (fully) shipped</b> means the order has no fulfilment, or at least one line was never fulfilled. A refund on such an order counts as a supplier or stock issue. A refund whose note names stock, color, size or a late shipment counts as a supplier issue as well.</li>
+        <li><b>Refunds</b> are the amounts the payment providers actually paid back: Shopify Payments refunds, PayPal refunds, and manual refunds recorded in Shopify. PayPal refunds made outside Shopify, for example after a dispute, are included.</li>
+        <li><b>Chargebacks</b> are the amounts Shopify Payments debited, plus the fee per chargeback, minus chargebacks won. <b>PayPal disputes</b> are the reversals and dispute fees in the PayPal account. Refunds made to settle a PayPal dispute are counted once, as refunds.</li>
+        <li><b>Problem rate</b> is the share of orders with a refund, a chargeback or a PayPal case. An order counts once.</li>
+        <li><b>Cut-off date:</b> every source is cut at the same date. Status of PayPal cases is as of the day the case report was downloaded.</li>
+        <li><b>Adding a store:</b> send the same files for the new store and a new tab appears. The PayPal export can hold several stores. They are split on the store ID that PayPal records on every payment.</li>
+      </ul></div>
+    </section>
+
+
+  </div>
+  <div class="tip" id="tip"></div>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const nf0=new Intl.NumberFormat('en-GB',{maximumFractionDigits:0}),nf2=new Intl.NumberFormat('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct=(v,d=1)=>(v*100).toFixed(d)+'%';
+const eur=v=>(v<0?'−':'')+'€'+nf0.format(Math.abs(Math.round(v)));
+const eur2=v=>(v<0?'−':'')+'€'+nf2.format(Math.abs(v));
+const nz=f=>v=>(v==null||isNaN(v))?'–':f(v);
+const FM={int:nz(v=>nf0.format(v)),eur:nz(eur),eur2:nz(eur2),pct:nz(v=>pct(v,1)),pct0:nz(v=>pct(v,0))};
+const enc=v=>encodeURIComponent(v);
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;};
+const st=id=>dash.data(id).status;
+const R=id=>dash.data(id).data||[];
+const root=$('#fr'),tip=$('#tip');
+const C=()=>dash.colors;
+const CRIT='var(--cds-chart-status-critical)',MUTE='var(--cds-chart-muted)';
+let cur=null;
+const IDS=['stores','kpi','daily','monthly','cuts','reasons','split','payouts','coverage','exceptions','actions','qc','cases'];
+function allOk(){return IDS.every(i=>st(i)==='ok');}
+function anyLoading(){return IDS.some(i=>st(i)==='loading');}
+function fail(box){box.textContent='';box.classList.remove('dash-skeleton');box.appendChild(el('div','fail','Failed to load'));}
+function ready(box,ids){const sts=ids.map(st);if(sts.every(s=>s==='ok')){box.classList.remove('dash-skeleton');return true;}if(sts.some(s=>s==='loading'))return false;fail(box);return false;}
+function mark(e,ds,field,where){e.dataset.source=ds;e.dataset.field=field;e.dataset.where=where;}
+const kw=m=>'store='+enc(cur)+'&metric='+enc(m);
+function showTip(ev,title,lines){
+  tip.textContent='';tip.appendChild(el('div','t',title));
+  lines.forEach(l=>{const d=el('div','li');if(l.c){const i=el('i');i.style.background=l.c;d.appendChild(i);}d.appendChild(el('span',null,l.t));tip.appendChild(d);});
+  tip.style.display='block';
+  const rb=root.getBoundingClientRect();let x=ev.clientX-rb.left+12,y=ev.clientY-rb.top+12;const tw=tip.offsetWidth;if(x+tw>rb.width)x=Math.max(0,ev.clientX-rb.left-tw-12);
+  tip.style.left=x+'px';tip.style.top=y+'px';
+}
+const hideTip=()=>{tip.style.display='none';};
+const dFmt=d3.utcFormat('%-d %b %Y'),dShort=d3.utcFormat('%-d %b'),mFmt=d3.utcFormat('%B %Y');
+function axisText(g){g.selectAll('text').attr('fill','var(--color-fg-muted)').attr('font-size',11).attr('font-family',null);g.selectAll('path,line').attr('stroke','var(--cds-chart-axis)');}
+function legend(id,items){const lg=$(id);lg.textContent='';items.forEach(([n,c])=>{const sp=el('span');const i=el('i');i.style.background=c;sp.appendChild(i);sp.appendChild(document.createTextNode(n));lg.appendChild(sp);});}
+
+/* ---------- data helpers */
+const forStore=id=>R(id).filter(r=>r.store===cur);
+const KPI=()=>{const k={};forStore('kpi').forEach(r=>k[r.metric]=(r.value===''||r.value==null)?NaN:+r.value);return k;};
+
+/* ---------- header, tabs */
+function renderTabs(){
+  const stores=R('stores').map(r=>r.store);
+  if(cur==null)cur=stores.length>1?'__all':stores[0];
+  const tabs=$('#tabs');tabs.textContent='';
+  const add=(label,val)=>{const b=el('button','tab',label);b.type='button';b.setAttribute('aria-pressed',String(cur===val));b.addEventListener('click',()=>{cur=val;render();});tabs.appendChild(b);};
+  if(stores.length>1)add('All stores','__all');
+  stores.forEach(s=>add(s,s));
+  const s0=R('stores').find(r=>r.store===(cur==='__all'?stores[0]:cur));
+  $('#sub').textContent=cur==='__all'?'Refunds, chargebacks and PayPal disputes, all stores, up to the cut-off date of each store':'Refunds, chargebacks and PayPal disputes up to '+(s0?dFmt(new Date(s0.cutoff_date)):'');
+}
+function renderTake(){
+  const t=$('#take');t.textContent='';
+  if(cur==='__all'){t.textContent='Pick a store above for its full report.';return;}
+  const k=KPI();const add=(txt)=>t.appendChild(document.createTextNode(txt));
+  const b=(m,f)=>{const e=el('b');e.dataset.m=m;e.dataset.f=f;mark(e,'kpi','value',kw(m));e.textContent=FM[f](k[m]);t.appendChild(e);};
+  add('This store lost ');b('lost_total','eur');add(' (');b('lost_rate','pct');add(' of revenue) to refunds and chargebacks. ');
+  b('ns_refund_share','pct0');add(' of all refunds (');b('ns_refund_eur','eur');add(') were on orders that were never shipped. ');
+  if(k.cb_orders>0){add('Klarna causes ');b('klarna_share_cb','pct0');add(' of the Shopify chargebacks.');if(k.pp_open_cases>0){add(' Still ahead: ');b('pp_open_cases','int');add(' open PayPal cases (');b('pp_open_amount','eur');add(')');if(k.exp_extra_cb===k.exp_extra_cb){add(' and an estimated ');b('exp_extra_cb','int');add(' more Shopify chargebacks');}add('.');}else if(k.exp_extra_cb===k.exp_extra_cb){add(' An estimated ');b('exp_extra_cb','int');add(' more Shopify chargebacks are still ahead.');}}
+  else{add('There are no Shopify chargebacks yet, but ');b('young_order_share','pct0');add(' of the orders are younger than 30 days, and chargebacks usually arrive weeks after the order. Still open: ');b('pp_open_cases','int');add(' PayPal cases (');b('pp_open_amount','eur');add(').');}
+}
+
+/* ---------- all stores */
+function renderAll(){
+  const th=$('#t-all thead tr'),tb=$('#t-all tbody');th.textContent='';tb.textContent='';
+  const cols=[['Store',null],['Orders','orders','int'],['Orders under 30 days old','young_order_share','pct0'],['Revenue','revenue','eur'],['Minus refunds on unshipped orders','ns_refund_eur','eur'],['Revenue after unshipped refunds',m=>m.revenue-m.ns_refund_eur,'eur'],['Lost on shipped orders (refunds, chargebacks, fees)',m=>m.lost_total-m.ns_refund_eur,'eur'],['Lost, % of revenue after unshipped refunds',m=>(m.lost_total-m.ns_refund_eur)/(m.revenue-m.ns_refund_eur),'pct'],['Refunded in total','refund_total','eur'],['Shopify chargeback rate','cb_rate','pct'],['PayPal case rate','pp_rate','pct'],['Open PayPal cases','pp_open_amount','eur']];
+  const st=R('stores'),KM={};
+  st.forEach(s=>{const km={};R('kpi').filter(r=>r.store===s.store).forEach(r=>km[r.metric]=+r.value);KM[s.store]=km;});
+  th.appendChild(el('th',null,''));st.forEach(s=>th.appendChild(el('th','r',s.store)));
+  const strong=new Set(['Revenue after unshipped refunds','Lost on shipped orders (refunds, chargebacks, fees)','Lost, % of revenue after unshipped refunds']);
+  cols.slice(1).forEach(c=>{
+    const f=typeof c[1]==='function';
+    const tr=el('tr',strong.has(c[0])?'hl':null);tr.appendChild(el('td',null,c[0]));
+    st.forEach(s=>{const km=KM[s.store];const td=el('td','r',FM[c[2]](f?c[1](km):km[c[1]]));if(!f)mark(td,'kpi','value','store='+enc(s.store)+'&metric='+enc(c[1]));tr.appendChild(td);});
+    tb.appendChild(tr);
+  });
+}
+
+/* ---------- tiles */
+function renderTiles(){
+  const g=$('#tiles');g.textContent='';const k=KPI();
+  const T=[['Lost to refunds and chargebacks','lost_total','eur',true,[['lost_rate','pct',' of revenue']]],
+  ['Refunded','refund_total','eur',false,[['refund_order_rate','pct',' of orders']]],
+  ['Refunds on orders never shipped','ns_refund_eur','eur',true,[['ns_refund_share','pct0',' of all refunds']]],
+  ['Shopify Payments chargebacks','cb_eur','eur',true,[['cb_rate','pct',' of orders']]],
+  ['PayPal cases','pp_cases','int',false,[['pp_rate','pct',' of PayPal orders']]],
+  ['Open PayPal cases','pp_open_amount','eur',false,[['pp_open_cases','int',' cases waiting']]]];
+  T.forEach(([l,m,f,bad,subs])=>{
+    const c=el('div','card tile');c.appendChild(el('span','l',l));
+    const v=el('span','v'+(bad?' bad':''),FM[f](k[m]));mark(v,'kpi','value',kw(m));c.appendChild(v);
+    const n=el('span','n');subs.forEach(([sm,sf,txt])=>{const b=el('span',null,FM[sf](k[sm]));mark(b,'kpi','value',kw(sm));n.appendChild(b);n.appendChild(document.createTextNode(txt));});
+    c.appendChild(n);g.appendChild(c);
+  });
+}
+
+/* ---------- split */
+function renderSplit(){
+  const box=$('#c-split');if(!ready(box,['split','kpi']))return;box.textContent='';
+  const rows=forStore('split');const k=KPI();const wrap=el('div','rows');
+  const max=d3.max(rows,r=>Math.abs(+r.amount))||1;const groups=[...new Set(rows.map(r=>r.group))];
+  const gcol={'Refunds: never (fully) shipped':CRIT,'Refunds: shipped':C()[0],'Chargebacks and disputes':C()[2]};
+  groups.forEach(gp=>{
+    wrap.appendChild(el('div','gh',gp));
+    rows.filter(r=>r.group===gp).forEach(r=>{
+      const row=el('div','row');row.appendChild(el('div','lb',r.label));
+      const tr=el('div','track');const s=el('span');s.style.width=Math.min(100,Math.abs(+r.amount)/max*100)+'%';s.style.background=+r.amount<0?MUTE:gcol[gp];tr.appendChild(s);row.appendChild(tr);
+      const rt=el('div','rt');const b=el('b',null,eur(+r.amount));mark(b,'split','amount','store='+enc(cur)+'&group='+enc(r.group)+'&label='+enc(r.label));rt.appendChild(b);
+      const sh=el('span',null,' · '+pct(+r.share_of_lost,1));mark(sh,'split','share_of_lost','store='+enc(cur)+'&group='+enc(r.group)+'&label='+enc(r.label));rt.appendChild(sh);row.appendChild(rt);
+      row.addEventListener('mousemove',ev=>showTip(ev,r.label,[{t:eur2(+r.amount)},{t:pct(+r.share_of_lost)+' of everything lost'},{t:pct(+r.share_of_revenue,2)+' of revenue'}]));row.addEventListener('mouseleave',hideTip);
+      wrap.appendChild(row);
+    });
+  });
+  const tot=el('div','row total');tot.appendChild(el('div','lb','Total lost'));tot.appendChild(el('div'));const rt=el('div','rt');const b=el('b',null,eur(k.lost_total));mark(b,'kpi','value',kw('lost_total'));rt.appendChild(b);rt.appendChild(document.createTextNode(' · '+pct(k.lost_rate)+' of revenue'));tot.appendChild(rt);wrap.appendChild(tot);
+  box.appendChild(wrap);
+  const ul=$('#split-notes');ul.textContent='';
+  const li=(parts)=>{const l=el('li');parts.forEach(p=>{if(typeof p==='string')l.appendChild(document.createTextNode(p));else{const e=el('b',null,FM[p[1]](k[p[0]]));mark(e,'kpi','value',kw(p[0]));l.appendChild(e);}});ul.appendChild(l);};
+  li([['ns_refund_orders','int'],' refunded orders were never (fully) shipped: ',['ns_refund_eur','eur'],', which is ',['ns_refund_share','pct0'],' of all refunds. None of them led to a Shopify Payments chargeback.']);
+  li(['Including refunds whose note names stock, color, size or a late shipment, ',['supplier_orders','int'],' orders (',['supplier_eur','eur'],', ',['supplier_share','pct0'],' of refunds) are supplier issues.']);
+  li(['Paid more than a week ago, still unshipped and not refunded: ',['open_unshipped_orders','int'],' order(s) (',['open_unshipped_eur','eur'],'). Unshipped and under a week old: ',['recent_unshipped_orders','int'],' order(s) (',['recent_unshipped_eur','eur'],'). See the exceptions table.']);
+  li([['young_order_share','pct0'],' of the orders are younger than 30 days. Chargebacks usually arrive weeks after the order, so the chargeback figures can still grow.']);
+  li(['Of the ',['refund_orders','int'],' refunded orders, ',['refund_full_n','int'],' were refunded in full and ',['refund_partial_n','int'],' partially.']);
+}
+
+/* ---------- daily chart and months */
+function renderDaily(){
+  const box=$('#c-day');if(!ready(box,['daily']))return;box.textContent='';
+  const S=[{k:'rns',n:'Refunds, never shipped',c:CRIT},{k:'rsh',n:'Refunds, shipped',c:C()[0]},{k:'cb',n:'Shopify chargebacks and fees',c:C()[2]},{k:'pp',n:'PayPal disputes lost and fees',c:C()[4]},{k:'won',n:'Won back',c:MUTE}];
+  legend('#lg-day',S.map(s=>[s.n,s.c]));
+  const rows=forStore('daily').map(r=>({d:new Date(r.day),rns:+r.refund_not_shipped,rsh:+r.refund_shipped,cb:+r.chargebacks+ +r.chargeback_fees,pp:+r.paypal_lost+ +r.paypal_fees,won:-(+r.won_back),lost:+r.lost_total}));
+  const w=box.clientWidth||320,h=250,m={l:46,r:8,t:8,b:26};
+  const x=d3.scaleBand(rows.map((r,i)=>i),[m.l,w-m.r]).padding(.15);
+  const stack=d3.stack().keys(S.map(z=>z.k)).offset(d3.stackOffsetDiverging)(rows);
+  const lo=d3.min(stack,l=>d3.min(l,d=>d[0])),hi=d3.max(stack,l=>d3.max(l,d=>d[1]));
+  const y=d3.scaleLinear([Math.min(0,lo),Math.max(0,hi)],[h-m.b,m.t]).nice();
+  const svg=d3.select(box).append('svg').attr('viewBox',`0 0 ${w} ${h}`).attr('width','100%');
+  svg.append('g').selectAll('line').data(y.ticks(5)).join('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',y).attr('y2',y).attr('stroke','var(--cds-chart-grid)');
+  svg.append('g').attr('transform',`translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(0).tickFormat(v=>nf0.format(v))).call(axisText).select('.domain').remove();
+  const step=Math.ceil(rows.length/Math.max(2,Math.floor(w/80)));
+  svg.append('g').attr('transform',`translate(0,${h-m.b})`).call(d3.axisBottom(x).tickValues(rows.map((r,i)=>i).filter(i=>i%step===0)).tickFormat(i=>dShort(rows[i].d)).tickSize(0).tickPadding(6)).call(axisText).select('.domain').remove();
+  svg.append('line').attr('x1',m.l).attr('x2',w-m.r).attr('y1',y(0)).attr('y2',y(0)).attr('stroke','var(--cds-chart-axis)');
+  stack.forEach((layer,li)=>{svg.append('g').selectAll('rect').data(layer).join('rect').attr('x',(d,i)=>x(i)).attr('width',x.bandwidth()).attr('y',d=>y(Math.max(d[0],d[1]))).attr('height',d=>Math.abs(y(d[0])-y(d[1]))).attr('fill',S[li].c);});
+  const hov=svg.append('rect').attr('y',m.t).attr('height',h-m.t-m.b).attr('fill','var(--cds-chart-grid)').attr('opacity',.5).style('display','none');
+  svg.append('rect').attr('x',m.l).attr('y',m.t).attr('width',w-m.l-m.r).attr('height',h-m.t-m.b).attr('fill','transparent')
+    .on('mousemove',ev=>{const rb=svg.node().getBoundingClientRect();const px=(ev.clientX-rb.left)*(w/rb.width);const i=Math.max(0,Math.min(rows.length-1,Math.floor((px-m.l)/((w-m.l-m.r)/rows.length))));const r=rows[i];
+      hov.style('display',null).attr('x',x(i)).attr('width',x.bandwidth());
+      showTip(ev,dFmt(r.d),[...S.map(z=>({c:z.c,t:z.n+': '+eur2(z.k==='won'?-r.won:r[z.k])})),{t:'Lost: '+eur2(r.lost)}]);})
+    .on('mouseleave',()=>{hov.style('display','none');hideTip();});
+}
+function renderMonths(){
+  const box=$('#months');
+  if(st('daily')!=='ok'||st('monthly')!=='ok'){if(!anyLoading()){box.textContent='';box.appendChild(el('div','fail','Failed to load'));}return;}
+  box.textContent='';
+  const days=forStore('daily'),mons=forStore('monthly').filter(r=>+r.orders>0||+r.lost_total>0);
+  const cols=[['Day',r=>dShort(new Date(r.day))+' '+new Date(r.day).getUTCFullYear(),0,'day'],['Orders',r=>FM.int(+r.orders),1,'orders'],['Revenue',r=>eur(+r.revenue),1,'revenue'],['Refunds, never shipped',r=>eur2(+r.refund_not_shipped),1,'refund_not_shipped'],['Refunds, shipped',r=>eur2(+r.refund_shipped),1,'refund_shipped'],['Chargebacks',r=>eur2(+r.chargebacks),1,'chargebacks'],['Chargeback fees',r=>eur2(+r.chargeback_fees),1,'chargeback_fees'],['Won back',r=>eur2(+r.won_back),1,'won_back'],['PayPal lost',r=>eur2(+r.paypal_lost),1,'paypal_lost'],['PayPal fees',r=>eur2(+r.paypal_fees),1,'paypal_fees'],['Total lost',r=>eur2(+r.lost_total),1,'lost_total'],['Lost, % of that day\'s revenue',r=>(r.lost_rate_day===''||r.lost_rate_day==null||isNaN(+r.lost_rate_day))?'–':pct(+r.lost_rate_day),1,'lost_rate_day'],['Lost, running total',r=>eur(+r.lost_cum),1,'lost_cum'],['Running % of revenue',r=>pct(+r.lost_rate_cum),1,'lost_rate_cum']];
+  const latest=mons.map(r=>r.month).sort().slice(-2);
+  mons.slice().sort((a,b)=>b.month.localeCompare(a.month)).forEach(mr=>{
+    const d=el('details');if(latest.includes(mr.month))d.open=true;
+    const sm=el('summary');sm.appendChild(el('span','mn',mFmt(new Date(mr.month+'-01'))));
+    const sv=(lab,field,f)=>{const s=el('span','sv');s.appendChild(document.createTextNode(lab+' '));const b=el('b',null,f(+mr[field]));mark(b,'monthly',field,'store='+enc(cur)+'&month='+enc(mr.month));s.appendChild(b);sm.appendChild(s);};
+    sv('Revenue','revenue',eur);sv('Refunds never shipped','refund_not_shipped',eur);sv('Refunds shipped','refund_shipped',eur);sv('Chargebacks','chargebacks',eur);sv('Total lost','lost_total',eur);
+    if(+mr.revenue>0&&mr.lost_rate!==''&&+mr.lost_rate<=1){const s=el('span','sv');s.appendChild(document.createTextNode('of revenue '));const b=el('b',null,pct(+mr.lost_rate));mark(b,'monthly','lost_rate','store='+enc(cur)+'&month='+enc(mr.month));s.appendChild(b);sm.appendChild(s);}
+    d.appendChild(sm);
+    const inner=el('div','inner'),sc=el('div','scroll'),tb=el('table');tb.dataset.source='daily';tb.dataset.rowKey='store,day';
+    const thd=el('thead'),trh=el('tr');cols.forEach(c=>{const th=el('th',c[2]?'r':null,c[0]);th.dataset.field=c[3];trh.appendChild(th);});thd.appendChild(trh);tb.appendChild(thd);
+    const tbd=el('tbody');days.filter(r=>r.day.slice(0,7)===mr.month).forEach(r=>{const tr=el('tr');tr.dataset.key=enc(cur)+','+enc(r.day);cols.forEach(c=>tr.appendChild(el('td',c[2]?'r':null,c[1](r))));tbd.appendChild(tr);});
+    tb.appendChild(tbd);sc.appendChild(tb);inner.appendChild(sc);d.appendChild(inner);box.appendChild(d);
+  });
+}
+
+/* ---------- refunds */
+function barRows(box,rows,opts){
+  box.textContent='';const wrap=el('div','rows');const max=d3.max(rows,r=>opts.val(r))||1;
+  rows.forEach(r=>{
+    const row=el('div','row');row.appendChild(el('div','lb',opts.label(r)));
+    const tr=el('div','track');const s=el('span');s.style.width=Math.min(100,opts.val(r)/max*100)+'%';s.style.background=opts.color(r);tr.appendChild(s);row.appendChild(tr);
+    const rt=el('div','rt');opts.right(r,rt);row.appendChild(rt);
+    if(opts.tip){row.addEventListener('mousemove',ev=>showTip(ev,opts.label(r),opts.tip(r)));row.addEventListener('mouseleave',hideTip);}
+    wrap.appendChild(row);
+  });box.appendChild(wrap);
+}
+function renderRefunds(){
+  const rs=forStore('reasons');
+  const b1=$('#c-reasons');if(ready(b1,['reasons'])){
+    const rows=rs.filter(r=>r.kind==='Refund reason').sort((a,b)=>+b.eur-+a.eur);
+    barRows(b1,rows,{val:r=>+r.eur,label:r=>r.label,color:r=>r.label.startsWith('Supplier')?CRIT:C()[0],
+      right:(r,rt)=>{const b=el('b',null,eur(+r.eur));mark(b,'reasons','eur','store='+enc(cur)+'&kind='+enc(r.kind)+'&label='+enc(r.label));rt.appendChild(b);rt.appendChild(document.createTextNode(' · '+nf0.format(+r.orders)+' orders'));},
+      tip:r=>[{t:eur2(+r.eur)+' in '+nf0.format(+r.orders)+' orders'},{t:pct(+r.share_of_refunds)+' of all refunds'},{t:'Of which on never-shipped orders: '+eur2(+r.not_shipped_eur)+' ('+nf0.format(+r.not_shipped_orders)+' orders)'}]});
+  }
+  const b2=$('#c-type');if(ready(b2,['reasons'])){
+    const rows=rs.filter(r=>r.kind==='Refund type');
+    barRows(b2,rows,{val:r=>+r.eur,label:r=>r.label,color:()=>C()[0],right:(r,rt)=>{const b=el('b',null,eur(+r.eur));mark(b,'reasons','eur','store='+enc(cur)+'&kind='+enc(r.kind)+'&label='+enc(r.label));rt.appendChild(b);rt.appendChild(document.createTextNode(' · '+nf0.format(+r.orders)+' orders'));}});
+  }
+  const b3=$('#c-sup');if(ready(b3,['reasons'])){
+    const rows=rs.filter(r=>r.kind==='Supplier issue');
+    barRows(b3,rows,{val:r=>+r.eur,label:r=>r.label,color:()=>CRIT,right:(r,rt)=>{const b=el('b',null,eur(+r.eur));mark(b,'reasons','eur','store='+enc(cur)+'&kind='+enc(r.kind)+'&label='+enc(r.label));rt.appendChild(b);rt.appendChild(document.createTextNode(' · '+nf0.format(+r.orders)+' orders · '+pct(+r.share_of_refunds,0)));}});
+  }
+}
+
+/* ---------- disputes */
+function renderDisputes(){
+  const rs=forStore('reasons'),k=KPI();
+  const b=$('#c-cbm');if(ready(b,['reasons','kpi'])){
+    const rows=rs.filter(r=>r.kind==='Shopify chargebacks by method').sort((a,c)=>+c.eur-+a.eur);
+    barRows(b,rows,{val:r=>+r.eur,label:r=>r.label,color:r=>r.label==='Klarna'?CRIT:C()[0],right:(r,rt)=>{const e=el('b',null,eur(+r.eur));mark(e,'reasons','eur','store='+enc(cur)+'&kind='+enc(r.kind)+'&label='+enc(r.label));rt.appendChild(e);rt.appendChild(document.createTextNode(' · '+nf0.format(+r.orders)+' chargebacks'));}});
+    const n=$('#cb-note');n.textContent='';const add=t=>n.appendChild(document.createTextNode(t));const bb=(m,f)=>{const e=el('b',null,FM[f](k[m]));mark(e,'kpi','value',kw(m));n.appendChild(e);};
+    if(k.cb_orders>0){add('Klarna orders get a chargeback in ');bb('klarna_rate','pct');add(' of cases, card payments in ');bb('card_rate','pct');add('. ');if(k.cb_median_days===k.cb_median_days){add('Chargebacks arrive a median of ');bb('cb_median_days','int');add(' days after the order and ');bb('cb_after_30','pct0');add(' of them after day 30. ');}else{add('Too few chargebacks to say how long they take to arrive. ');}add('Shopify does not give the reason in this export.');}
+    else{add('No chargebacks have been debited yet. ');bb('young_order_share','pct0');add(' of the orders are younger than 30 days, so this says little about the chargeback risk. The bank inquiries listed under exceptions can still turn into chargebacks.');}
+  }
+  const t=$('#t-pp');
+  if(st('reasons')==='ok'){
+    const thr=$('#t-pp thead tr');thr.textContent='';[['Type','kind',0],['Description','label',0],['Cases','orders',1],['Amount','eur',1]].forEach(c=>{const th=el('th',c[2]?'r':null,c[0]);th.dataset.field=c[1];thr.appendChild(th);});
+    const tb=$('#t-pp tbody');tb.textContent='';
+    rs.filter(r=>['PayPal case type','PayPal case reason','PayPal case status','PayPal outcome','PayPal outcome reason','PayPal reason and outcome','Customer comment theme'].includes(r.kind)).forEach(r=>{const tr=el('tr');tr.dataset.key=enc(cur)+','+enc(r.kind)+','+enc(r.label);
+      tr.appendChild(el('td',null,r.kind.replace('PayPal case reason','Reason').replace('PayPal case status','Status').replace('PayPal outcome','Outcome').replace('Customer comment theme','Comment theme').replace('PayPal case type','Case type').replace('PayPal outcome reason','Outcome reason').replace('PayPal reason and outcome','Reason and outcome')));tr.appendChild(el('td',null,r.label));tr.appendChild(el('td','r',nf0.format(+r.orders)));tr.appendChild(el('td','r',+r.eur?eur(+r.eur):'–'));tb.appendChild(tr);});
+  }
+  if(st('kpi')==='ok'){
+    const n=$('#pp-note');n.textContent='';const add=t=>n.appendChild(document.createTextNode(t));const bb=(m,f)=>{const e=el('b',null,FM[f](k[m]));mark(e,'kpi','value',kw(m));n.appendChild(e);};
+    $('#opencases').hidden=!(k.pp_cases>0);
+    if(!(k.pp_cases>0)){add('This store has no PayPal cases and does not use PayPal in the data.');return;}
+    bb('pp_open_cases','int');add(' cases are still open (');bb('pp_open_amount','eur');add(').');if(k.pp_expected_loss===k.pp_expected_loss){add(' If they end like the closed cases, the expected loss is ');bb('pp_expected_loss','eur');add('.');}else{add(' Too few cases are closed to estimate the expected loss.');}add(' PayPal disputes already lost: ');bb('pp_lost_eur','eur');add('.');if(k.pp_open_after_cutoff>0){add(' ');bb('pp_open_after_cutoff','int');add(' more open cases were filed after the cut-off date and are listed below. ');bb('pp_awaiting_total','int');add(' cases in total wait for your response.');}
+  }
+}
+
+/* ---------- analysis */
+function dimRows(boxId,dim,order){
+  const box=$(boxId);if(!ready(box,['cuts']))return;
+  let rows=forStore('cuts').filter(r=>r.dimension===dim).map(r=>({l:r.label,n:+r.orders,p:+r.problem_rate,rf:+r.refund_rate,di:+r.dispute_rate,eur:+r.refund_eur,ns:+r.not_shipped_refund_eur,cb:+r.sp_chargebacks,pp:+r.pp_cases,dim:r.dimension}));
+  if(order)rows.sort((a,b)=>order.indexOf(a.l)-order.indexOf(b.l));else rows.sort((a,b)=>b.p-a.p);
+  barRows(box,rows,{val:r=>r.p,label:r=>r.l,color:r=>r.p>=0.3?CRIT:C()[0],
+    right:(r,rt)=>{const b=el('b',null,pct(r.p,0));mark(b,'cuts','problem_rate','store='+enc(cur)+'&dimension='+enc(dim)+'&label='+enc(r.l));rt.appendChild(b);rt.appendChild(document.createTextNode(' · '+nf0.format(r.n)+' orders'));},
+    tip:r=>[{t:nf0.format(r.n)+' orders'},{t:'Refunds: '+pct(r.rf)+' of orders, '+eur2(r.eur)},{t:'Chargebacks or PayPal cases: '+pct(r.di)+' of orders'},{t:'Refunded on unshipped orders: '+eur2(r.ns)},{t:'Shopify chargebacks '+nf0.format(r.cb)+', PayPal cases '+nf0.format(r.pp)}]});
+}
+
+/* ---------- payouts, coverage, exceptions, actions */
+function renderPayouts(){
+  if(st('payouts')!=='ok'||st('kpi')!=='ok')return;
+  const k=KPI();const n=$('#pay-note');n.textContent='';const add=t=>n.appendChild(document.createTextNode(t));const bb=(m,f)=>{const e=el('b',null,FM[f](k[m]));mark(e,'kpi','value',kw(m));n.appendChild(e);};
+  if(k.neg_payouts_n>0){bb('neg_payouts_n','int');add(' payouts were negative, together ');bb('neg_payouts_sum','eur');add('. ');}else{add('No payout was negative. ');}
+  add('Each payout is rebuilt from the individual transactions: new sales, refunds, chargebacks and fees. The amount that cannot be explained by transactions is ');bb('payout_unexplained','eur2');add(', so no subscription, app or other charge is hidden in the payouts.');
+  const thr=$('#t-pay thead tr');thr.textContent='';[['Payout date','payout_date',0],['Status','status',0],['New sales','new_sales',1],['Refunds','refunds',1],['Chargebacks and adjustments','chargebacks_adjustments',1],['Reserve','reserve',1],['Fees','fees',1],['Total','total',1],['Rebuilt from transactions','rebuilt_from_transactions',1],['Unexplained','unexplained',1]].forEach(c=>{const th=el('th',c[2]?'r':null,c[0]);th.dataset.field=c[1];thr.appendChild(th);});
+  const tb=$('#t-pay tbody');tb.textContent='';
+  forStore('payouts').forEach(r=>{const tr=el('tr');tr.dataset.key=enc(cur)+','+enc(r.payout_date);
+    tr.appendChild(el('td',null,dFmt(new Date(r.payout_date))));tr.appendChild(el('td',null,r.status.replace('_',' ')));
+    ['new_sales','refunds','chargebacks_adjustments','reserve','fees','total','rebuilt_from_transactions','unexplained'].forEach(f=>{const td=el('td','r',eur2(+r[f]));if(f==='total'&&+r[f]<0)td.style.color='var(--color-bad)';tr.appendChild(td);});tb.appendChild(tr);});
+}
+function renderCoverage(){
+  if(st('coverage')==='ok'){
+    const thr=$('#t-cov thead tr');thr.textContent='';[['Source','source',0],['From','from_date',0],['To','to_date',0],['Rows','rows',1],['Status','status',0],['What was checked','note',0]].forEach(c=>{const th=el('th',c[2]?'r':null,c[0]);th.dataset.field=c[1];thr.appendChild(th);});
+    const tb=$('#t-cov tbody');tb.textContent='';
+    forStore('coverage').forEach(r=>{const tr=el('tr');tr.dataset.key=enc(cur)+','+enc(r.source);
+      tr.appendChild(el('td',null,r.source));tr.appendChild(el('td',null,r.from_date?dFmt(new Date(r.from_date)):'–'));tr.appendChild(el('td',null,r.to_date?dFmt(new Date(r.to_date)):'–'));tr.appendChild(el('td','r',nf0.format(+r.rows)));
+      const td=el('td');td.appendChild(el('span','chip '+(r.status==='OK'?'ok':'warn'),r.status));tr.appendChild(td);tr.appendChild(el('td','wrap',r.note));tb.appendChild(tr);});
+  }
+  if(st('exceptions')==='ok'){
+    const thr=$('#t-exc thead tr');thr.textContent='';[['Order','order',0],['Order date','order_date',0],['Channel','channel',0],['Issue','issue',0],['Amount','amount',1],['Detail','detail',0]].forEach(c=>{const th=el('th',c[2]?'r':null,c[0]);th.dataset.field=c[1];thr.appendChild(th);});
+    const tb=$('#t-exc tbody');tb.textContent='';
+    forStore('exceptions').forEach(r=>{const tr=el('tr');tr.dataset.key=enc(cur)+','+enc(r.order)+','+enc(r.issue);
+      tr.appendChild(el('td',null,r.order));tr.appendChild(el('td',null,r.order_date?dFmt(new Date(r.order_date)):'–'));tr.appendChild(el('td',null,r.channel));tr.appendChild(el('td','wrap',r.issue));tr.appendChild(el('td','r',eur2(+r.amount)));tr.appendChild(el('td','wrap',r.detail));tb.appendChild(tr);});
+  }
+}
+
+function renderQC(){
+  if(st('qc')!=='ok')return;
+  const rows=forStore('qc').slice(0,20);const thr=$('#t-qc thead tr');thr.textContent='';
+  [['#','rank',1],['Product','product',0],['Priority','priority',0],['Orders','orders',1],['Problem rate','problem_rate',1],['Quality refunds','quality_refund_orders',1],['Quality refund €','quality_refund_eur',1],['Not as described cases','not_as_described_cases',1],['What to request','suggested_check',0]].forEach(c=>{const th=el('th',c[2]?'r':null,c[0]);th.dataset.field=c[1];thr.appendChild(th);});
+  const tb=$('#t-qc tbody');tb.textContent='';
+  rows.forEach(r=>{const tr=el('tr');tr.dataset.key=enc(cur)+','+enc(r.product);
+    tr.appendChild(el('td','r',r.rank));tr.appendChild(el('td','wrap',r.product));
+    const pt=el('td');pt.appendChild(el('span','chip '+(r.priority==='High'?'bad':'warn'),r.priority));tr.appendChild(pt);
+    tr.appendChild(el('td','r',nf0.format(+r.orders)));tr.appendChild(el('td','r',pct(+r.problem_rate,0)));tr.appendChild(el('td','r',nf0.format(+r.quality_refund_orders)));tr.appendChild(el('td','r',eur(+r.quality_refund_eur)));tr.appendChild(el('td','r',nf0.format(+r.not_as_described_cases)));
+    tr.appendChild(el('td','wrap',r.suggested_check));
+    tb.appendChild(tr);});
+  $('#qc-empty').textContent=rows.length?'':'No product reaches the threshold yet.';
+}
+
+function renderCases(){
+  if(st('cases')!=='ok')return;
+  const rows=forStore('cases');const thr=$('#t-cases thead tr');thr.textContent='';
+  [['PayPal case ID','case_id',0],['Filed','filed_date',0],['Order','order',0],['Reason','reason',0],['Status','status',0],['Amount','amount',1],['Respond by','response_due',0],['Counted in this report','in_report',0]].forEach(c=>{const th=el('th',c[2]?'r':null,c[0]);th.dataset.field=c[1];thr.appendChild(th);});
+  const tb=$('#t-cases tbody');tb.textContent='';
+  rows.forEach(r=>{const tr=el('tr');tr.dataset.key=enc(cur)+','+enc(r.case_id);
+    tr.appendChild(el('td',null,r.case_id));tr.appendChild(el('td',null,dFmt(new Date(r.filed_date))));tr.appendChild(el('td',null,r.order||'–'));tr.appendChild(el('td',null,r.reason));
+    const sd=el('td');sd.appendChild(el('span','chip '+(r.status==='Waiting for your response'?'warn':''),r.status.replace(' By PayPal',' by PayPal')));tr.appendChild(sd);
+    tr.appendChild(el('td','r',eur2(+r.amount)));tr.appendChild(el('td',null,r.response_due?dFmt(new Date(r.response_due)):'–'));tr.appendChild(el('td',null,r.in_report));tb.appendChild(tr);});
+  const n=$('#cases-note');n.textContent=rows.length?'All open cases of this store, matched to the store by the PayPal store ID on the disputed payment and checked against the Shopify order. Status is as of the day the case report was downloaded. Cases filed after the cut-off date are listed but not counted in the totals of this report. Search a case ID in the PayPal Resolution Center to find it.':'This store has no open PayPal cases.';
+}
+
+
+
+function renderActions(){
+  const box=$('#acts');
+  if(st('actions')!=='ok'){if(!anyLoading()){box.textContent='';box.appendChild(el('div','fail','Failed to load'));}return;}
+  box.textContent='';
+  R('actions').filter(r=>r.store==='All'||r.store===cur).sort((a,b)=>+a.priority-+b.priority).forEach(r=>{
+    const c=el('div','card act');c.appendChild(el('div','pr',r.priority));
+    const body=el('div');body.style.cssText='display:flex;flex-direction:column;gap:.5rem;min-width:0';
+    body.appendChild(el('h3',null,r.action));
+    const tags=el('div','tags');[r.area,r.owner,r.when].forEach(t=>tags.appendChild(el('span','tag',t)));body.appendChild(tags);
+    const dl=el('dl');[['Why',r.evidence],['Effect',r.effect]].forEach(([a,v])=>{dl.appendChild(el('dt',null,a));dl.appendChild(el('dd',null,v));});body.appendChild(dl);
+    c.appendChild(body);box.appendChild(c);
+  });
+}
+
+function render(){
+  if(!allOk()){
+    if(!anyLoading()){$$('.box').forEach(b=>{if(b.classList.contains('dash-skeleton'))fail(b);});}
+    return;
+  }
+  renderTabs();renderTake();
+  const all=cur==='__all';
+  $('#v-all').hidden=!all;$('#v-store').hidden=all;
+  if(all){renderAll();return;}
+  renderTiles();renderSplit();renderDaily();renderMonths();renderRefunds();renderDisputes();
+  dimRows('#d-method','Payment method',null);dimRows('#d-product','Product',null);dimRows('#d-country','Country',null);
+  dimRows('#d-region','Region',null);dimRows('#d-value','Order value',['up to €30','€30–45','€45–60','€60–80','€80–100','€100–150','over €150']);dimRows('#d-ship','Shipping status',['Shipped','Not (fully) shipped']);
+  renderQC();renderCases();renderPayouts();renderCoverage();renderActions();
+}
+$('#b-open').addEventListener('click',()=>$$('#months details').forEach(d=>d.open=true));
+$('#b-close').addEventListener('click',()=>$$('#months details').forEach(d=>d.open=false));
+dash.onData(render);
+})();
+</script>
