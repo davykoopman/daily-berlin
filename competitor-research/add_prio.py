@@ -23,6 +23,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("items")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--max", type=int, default=999, help="max aantal regels per store uit dit bestand")
+    ap.add_argument("--factor", nargs="*", default=["Niaali=0.65"], help="prijsniveau t.o.v. Davento per store (look-alikes)")
     a = ap.parse_args()
     items = json.loads(Path(a.items).read_text())
     cfg = json.loads((BASE / "config/stores.json").read_text())
@@ -38,6 +40,7 @@ def main():
         gal = [im["src"] + ("&" if "?" in im["src"] else "?") + "width=240" for p in prods for im in (p.get("images") or [])[:6]]
         own[n] = np.array([int(h, 16) for h in pp.hash_images(gal).values() if h], dtype=np.uint64)
     added = {n: [] for n in stores}
+    factor = {k: float(v) for k, v in (f.split("=") for f in a.factor)}
     for it in items:
         st_, hd = it["url"].split("/")[2], it["url"].split("/")[4].split("?")[0]
         g = pu.gallery(st_, hd)
@@ -64,8 +67,11 @@ def main():
                 continue
             if not it.get("presence_checked") and len(own[n]) and any(int(np.min(np.bitwise_count(own[n] ^ np.uint64(h)))) <= 12 for h in first6[:4]):
                 continue
+            if len(added[n]) >= a.max:
+                continue
             floor = src_price * fx.get(src_cur, 1.0)
-            eur = max(it["base_eur"], floor)
+            base = it["base_eur"] * (factor.get(n, 1.0) if it.get("strat", "P") == "P" and it.get("davento_price", True) else 1.0)
+            eur = max(base, floor)
             price = sp.round_price(eur, s["valuta"], fx)
             in_m = market_of.get(st_) in s["markten"]
             row = dict(key=f"prio/{st_}/{hd}", url=it["url"], title=g.get("title") or it["title"], cat=sp.CAT_EN.get(it["cat"], it["cat"]),
