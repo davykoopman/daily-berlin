@@ -55,9 +55,10 @@ def dedupe(state, rows, gals, hashes):
     n_own = n_dup = 0
     for store, srows in state.items():
         prods = pp.fetch_products(dom[store], strict=True)
-        og = [im["src"] + ("&" if "?" in im["src"] else "?") + "width=240" for p in prods for im in (p.get("images") or [])[:8]]
-        oh = pp.hash_images(og)
-        OH = np.array([int(h, 16) for h in oh.values() if h], dtype=np.uint64)
+        og = [(p["handle"], im["src"] + ("&" if "?" in im["src"] else "?") + "width=240") for p in prods for im in (p.get("images") or [])[:8]]
+        oh = pp.hash_images([u for _, u in og])
+        OHh = [hd for hd, u in og if oh.get(u)]
+        OH = np.array([int(oh[u], 16) for _, u in og if oh.get(u)], dtype=np.uint64)
         seen = []          # (main, [hashes]) van eerdere open regels
         for x in srows:
             if x["status"] != "Not listed" or x.get("_rej"):
@@ -68,11 +69,18 @@ def dedupe(state, rows, gals, hashes):
             hh = [int(hashes[pu.W(u)], 16) for u, _, _ in g["imgs"][:8] if hashes.get(pu.W(u))]
             if not hh:
                 continue
-            # generieke foto's (maattabel e.d.) die bij veel eigen producten terugkomen tellen niet mee
-            def hit(h):
-                n = int(np.count_nonzero(np.bitwise_count(OH ^ np.uint64(h)) <= 12))
-                return 0 < n < 15
-            if len(OH) and any(hit(h) for h in hh):
+            # al in store = ≥2 foto's (≤10) bij HETZELFDE eigen product, of één bijna identieke foto (≤6).
+            # (26-10: één foto ≤12 gaf in een steekproef 12 van 14 valse 'al in store'.)
+            per, near = {}, False
+            if len(OH):
+                for h in hh:
+                    d = np.bitwise_count(OH ^ np.uint64(h))
+                    idx = np.nonzero(d <= 10)[0]
+                    if 0 < len(idx) < 15:          # generieke foto's (maattabel) overslaan
+                        for j in idx:
+                            per.setdefault(OHh[j], set()).add(h)
+                        near = near or int(d.min()) <= 6
+            if near or any(len(v) >= 2 for v in per.values()):
                 x["_rej"] = "Already in store (auto-check)"; n_own += 1
                 continue
             dup = False
