@@ -91,6 +91,12 @@ td .nm{font-weight:600}
 .pill{display:inline-block;font-size:11.5px;font-weight:600;border-radius:99px;padding:2px 9px}
 .pill.ok{background:var(--pos-soft);color:var(--pos)}.pill.bad{background:var(--neg-soft);color:var(--neg)}.pill.mid{background:var(--warn-soft);color:var(--warn)}
 td.spark{width:96px;padding-block:4px}
+.sumhead{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:flex-start}
+#summary{min-width:520px}
+#summary th.mh{cursor:pointer}
+#summary th.mh:hover{color:var(--accent)}
+#summary td.tc,#summary th.tc{border-left:1px solid var(--line)}
+#summary tfoot td{font-weight:600}
 .note{font-size:12px;color:var(--muted)}
 .dtb{max-height:340px;overflow:auto}
 .dtb table{min-width:720px}
@@ -126,6 +132,14 @@ td.spark{width:96px;padding-block:4px}
 </div>
 
 <section class="kpis" id="kpis" aria-label="Samenvatting"></section>
+
+<section class="panel">
+  <div class="sumhead">
+    <div><h2>Overzicht alle stores en maanden</h2><div class="hint" id="sumHint"></div></div>
+    <div class="seg" id="metric" role="group" aria-label="Meetwaarde"></div>
+  </div>
+  <div class="tw"><table id="summary"></table></div>
+</section>
 
 <section class="grid2">
   <div class="panel">
@@ -185,7 +199,7 @@ function setData(names,rows,demo){
   DATA.forEach(r=>r.profit=r.omzet-r.cogs-r.mb-r.ads-r.team-r.refunds-r.subs-r.trans);
   const ks=[...new Set(DATA.map(r=>mOf(r.date)))].sort();
   MONTHS=ks.map(k=>({k,l:new Date(k+'-01').toLocaleDateString('nl-NL',{month:'short',year:'2-digit',timeZone:'UTC'}).replace('.','')}));
-  if(!ks.includes(month))month=ks[ks.length-1];
+  if(month!=='all'&&!ks.includes(month))month=ks[ks.length-1];
   store=null;
 }
 
@@ -217,18 +231,18 @@ function showTip(e,html){tip.innerHTML=html;tip.style.display='block';const w=ti
 const hideTip=()=>tip.style.display='none';
 
 function render(){
-  $('months').innerHTML=MONTHS.map(m=>`<button aria-pressed="${m.k===month}" data-m="${m.k}">${m.l}</button>`).join('');
+  $('months').innerHTML=MONTHS.map(m=>`<button aria-pressed="${m.k===month}" data-m="${m.k}">${m.l}</button>`).join('')+`<button aria-pressed="${month==='all'}" data-m="all">Totaal</button>`;
   $('months').querySelectorAll('button').forEach(b=>b.onclick=()=>{month=b.dataset.m;render()});
   const sc=$('scope');sc.hidden=store===null;
   if(store!==null){sc.textContent=STORES[store].n+' ✕';sc.onclick=()=>{store=null;render()}}
 
-  const monthRows=DATA.filter(r=>mOf(r.date)===month);
+  const monthRows=month==='all'?DATA.slice():DATA.filter(r=>mOf(r.date)===month);
   const scoped=store===null?monthRows:monthRows.filter(r=>r.store===store);
   const days=byDay(scoped);
   const tot=sum(scoped);
 
   // previous month, same number of days, for the delta
-  const mi=MONTHS.findIndex(m=>m.k===month),n=days.length;
+  const mi=month==='all'?-1:MONTHS.findIndex(m=>m.k===month),n=days.length;
   let prev=null;
   if(mi>0){
     const pr=DATA.filter(r=>mOf(r.date)===MONTHS[mi-1].k&&(store===null||r.store===store));
@@ -250,7 +264,7 @@ function render(){
   barChart($('cProfit'),days);
   lineChart($('cRoas'),days);
   costSplit(tot);
-  storeTable(monthRows);
+  storeTable(monthRows);summary();
   dailyTable(days);
 }
 
@@ -261,14 +275,14 @@ function barChart(el,days){
   let mx=Math.max(0,...vals),mn=Math.min(0,...vals);
   const step=niceStep((mx-mn)/4||1);mx=Math.ceil(mx/step)*step;mn=Math.floor(mn/step)*step;
   const y=v=>m.t+ih*(1-(v-mn)/(mx-mn||1));
-  const N=Math.max(days.length,15),bw=iw/N,w=Math.max(3,bw-3);
+  const N=Math.max(days.length,15),bw=iw/N,w=Math.max(1,Math.min(bw-3,bw*.8));
   let s=`<svg viewBox="0 0 ${W} ${H}" height="${H}">`;
   for(let v=mn;v<=mx+1e-9;v+=step)s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--${v===0?'muted':'grid'})" stroke-width="${v===0?1:1}"/><text x="${m.l-8}" y="${y(v)+4}" text-anchor="end">${v<0?'−':''}${Math.abs(v)>=1000?(Math.abs(v)/1000)+'k':Math.abs(v)}</text>`;
   days.forEach((d,i)=>{
     const x=m.l+i*bw+(bw-w)/2,y0=y(0),y1=y(d.profit),h=Math.max(1,Math.abs(y1-y0)),top=Math.min(y0,y1);
     s+=`<rect x="${x}" y="${top}" width="${w}" height="${h}" rx="2" fill="${d.profit>=0?'var(--pos)':'var(--neg)'}" opacity=".9"/>`;
     s+=`<rect class="hit" data-i="${i}" x="${m.l+i*bw}" y="${m.t}" width="${bw}" height="${ih}" fill="transparent"/>`;
-    if(i%Math.ceil(N/8)===0)s+=`<text x="${x+w/2}" y="${H-5}" text-anchor="middle">${new Date(d.date).getUTCDate()}</text>`;
+    if(i%Math.ceil(N/(month==='all'?6:8))===0)s+=`<text x="${x+w/2}" y="${H-5}" text-anchor="middle">${month==='all'?fmtDay(d.date):new Date(d.date).getUTCDate()}</text>`;
   });
   el.innerHTML=s+'</svg>';
   el.querySelectorAll('.hit').forEach(r=>{
@@ -289,7 +303,7 @@ function lineChart(el,days){
   const path=k=>{let p='',pen=false;days.forEach((d,i)=>{const v=k==0?d.roas:d.be;if(v==null){pen=false;return}p+=(pen?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1);pen=true});return p};
   s+=`<path d="${path(1)}" fill="none" stroke="var(--s2)" stroke-width="2" stroke-linejoin="round"/><path d="${path(0)}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
   days.forEach((d,i)=>{
-    if(i%Math.ceil(N/10)===0)s+=`<text x="${x(i)}" y="${H-5}" text-anchor="middle">${new Date(d.date).getUTCDate()}</text>`;
+    if(i%Math.ceil(N/(month==='all'?6:10))===0)s+=`<text x="${x(i)}" y="${H-5}" text-anchor="middle">${month==='all'?fmtDay(d.date):new Date(d.date).getUTCDate()}</text>`;
     s+=`<rect class="hit" data-i="${i}" x="${x(i)-iw/N/2}" y="${m.t}" width="${iw/N}" height="${ih}" fill="transparent"/>`;
   });
   s+=`<line id="xh" y1="${m.t}" y2="${m.t+ih}" stroke="var(--muted)" stroke-dasharray="3 3" style="display:none"/>`;
@@ -329,6 +343,32 @@ function storeTable(monthRows){
    +rows.map(r=>`<tr class="st ${store===r.i?'sel':''}" data-i="${r.i}"><td class="nm">${r.n}</td><td class="num">${eur(r.t.omzet)}</td><td class="num">${eur(r.t.ads)}</td><td class="num ${r.t.profit>=0?'up':'down'}">${eur(r.t.profit)}</td><td class="num">${pct(r.t.pp)}</td><td class="num">${r.t.roas?x2(r.t.roas):'–'}</td><td class="num">${r.t.be?x2(r.t.be):'–'}</td><td>${status(r.t)}</td><td class="spark">${spark(r.d)}</td></tr>`).join('')
    +`</tbody><tfoot><tr><td>Totaal</td><td class="num">${eur(all.omzet)}</td><td class="num">${eur(all.ads)}</td><td class="num ${all.profit>=0?'up':'down'}">${eur(all.profit)}</td><td class="num">${pct(all.pp)}</td><td class="num">${all.roas?x2(all.roas):'–'}</td><td class="num">${all.be?x2(all.be):'–'}</td><td></td><td></td></tr></tfoot>`;
   $('stores').querySelectorAll('tr.st').forEach(tr=>tr.onclick=()=>{const i=+tr.dataset.i;store=store===i?null:i;render()});
+}
+
+let metric='profit';
+const METRICS=[['profit','Winst'],['omzet','Omzet'],['roas','ROAS'],['pp','Profit %']];
+function summary(){
+  $('metric').innerHTML=METRICS.map(m=>`<button aria-pressed="${m[0]===metric}" data-k="${m[0]}">${m[1]}</button>`).join('');
+  $('metric').querySelectorAll('button').forEach(b=>b.onclick=()=>{metric=b.dataset.k;summary()});
+  $('sumHint').textContent='Klik op een maand of een store om het dashboard daarop te zetten.';
+  const fmt=(t,rows)=>{
+    if(!rows.length)return '<span class="note">–</span>';
+    if(metric==='profit')return `<span class="${t.profit>=0?'up':'down'}">${eur(t.profit)}</span>`;
+    if(metric==='omzet')return eur(t.omzet);
+    if(metric==='roas')return t.roas?`<span class="${t.be&&t.roas>=t.be?'up':'down'}">${x2(t.roas)}</span>`:'–';
+    return `<span class="${t.pp>=0?'up':'down'}">${pct(t.pp)}</span>`;
+  };
+  const cell=rows=>fmt(sum(rows),rows);
+  const head='<thead><tr><th>Store</th>'+MONTHS.map(m=>`<th class="mh" data-m="${m.k}">${m.l}</th>`).join('')+'<th class="tc">Totaal</th></tr></thead>';
+  const body='<tbody>'+STORES.map((s,i)=>{
+    const rs=DATA.filter(r=>r.store===i);
+    return `<tr class="st ${store===i?'sel':''}" data-i="${i}"><td class="nm">${s.n}</td>`
+      +MONTHS.map(m=>{const x=rs.filter(r=>mOf(r.date)===m.k);return `<td class="num">${cell(x)}</td>`}).join('')
+      +`<td class="num tc">${cell(rs)}</td></tr>`}).join('')+'</tbody>';
+  const foot='<tfoot><tr><td>Alle stores</td>'+MONTHS.map(m=>`<td class="num">${cell(DATA.filter(r=>mOf(r.date)===m.k))}</td>`).join('')+`<td class="num tc">${cell(DATA)}</td></tr></tfoot>`;
+  $('summary').innerHTML=head+body+foot;
+  $('summary').querySelectorAll('th.mh').forEach(th=>th.onclick=()=>{month=th.dataset.m;render()});
+  $('summary').querySelectorAll('tr.st').forEach(tr=>tr.onclick=()=>{const i=+tr.dataset.i;store=store===i?null:i;render()});
 }
 
 function dailyTable(days){
