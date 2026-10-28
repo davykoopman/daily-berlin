@@ -97,6 +97,24 @@ td.spark{width:96px;padding-block:4px}
 #summary th.mh:hover{color:var(--accent)}
 #summary td.tc,#summary th.tc{border-left:1px solid var(--line)}
 #summary tfoot td{font-weight:600}
+.acc{display:flex;flex-direction:column;gap:8px}
+.acc details>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:14px minmax(90px,1.4fr) repeat(4,minmax(0,1fr));gap:8px;align-items:center;padding:10px 12px;border-radius:8px}
+.acc details>summary::-webkit-details-marker{display:none}
+.acc details>summary::before{content:"▸";color:var(--muted);transition:transform .15s}
+.acc details[open]>summary::before{transform:rotate(90deg)}
+.acc details>summary:hover{background:var(--grid)}
+.acc details>summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.acc .stx{border:1px solid var(--line);border-radius:10px}
+.acc .stx>summary{font-size:14px}
+.acc .stx>summary .nm{font-weight:600}
+.acc .stx[open]>summary{border-bottom:1px solid var(--line);border-radius:10px 10px 0 0}
+.acc .inner{display:flex;flex-direction:column;gap:2px;padding:6px 8px 10px}
+.acc .mo>summary{font-size:13px;padding:8px 10px}
+.acc .mo[open]>summary{background:var(--grid)}
+.acc .mo .dtb{margin:6px 0 8px 28px;max-height:none}
+.acc .c{text-align:right;white-space:nowrap}
+.acc .c small{display:block;font-size:11px;color:var(--muted);font-family:var(--font)}
+@media (max-width:640px){.acc details>summary{grid-template-columns:14px minmax(0,1.2fr) repeat(2,minmax(0,1fr));gap:6px}.acc details>summary .hm{display:none}.acc .mo .dtb{margin-left:0}}
 .note{font-size:12px;color:var(--muted)}
 .dtb{max-height:340px;overflow:auto}
 .dtb table{min-width:720px}
@@ -169,7 +187,13 @@ td.spark{width:96px;padding-block:4px}
 </section>
 
 <section class="panel">
-  <h2>Dagoverzicht <span class="note" id="dtLabel"></span></h2>
+  <h2>Dagoverzicht per store</h2>
+  <div class="hint">Klap een store open en daarna een maand om de dagen te zien. De kopregel toont het totaal van die store of maand.</div>
+  <div id="perStore" class="acc"></div>
+</section>
+
+<section class="panel">
+  <h2>Dagoverzicht gekozen periode <span class="note" id="dtLabel"></span></h2>
   <div class="hint">Zelfde kolommen als de maandtab in elke sheet.</div>
   <div class="dtb tw"><table id="daily"></table></div>
 </section>
@@ -264,7 +288,7 @@ function render(){
   barChart($('cProfit'),days);
   lineChart($('cRoas'),days);
   costSplit(tot);
-  storeTable(monthRows);summary();
+  storeTable(monthRows);summary();perStore();
   dailyTable(days);
 }
 
@@ -369,6 +393,30 @@ function summary(){
   $('summary').innerHTML=head+body+foot;
   $('summary').querySelectorAll('th.mh').forEach(th=>th.onclick=()=>{month=th.dataset.m;render()});
   $('summary').querySelectorAll('tr.st').forEach(tr=>tr.onclick=()=>{const i=+tr.dataset.i;store=store===i?null:i;render()});
+}
+
+const OPEN=new Set();
+function dayTableHtml(days){
+  const t=sum(days);
+  return `<table><thead><tr>${['Datum','Omzet','COGS','Adspend','Media buyer','Team','Refunds','Subs','Transactie','Profit','ROAS','Break-even','Profit %'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`
+   +[...days].reverse().map(d=>`<tr><td>${fmtDay(d.date)}</td>${[d.omzet,d.cogs,d.ads,d.mb,d.team,d.refunds,d.subs,d.trans].map(v=>`<td class="num">${eur(v)}</td>`).join('')}<td class="num ${d.profit>=0?'up':'down'}">${eur(d.profit)}</td><td class="num">${d.roas?x2(d.roas):'–'}</td><td class="num">${d.be?x2(d.be):'–'}</td><td class="num">${pct(d.pp)}</td></tr>`).join('')
+   +`</tbody><tfoot><tr><td>Totaal</td>${[t.omzet,t.cogs,t.ads,t.mb,t.team,t.refunds,t.subs,t.trans].map(v=>`<td class="num">${eur(v)}</td>`).join('')}<td class="num ${t.profit>=0?'up':'down'}">${eur(t.profit)}</td><td class="num">${t.roas?x2(t.roas):'–'}</td><td class="num">${t.be?x2(t.be):'–'}</td><td class="num">${pct(t.pp)}</td></tr></tfoot></table>`;
+}
+function headCells(t){
+  return `<span class="c num">${eur(t.omzet)}<small>omzet</small></span><span class="c num ${t.profit>=0?'up':'down'}">${eur(t.profit)}<small>winst</small></span><span class="c num hm">${t.roas?x2(t.roas):'–'}<small>ROAS</small></span><span class="c num hm">${pct(t.pp)}<small>profit %</small></span>`;
+}
+function perStore(){
+  const el=$('perStore');
+  el.innerHTML=STORES.map((st,i)=>{
+    const rs=DATA.filter(r=>r.store===i),t=sum(rs);
+    const months=[...MONTHS].reverse().map(m=>{
+      const x=rs.filter(r=>mOf(r.date)===m.k);if(!x.length)return '';
+      const key=i+'|'+m.k;
+      return `<details class="mo" data-k="${key}" ${OPEN.has(key)?'open':''}><summary><span>${m.l}</span>${headCells(sum(x))}</summary><div class="tw dtb">${dayTableHtml(byDay(x))}</div></details>`;
+    }).join('');
+    return `<details class="stx" data-k="s${i}" ${OPEN.has('s'+i)?'open':''}><summary><span class="nm">${st.n}</span>${headCells(t)}</summary><div class="inner">${months}</div></details>`;
+  }).join('');
+  el.querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{d.open?OPEN.add(d.dataset.k):OPEN.delete(d.dataset.k)}));
 }
 
 function dailyTable(days){
