@@ -94,3 +94,22 @@ word for word against the backup policies/privacy_policy.it.txt (2026-10-02): 2,
 - Italian version policies/privacy_policy.it.italiano.html (same structure: 13 headings, 28 bullets, same 3 links and
   contact details; date 14 October 2026). The other Davento policies were already Italian; the privacy policy was the
   untranslated English Shopify template. The German translation (T-Lab) still holds the old Davento text.
+
+## UK + FR translation prep (2026-10-28, after GO)
+Locales en + fr added by the owner (unpublished); T-Lab AI translation running for both, all resource types except
+shop policies. Markets UK/FR not created yet (media buyer). Policies are written by hand per country, not by T-Lab
+(drafts, not in Shopify yet; register as en/fr translations of the shop policies after the owner approves):
+- policies/en/*.en.html (UK): legal notice, contact (CET, "one hour ahead of UK time"), shipping, refund (60 days +
+  Consumer Contracts Regulations 14-day cancel + Consumer Rights Act faulty items, refund ≤14 days after receipt),
+  terms (statutory rights kept, liability per UK law, Dutch law + UK mandatory law and UK courts), privacy (Shopify
+  template with Davento values, ICO line).
+- policies/fr/*.fr.html (FR): mentions légales (directeur de la publication, hébergeur Shopify International Ltd Dublin,
+  médiateur placeholder), contact (heure de Paris), livraison, retours (rétractation L221-18, garanties légales),
+  CGV (official garantie légale de conformité text, vices cachés, Dutch law + French mandatory law, médiateur), privacy
+  (CNIL line, directives post-mortem).
+- Placeholders: [NOM DU MÉDIATEUR], [ADRESSE], [SITE INTERNET] in fr/legal_notice and fr/terms (art. 18).
+- pages/en|fr/modulo-recesso.legal.*.html: replaces the "Diritto di recesso" part of page "Modulo di recesso" in the
+  T-Lab translation (withdrawal possible before delivery too, statutory 14 days named, model cancellation form added).
+  pages/en/pagamenti.currency.en.html: currency line with GBP for the "Pagamenti" translation.
+- Same gaps exist in the IT/DE source (no model withdrawal form, "no withdrawal while in transit", Italian law, GMT+2
+  all year) – advice to the owner, not changed.
