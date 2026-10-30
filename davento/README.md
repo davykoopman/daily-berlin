@@ -155,3 +155,7 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   CSS and the "bf_offer" setting removed. Hero bottom ribbons lifted (desktop 64/84px, mobile 22px) so a dark strip
   separates the hero from the cream band. Still only until 1 Dec (pp-bf-active), then the normal trust bar.
   Seen: /de-de menu tabs say "Frau / Mann" (should be Damen / Herren), /en-gb "Woman / Man" – menu translations.
+- Prepared, NOT uploaded yet (upload denied in the permission prompt, theme still has the previous version):
+  hero cream ribbons mirror the red ones (same length, leave the hero at the bottom edge); trust bar during Black
+  Friday = own white section with four equal cream cards (14px radius, 16px gap desktop / 10px mobile, 2×2),
+  cards rise in on load one after the other and each icon pops once (no scroll reveal; still for reduced motion).

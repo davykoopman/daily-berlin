@@ -126,7 +126,7 @@
 
 <div class="pp-trust{% if bf_on == '1' %} pp-trust--bf{% endif %}">
   <ul class="pp-trust__list" role="list">
-    <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 0ms;">
+    <li class="pp-trust__item" {% unless bf_on == '1' %}data-pp-reveal {% endunless %}style="--pp-delay: 0ms;">
       <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/>
         <circle cx="6.5" cy="17.25" r="1.75"/>
@@ -135,7 +135,7 @@
       <p class="pp-trust__title">{{ t1 }}</p>
       <p class="pp-trust__text">{{ s1 }}</p>
     </li>
-    <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 90ms;">
+    <li class="pp-trust__item" {% unless bf_on == '1' %}data-pp-reveal {% endunless %}style="--pp-delay: 90ms;">
       <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5"/>
         <path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/>
@@ -143,7 +143,7 @@
       <p class="pp-trust__title">{{ t2 }}</p>
       <p class="pp-trust__text">{{ s2 }}</p>
     </li>
-    <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 180ms;">
+    <li class="pp-trust__item" {% unless bf_on == '1' %}data-pp-reveal {% endunless %}style="--pp-delay: 180ms;">
       <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <rect x="5" y="10.5" width="14" height="10" rx="1.5"/>
         <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5M12 14.5v2"/>
@@ -151,7 +151,7 @@
       <p class="pp-trust__title">{{ t3 }}</p>
       <p class="pp-trust__text">{{ s3 }}</p>
     </li>
-    <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 270ms;">
+    <li class="pp-trust__item" {% unless bf_on == '1' %}data-pp-reveal {% endunless %}style="--pp-delay: 270ms;">
       <a class="pp-trust__item-link" href="mailto:{{ email }}" aria-label="{{ t4 }}: {{ email }}">
         <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M4 5.5h16v10H9.5L5.5 19v-3.5H4z"/>
@@ -237,28 +237,31 @@
     white-space: nowrap;
   }
 
-  /* Black Friday: its own cream band under the hero, red icons, serif titles, one compact row */
+  /* Black Friday: its own section under the hero with four equal cream cards (rounded corners),
+     red icons and serif titles. The cards rise in one after the other as soon as the page shows,
+     the icon gives one small pop so the eye lands on them. */
   .pp-trust--bf {
-    padding-block: 22px;
-    background: #f3efe8;
+    padding-block: 28px;
+    background: #fff;
     color: #141414;
     border-block: 0;
   }
 
   .pp-trust--bf .pp-trust__list {
     max-width: 1320px;
-    gap: 0;
+    gap: 16px;
   }
 
   .pp-trust--bf .pp-trust__item {
     flex-direction: row;
     justify-content: center;
     gap: 12px;
-    padding-inline: 16px;
-  }
-
-  .pp-trust--bf .pp-trust__item + .pp-trust__item {
-    border-left: 1px solid #ddd5c9;
+    min-height: 76px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: #f3efe8;
+    animation: pp-trust-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: var(--pp-delay, 0ms);
   }
 
   .pp-trust--bf .pp-trust__item-link {
@@ -269,11 +272,17 @@
 
   .pp-trust--bf .pp-trust__icon {
     flex: none;
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     margin: 0;
     color: #c20000;
     stroke-width: 1.6;
+    animation: pp-trust-pop 0.5s ease-out both;
+    animation-delay: calc(var(--pp-delay, 0ms) + 450ms);
+  }
+
+  .pp-trust--bf .pp-trust__item-link .pp-trust__icon {
+    animation-delay: 720ms;
   }
 
   .pp-trust--bf .pp-trust__title {
@@ -288,6 +297,26 @@
     display: none;
   }
 
+  @keyframes pp-trust-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+
+  @keyframes pp-trust-pop {
+    50% {
+      transform: scale(1.25);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-trust--bf .pp-trust__item,
+    .pp-trust--bf .pp-trust__icon {
+      animation: none;
+    }
+  }
+
   @media screen and (max-width: 768px) {
     .pp-trust {
       padding-block: 28px;
@@ -298,21 +327,15 @@
     }
 
     .pp-trust--bf .pp-trust__list {
-      gap: 16px 0;
+      gap: 10px;
     }
 
     .pp-trust--bf .pp-trust__item {
       justify-content: flex-start;
       gap: 10px;
-      padding-inline: 10px;
-    }
-
-    .pp-trust--bf .pp-trust__item + .pp-trust__item {
-      border-left: 0;
-    }
-
-    .pp-trust--bf .pp-trust__item:nth-child(even) {
-      border-left: 1px solid #ddd5c9;
+      min-height: 64px;
+      padding: 12px 12px;
+      border-radius: 12px;
     }
 
     .pp-trust--bf .pp-trust__icon {
@@ -322,6 +345,7 @@
 
     .pp-trust--bf .pp-trust__title {
       font-size: 0.9375rem;
+      line-height: 1.2;
       text-align: left;
     }
 
