@@ -113,17 +113,22 @@
           }
         },
         "pp_rating": {
-          "type": "custom",
+          "type": "pp_rating",
           "disabled": true,
           "settings": {
-            "code": "{% render 'pp-rating', product: product, source: 'app', manual_rating: 4.7, manual_count: 2000 %}"
+            "source": "manual",
+            "rating": 4.7,
+            "count": 2000,
+            "text": ""
           }
         },
         "pp_stock": {
-          "type": "custom",
+          "type": "pp_stock",
           "disabled": true,
           "settings": {
-            "code": "{% render 'pp-stock', product: product, threshold: 5 %}"
+            "title": "",
+            "show_note": true,
+            "note": ""
           }
         }
       },

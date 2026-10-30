@@ -189,3 +189,11 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   hover arrows on desktop (snippets/pp-gallery-nav.liquid, rendered in product-images.liquid); "Spedito entro
   1–2 giorni lavorativi" block (pp_delivery) disabled; block spacing 25px → 16px (title 10px), variant label
   spacing smaller. pp-rating: no "+" after "oltre / über / plus de".
+- Rating and stock rebuilt as own block types (user: on/off exactly like NewMae): "PP Rating" and "PP Stock" in
+  sections/main-product.liquid (rendered in snippets/product-template.liquid; Apex originals in orig/). Both in
+  templates/product.json, disabled; switch on/off with the eye in the theme editor, settings per block.
+  PP Rating: always above the title (wherever the block is in the list), source Manual (default: 4.7, 2000
+  customers, translated text; optional own text) or Review app; one line on phones (DE text "Über 2.000
+  zufriedene Kunden"). PP Stock: no stock rule any more (user: "risico op mij") – dot + "Disponibile, pronto per
+  la spedizione" + note on every product while on, hidden only on a sold-out variant; own line/note text optional.
+  Tested on/off with templates/product.pp-test.json (IT/DE/EN, mobile + desktop).

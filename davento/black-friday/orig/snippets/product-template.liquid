@@ -1,0 +1,1603 @@
+{% comment %}
+  Parameters
+  context - used to determine whether on the featured product or main product template
+  mobile_layout
+{% endcomment %}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+
+  unless thumbnail_position
+    assign thumbnail_position = 'beside'
+  endunless
+
+  assign product_zoom_size = '1800x1800'
+  assign product_image_size = '620x'
+
+  case image_container_width
+    when 'small'
+      assign product_image_width = 'medium-up--two-fifths'
+      assign product_description_width = 'medium-up--three-fifths'
+      assign product_image_size = '480x'
+    when 'medium'
+      assign product_image_width = 'medium-up--one-half'
+      assign product_description_width = 'medium-up--one-half'
+      assign product_image_size = '620x'
+    when 'large'
+      assign product_image_width = 'medium-up--three-fifths'
+      assign product_description_width = 'medium-up--two-fifths'
+      assign product_image_size = '740x'
+  endcase
+
+  assign product_img_structure = product.featured_media | img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+  assign has_badge1 = false
+  assign has_badge2 = false
+
+  for tag in product.tags
+    if tag == 'badge1'
+      assign has_badge1 = true
+    elsif tag == 'badge2'
+      assign has_badge2 = true
+    endif
+  endfor
+-%}
+
+{%- liquid
+  assign connect_to_sizechart = false
+
+  for block in section.blocks
+    if block.type == 'size_chart'
+      assign sizechart_index = forloop.index0
+      assign next_block_index = sizechart_index | plus: 1
+      assign variant_block = section.blocks[next_block_index]
+
+      if variant_block.type == 'variant_picker' and variant_section.settings.picker_type == 'button' and product.has_only_default_variant == false
+        for option in product.options_with_values
+          assign size_trigger = 'products.general.size_trigger' | t | downcase
+          assign downcased_option = option.name | downcase
+
+          if downcased_option contains size_trigger
+            assign connect_to_sizechart = true
+          endif
+        endfor
+      endif
+    endif
+  endfor
+-%}
+
+<div
+  id="ProductSection-{{ section_id }}-{{ product.id }}"
+  class="product-section"
+  data-section-id="{{ section_id }}"
+  data-product-id="{{ product.id }}"
+  data-apx-section="product"
+  data-product-handle="{{ product.handle }}"
+  data-product-title="{{ product.title | escape }}"
+  data-product-url="{{ product.url | within: collection }}"
+  data-aspect-ratio="{{ 100 | divided_by: product.featured_media.aspect_ratio }}"
+  data-img-url="{{ product_img_structure }}"
+  {% unless isModal %}
+    data-history="true"
+  {% endunless %}
+  data-modal="{{ isModal }}"
+>
+  {%- render 'product-template-variables', product: product, current_variant: current_variant -%}
+
+  <div class="page-content page-content--product">
+    <style>
+      .template-product .product-image-main {
+        position: relative;
+      }
+
+      .template-product .product-image-main .image-wrap {
+        position: relative;
+      }
+
+      @media (max-width: 749px) {
+        .template-product .product-image-main .product__badge--product-page.product__badge--badge1 {
+          {% assign badge1_mobile_position = settings.badge1_product_position | default: settings.badge1_position %}
+          {% if badge1_mobile_position contains 'top' %}
+            top: {{ settings.badge1_product_mobile_spacing_top | default: settings.badge1_product_spacing_top | default: settings.badge1_spacing_top | default: 16 }}px !important;
+            bottom: auto !important;
+          {% else %}
+            bottom: {{ settings.badge1_product_mobile_spacing_bottom | default: settings.badge1_product_spacing_bottom | default: settings.badge1_spacing_bottom | default: 16 }}px !important;
+            top: auto !important;
+          {% endif %}
+          {% if badge1_mobile_position contains 'right' %}
+            right: {{ settings.badge1_product_mobile_spacing_right | default: settings.badge1_product_spacing_right | default: settings.badge1_spacing_right | default: 16 }}px !important;
+            left: auto !important;
+          {% else %}
+            left: {{ settings.badge1_product_mobile_spacing_left | default: settings.badge1_product_spacing_left | default: settings.badge1_spacing_left | default: 16 }}px !important;
+            right: auto !important;
+          {% endif %}
+        }
+
+        .template-product .product-image-main .product__badge--product-page.product__badge--badge2 {
+          {% assign badge2_mobile_position = settings.badge2_product_position | default: settings.badge2_position %}
+          {% if badge2_mobile_position contains 'top' %}
+            top: {{ settings.badge2_product_mobile_spacing_top | default: settings.badge2_product_spacing_top | default: settings.badge2_spacing_top | default: 48 }}px !important;
+            bottom: auto !important;
+          {% else %}
+            bottom: {{ settings.badge2_product_mobile_spacing_bottom | default: settings.badge2_product_spacing_bottom | default: settings.badge2_spacing_bottom | default: 16 }}px !important;
+            top: auto !important;
+          {% endif %}
+          {% if badge2_mobile_position contains 'right' %}
+            right: {{ settings.badge2_product_mobile_spacing_right | default: settings.badge2_product_spacing_right | default: settings.badge2_spacing_right | default: 16 }}px !important;
+            left: auto !important;
+          {% else %}
+            left: {{ settings.badge2_product_mobile_spacing_left | default: settings.badge2_product_spacing_left | default: settings.badge2_spacing_left | default: 16 }}px !important;
+            right: auto !important;
+          {% endif %}
+        }
+      }
+    </style>
+
+    <div class="amz-pw">
+      <div class="grid{% unless image_position == 'left' %} grid--product-images-right{% endunless %}{% if mobile_layout == 'partial' %} grid--product-images--partial{% endif %}">
+        {%- if image_position == 'left' -%}
+          <div class="grid__item {{ product_image_width }} amz-prod__sticky">
+            <div
+              class="product-badges-wrapper{% if thumbnail_position == 'beside' %} amz-tb-pdp--beside{% endif %}"
+              style="position: relative; --amz-tb-pdp-thumb-col: 90px; --amz-tb-pdp-thumb-gap: 16px;"
+            >
+              {%- render 'amz-trending-badges', product: product, context: 'product' -%}
+              {%- render 'product-images',
+                section_id: section_id,
+                product: product,
+                isModal: isModal,
+                image_position: image_position,
+                product_zoom_enable: product_zoom_enable,
+                product_zoom_size: product_zoom_size,
+                product_image_size: product_image_size,
+                thumbnail_arrows: thumbnail_arrows,
+                thumbnail_height: thumbnail_height,
+                thumbnail_position: thumbnail_position,
+                video_looping: video_looping,
+                video_style: video_style,
+                context: context,
+                sizes: sizes,
+                sizeVariable: product_image_width,
+                fallback: fallback,
+                mobile_layout: mobile_layout
+              -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="grid__item {{ product_description_width }}">
+          <div class="amz-prod__meta">
+            <div class="product-block product-block--header">
+              {%- if settings.show_amz-bc-list and isModal != true -%}
+                {%- render 'breadcrumbs' -%}
+              {%- endif -%}
+
+              {%- if settings.vendor_enable -%}
+                <div class="amz-prod__vendor">
+                  {%- assign vendor_handle = product.vendor | handleize -%}
+                  {%- if collections[vendor_handle] != empty -%}
+                    <a href="{{ routes.collections_url }}/{{ collections[vendor_handle].handle }}">
+                      {{ collections[vendor_handle].title }}
+                    </a>
+                  {%- else -%}
+                    {{ product.vendor | link_to_vendor }}
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+              
+              {%- comment -%}
+                AMZ Review Stars block (position: above_title)
+                Rendered here so it can be toggled to appear above the product title.
+              {%- endcomment -%}
+              {%- for block in blocks -%}
+                {%- if block.type == 'amz_review_stars' and block.settings.position == 'above_title' -%}
+                  {%- render 'amz-review-stars', block: block -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- if isModal -%}
+                <p class="h2 amz-prod__ttl">
+                  {{ product.title }}
+                </p>
+              {%- else -%}
+                <h1 class="h2 amz-prod__ttl">
+                  {%- unless product.empty? -%}
+                    {{ product.title }}
+                  {%- else -%}
+                    {{ 'home_page.onboarding.product_title' | t }}
+                  {%- endunless -%}
+                </h1>
+              {%- endif -%}
+
+              {%- if sku_enable -%}
+                <p data-sku class="amz-prod__sku">
+                  {%- if current_variant.sku -%}
+                    {{ current_variant.sku }}
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+            </div>
+            {%- if section.settings.enable_sticky_atc -%}
+              <a class="sticky-atc-anchor" id="product-info" rel="nofollow"></a>
+              {%- render 'sticky-atc',
+                product: product,
+                current_variant: current_variant,
+                sticky_behavior: section.settings.sticky_atc_behavior
+              -%}
+            {%- endif -%}
+
+            <div data-product-blocks>
+              {%- capture form_id -%}AddToCartForm-{{ section_id }}-{{ product.id }}{%- endcapture -%}
+              {%- for block in blocks -%}
+                
+                {%- case block.type -%}
+                  {%- when '@app' -%}
+                    {% render block %}
+                  {%- when 'amz_review_stars' -%}
+                    {%- if block.settings.position != 'above_title' -%}
+                      {%- render 'amz-review-stars', block: block -%}
+                    {%- endif -%}
+                  {%- when 'amz_dot_counter' -%}
+                    {%- render 'amz-dot-counter', block: block -%}
+                  {%- when 'selluxe_icons_with_text' -%}
+                    {%- render 'selluxe-bullets', block: block -%}
+                  {%- when 'separator' -%}
+                    <div class="product-block" {{ block.shopify_attributes }}><hr></div>
+                  {%- when 'text' -%}
+                    <div class="product-block" {{ block.shopify_attributes }}>
+                      {{ block.settings.text }}
+                    </div>
+
+                  {%- when 'amz_price_change_timer' -%}
+                    {%- render 'amz-price-change-timer',
+                      product: product,
+                      current_variant: current_variant,
+                      block: block,
+                      section_id: section_id
+                    -%}
+                  {%- when 'tab' -%}
+                    {% assign tab_id = block.id | append: product.id %}
+                    {% capture tab_content %}
+                      {{ block.settings.content }}
+                      {{ block.settings.page.content }}
+                      {{ block.settings.custom_liquid }}
+                    {% endcapture %}
+                    {% unless tab_content == blank and block.settings.title == blank %}
+                      <div class="product-block product-block--tab" {{ block.shopify_attributes }}>
+                        {%- render 'tab', id: tab_id, title: block.settings.title, content: tab_content, force_open: block.settings.force_open -%}
+                      </div>
+                    {% endunless %}
+                  {%- when 'contact' -%}
+                    <div class="product-block product-block--tab" {{ block.shopify_attributes }}>
+                      {% assign tab_id = block.id | append: product.id %}
+                      {%- render 'tab-contact', id: tab_id, block: block -%}
+                    </div>
+                  {%- when 'description' -%}
+                    <div
+                      class="product-block{% if block.settings.is_tab %} product-block--tab{% endif %}"
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- assign id = block.id | append: product.id -%}
+                      {%- render 'product-description', id: id, product: product, is_tab: section.settings.is_tab -%}
+                    </div>
+                    <div data-amz-testimonial-hook=\"below_description\"></div>
+                  {%- when 'amztab' -%}
+                    {% assign tab_id = block.id | append: product.id %}
+                    {% capture tab_content %}
+                      {{ block.settings.content }}
+                    {% endcapture %}
+                    {% capture mfallback %}
+                      {{ block.settings.fallbackText }}
+                    {% endcapture %}
+                    {% unless block.settings.title == blank %}
+                      <div class="product-block product-block--tab" {{ block.shopify_attributes }}>
+                        {%- render 'tab',
+                          id: tab_id,
+                          title: block.settings.title,
+                          content: tab_content,
+                          fallback: mfallback,
+                          force_open: block.settings.mopen
+                        -%}
+                      </div>
+                    {% endunless %}
+                  {%- when 'amz-upsel' -%}
+                    {% style %}
+                      .amz-upsell-wrapper{
+                        margin-top:{{block.settings.mt }}px;
+                        margin-bottom:{{block.settings.mb }}px;
+                      }
+                      .amz-upsell-heading{
+                        font-size:{{block.settings.headingSize }}px;
+                        color:{{block.settings.headingClr }}
+                      }
+                      .amz-upsell-header{
+                        margin-bottom:{{block.settings.headrSpacingbtm }}px;
+                      }
+                      .amz-upsell-prod-title{
+                        font-size:{{block.settings.prodtitleSize }}px;
+                        color:{{block.settings.prodtitleClr }};
+                      }
+                      .amz-upsell-compare-price{
+                        font-size:{{block.settings.comparepriceSize }}px;
+                        color:{{block.settings.comparepriceClr }};
+                      }
+                      .amz-upsell-original-price{
+                        font-size:{{block.settings.salepriceSize }}px;
+                        color:{{block.settings.salepriceClr }};
+                      }
+                      .amz-upsell-sale-text{
+                        font-size:{{block.settings.saletextSize }}px;
+                        color:{{block.settings.saletextClr }};
+                      }
+                      .amz-upsell-ssave-tag{
+                       color:{{block.settings.tagtextClr }};
+                       background:{{block.settings.tagbgClr }};
+                      }
+                    {% endstyle %}
+                    <div class="amz-upsell-wrapper">
+                      <div class="amz-upsell-header">
+                        <h2 class="amz-upsell-heading">{{ block.settings.title }}</h2>
+                        <div class="swiper-pagination"></div>
+                      </div>
+                      <div class="amz-upsell-slider-wrapper">
+                        <div class="swiper amzUpsellSlider">
+                          <div class="swiper-wrapper">
+                            {%- if block.settings.collection != blank -%}
+                              {%- assign current_collection = collections[block.settings.collection] -%}
+                              {%- for product in current_collection.products -%}
+                                <div class="swiper-slide">
+                                  <div class="amz-upsell-product-wrapper">
+                                    <div class="amz-upsell-media-wrapper">
+                                      <div class="amz-upsell-media">
+                                        {%- if product.featured_image != blank -%}
+                                          <img
+                                            src="{{ product.featured_image | image_url }}"
+                                            alt="{{ product.title | escape }}"
+                                            loading="lazy"
+                                            width="100%"
+                                            height="100%"
+                                            class="amz-upsell-prod-img amz-upsell-prod-img-1"
+                                          >
+                                        {%- endif -%}
+
+                                        {%- if product.images.size > 1 -%}
+                                          <img
+                                            src="{{ product.images[1] | image_url }}"
+                                            alt="{{ product.title | escape }}"
+                                            loading="lazy"
+                                            width="100%"
+                                            height="100%"
+                                            class="amz-upsell-prod-img amz-upsell-prod-img-2"
+                                          >
+                                        {%- endif -%}
+                                      </div>
+                                      {%- if product.compare_at_price > product.price -%}
+                                        {%- assign discount = product.compare_at_price | minus: product.price -%}
+                                        {%- assign percentage = discount
+                                          | times: 100
+                                          | divided_by: product.compare_at_price
+                                        -%}
+                                        <span class="amz-upsell-ssave-tag">
+                                          {{- block.settings.savetext }}
+                                          {{ percentage | round }}%</span
+                                        >
+                                      {%- endif -%}
+                                    </div>
+                                    <div class="amz-upsell-product-content">
+                                      <h2 class="amz-upsell-prod-title">{{ product.title }}</h2>
+                                      <div class="amz-upsell-pro-prices">
+                                        {%- if product.compare_at_price > product.price -%}
+                                          <span class="amz-upsell-compare-price">
+                                            {{- product.compare_at_price | money -}}
+                                          </span>
+                                        {% endif %}
+                                        <span class="amz-upsell-original-price">{{ product.price | money }}</span>
+                                        {%- if product.compare_at_price > product.price -%}
+                                          <span class="amz-upsell-sale-text">{{ block.settings.saletext }}</span>
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                    <a href="{{ product.url }}" class="amz-upsell-product-link"></a>
+                                  </div>
+                                </div>
+                              {%- endfor -%}
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <script>
+                      document.addEventListener('DOMContentLoaded', () => {
+                        initUpsellSlider();
+                        document.addEventListener('shopify:section:load', initUpsellSlider);
+                        document.addEventListener('shopify:section:unload', initUpsellSlider);
+                      });
+                    </script>
+                  {%- when 'amz-videos-slider' -%}
+                    {% style %}
+                      .amz-video-slider--{{ block.id }}{
+                        padding-top:{{block.settings.pdtop}}px;
+                        padding-bottom:{{block.settings.pdbot}}px;
+                        margin-top:{{block.settings.mt}}px;
+                        margin-bottom:{{block.settings.mb}}px;
+                        background:{{block.settings.bgclr}}
+                      }
+                      .amz-video-slider--{{ block.id }} .u-section-heading{
+                        font-size:{{block.settings.headingSize}}px;
+                        color:{{block.settings.headingClr}};
+                      }
+                      @media(max-width: 569px){
+                        .amz-video-slider--{{ block.id }} .u-section-heading{
+                          font-size:{{block.settings.mheadingSize}}px;
+                        }
+                      }
+
+                      {%- assign _ar = block.settings.video_aspect_ratio | default: 'original' -%}
+                      .amz-video-slider--{{ block.id }} .amz-video-slide-inner{
+                        position: relative;
+                        overflow: hidden;
+                        {% if block.settings.video_width_desktop and block.settings.video_width_desktop > 0 %}width: {{ block.settings.video_width_desktop }}px;{% endif %}
+                        {% if block.settings.video_use_custom_height %}
+                          {% if block.settings.video_height_desktop and block.settings.video_height_desktop > 0 %}height: {{ block.settings.video_height_desktop }}px;{% endif %}
+                        {% else %}
+                          {% if _ar != 'original' %}
+                            {% case _ar %}
+                              {% when '3-5' %}aspect-ratio: 3 / 5;
+                              {% when '4-5' %}aspect-ratio: 4 / 5;
+                              {% when '9-16' %}aspect-ratio: 9 / 16;
+                              {% when '1-1' %}aspect-ratio: 1 / 1;
+                              {% when '16-9' %}aspect-ratio: 16 / 9;
+                            {% endcase %}
+                          {% endif %}
+                        {% endif %}
+                      }
+                      .amz-video-slider--{{ block.id }} .amz-video-slide-inner video,
+                      .amz-video-slider--{{ block.id }} .amz-video-slide-inner .vs-video{
+                        width: 100%;
+                        height: 100%;
+                        display: block;
+                        object-fit: cover;
+                      }
+                      @media(max-width: 569px){
+                        .amz-video-slider--{{ block.id }} .amz-video-slide-inner{
+                          {% if block.settings.video_width_mobile and block.settings.video_width_mobile > 0 %}width: {{ block.settings.video_width_mobile }}px;{% endif %}
+                          {% if block.settings.video_use_custom_height %}
+                            {% if block.settings.video_height_mobile and block.settings.video_height_mobile > 0 %}height: {{ block.settings.video_height_mobile }}px;{% endif %}
+                          {% endif %}
+                        }
+                      }
+                    {% endstyle %}
+                    <div class="amz-video-slider--{{ block.id }}">
+                      <div class="amz-video-slider-container amz-pwaa">
+                        <h3 style="margin-bottom:20px;" class="u-section-heading">
+                          {{ block.settings['section-heading'] }}
+                        </h3>
+                        <div class="amz-video-slider-wrapper">
+                          <div class="swiper myvideoSwiper">
+                            <div class="swiper-wrapper">
+                              {% if block.settings.video1 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video1
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video2 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video2
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video3 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video3
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video4 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video4
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video5 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video5
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video6 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video6
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video7 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video7
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video8 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video8
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video9 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video9
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video10 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video10
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video11 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video11
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                              {% if block.settings.video12 %}
+                                <div class="amz-video-slider-video swiper-slide">
+                                  <div class="amz-video-slide-inner">
+                                    {{
+                                      block.settings.video12
+                                      | video_tag:
+                                        autoplay: true,
+                                        loop: true,
+                                        muted: true,
+                                        image_size: '1024x1024',
+                                        class: 'vs-video'
+                                    }}
+                                  </div>
+                                </div>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div class="swiper-button-prev u-swiper-prev">
+                            <svg
+                              fill="#000000"
+                              height="10px"
+                              width="10px"
+                              version="1.1"
+                              id="XMLID_287_"
+                              xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink"
+                              viewBox="0 0 24 24"
+                              xml:space="preserve"
+                            >
+                              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="next"> <g> <polygon points="6.8,23.7 5.4,22.3 15.7,12 5.4,1.7 6.8,0.3 18.5,12 "></polygon> </g> </g> </g>
+                            </svg>
+                          </div>
+                          <div class="swiper-button-next u-swiper-next">
+                            <svg
+                              fill="#000000"
+                              height="10px"
+                              width="10px"
+                              version="1.1"
+                              id="XMLID_287_"
+                              xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink"
+                              viewBox="0 0 24 24"
+                              xml:space="preserve"
+                            >
+                              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="next"> <g> <polygon points="6.8,23.7 5.4,22.3 15.7,12 5.4,1.7 6.8,0.3 18.5,12 "></polygon> </g> </g> </g>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <script>
+                      document.addEventListener('DOMContentLoaded', () => {
+                        swiperinitialized();
+                        document.addEventListener('shopify:section:load', swiperinitialized);
+                        document.addEventListener('shopify:section:unload', swiperinitialized);
+                      });
+                    </script>
+                  {% when 'amzinventory' -%}
+                    <style>
+                      .cstm-inventory-icon:after,
+                      .cstm-inventory-icon:before {
+                          background: {{ block.settings.invenDot-clr }};
+                          width: {{ block.settings.invenDot-size }}px;
+                          height: {{ block.settings.invenDot-size }}px;
+                      }
+                    </style>
+                    {% capture random_number2 %}<span class="amzrandomInven"></span>{% endcapture %}
+                    {% assign current_variant = product.selected_or_first_available_variant %}
+                    <div
+                      class="amzinventory-box"
+                      style="margin-top: {{block.settings.invenDot-mt}}px; margin-bottom: {{block.settings.invenDot-mb}}px; gap: {{block.settings.invenDot-gap}}px;{% unless current_variant.available %}display: none;{% endunless %}"
+                    >
+                      <span
+                        class="cstm-inventory-icon"
+                        style="left: {{ block.settings.invenDot-adjust }}px ;width: {{ block.settings.invenDot-size }}px; height: {{ block.settings.invenDot-size }}px;"
+                      ></span>
+                      <p style="color: {{ block.settings.invenText-clr }}; font-size: {{ block.settings.invenText-size }}px; margin: 0;">
+                        {{ block.settings.invenText | replace: '[num]', random_number2 }}
+                      </p>
+                    </div>
+                  {% when 'usp-bg' -%}
+                    {% if block.settings.checkQty %}
+                      {% assign hideOnUnavailable = true %}
+                      {% assign current_variant = product.selected_or_first_available_variant %}
+                    {% endif %}
+                    {% style %}
+                        .usp-box-{{ block.id }}{
+                          margin-top: {{ block.settings.uspmt }}px;
+                          margin-bottom: {{ block.settings.uspmb }}px;
+                          gap: {{ block.settings.uspgap }}px
+                        }
+                       .usp-box-{{ block.id }} img{
+                          width: {{ block.settings.uspimgsize }}px;
+                         min-width: {{ block.settings.uspimgsize }}px;
+                       }
+                      {% if block.settings.enableBg %}
+                        .usp-box-{{ block.id }}{
+                          width: fit-content;
+                          background: {{ block.settings.uspBg }};
+                          padding: {{ block.settings.usppy }}px  {{ block.settings.usppx }}px;
+                        }
+                      {% endif %}
+                    {% endstyle %}
+
+                    {% if block.settings['usp-text'] != blank %}
+                      {% capture random_number %}<span class="amzrandomInven"></span>{% endcapture %}
+                      <div class="usp-box usp-box-{{ block.id }}{% if hideOnUnavailable %}{% unless current_variant.available %} hide{% endunless %}{% endif %}">
+                        {% if block.settings['usp-img'] != blank %}
+                          <img src="{{ block.settings.usp-img | image_url }}" width="auto" height="auto" alt="Image">
+                        {% endif %}
+                        {% if block.settings['usp-text'] != blank %}
+                          <div class="usp-text">
+                            <p style="font-size: {{ block.settings.usptxtsize }}px; margin: 0; color: {{ block.settings.uspclr }}">
+                              {{ block.settings['usp-text'] | replace: '[num]', random_number }}
+                            </p>
+                          </div>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+
+                    {% if block.settings.showRandom %}
+                      <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                          let min = parseInt('{{ block.settings.min }}', 10);
+                          let max = parseInt('{{ block.settings.max }}', 10);
+                          randomInventoryNumber(min, max);
+                          document.addEventListener('shopify:section:load', () => randomInventoryNumber(min, max));
+                          document.addEventListener('shopify:section:unload', () => randomInventoryNumber(min, max));
+                        });
+                      </script>
+                    {% endif %}
+                  {% when 'usps-date' -%}
+                    {% if block.settings['usp-text'] != blank %}
+                      <div
+                        class="usp-box"
+                        style="margin-top: {{ block.settings.uspmt }}px; margin-bottom: {{ block.settings.uspmb }}px; gap: {{ block.settings.uspgap }}px"
+                      >
+                        {% if block.settings['usp-img'] != blank %}
+                          <img
+                            src="{{ block.settings.usp-img | image_url }}"
+                            width="{{ block.settings.uspimgsize }}px"
+                            height="auto"
+                            alt="Image"
+                          >
+                        {% endif %}
+                        {% capture nextDate %}<span id="amznextDate"></span>{% endcapture %}
+                        <div class="usp-text">
+                          <p style="font-size: {{ block.settings.usptxtsize }}px; margin: 0; color: {{ block.settings.uspclr }}">
+                            {{ block.settings['usp-text'] | replace: '[date]', nextDate }}
+                          </p>
+                        </div>
+                      </div>
+                    {% endif %}
+
+                    <script>
+                      document.addEventListener('DOMContentLoaded', () => {
+                        showNextDate();
+                        document.addEventListener('shopify:section:load', () => showNextDate());
+                        document.addEventListener('shopify:section:unload', () => showNextDate());
+                      });
+                    </script>
+                  
+               {% when 'usps-afterpay' -%}
+                {%- liquid
+                  assign v = product.selected_or_first_available_variant
+                   if v == nil
+                   assign v = product.variants.first
+                   endif
+
+                   assign currency_symbol = cart.currency.symbol
+                   assign installment_cents = v.price | times: 1.0 | divided_by: 4 | round
+                   assign installment_display = installment_cents | money_without_currency
+                      -%}
+
+                   {% if block.settings.usp-text != blank %}
+                   <div
+                   class="usp-box"
+                   data-amz-afterpay-usp
+                   data-variants='{{ product.variants | json | escape }}'
+                   style="
+                   margin-top: {{ block.settings.uspmt }}px;
+                   margin-bottom: {{ block.settings.uspmb }}px;
+                   gap: {{ block.settings.uspgap }}px;
+                   display: flex;
+                   align-items: center;
+                   "
+                   >
+                  {% if block.settings.usp-img != blank %}
+                <img
+                  src="{{ block.settings.usp-img | image_url: width: 200 }}"
+                  alt="Afterpay"
+                  loading="lazy"
+                  style="
+                  width: {{ block.settings.uspimgsize }}px;
+                  height: {{ block.settings.uspimgsize }}px;
+                  max-width: none;
+                  flex: 0 0 {{ block.settings.uspimgsize }}px;
+                  object-fit: contain;
+                  display: block;
+                  "
+                  >
+                 {% else %}
+                 <img
+                 src="https://cdn.shopify.com/s/files/1/0897/5309/2361/files/icons8-afterpay-240.png?v=1771405737"
+                alt="Afterpay"
+                loading="lazy"
+                style="
+                width: {{ block.settings.uspimgsize }}px;
+                height: {{ block.settings.uspimgsize }}px;
+                max-width: none;
+                flex: 0 0 {{ block.settings.uspimgsize }}px;
+                object-fit: contain;
+                display: block;
+                "
+                >
+                {% endif %}
+
+                {% capture ap_currency %}<span class="amz-ap-currency" data-amz-ap-currency>{{ currency_symbol }}</span>{% endcapture %}
+                {% capture ap_amount %}<span class="amz-ap-amount" data-amz-ap-amount>{{ installment_display }}</span>{% endcapture %}
+
+                <div class="usp-text" style="min-width: 0;">
+                   <p
+                 style="
+                 font-size: {{ block.settings.usptxtsize }}px;
+                 margin: 0;
+                 color: {{ block.settings.uspclr }};
+                 "
+                 >
+                {{ block.settings.usp-text | replace: '[currency]', ap_currency | replace: '[amount]', ap_amount }}
+               </p>
+            </div>
+          </div>
+         {% endif %}
+                    <script>
+                      (function () {
+                        if (window.AMZAfterpayUspInit) return;
+                        window.AMZAfterpayUspInit = true;
+
+                        function safeParse(str){
+                          try { return JSON.parse(str); } catch(e){ return null; }
+                        }
+
+                        function findProductForm(wrap){
+                          return wrap.closest('form[action*="/cart/add"]') ||
+                                 document.querySelector('form[action*="/cart/add"]');
+                        }
+
+                        function getVariantId(form){
+                          if(!form) return null;
+                          var idEl = form.querySelector('input[name="id"], select[name="id"]');
+                          return idEl ? String(idEl.value || '').trim() : null;
+                        }
+
+                        function money2(amount){
+                          try {
+                            return new Intl.NumberFormat(navigator.language || 'en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2
+                            }).format(amount);
+                          } catch(e){
+                            return Number(amount).toFixed(2);
+                          }
+                        }
+
+                        function getVariantPriceCentsFromData(wrap, variantId){
+                          var raw = wrap.getAttribute('data-variants') || '[]';
+                          var variants = safeParse(raw);
+                          if(!variants || !Array.isArray(variants) || !variantId) return null;
+
+                          var v = variants.find(function(x){ return String(x.id) === String(variantId); });
+                          if(!v) return null;
+
+                          if(typeof v.price === 'number') return v.price;
+                          if(typeof v.price === 'string' && /^\d+$/.test(v.price)) return parseInt(v.price, 10);
+
+                          return null;
+                        }
+
+                        function parseVisiblePriceToCents(){
+                          var priceNode =
+                            document.querySelector('.price-list [data-money]') ||
+                            document.querySelector('[data-price]') ||
+                            document.querySelector('.price') ||
+                            document.querySelector('[data-product-price]');
+
+                          if(!priceNode) return null;
+
+                          var txt = (priceNode.textContent || '').replace(/\s+/g,' ').trim();
+                          var m = txt.match(/(\d{1,3}([.,]\d{3})*([.,]\d{2})|\d+([.,]\d{2})?)/);
+                          if(!m) return null;
+
+                          var raw = m[1];
+                          var lastComma = raw.lastIndexOf(',');
+                          var lastDot = raw.lastIndexOf('.');
+                          var decSep = lastComma > lastDot ? ',' : '.';
+
+                          var normalized = raw;
+                          if (decSep === ',') normalized = normalized.replace(/\./g,'').replace(',', '.');
+                          else normalized = normalized.replace(/,/g,'');
+
+                          var num = parseFloat(normalized);
+                          if(isNaN(num)) return null;
+
+                          return Math.round(num * 100);
+                        }
+
+                        function updateWrap(wrap){
+                          var amountEl = wrap.querySelector('[data-amz-ap-amount]');
+                          if(!amountEl) return;
+
+                          var currencyEl = wrap.querySelector('[data-amz-ap-currency]');
+                          var form = findProductForm(wrap);
+                          var variantId = getVariantId(form);
+
+                          var priceCents = getVariantPriceCentsFromData(wrap, variantId);
+                          if(priceCents == null) priceCents = parseVisiblePriceToCents();
+                          if(priceCents == null) return;
+
+                          var installment = (priceCents / 100) / 4;
+                          amountEl.textContent = money2(installment);
+
+                          if(currencyEl && (!currencyEl.textContent || !currencyEl.textContent.trim())){
+                            currencyEl.textContent = "€";
+                          }
+                        }
+
+                        function updateAll(){
+                          var wraps = document.querySelectorAll('[data-amz-afterpay-usp]');
+                          if(!wraps || !wraps.length) return;
+                          wraps.forEach(function(w){ updateWrap(w); });
+                        }
+
+                        function boot(){
+                          updateAll();
+                          setTimeout(updateAll, 150);
+                          setTimeout(updateAll, 600);
+
+                          document.addEventListener('change', function(){ setTimeout(updateAll, 30); }, true);
+                          document.addEventListener('input', function(){ setTimeout(updateAll, 30); }, true);
+                          document.addEventListener('variant:change', function(){ setTimeout(updateAll, 30); });
+
+                          var last = null;
+                          setInterval(function(){
+                            var anyWrap = document.querySelector('[data-amz-afterpay-usp]');
+                            if(!anyWrap) return;
+                            var form = findProductForm(anyWrap);
+                            var vid = getVariantId(form);
+                            if(vid && vid !== last){
+                              last = vid;
+                              updateAll();
+                            }
+                          }, 250);
+                        }
+
+                        if(document.readyState === 'loading'){
+                          document.addEventListener('DOMContentLoaded', boot);
+                        } else {
+                          boot();
+                        }
+                      })();
+                    </script>
+                    {% when 'usps' -%}
+                     {% if block.settings.usp-text != blank %}
+                     <div
+                      class="usp-box"
+                        style="
+                        margin-top: {{ block.settings.uspmt }}px;
+                        margin-bottom: {{ block.settings.uspmb }}px;
+                        gap: {{ block.settings.uspgap }}px;
+                        display: flex;
+                        align-items: center;
+                         "
+                        >
+                       {% if block.settings.usp-img != blank %}
+                        <img
+                          src="{{ block.settings.usp-img | image_url: width: 200 }}"
+                           alt="Icon"
+                           loading="lazy"
+                            style="
+                             width: {{ block.settings.uspimgsize }}px;
+                             height: {{ block.settings.uspimgsize }}px;
+                             max-width: none;
+                             flex: 0 0 {{ block.settings.uspimgsize }}px;
+                             object-fit: contain;
+                             display: block;
+                            "
+                            >
+                            {% endif %}
+
+                             <div class="usp-text" style="min-width: 0;">
+                              <p
+                              style="
+                               font-size: {{ block.settings.usptxtsize }}px;
+                               margin: 0;
+                               color: {{ block.settings.uspclr }};
+                               "
+                               >
+                           {{ block.settings.usp-text }}
+                         </p>
+                      </div>
+                   </div>
+                 {% endif %}
+                  
+                  {% when 'amzshipping-note' %}
+                    {% style %}
+                      .amzshipping-note-wrapper{
+                        background:{{block.settings.bg}};
+                        margin:{{block.settings.mt}}px 0 {{block.settings.mb}}px 0;
+                      }
+                      .amzshipping-note-dot{
+                        background-color:{{block.settings.dotcolor}};
+                      }
+                      .amzshipping-note-wrapper span {
+                        font-size: {{ block.settings.textSize }}px;
+                      }
+                      .amzshipping-note-wrapper .amzshipping-flag {
+                        font-size: {{ block.settings.textSize }}px;
+                      }
+                      @media (max-width: 769px) {
+                        .amzshipping-note-wrapper span {
+                          font-size: {{ block.settings.textSizeMob }}px;
+                        }
+                        .amzshipping-note-wrapper .amzshipping-flag {
+                          font-size: {{ block.settings.textSizeMob }}px;
+                        }
+                      }
+                    {% endstyle %}
+                    <div class="amzshipping-note-wrapper">
+                      <div class="amzshipping-note">
+                        <div class="amzshipping-note-date">
+                          {% if block.settings.img2 != blank %}
+                            <img
+                              src="{{ block.settings.img2 | image_url }}"
+                              width="{{ block.settings.imgsize }}px"
+                              height="auto"
+                            >
+                          {% endif %}
+                          <span>{{ block.settings.text1 }}</span>
+                        </div>
+                      </div>
+                      <div class="amzshipping-note">
+                        <div class="amzshipping-flag">
+                          <img
+                            src="https://flagsapi.com/{{ localization.country.iso_code }}/flat/64.png"
+                            class="amzshipping-flagIcon"
+                            width="20px"
+                            height="20px"
+                            alt="Flag"
+                          >
+                          {% if block.settings.showdifftexts %}
+                            {% if localization.country.iso_code == 'GB' %}
+                              {{ block.settings.text2gb }}
+                            {% elsif localization.country.iso_code == 'AU' %}
+                              {{ block.settings.text2au }}
+                            {% else %}
+                              {{ block.settings.text2 | replace: '[country]', localization.country.iso_code }}
+                            {% endif %}
+                          {% else %}
+                            {{ block.settings.text2 | replace: '[country]', localization.country.iso_code }}
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  {% when 'amz-rating' %}
+                    {% if block.settings['rating-text'] != blank %}
+                      <div
+                        class="cstm-rating-box"
+                        style="display: flex; align-items: center; gap: 8px; margin-bottom: {{ block.settings.rt-mb }}px;"
+                      >
+                        {% if block.settings['rating-img'] %}
+                          <img
+                            src="{{ block.settings.rating-img | image_url }}"
+                            loading="eager"
+                            height="auto"
+                            width="{{ block.settings.rimg-size }}px"
+                            alt="Rating"
+                          >
+                        {% endif %}
+                        <a
+                          href="#amz-tpReviews"
+                          style="font-size: {{ block.settings.rt-size }}px; color: {{ block.settings.rt-clr }};"
+                        >
+                          {{- block.settings['rating-text'] -}}
+                        </a>
+                      </div>
+                    {% endif %}
+                  {%- when 'price' -%}
+                    <div class="product-block product-block--price" {{ block.shopify_attributes }}>
+                      {%- assign current_is_sale = false -%}
+                      {%- if current_variant.compare_at_price > current_variant.price -%}
+                        {%- assign current_is_sale = true -%}
+                      {%- endif -%}
+                      {%- assign show_compare = current_is_sale -%}
+
+                      {%- assign hide_sale_price = true -%}
+                      {%- if product.compare_at_price_max > product.price and current_is_sale -%}
+                        {%- assign hide_sale_price = false -%}
+                      {%- endif -%}
+
+                      {%- capture price_current_html -%}
+    {% if current_is_sale %}
+      <span data-product-price class="product__price on-sale" style="color: {{ block.settings.cur_color }}; font-size: {{ block.settings.cur_size | default: 22 }}px; font-weight: {{ block.settings.cur_weight | default: 600 }}; padding-left: {{ block.settings.cur_pad_x | default: 6 }}px; padding-right: {{ block.settings.cur_pad_x | default: 6 }}px;">
+        {{ current_variant.price | money }}
+        {{ form | payment_terms }}
+      </span>
+    {% endif %}
+  {%- endcapture -%}
+
+                      {%- capture price_regular_html -%}
+    {% unless current_is_sale %}
+      <span class="product__price" style="color: {{ block.settings.reg_color }}; font-size: {{ block.settings.reg_size | default: 18 }}px; font-weight: {{ block.settings.reg_weight | default: 500 }};">
+        {{ current_variant.price | money }}
+      </span>
+    {% endunless %}
+  {%- endcapture -%}
+
+                      {%- capture price_compare_html -%}
+    {% if show_compare %}
+      <span data-a11y-price class="visually-hidden" aria-hidden="{{ hide_sale_price }}">{{ 'products.general.regular_price' | t }}</span>
+      <span data-product-price-wrap class="{% if hide_sale_price %} hide{% endif %}">
+        <span data-compare-price class="product__price product__price--compare" style="color: {{ block.settings.cmp_color }}; font-size: {{ block.settings.cmp_size | default: 16 }}px; font-weight: {{ block.settings.cmp_weight | default: 400 }}; padding-left: {{ block.settings.cmp_pad_x | default: 0 }}px; padding-right: {{ block.settings.cmp_pad_x | default: 0 }}px;">
+          {{ current_variant.compare_at_price | money }}
+        </span>
+      </span>
+      <span data-compare-price-a11y class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
+    {% endif %}
+  {%- endcapture -%}
+
+                      {%- capture price_save_html -%}
+    {%- assign show_save = false -%}
+    {%- if block.settings.save_enable and show_compare -%}{%- assign show_save = true -%}{%- endif -%}
+    {% if show_save %}
+      {% if block.settings.save_format == 'amount' %}
+        {%- capture saved_val -%}{{ current_variant.compare_at_price | minus: current_variant.price | money }}{%- endcapture -%}
+      {% else %}
+        {%- capture saved_val -%}{{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}%{%- endcapture -%}
+      {% endif %}
+      <span data-save-price class="product__price-savings" style="color: {{ block.settings.save_text_color }}; background: {{ block.settings.save_bg_color }}; font-size: {{ block.settings.save_size | default: 14 }}px; font-weight: {{ block.settings.save_weight | default: 500 }}; padding: {{ block.settings.save_pad_y | default: 4 }}px {{ block.settings.save_pad_x | default: 8 }}px; border-radius: {{ block.settings.save_radius | default: 6 }}px;">
+        {{ block.settings.save_label | default: 'Save' }} {{ saved_val }}
+      </span>
+    {% endif %}
+  {%- endcapture -%}
+
+                      {%- assign p1 = block.settings.order_current | default: 1 -%}
+                      {%- assign p2 = block.settings.order_compare | default: 2 -%}
+                      {%- assign p3 = block.settings.order_save | default: 3 -%}
+                      {%- assign p4 = block.settings.order_regular | default: 1 -%}
+
+                      {%- for i in (1..4) -%}
+                        {%- if p1 == i -%}{{ price_current_html }}{%- endif -%}
+                        {%- if p2 == i -%}{{ price_compare_html }}{%- endif -%}
+                        {%- if p3 == i -%}{{ price_save_html }}{%- endif -%}
+                        {%- if p4 == i -%}{{ price_regular_html }}{%- endif -%}
+                      {%- endfor -%}
+
+                      <div
+                        data-unit-price-wrapper
+                        class="product__unit-price product__unit-price--spacing {% unless current_variant.unit_price_measurement %} hide{% endunless %}"
+                      >
+                        {%- capture unit_price_base_unit -%}
+      <span data-unit-base>
+        {%- if current_variant.unit_price_measurement -%}
+          {%- if current_variant.unit_price_measurement.reference_value != 1 -%}{{ current_variant.unit_price_measurement.reference_value }}{%- endif -%}
+          {{ current_variant.unit_price_measurement.reference_unit }}
+        {%- endif -%}
+      </span>
+    {%- endcapture -%}
+                        <span data-unit-price>{{ current_variant.unit_price | money }}</span>/{{ unit_price_base_unit }}
+                      </div>
+
+                      {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+                        <div class="product__policies rte small--text-center">
+                          {%- if shop.taxes_included -%}{{ 'products.product.include_taxes' | t }}{%- endif -%}
+                          {%- if shop.shipping_policy.body != blank -%}
+                            {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+
+                                      <div data-amz-testimonial-hook="below_price"></div>
+{%- when 'quantity_selector' -%}
+                    <div class="product-block" {{ block.shopify_attributes }}>
+                      <div class="product__quantity">
+                        {% assign qty_id = section_id | append: product.id %}
+                        <label for="Quantity-{{ qty_id }}">{{ 'products.product.quantity' | t }}</label>
+                        {%- render 'quantity-input', form_id: form_id, id: qty_id, qty: 1, min: 1 -%}
+                      </div>
+                    </div>
+                  {%- when 'size_chart' -%}
+                    {% if connect_to_sizechart == false %}
+                      {%- capture size_chart_title -%}
+                        {{ 'products.general.size_chart' | t }}<svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-size-chart" viewBox="0 0 64 64"><path d="M22.39 33.53c-7.46 0-13.5-3.9-13.5-8.72s6-8.72 13.5-8.72 13.5 3.9 13.5 8.72a12 12 0 0 1-.22 1.73"/><ellipse cx="22.39" cy="24.81" rx="3.28" ry="2.12"/><path d="M8.89 24.81V38.5c0 7.9 6.4 9.41 14.3 9.41h31.92V33.53H22.39m24.39 0v7.44m-8.13-7.44v7.44m-8.13-7.44v7.44m-8.13-7.44v7.44"/></svg>
+                      {%- endcapture -%}
+
+                      <div class="size-chart__standalone" {{ block.shopify_attributes }}>
+                        {%- render 'tool-tip-trigger',
+                          title: size_chart_title,
+                          content: section.settings.size_chart.content,
+                          context: 'size-chart'
+                        -%}
+                        {% style %}
+                          tool-tip-trigger {
+                            text-transform: uppercase;
+                          }
+                        {% endstyle %}
+                      </div>
+                    {% endif %}
+
+                  {% when 'bottom_review' %}
+                    {% assign tab_id = block.id | append: product.id %}
+                    {% capture tab_content %}
+                      {{ section.settings.content }}
+                      {{ section.settings.page.content }}
+                       <div id="aus-tp-boom"></div>
+                    {% endcapture %}
+                    {% unless tab_content == blank and section.settings.title == blank %}
+                      <div class="product-block product-block--tab" {{ block.shopify_attributes }}>
+                        {%- render 'tab',
+                          id: tab_id,
+                          title: section.settings.title,
+                          content: tab_content,
+                          force_open: true
+                        -%}
+                      </div>
+                    {% endunless %}
+
+                  {%- when 'variant_picker' -%}
+                    <div
+                      class="product-block"
+                      {% if block.settings.product_dynamic_variants_enable %}
+                        data-dynamic-variants-enabled
+                      {% endif %}
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- unless product.has_only_default_variant -%}
+                        {%- for option in product.options_with_values -%}
+                          {%- liquid
+                            if block.settings.color_swatches
+                              assign is_color = false
+                              assign color_option_index = forloop.index0
+                              assign downcased_option = option.name | downcase
+
+                              # Use the theme’s trigger AND a multilingual fallback list
+                              assign swatch_trigger = 'products.general.color_swatch_trigger' | t | downcase
+                              assign color_synonyms = 'color,colour,farve,couleur,farbe,colore,kleur,coloris,cor,kolor,цвет,색,色,顏色' | split: ','
+
+                              if downcased_option contains swatch_trigger
+                                assign is_color = true
+                              else
+                                for syn in color_synonyms
+                                  if downcased_option contains syn
+                                    assign is_color = true
+                                  endif
+                                endfor
+                              endif
+                            endif
+                          -%}
+
+                          {%- if block.settings.picker_type == 'button' -%}
+                            {%- render 'variant-button', block: block, product: product, form_id: form_id, section_id: section_id, option: option, forloop: forloop, variant_labels: block.settings.variant_labels, is_color: is_color, color_option_index: color_option_index, connect_to_sizechart: connect_to_sizechart, sizechart_index: sizechart_index, swatch_mode: block.settings.swatch_mode, default: 'round', color_shape: block.settings.color_shape -%}
+
+                          {%- else -%}
+                            {%- render 'variant-dropdown',
+                              product: product,
+                              form_id: form_id,
+                              section_id: section_id,
+                              option: option,
+                              forloop: forloop,
+                              variant_labels: block.settings.variant_labels
+                            -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                      {%- endunless -%}
+                    </div>
+                    <div data-amz-testimonial-hook="below_variants"></div>
+                  {%- when 'buy_buttons' -%}
+                    <div data-amz-testimonial-hook="above_buy_buttons"></div>
+                    <div class="product-block" {{ block.shopify_attributes }}>
+                      {%- unless product.empty? -%}
+                        <div class="product-block">
+                          {%- render 'product-form',
+                            form_id: form_id,
+                            product: product,
+                            show_dynamic_checkout: section.settings.show_dynamic_checkout,
+                            current_variant: current_variant,
+                            block: block
+                          -%}
+                        </div>
+                      {%- endunless -%}
+
+                      {%- if section.settings.surface_pickup_enable -%}
+                        <div
+                          data-amz-sa-holder
+                          data-product-name="{{ product.title | escape }}"
+                          data-base-url="{{ shop.url }}{{ routes.root_url }}"
+                        ></div>
+                      {%- endif -%}
+                    </div>
+                    <div data-amz-testimonial-hook="below_buy_buttons"></div>
+                  {%- when 'sales_point' -%}
+                    {%- unless section.settings.text == blank -%}
+                      <div class="product-block product-block--sales-point" {{ block.shopify_attributes }}>
+                        <ul class="sales-points">
+                          <li class="sales-point">
+                            <span class="icon-and-text">
+                              {% case section.settings.icon %}
+                                {% when 'checkmark' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-circle-checkmark"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="M52.68 24.48A22 22 0 1 1 47 15.93"/><path d="m21 32 8.5 8.5L57 13"/>
+                                  </svg>
+                                {% when 'gift' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-gift"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="M9 20.23h46v8.68H9zm4.34 8.68h36.89v24.3H13.34zm14.48-8.25v32.98m8.09-32.76v32.98M20.52 11.43a3.73 3.73 0 0 0-.74 2.87 4.57 4.57 0 0 0 .8 2.27C22 18.09 25.15 20 32 20.23a12 12 0 0 0-2.43-7 7.52 7.52 0 0 0-5.66-3.12 4 4 0 0 0-3.39 1.32Z"/><path d="M43.37 11.43a3.73 3.73 0 0 1 .74 2.87 4.48 4.48 0 0 1-.8 2.27c-1.42 1.52-4.57 3.41-11.42 3.66a12.08 12.08 0 0 1 2.43-7A7.56 7.56 0 0 1 40 10.14a4 4 0 0 1 3.37 1.29Z"/>
+                                  </svg>
+                                {% when 'globe' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-globe"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <circle cx="32" cy="32" r="22"/><path d="M13 21h38M10 32h44M13 43h38M32 10c-12 8-12 37 0 44m0-44c12 8 12 37 0 44"/>
+                                  </svg>
+                                {% when 'heart' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-heart"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="M51.27 15.05a13 13 0 0 0-18.44 0l-.83.83-.83-.83a13 13 0 0 0-18.44 18.44l.83.83L32 52.77l18.44-18.45.83-.83a13 13 0 0 0 0-18.44Z"/>
+                                  </svg>
+                                {% when 'leaf' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-leaf"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <defs><style>.a{stroke-miterlimit:10}</style></defs><path class="a" d="M52 11 13 50m22-37v15h16"/><path class="a" d="M52 11c6 24-16.72 47.29-33 32C7 22 29 10 52 11Z"/>
+                                  </svg>
+                                {% when 'lock' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-lock"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="M19.45 23.6v-3.2c0-7 5.89-11.75 12.55-11.75 7.21 0 12.55 5.49 12.55 11.75v3.2M10 23.6h44v31.75H10zm22 13.87v7.47"/><circle cx="32" cy="35.87" r="1.6"/>
+                                  </svg>
+                                {% when 'package' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-package"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="M32 54.52 10 41.95v-19.9L32 9.48l22 12.57v19.9L32 54.52z"/><path d="M32 54.52v-19.9l22-12.57M32 34.62 10 22.05m31.7-7.03L21 28.33v8.38"/>
+                                  </svg>
+                                {% when 'phone' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-phone"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="m18.4 9.65 10.2 10.2-6.32 6.32c2.1 7 6.89 12.46 15.55 15.55l6.32-6.32 10.2 10.2-8.75 8.75C25.71 50.3 13.83 38.21 9.65 18.4Z"/>
+                                  </svg>
+                                {% when 'ribbon' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-ribbon"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="m28.57 42.31-8.36 13.07-2.6-7.17-7.61.65 8.35-13.07a17.05 17.05 0 0 0 8.12 5.94 17.3 17.3 0 0 0 1.74.5ZM54 48.86l-7.61-.65-2.61 7.17-8.36-13.07.37-.08a16.4 16.4 0 0 0 1.73-.5 17 17 0 0 0 8.12-5.93Z"/><path d="M49 25.64a16.79 16.79 0 0 1-3.14 9.85 3.55 3.55 0 0 1-.23.31 17 17 0 0 1-8.12 5.93 16.4 16.4 0 0 1-1.73.5l-.37.08a16.74 16.74 0 0 1-3.42.35 16.91 16.91 0 0 1-3.43-.35l-.36-.08a17.3 17.3 0 0 1-1.74-.5 17.05 17.05 0 0 1-8.12-5.94c-.07-.09-.15-.19-.22-.3A16.86 16.86 0 0 1 15 25.64a17 17 0 0 1 34 0Z"/><path d="m36.09 27.78.96 5.63L32 30.75l-5.05 2.66.96-5.63-4.09-3.98 5.65-.82L32 17.86l2.53 5.12 5.64.82-4.08 3.98z"/>
+                                  </svg>
+                                {% when 'shield' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-shield"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="M21.18 31.69 28.54 39l15.91-15.88"/><path d="M53 12.54v15.24a31.41 31.41 0 0 1-3.7 14.95A25.46 25.46 0 0 1 32 56a25.46 25.46 0 0 1-17.3-13.27A31.41 31.41 0 0 1 11 27.78V12.54C24.88 13.67 32 8 32 8s7.12 5.67 21 4.54Z"/>
+                                  </svg>
+                                {% when 'tag' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-tag"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <path d="m46.69 10.34-10.55.07-25.8 25.8 17.45 17.45 25.8-25.8.07-10.55-6.97-6.97z"/><circle cx="43.95" cy="20.05" r="3.53"/><path d="M14.4 32.15 31.85 49.6"/>
+                                  </svg>
+                                {% when 'truck' %}
+                                  <svg
+                                    aria-hidden="true"
+                                    focusable="false"
+                                    role="presentation"
+                                    class="icon icon-truck"
+                                    viewBox="0 0 64 64"
+                                  >
+                                    <defs><style>.a{stroke-miterlimit:10}</style></defs><path class="a" d="M16.5 43.22H6.88V16.5h33.14v26.72H23.94m21.48 0h-5.4V30.4h17.1v12.82h-4.23m4.23-12.82-6.41-8.56H40.02"/><circle class="a" cx="20.24" cy="43.76" r="3.74"/><path class="a" d="M45.42 43.23a3.82 3.82 0 1 1 0 .37v-.37"/>
+                                  </svg>
+                              {% endcase %}
+                              <span>{{ section.settings.text }}</span>
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    {%- endunless -%}
+                  {%- when 'inventory_status' -%}
+                    {%- render 'product-inventory', product: product, current_variant: current_variant, block: block -%}
+                  {%- when 'share' -%}
+                    <div class="product-block" {{ block.shopify_attributes }}>
+                      {%- render 'social-sharing',
+                        share_title: product.title,
+                        share_permalink: product.url,
+                        share_image: product
+                      -%}
+                    </div>
+                  {%- when 'complementary_products' -%}
+                    <div class="product-block" {{ block.shopify_attributes }}>
+                      {%- render 'product-complementary',
+                        block: block,
+                        product: product,
+                        type: 'block',
+                        image_style: section.settings.image_style
+                      -%}
+                    </div>
+                  {%- when 'trust_badge' -%}
+                    <div class="product-block" {{ block.shopify_attributes }}>
+                      <div
+                        class="aos-animate"
+                        style="max-width: {{ section.settings.trust_image.width }}px; margin: 0 auto;"
+                      >
+                        <div
+                          class="image-wrap "
+                          style="height: 0; padding-bottom: {{ 100 | divided_by: section.settings.trust_image.aspect_ratio }}%;"
+                        >
+                          {%- render 'image-element',
+                            img: section.settings.trust_image,
+                            widths: '360, 540, 700, 1024',
+                            sizeVariable: product_description_width
+                          -%}
+                        </div>
+                      </div>
+                    </div>
+                  {%- when 'custom' -%}
+                    <div class="product-block" {{ block.shopify_attributes }}>
+                      {{ block.settings.code }}
+                    </div>
+                {%- endcase -%}
+              {%- else -%}
+                <div
+                  data-blocks-holder
+                  data-url="{{ product.url | within: collection }}"
+                  data-template="{{ product.template_suffix }}"
+                >
+                  <div class="placeholder-content" style="min-height: 86px;"></div>
+                </div>
+              {%- endfor -%}
+            </div>
+
+            {%- unless product.empty? -%}
+              <textarea class="hide" aria-hidden="true" aria-label="Product JSON" data-variant-json>
+                {{ product.variants | json }}
+              </textarea>
+              {%- if product.options.size > 1 -%}
+                <textarea class="hide" aria-hidden="true" aria-label="Variant JSON" data-current-variant-json>
+                  {{ current_variant | json }}
+                </textarea>
+              {%- endif -%}
+            {%- endunless -%}
+          </div>
+        </div>
+
+        {%- unless image_position == 'left' -%}
+          <div class="grid__item {{ product_image_width }} amz-prod__sticky">
+            <div
+              class="product-badges-wrapper{% if thumbnail_position == 'beside' %} amz-tb-pdp--beside{% endif %}"
+              style="position: relative; --amz-tb-pdp-thumb-col: 90px; --amz-tb-pdp-thumb-gap: 16px;"
+            >
+              {%- render 'amz-trending-badges', product: product, context: 'product' -%}
+              {%- render 'product-images',
+                section_id: section_id,
+                product: product,
+                isModal: isModal,
+                image_position: image_position,
+                product_zoom_enable: product_zoom_enable,
+                product_zoom_size: product_zoom_size,
+                product_image_size: product_image_size,
+                thumbnail_arrows: thumbnail_arrows,
+                thumbnail_position: thumbnail_position,
+                video_looping: video_looping,
+                video_style: video_style,
+                context: context,
+                sizes: sizes,
+                sizeVariable: product_image_width,
+                fallback: fallback,
+                mobile_layout: mobile_layout
+              -%}
+            </div>
+          </div>
+        {%- endunless -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%-
+                                  render 'variant-button',
+                                  block: block,
+                                  product: product,
+                                  form_id: form_id,
+                                  section_id: section_id,
+                                  option: option,
+                                  forloop: forloop,
+                                  variant_labels: block.settings.variant_labels,
+                                  is_color: is_color,
+                                  color_option_index: color_option_index,
+                                  connect_to_sizechart: connect_to_sizechart,
+                                  sizechart_index: sizechart_index,
+                                  swatch_mode: block.settings.swatch_mode | default: 'image',
+                                  color_shape: block.settings.color_shape | default: 'round'
+                                -%}
+  to: "{%- render 'variant-button', block: block, product: product, form_id: form_id,
+    section_id: section_id, option: option, forloop: forloop, variant_labels: block.settings.variant_labels,
+    is_color: is_color, color_option_index: color_option_index, connect_to_sizechart:
+    connect_to_sizechart, sizechart_index: sizechart_index, swatch_mode: block.settings.swatch_mode,
+    default: 'round', color_shape: block.settings.color_shape -%}"
+  position: 68307..68731
+{% endcomment %}

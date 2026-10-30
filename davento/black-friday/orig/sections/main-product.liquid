@@ -1,0 +1,2872 @@
+{%- liquid
+  assign isModal = false
+  if template == 'product.modal'
+    assign isModal = true
+  endif
+-%}
+
+{%- render 'product-template',
+  product: product,
+  section_id: section.id,
+  blocks: section.blocks,
+  image_position: section.settings.image_position,
+  image_container_width: section.settings.image_size,
+  product_zoom_enable: section.settings.product_zoom_enable,
+  sku_enable: section.settings.sku_enable,
+  isModal: isModal,
+  thumbnail_position: section.settings.thumbnail_position,
+  thumbnail_height: section.settings.thumbnail_height,
+  thumbnail_arrows: section.settings.thumbnail_arrows,
+  mobile_layout: section.settings.mobile_layout,
+  video_looping: section.settings.enable_video_looping,
+  video_style: section.settings.product_video_style,
+  context: 'main-product'
+-%}
+
+{% schema %}
+{
+  "name": "t:sections.main-product.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sticky 'Add to cart'"
+    },
+    {
+      "type": "paragraph",
+      "content": "A floating prompt to purchase the product, which appears after scrolling past the main product detail."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_atc",
+      "label": "Enable sticky 'Add to cart'",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "sticky_atc_position",
+      "label": "Position on large screens",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "Right" }
+      ],
+      "default": "end"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc_mobile",
+      "label": "Show on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "sticky_atc_behavior",
+      "label": "Behavior",
+      "options": [
+        { "value": "add_to_cart", "label": "Add to cart" },
+        { "value": "scroll", "label": "Scroll to options" }
+      ],
+      "default": "add_to_cart"
+    },
+    {
+      "type": "select",
+      "id": "sticky_atc_button_style",
+      "label": "Button style",
+      "default": "secondary",
+      "options": [
+        { "label": "Primary", "value": "primary" },
+        { "label": "Secondary", "value": "secondary" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc_only_button_mobile",
+      "label": "Mobile: show only the button",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc_only_button_desktop",
+      "label": "Desktop: show only the button",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "sticky_atc_width_mobile",
+      "label": "Mobile width",
+      "default": "full",
+      "options": [
+        { "value": "full", "label": "Full width" },
+        { "value": "compact", "label": "Compact pill" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "sticky_atc_width_desktop",
+      "label": "Desktop width",
+      "default": "medium",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "full", "label": "Full width" }
+      ]
+    },
+    {
+      "id": "re_img",
+      "type": "image_picker",
+      "label": "stars"
+    },
+    {
+      "id": "trustcount",
+      "type": "richtext",
+      "default": "<p>4.7 | 827 reviews<p>",
+      "label": "review count"
+    },
+{
+  "type": "header",
+  "content": "Review stars click action"
+},
+{
+  "type": "checkbox",
+  "id": "review_scroll_enable",
+  "label": "Make review stars clickable",
+  "default": true
+},
+{
+  "type": "text",
+  "id": "review_scroll_target",
+  "label": "Scroll target selector (id or CSS selector)",
+  "default": "#amz-testimonial-2"
+},
+{
+  "type": "checkbox",
+  "id": "review_scroll_open_collapsible",
+  "label": "Auto-open the collapsible/tab containing the target",
+  "default": true
+},
+{
+  "type": "range",
+  "id": "review_scroll_offset",
+  "min": -500,
+  "max": 500,
+  "step": 10,
+  "unit": "px",
+  "label": "Extra top offset (below sticky header)",
+  "default": 0
+},
+
+    {
+      "type": "checkbox",
+      "id": "sku_enable",
+      "label": "t:sections.main-product.settings.sku_enable.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.header_media"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-product.settings.content"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.main-product.settings.image_position.label",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.main-product.settings.image_position.options.left.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.main-product.settings.image_position.options.right.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "t:sections.main-product.settings.image_size.label",
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:sections.main-product.settings.image_size.options.small.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.main-product.settings.image_size.options.medium.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.main-product.settings.image_size.options.large.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "product_zoom_enable",
+      "label": "t:sections.main-product.settings.product_zoom_enable.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "thumbnail_position",
+      "label": "t:sections.main-product.settings.thumbnail_position.label",
+      "default": "beside",
+      "options": [
+        {
+          "value": "beside",
+          "label": "t:sections.main-product.settings.thumbnail_position.options.beside.label"
+        },
+        {
+          "value": "below",
+          "label": "t:sections.main-product.settings.thumbnail_position.options.below.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "thumbnail_height",
+      "label": "t:sections.main-product.settings.thumbnail_height.label",
+      "info": "t:sections.main-product.settings.thumbnail_height.info",
+      "default": "flexible",
+      "options": [
+        {
+          "value": "fixed",
+          "label": "t:sections.main-product.settings.thumbnail_height.options.fixed.label"
+        },
+        {
+          "value": "flexible",
+          "label": "t:sections.main-product.settings.thumbnail_height.options.flexible.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "thumbnail_arrows",
+      "label": "t:sections.main-product.settings.thumbnail_arrows.label"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "t:sections.main-product.settings.mobile_layout.label",
+      "default": "partial",
+      "options": [
+        {
+          "value": "partial",
+          "label": "t:sections.main-product.settings.mobile_layout.options.partial.label"
+        },
+        {
+          "value": "full",
+          "label": "t:sections.main-product.settings.mobile_layout.options.full.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "t:sections.main-product.settings.enable_video_looping.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "product_video_style",
+      "label": "t:sections.main-product.settings.product_video_style.label",
+      "default": "muted",
+      "options": [
+        {
+          "value": "muted",
+          "label": "t:sections.main-product.settings.product_video_style.options.muted.label"
+        },
+        {
+          "value": "unmuted",
+          "label": "t:sections.main-product.settings.product_video_style.options.unmuted.label"
+        }
+      ],
+      "info": "t:sections.main-product.settings.product_video_style.info"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+        "type": "amz_review_stars",
+        "name": "AMZ Review Stars",
+        "limit": 3,
+        "settings": [
+          {
+            "type": "header",
+            "content": "Position"
+          },
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Block position",
+            "default": "above_title",
+            "info": "\"Above title\" renders above the product title. \"Inline\" renders in its block order position.",
+            "options": [
+              { "value": "above_title", "label": "Above title" },
+              { "value": "inline", "label": "Inline (block order)" }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Rating"
+          },
+          {
+            "type": "range",
+            "id": "rating",
+            "label": "Rating value",
+            "min": 0,
+            "max": 5,
+            "step": 0.1,
+            "default": 4.9
+          },
+          {
+            "type": "range",
+            "id": "max_stars",
+            "label": "Number of stars",
+            "min": 1,
+            "max": 10,
+            "step": 1,
+            "default": 5
+          },
+          {
+            "type": "header",
+            "content": "Star Style"
+          },
+          {
+            "type": "select",
+            "id": "star_style",
+            "label": "Star icon",
+            "default": "solid",
+            "options": [
+              { "value": "solid", "label": "★ Solid (default)" },
+              { "value": "outline", "label": "☆ Outline" },
+              { "value": "sharp", "label": "✦ Sharp / Angular" },
+              { "value": "heart", "label": "♥ Heart" },
+              { "value": "circle", "label": "● Circle" },
+              { "value": "diamond", "label": "◆ Diamond" }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "star_size",
+            "label": "Star size",
+            "min": 10,
+            "max": 40,
+            "step": 1,
+            "unit": "px",
+            "default": 18
+          },
+          {
+            "type": "color",
+            "id": "star_color",
+            "label": "Filled star color",
+            "default": "#FFCC00"
+          },
+          {
+            "type": "color",
+            "id": "empty_star_color",
+            "label": "Empty star color",
+            "default": "#E0E0E0"
+          },
+          {
+            "type": "header",
+            "content": "Label / Review Text"
+          },
+          {
+            "type": "text",
+            "id": "review_label",
+            "label": "Review label text",
+            "default": "4.9/5 Based on 10,253+ Reviews"
+          },
+          {
+            "type": "range",
+            "id": "label_size",
+            "label": "Label font size",
+            "min": 10,
+            "max": 28,
+            "step": 1,
+            "unit": "px",
+            "default": 14
+          },
+          {
+            "type": "color",
+            "id": "label_color",
+            "label": "Label color",
+            "default": "#333333"
+          },
+          {
+            "type": "url",
+            "id": "link_url",
+            "label": "Link URL (optional)",
+            "info": "Makes the label a clickable link (e.g. to a reviews section)"
+          },
+          {
+            "type": "header",
+            "content": "Layout"
+          },
+          {
+            "type": "select",
+            "id": "alignment",
+            "label": "Alignment",
+            "default": "flex-start",
+            "options": [
+              { "value": "flex-start", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "flex-end", "label": "Right" }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "stars_label_gap",
+            "label": "Gap between stars and label",
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "px",
+            "default": 6
+          },
+          {
+            "type": "header",
+            "content": "Spacing"
+          },
+          {
+            "type": "range",
+            "id": "margin_top",
+            "label": "Margin top",
+            "min": 0,
+            "max": 60,
+            "step": 1,
+            "unit": "px",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "margin_bottom",
+            "label": "Margin bottom",
+            "min": 0,
+            "max": 60,
+            "step": 1,
+            "unit": "px",
+            "default": 4
+          },
+          {
+            "type": "range",
+            "id": "padding_top",
+            "label": "Padding top",
+            "min": 0,
+            "max": 40,
+            "step": 1,
+            "unit": "px",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "padding_bottom",
+            "label": "Padding bottom",
+            "min": 0,
+            "max": 40,
+            "step": 1,
+            "unit": "px",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "padding_left",
+            "label": "Padding left",
+            "min": 0,
+            "max": 40,
+            "step": 1,
+            "unit": "px",
+            "default": 0
+          },
+          {
+            "type": "range",
+            "id": "padding_right",
+            "label": "Padding right",
+            "min": 0,
+            "max": 40,
+            "step": 1,
+            "unit": "px",
+            "default": 0
+          }
+        ]
+      },
+    {
+      "type": "selluxe_icons_with_text",
+      "name": "Bullets Points",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "bullet_icon",
+          "label": "Image or Icon"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "bullet_text",
+          "default": "Gratis verzending met Postnl & Bpost",
+          "label": "Text to show beside icon"
+        },
+        {
+          "type": "color",
+          "id": "bullet_text_color",
+          "default": "#000000",
+          "label": "Text color"
+        },
+        {
+          "type": "image_picker",
+          "id": "bullet_icon_1",
+          "label": "Image or Icon"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "bullet_text_1",
+          "default": "Gratis verzending met Postnl & Bpost",
+          "label": "Text to show beside icon"
+        },
+        {
+          "type": "color",
+          "id": "bullet_text_color_1",
+          "default": "#000000",
+          "label": "Text color"
+        },
+        {
+          "type": "image_picker",
+          "id": "bullet_icon_2",
+          "label": "Image or Icon"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "bullet_text_2",
+          "default": "14 dagen retourgarantie",
+          "label": "Text to show beside icon"
+        },
+        {
+          "type": "color",
+          "id": "bullet_text_color_2",
+          "default": "#000000",
+          "label": "Text color"
+        },
+        {
+          "type": "image_picker",
+          "id": "bullet_icon_3",
+          "label": "Image or Icon"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "bullet_text_3",
+          "default": "Betaal veilig met iDeal & Bancontact",
+          "label": "Text to show beside icon"
+        },
+        {
+          "type": "color",
+          "id": "bullet_text_color_3",
+          "default": "#000000",
+          "label": "Text color"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "min": 8,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon size",
+          "default": 25
+        },
+        {
+          "type": "range",
+          "id": "bullet_font_size",
+          "min": 8,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Font size",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "amz_dot_counter",
+      "name": "AMZ Dot Counter",
+      "settings": [
+        {
+          "type": "color",
+          "id": "dot_color",
+          "label": "Dot Color",
+          "default": "#FFA500"
+        },
+        {
+          "type": "checkbox",
+          "id": "dot_text_color",
+          "label": "Apply color to text?",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "dot_size",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Dot size",
+          "default": 16
+        },
+        {
+          "id": "dottext1",
+          "type": "richtext",
+          "label": "Paragraph 1"
+        },
+        {
+          "id": "dottext2",
+          "type": "richtext",
+          "label": "Paragraph 2"
+        },
+        {
+          "type": "range",
+          "id": "icon-size",
+          "min": 12,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Text margin left",
+          "default": 25
+        },
+        {
+          "type": "range",
+          "id": "font-size",
+          "min": 12,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Font size",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "Counter settings"
+        },
+        {
+          "type": "checkbox",
+          "id": "count_enabled",
+          "label": "Enable counter number",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "count_mode",
+          "label": "Counter mode",
+          "default": "dynamic",
+          "options": [
+            { "value": "dynamic", "label": "Dynamic (updates over time)" },
+            { "value": "random_once", "label": "Random (once on load)" },
+            { "value": "static", "label": "Static (fixed number)" },
+            { "value": "selected_list", "label": "Selected list (pick one)" }
+          ]
+        },
+        {
+          "type": "number",
+          "id": "static_number",
+          "label": "Static number",
+          "default": 7
+        },
+        {
+          "type": "textarea",
+          "id": "selected_numbers",
+          "label": "Selected numbers list (comma separated)",
+          "default": "3,4,5,6,7,8"
+        },
+        {
+          "type": "number",
+          "id": "random_min",
+          "label": "Random minimum",
+          "default": 3
+        },
+        {
+          "type": "number",
+          "id": "random_max",
+          "label": "Random maximum",
+          "default": 8
+        },
+        {
+          "type": "checkbox",
+          "id": "dynamic_loop",
+          "label": "Dynamic: keep updating",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "dynamic_interval_ms",
+          "min": 500,
+          "max": 5000,
+          "step": 100,
+          "unit": "ms",
+          "label": "Dynamic: update interval",
+          "default": 2000
+        },
+        {
+          "type": "checkbox",
+          "id": "dynamic_step_mode",
+          "label": "Dynamic: step up/down instead of random",
+          "default": false
+        },
+        {
+          "type": "number",
+          "id": "dynamic_step_min",
+          "label": "Dynamic: step minimum",
+          "default": 3
+        },
+        {
+          "type": "number",
+          "id": "dynamic_step_max",
+          "label": "Dynamic: step maximum",
+          "default": 8
+        },
+        {
+          "type": "number",
+          "id": "dynamic_step_start",
+          "label": "Dynamic: step start",
+          "default": 3
+        },
+        {
+          "type": "range",
+          "id": "dynamic_step_change",
+          "min": 1,
+          "max": 50,
+          "step": 1,
+          "label": "Dynamic: step change amount",
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "top_review",
+      "name": "Top Review",
+      "settings": [],
+      "limit": 1
+    },
+    {
+      "type": "bottom_review",
+      "name": "Bottom Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:product_block.tab.settings.title.label",
+          "default": "Shipping information"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:product_block.tab.settings.content.label",
+          "default": "<p>Use collapsible tabs for more detailed information that will help customers make a purchasing decision.</p><p>Ex: Shipping and return policies, size guides, and other common questions.</p>"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "t:product_block.tab.settings.page.label"
+        }
+      ],
+      "limit": 1
+    },
+    {
+      "type": "selluxe_followers",
+      "name": "Selluxe Followers Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "profile_picture",
+          "label": "Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "reviewers",
+          "label": "Reviewer"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_verified",
+          "label": "Show verified icon",
+          "default": true
+        },
+        {
+          "type": "inline_richtext",
+          "id": "add_text",
+          "label": "Additional text"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Font size",
+          "default": 14
+        },
+        {
+          "type": "select",
+          "id": "horizontal_alignment",
+          "label": "Horizontal alignment",
+          "options": [
+            {
+              "value": "flex-start",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "flex-end",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        }
+      ]
+    },
+    {
+      "type": "amzinventory",
+      "name": "AMZ Inventory",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "invenDot-mt",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "invenDot-mb",
+          "min": 0,
+          "max": 80,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Bottom",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "invenDot-adjust",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Left spacing",
+          "default": 4
+        },
+        {
+          "type": "range",
+          "id": "invenDot-gap",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Gap",
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "invenDot-size",
+          "min": 8,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Animated Dot Size",
+          "default": 10
+        },
+        {
+          "type": "color",
+          "id": "invenDot-clr",
+          "label": "Animated Dot Color",
+          "default": "#BC0000"
+        },
+        {
+          "type": "range",
+          "id": "invenText-size",
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "label": "Text Size",
+          "default": 16
+        },
+        {
+          "type": "color",
+          "id": "invenText-clr",
+          "label": "Text Color",
+          "default": "#BC0000"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "invenText",
+          "label": "Enter Text",
+          "default": "Dit is een bestseller (OP=OP)",
+          "info": "Add [num] to show a random number"
+        }
+      ]
+    },
+    {
+      "type": "usps-date",
+      "name": "AMZ USP with Next date",
+      "settings": [
+        {
+          "type": "range",
+          "id": "uspmt",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "uspmb",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Bottom",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "uspgap",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Gap",
+          "default": 10
+        },
+        {
+          "type": "image_picker",
+          "id": "usp-img",
+          "label": "Add Icon"
+        },
+        {
+          "type": "range",
+          "id": "uspimgsize",
+          "min": 4,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Image Size",
+          "default": 20
+        },
+        {
+          "type": "inline_richtext",
+          "id": "usp-text",
+          "label": "Enter Text",
+          "default": "Ordered today, shipped <strong>[date]</strong>"
+        },
+        {
+          "type": "color",
+          "id": "uspclr",
+          "label": "Text Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "usptxtsize",
+          "min": 8,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Text Size",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "usp-bg",
+      "name": "AMZ USP with BG",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "checkQty",
+          "label": "Hide on unavailable products",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "uspmt",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "uspmb",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Bottom",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "uspgap",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Gap",
+          "default": 10
+        },
+        {
+          "type": "checkbox",
+          "id": "enableBg",
+          "label": "Enable Background",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "uspBg",
+          "label": "background Color",
+          "default": "#E8E8E1"
+        },
+        {
+          "type": "header",
+          "content": "Paddings",
+          "info": "Paddings will work when Background color is enabled"
+        },
+        {
+          "type": "range",
+          "id": "usppy",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Padding Y",
+          "info": "Top Bottom Spacing",
+          "default": 10
+        },
+        {
+          "type": "range",
+          "id": "usppx",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Padding X",
+          "info": "left Right Spacing",
+          "default": 10
+        },
+        {
+          "type": "image_picker",
+          "id": "usp-img",
+          "label": "Add Icon"
+        },
+        {
+          "type": "range",
+          "id": "uspimgsize",
+          "min": 4,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Image Size",
+          "default": 20
+        },
+        {
+          "type": "checkbox",
+          "id": "showRandom",
+          "label": "Show Random Number",
+          "default": true
+        },
+        {
+          "type": "number",
+          "id": "min",
+          "label": "Min Number",
+          "default": 1
+        },
+        {
+          "type": "number",
+          "id": "max",
+          "label": "Max Number",
+          "default": 9
+        },
+        {
+          "type": "inline_richtext",
+          "id": "usp-text",
+          "label": "Enter Text",
+          "default": "Add your heading here",
+          "info": "Add [num] where you want to show the random number"
+        },
+        {
+          "type": "color",
+          "id": "uspclr",
+          "label": "Text Color",
+          "default": "#000"
+        },
+        {
+          "type": "range",
+          "id": "usptxtsize",
+          "min": 8,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Text Size",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "usps-afterpay",
+      "name": "AMZ USP Afterpay",
+      "settings": [
+        {
+          "type": "range",
+          "id": "uspmt",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "uspmb",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Bottom",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "uspgap",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Gap",
+          "default": 10
+        },
+        {
+          "type": "image_picker",
+          "id": "usp-img",
+          "label": "Add Icon"
+        },
+        {
+          "type": "range",
+          "id": "uspimgsize",
+          "min": 4,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Image Size",
+          "default": 20
+        },
+        {
+          "type": "inline_richtext",
+          "id": "usp-text",
+          "label": "Enter Text",
+          "default": "or 4 interest-free payments of <strong>[currency][amount]</strong> with Afterpay"
+        },
+        {
+          "type": "color",
+          "id": "uspclr",
+          "label": "Text Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "usptxtsize",
+          "min": 8,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Text Size",
+          "default": 16
+        }
+      ]
+    },
+{
+      "type": "usps",
+      "name": "AMZ USP",
+      "settings": [
+        {
+          "type": "range",
+          "id": "uspmt",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "uspmb",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Spacing Bottom",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "uspgap",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "label": "Gap",
+          "default": 10
+        },
+        {
+          "type": "image_picker",
+          "id": "usp-img",
+          "label": "Add Icon"
+        },
+        {
+          "type": "range",
+          "id": "uspimgsize",
+          "min": 4,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "label": "Image Size",
+          "default": 20
+        },
+        {
+          "type": "inline_richtext",
+          "id": "usp-text",
+          "label": "Enter Text",
+          "default": "Add your heading here"
+        },
+        {
+          "type": "color",
+          "id": "uspclr",
+          "label": "Text Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "usptxtsize",
+          "min": 8,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Text Size",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "amzshipping-note",
+      "name": "AMZ Shipping Note",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "color",
+          "label": "Background Color",
+          "id": "bg"
+        },
+        {
+          "type": "color",
+          "label": "Dot Color",
+          "id": "dotcolor",
+          "default": "#2A555A"
+        },
+        {
+          "type": "image_picker",
+          "id": "img2",
+          "label": "Icon"
+        },
+        {
+          "type": "range",
+          "id": "imgsize",
+          "min": 1,
+          "max": 50,
+          "step": 1,
+          "label": "Image Size",
+          "default": 20
+        },
+        {
+          "type": "inline_richtext",
+          "label": "Enter Text Here",
+          "id": "text1",
+          "default": " | 17,000+ Happy customers"
+        },
+        {
+          "type": "inline_richtext",
+          "label": "Enter Text Here",
+          "id": "text2",
+          "default": "| Free shipping to [country]"
+        },
+        {
+          "type": "checkbox",
+          "id": "showdifftexts",
+          "label": "Show Different texts for Aus and GB",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "text2gb",
+          "label": "Shipping Text For GB",
+          "default": "free shipping with royal mail"
+        },
+        {
+          "type": "text",
+          "id": "text2au",
+          "label": "Shipping Text For AUS",
+          "default": "free shipping with australia post"
+        },
+        {
+          "type": "range",
+          "id": "textSize",
+          "min": 5,
+          "max": 30,
+          "step": 1,
+          "label": "Destkop Text Size",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "textSizeMob",
+          "min": 5,
+          "max": 30,
+          "step": 1,
+          "label": "Mobile Text Size",
+          "default": 11
+        },
+        {
+          "type": "range",
+          "id": "mt",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "label": "Space Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "mb",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "label": "Space Bottom",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "amz-upsel",
+      "name": "AMZ Upsell Slider",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "You may also like"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select collection"
+        },
+        {
+          "type": "range",
+          "id": "mt",
+          "label": "Margin Top",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "mb",
+          "label": "Margin Bottom",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 40
+        },
+        {
+          "type": "range",
+          "id": "headingSize",
+          "label": "Heading Font Size (px)",
+          "min": 10,
+          "max": 80,
+          "step": 1,
+          "default": 24
+        },
+        {
+          "type": "color",
+          "id": "headingClr",
+          "label": "Heading Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "headrSpacingbtm",
+          "label": "Heading Bottom Spacing (px)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "default": 20
+        },
+        {
+          "type": "range",
+          "id": "prodtitleSize",
+          "label": "Product Title Font Size (px)",
+          "min": 10,
+          "max": 40,
+          "step": 1,
+          "default": 16
+        },
+        {
+          "type": "color",
+          "id": "prodtitleClr",
+          "label": "Product Title Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "comparepriceSize",
+          "label": "Compare Price Font Size (px)",
+          "min": 10,
+          "max": 40,
+          "step": 1,
+          "default": 14
+        },
+        {
+          "type": "color",
+          "id": "comparepriceClr",
+          "label": "Compare Price Color",
+          "default": "#999999"
+        },
+        {
+          "type": "range",
+          "id": "salepriceSize",
+          "label": "Sale Price Font Size (px)",
+          "min": 10,
+          "max": 40,
+          "step": 1,
+          "default": 16
+        },
+        {
+          "type": "color",
+          "id": "salepriceClr",
+          "label": "Sale Price Color",
+          "default": "#FF0000"
+        },
+        {
+          "type": "text",
+          "id": "saletext",
+          "label": "Sale Text",
+          "default": "Sale"
+        },
+        {
+          "type": "range",
+          "id": "saletextSize",
+          "label": "Sale Text Font Size (px)",
+          "min": 10,
+          "max": 30,
+          "step": 1,
+          "default": 14
+        },
+        {
+          "type": "color",
+          "id": "saletextClr",
+          "label": "Sale Text Color",
+          "default": "#FF0000"
+        },
+        {
+          "type": "text",
+          "id": "savetext",
+          "label": "Percentage Tag Text",
+          "default": "SAVE"
+        },
+        {
+          "type": "color",
+          "id": "tagbgClr",
+          "label": "Tag Background Color",
+          "default": "#FF0000"
+        },
+        {
+          "type": "color",
+          "id": "tagtextClr",
+          "label": "Tag text Color",
+          "default": "#fff"
+        }
+      ]
+    },
+    {
+      "type": "amz-videos-slider",
+      "name": "AMZ Videos Slider",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Section Paddings Settings"
+        },
+        {
+          "type": "range",
+          "id": "pdtop",
+          "min": 0,
+          "max": 200,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "pdbot",
+          "min": 0,
+          "max": 200,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding Bottom",
+          "default": 0
+        },
+        {
+          "type": "color",
+          "id": "bgclr",
+          "label": "Background Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Section Margins Settings"
+        },
+        {
+          "type": "range",
+          "id": "mt",
+          "min": 0,
+          "max": 200,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "mb",
+          "min": 0,
+          "max": 200,
+          "step": 2,
+          "unit": "px",
+          "label": "Margin Bottom",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Section Heading Settings"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "section-heading",
+          "label": "Enter Heading ",
+          "default": "Enter Heading Here"
+        },
+        {
+          "type": "range",
+          "id": "headingSize",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading Size ",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "mheadingSize",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Heading Size For Small Screens ",
+          "default": 24
+        },
+        {
+          "type": "color",
+          "id": "headingClr",
+          "label": "Heading Color",
+          "default": "#000000"
+        },
+
+        {
+          "type": "header",
+          "content": "Video Size Settings"
+        },
+        {
+          "type": "select",
+          "id": "video_aspect_ratio",
+          "label": "Video aspect ratio",
+          "default": "original",
+          "options": [
+            { "value": "original", "label": "Original (no crop)" },
+            { "value": "3-5", "label": "3:5" },
+            { "value": "4-5", "label": "4:5" },
+            { "value": "9-16", "label": "9:16" },
+            { "value": "1-1", "label": "1:1" },
+            { "value": "16-9", "label": "16:9" }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "video_use_custom_height",
+          "label": "Use custom height (disable aspect ratio crop)",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "video_width_desktop",
+          "min": 0,
+          "max": 600,
+          "step": 10,
+          "unit": "px",
+          "label": "Video width (desktop) - 0 = original",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "video_height_desktop",
+          "min": 0,
+          "max": 900,
+          "step": 10,
+          "unit": "px",
+          "label": "Video height (desktop) - 0 = original",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "video_width_mobile",
+          "min": 0,
+          "max": 450,
+          "step": 10,
+          "unit": "px",
+          "label": "Video width (mobile) - 0 = original",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "video_height_mobile",
+          "min": 0,
+          "max": 700,
+          "step": 10,
+          "unit": "px",
+          "label": "Video height (mobile) - 0 = original",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Videos"
+        },
+        {
+          "type": "video",
+          "id": "video1",
+          "label": "Add Video"
+        },
+        {
+          "type": "video",
+          "id": "video2",
+          "label": "Add Video"
+        },
+        {
+          "type": "video",
+          "id": "video3",
+          "label": "Add Video"
+        },
+        {
+          "type": "video",
+          "id": "video4",
+          "label": "Add Video"
+        },
+        {
+          "type": "video",
+          "id": "video5",
+          "label": "Add Video"
+        },
+        {
+          "type": "video",
+          "id": "video6",
+          "label": "Add Video"
+        },
+        {
+          "type": "video",
+          "id": "video7",
+          "label": "Add Video"
+        },
+        {
+          "type": "video",
+          "id": "video8",
+          "label": "Add Video"
+        }
+      ]
+    },
+    {
+      "type": "price",
+      "name": "t:product_block.price.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Compare price"
+        },
+        {
+          "type": "color",
+          "id": "cmp_color",
+          "label": "Color",
+          "default": "#999999"
+        },
+        {
+          "type": "range",
+          "id": "cmp_size",
+          "label": "Font size (px)",
+          "min": 10,
+          "max": 48,
+          "step": 1,
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "cmp_pad_x",
+          "label": "Left/Right padding (px)",
+          "min": 0,
+          "max": 36,
+          "step": 1,
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "cmp_weight",
+          "label": "Font weight",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "default": 400
+        },
+        {
+          "type": "header",
+          "content": "Current price (on sale)"
+        },
+        {
+          "type": "color",
+          "id": "cur_color",
+          "label": "Color",
+          "default": "#111111"
+        },
+        {
+          "type": "range",
+          "id": "cur_size",
+          "label": "Font size (px)",
+          "min": 10,
+          "max": 64,
+          "step": 1,
+          "default": 22
+        },
+        {
+          "type": "range",
+          "id": "cur_pad_x",
+          "label": "Left/Right padding (px)",
+          "min": 0,
+          "max": 36,
+          "step": 1,
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "cur_weight",
+          "label": "Font weight",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "default": 600
+        },
+        {
+          "type": "header",
+          "content": "Regular price (no discount)"
+        },
+        {
+          "type": "color",
+          "id": "reg_color",
+          "label": "Color",
+          "default": "#111111"
+        },
+        {
+          "type": "range",
+          "id": "reg_size",
+          "label": "Font size (px)",
+          "min": 10,
+          "max": 48,
+          "step": 1,
+          "default": 18
+        },
+        {
+          "type": "range",
+          "id": "reg_weight",
+          "label": "Font weight",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "default": 500
+        },
+        {
+          "type": "header",
+          "content": "Savings badge"
+        },
+        {
+          "type": "checkbox",
+          "id": "save_enable",
+          "label": "Show savings label",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "save_format",
+          "label": "Show savings as",
+          "default": "percent",
+          "options": [
+            {
+              "value": "percent",
+              "label": "Percent (67%)"
+            },
+            {
+              "value": "amount",
+              "label": "Amount ($10)"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "save_label",
+          "label": "Label text",
+          "default": "Save"
+        },
+        {
+          "type": "color",
+          "id": "save_text_color",
+          "label": "Text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "save_bg_color",
+          "label": "Background color",
+          "default": "#ef4444"
+        },
+        {
+          "type": "range",
+          "id": "save_size",
+          "label": "Font size (px)",
+          "min": 10,
+          "max": 48,
+          "step": 1,
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "save_pad_x",
+          "label": "Left/Right padding (px)",
+          "min": 0,
+          "max": 36,
+          "step": 1,
+          "default": 8
+        },
+        {
+          "type": "range",
+          "id": "save_pad_y",
+          "label": "Top/Bottom padding (px)",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "default": 4
+        },
+        {
+          "type": "range",
+          "id": "save_radius",
+          "label": "Border radius (px)",
+          "min": 0,
+          "max": 32,
+          "step": 1,
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "save_weight",
+          "label": "Font weight",
+          "min": 100,
+          "max": 900,
+          "step": 100,
+          "default": 500
+        },
+        {
+          "type": "header",
+          "content": "Order"
+        },
+        {
+          "type": "range",
+          "id": "order_current",
+          "label": "Current price position",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "order_compare",
+          "label": "Compare price position",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "type": "range",
+          "id": "order_save",
+          "label": "Savings label position",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "type": "range",
+          "id": "order_regular",
+          "label": "Regular price position (no sale)",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 1
+        }
+      ]
+    },
+    {
+      "type": "quantity_selector",
+      "name": "t:product_block.quantity_selector.name",
+      "limit": 1
+    },
+    {
+      "type": "complementary_products",
+      "name": "Complementary products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.product-complementary.settings.paragraph.content"
+        },
+        {
+          "type": "text",
+          "id": "product_complementary_heading",
+          "label": "t:sections.product-complementary.settings.product_complementary_heading.label",
+          "default": "Pairs well with"
+        },
+        {
+          "type": "range",
+          "id": "complementary_count",
+          "label": "t:sections.product-complementary.settings.complementary_count.label",
+          "default": 4,
+          "min": 2,
+          "max": 10,
+          "step": 1
+        },
+        {
+          "type": "range",
+          "id": "per_slide",
+          "label": "t:sections.product-complementary.settings.per_slide.label",
+          "default": 2,
+          "min": 2,
+          "max": 4,
+          "step": 1
+        },
+        {
+          "type": "select",
+          "id": "control_type",
+          "label": "t:sections.product-complementary.settings.control_type.label",
+          "options": [
+            {
+              "value": "dots",
+              "label": "t:sections.product-complementary.settings.control_type.options.dots.label"
+            },
+            {
+              "value": "arrows",
+              "label": "t:sections.product-complementary.settings.control_type.options.arrows.label"
+            }
+          ],
+          "default": "dots"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.product-complementary.settings.header.content"
+        },
+        {
+          "type": "select",
+          "id": "image_style",
+          "label": "t:sections.product-complementary.settings.image_style.label",
+          "options": [
+            {
+              "value": "default",
+              "label": "t:sections.product-complementary.settings.image_style.options.default.label"
+            },
+            {
+              "value": "circle",
+              "label": "t:sections.product-complementary.settings.image_style.options.circle.label"
+            }
+          ],
+          "default": "default"
+        }
+      ]
+    },
+    {
+      "type": "size_chart",
+      "name": "t:product_block.size_chart.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "page",
+          "id": "size_chart",
+          "label": "t:product_block.size_chart.settings.page.label"
+        }
+      ]
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant picker",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "variant_labels",
+          "label": "t:product_block.variant_picker.settings.variant_labels.label",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "picker_type",
+          "label": "t:product_block.variant_picker.settings.picker_type.label",
+          "options": [
+            {
+              "value": "button",
+              "label": "t:product_block.variant_picker.settings.picker_type.options.button.label"
+            },
+            {
+              "value": "dropdown",
+              "label": "t:product_block.variant_picker.settings.picker_type.options.dropdown.label"
+            }
+          ],
+          "default": "button"
+        },
+        {
+          "type": "checkbox",
+          "id": "product_dynamic_variants_enable",
+          "label": "t:product_block.variant_picker.settings.product_dynamic_variants_enable.label",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "color_swatches",
+          "label": "Enable color swatches",
+          "info": "Requires type to be set to 'Buttons'. [Learn how to set up swatches](https://help.shopify.com/en/manual/online-store/themes/customizing-themes/color-swatches)"
+        },
+        {
+          "type": "select",
+          "id": "swatch_mode",
+          "label": "Swatch display",
+          "options": [
+            { "value": "image", "label": "Variant images" },
+            { "value": "color", "label": "Colors" }
+          ],
+          "default": "image"
+        },
+        {
+          "type": "select",
+          "id": "color_shape",
+          "label": "t:product_block.variant_picker.settings.color_shape.label",
+          "default": "round",
+          "options": [
+            { "value": "round", "label": "t:product_block.variant_picker.settings.color_shape.options.round.label" },
+            { "value": "square", "label": "t:product_block.variant_picker.settings.color_shape.options.square.label" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "image_shape",
+          "label": "t:product_block.variant_picker.settings.image_shape.label",
+          "default": "round",
+          "options": [
+            { "value": "round", "label": "t:product_block.variant_picker.settings.image_shape.options.round.label" },
+            { "value": "square", "label": "t:product_block.variant_picker.settings.image_shape.options.square.label" }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "label": "t:product_block.variant_picker.settings.image_width.label",
+          "min": 24,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "default": 60
+        },
+        {
+          "type": "range",
+          "id": "image_height",
+          "label": "t:product_block.variant_picker.settings.image_height.label",
+          "min": 24,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "default": 60
+        },
+        {
+          "type": "range",
+          "id": "image_border_width",
+          "label": "t:product_block.variant_picker.settings.image_border_width.label",
+          "min": 0,
+          "max": 6,
+          "step": 1,
+          "unit": "px",
+          "default": 1
+        },
+        {
+          "type": "header",
+          "content": "t:product_block.variant_picker.settings.sale_badge.header"
+        },
+        {
+          "type": "checkbox",
+          "id": "badge_enable",
+          "label": "t:product_block.variant_picker.settings.sale_badge.enable.label",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "badge_apply_to",
+          "label": "t:product_block.variant_picker.settings.sale_badge.apply_to.label",
+          "default": "both",
+          "options": [
+            {
+              "value": "both",
+              "label": "t:product_block.variant_picker.settings.sale_badge.apply_to.options.both.label"
+            },
+            {
+              "value": "image",
+              "label": "t:product_block.variant_picker.settings.sale_badge.apply_to.options.image.label"
+            },
+            {
+              "value": "color",
+              "label": "t:product_block.variant_picker.settings.sale_badge.apply_to.options.color.label"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "t:product_block.variant_picker.settings.sale_badge.text.label",
+          "default": "SALE"
+        },
+        {
+          "type": "color",
+          "id": "badge_bg",
+          "label": "t:product_block.variant_picker.settings.sale_badge.bg.label",
+          "default": "#FF0000"
+        },
+        {
+          "type": "range",
+          "id": "badge_opacity",
+          "label": "t:product_block.variant_picker.settings.sale_badge.opacity.label",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "color",
+          "id": "badge_text_color",
+          "label": "t:product_block.variant_picker.settings.sale_badge.text_color.label",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "range",
+          "id": "badge_font_size",
+          "label": "t:product_block.variant_picker.settings.sale_badge.font_size.label",
+          "min": 8,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "default": 11
+        },
+        {
+          "type": "range",
+          "id": "badge_pad_x",
+          "label": "t:product_block.variant_picker.settings.sale_badge.pad_x.label",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "badge_pad_y",
+          "label": "t:product_block.variant_picker.settings.sale_badge.pad_y.label",
+          "min": 0,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "default": 2
+        },
+        {
+          "type": "range",
+          "id": "badge_radius",
+          "label": "t:product_block.variant_picker.settings.sale_badge.radius.label",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "select",
+          "id": "badge_position",
+          "label": "t:product_block.variant_picker.settings.sale_badge.position.label",
+          "default": "top_right",
+          "options": [
+            {
+              "value": "top_left",
+              "label": "t:product_block.variant_picker.settings.sale_badge.position.options.top_left.label"
+            },
+            {
+              "value": "top_right",
+              "label": "t:product_block.variant_picker.settings.sale_badge.position.options.top_right.label"
+            },
+            {
+              "value": "bottom_left",
+              "label": "t:product_block.variant_picker.settings.sale_badge.position.options.bottom_left.label"
+            },
+            {
+              "value": "bottom_right",
+              "label": "t:product_block.variant_picker.settings.sale_badge.position.options.bottom_right.label"
+            }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "badge_offset_x",
+          "label": "t:product_block.variant_picker.settings.sale_badge.offset_x.label",
+          "min": -50,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "badge_offset_y",
+          "label": "t:product_block.variant_picker.settings.sale_badge.offset_y.label",
+          "min": -50,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 45
+        },
+        {
+          "type": "range",
+          "id": "badge_z",
+          "label": "t:product_block.variant_picker.settings.sale_badge.z.label",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "checkbox",
+          "id": "badge_uppercase",
+          "label": "t:product_block.variant_picker.settings.sale_badge.uppercase.label",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "badge_weight",
+          "label": "t:product_block.variant_picker.settings.sale_badge.weight.label",
+          "default": "600",
+          "options": [
+            { "value": "400", "label": "400" },
+            { "value": "500", "label": "500" },
+            { "value": "600", "label": "600" },
+            { "value": "700", "label": "700" },
+            { "value": "800", "label": "800" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "t:product_block.description.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "is_tab",
+          "label": "t:product_block.description.settings.is_tab.label"
+        }
+      ]
+    },
+    {
+      "type": "buy_buttons",
+      "name": "t:product_block.buy_buttons.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "label": "t:product_block.buy_buttons.settings.show_dynamic_checkout.label",
+          "info": "t:product_block.buy_buttons.settings.show_dynamic_checkout.info",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "surface_pickup_enable",
+          "label": "t:product_block.buy_buttons.settings.surface_pickup_enable.label",
+          "info": "t:product_block.buy_buttons.settings.surface_pickup_enable.info",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_gift_card_recipient",
+          "default": false,
+          "label": "t:common.gift_card.show_gift_card_recipient.label",
+          "info": "t:common.gift_card.show_gift_card_recipient.info"
+        }
+      ]
+    },
+    {
+      "type": "inventory_status",
+      "name": "t:product_block.inventory_status.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "inventory_threshold",
+          "label": "t:product_block.inventory_status.settings.inventory_threshold.label",
+          "default": 10,
+          "min": 0,
+          "max": 20,
+          "step": 2
+        },
+        {
+          "type": "checkbox",
+          "id": "inventory_transfers_enable",
+          "label": "t:product_block.inventory_status.settings.inventory_transfers_enable.label",
+          "info": "t:product_block.inventory_status.settings.inventory_transfers_enable.info",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "sales_point",
+      "name": "t:product_block.sales_point.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:product_block.sales_point.settings.icon.label",
+          "default": "globe",
+          "options": [
+            {
+              "value": "checkmark",
+              "label": "t:product_block.sales_point.settings.icon.options.checkmark.label"
+            },
+            {
+              "value": "gift",
+              "label": "t:product_block.sales_point.settings.icon.options.gift.label"
+            },
+            {
+              "value": "globe",
+              "label": "t:product_block.sales_point.settings.icon.options.globe.label"
+            },
+            {
+              "value": "heart",
+              "label": "t:product_block.sales_point.settings.icon.options.heart.label"
+            },
+            {
+              "value": "leaf",
+              "label": "t:product_block.sales_point.settings.icon.options.leaf.label"
+            },
+            {
+              "value": "lock",
+              "label": "t:product_block.sales_point.settings.icon.options.lock.label"
+            },
+            {
+              "value": "package",
+              "label": "t:product_block.sales_point.settings.icon.options.package.label"
+            },
+            {
+              "value": "phone",
+              "label": "t:product_block.sales_point.settings.icon.options.phone.label"
+            },
+            {
+              "value": "ribbon",
+              "label": "t:product_block.sales_point.settings.icon.options.ribbon.label"
+            },
+            {
+              "value": "shield",
+              "label": "t:product_block.sales_point.settings.icon.options.shield.label"
+            },
+            {
+              "value": "tag",
+              "label": "t:product_block.sales_point.settings.icon.options.tag.label"
+            },
+            {
+              "value": "truck",
+              "label": "t:product_block.sales_point.settings.icon.options.truck.label"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:product_block.sales_point.settings.text.label",
+          "default": "Free worldwide shipping"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:product_block.text.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "Text block",
+          "label": "t:product_block.text.settings.text.label"
+        }
+      ]
+    },
+    {
+      "type": "trust_badge",
+      "name": "t:product_block.trust_badge.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "trust_image",
+          "label": "t:product_block.trust_badge.settings.trust_image.label"
+        }
+      ]
+    },
+    {
+      "type": "tab",
+      "name": "t:product_block.tab.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:product_block.tab.settings.title.label",
+          "default": "Shipping information"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:product_block.tab.settings.content.label",
+          "default": "<p>Use collapsible tabs for more detailed information that will help customers make a purchasing decision.</p><p>Ex: Shipping and return policies, size guides, and other common questions.</p>"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "t:product_block.tab.settings.page.label"
+        },
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom liquid (optional)",
+        },
+        {
+          "type": "checkbox",
+          "id": "force_open",
+          "label": "Keep this tab open by default",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "share",
+      "name": "t:product_block.share_on_social.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:product_block.share_on_social.settings.content"
+        }
+      ]
+    },
+    {
+      "type": "separator",
+      "name": "t:product_block.separator.name"
+    },
+    {
+      "type": "contact",
+      "name": "t:product_block.contact_form.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:product_block.contact_form.settings.content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:product_block.contact_form.settings.title.label",
+          "default": "Ask a question"
+        },
+        {
+          "type": "checkbox",
+          "id": "phone",
+          "label": "t:product_block.contact_form.settings.phone.label"
+        }
+      ]
+    },
+    {
+      "type": "custom",
+      "name": "t:product_block.html.name",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "code",
+          "label": "t:product_block.html.settings.code.label",
+          "default": "<h4>Custom code block</h4><p>Use this advanced section to add custom HTML, app scripts, or liquid.</p>",
+          "info": "t:product_block.html.settings.code.info"
+        }
+      ]
+    },
+    {
+      "type": "amz_price_change_timer",
+      "name": "AMZ Price change timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable",
+          "label": "Enable",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "text",
+          "id": "text_before_price",
+          "label": "Text before price",
+          "default": "Price will change to"
+        },
+        {
+          "type": "text",
+          "id": "text_between_price_timer",
+          "label": "Text between price and timer",
+          "default": "in"
+        },
+        {
+          "type": "select",
+          "id": "price_source",
+          "label": "Price source",
+          "default": "compare",
+          "options": [
+            { "value": "compare", "label": "Compare at price (recommended)" },
+            { "value": "current", "label": "Current price" },
+            { "value": "manual", "label": "Manual price" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "manual_price",
+          "label": "Manual price (e.g. 160.00)",
+          "default": "160.00"
+        },
+        {
+          "type": "header",
+          "content": "Countdown reset"
+        },
+        {
+          "type": "select",
+          "id": "timezone_mode",
+          "label": "Timezone mode",
+          "default": "visitor",
+          "options": [
+            { "value": "visitor", "label": "Visitor timezone (recommended)" },
+            { "value": "store", "label": "Store timezone" },
+            { "value": "iana", "label": "Fixed timezone (IANA name)" },
+            { "value": "offset", "label": "Fixed timezone (UTC offset)" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "timezone_iana",
+          "label": "IANA timezone (e.g. Europe/Amsterdam)",
+          "default": "Europe/Amsterdam"
+        },
+        {
+          "type": "range",
+          "id": "timezone_offset_minutes",
+          "label": "UTC offset (minutes)",
+          "min": -700,
+          "max": 800,
+          "step": 20,
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_if_no_compare",
+          "label": "Hide block if product has no compare at price",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "select",
+          "id": "align_desktop",
+          "label": "Desktop alignment",
+          "default": "left",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "align_mobile",
+          "label": "Mobile alignment",
+          "default": "left",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ]
+        },
+        {
+          "type": "range",
+          "id": "gap_desktop",
+          "label": "Desktop gap between items",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "gap_mobile",
+          "label": "Mobile gap between items",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "margin_top_desktop",
+          "label": "Desktop margin top",
+          "min": -50,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom_desktop",
+          "label": "Desktop margin bottom",
+          "min": -50,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "margin_top_mobile",
+          "label": "Mobile margin top",
+          "min": -50,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom_mobile",
+          "label": "Mobile margin bottom",
+          "min": -50,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Style: Text"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#111111"
+        },
+        {
+          "type": "range",
+          "id": "text_size_desktop",
+          "label": "Desktop text size",
+          "min": 8,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "text_size_mobile",
+          "label": "Mobile text size",
+          "min": 8,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "header",
+          "content": "Style: Price"
+        },
+        {
+          "type": "color",
+          "id": "price_color",
+          "label": "Price color",
+          "default": "#111111"
+        },
+        {
+          "type": "range",
+          "id": "price_size_desktop",
+          "label": "Desktop price size",
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "price_size_mobile",
+          "label": "Mobile price size",
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "unit": "px",
+          "default": 15
+        },
+        {
+          "type": "select",
+          "id": "price_weight",
+          "label": "Price font weight",
+          "default": "600",
+          "options": [
+            { "value": "400", "label": "Regular (400)" },
+            { "value": "500", "label": "Medium (500)" },
+            { "value": "600", "label": "Semi-bold (600)" },
+            { "value": "700", "label": "Bold (700)" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Style: Timer"
+        },
+        {
+          "type": "color",
+          "id": "timer_color",
+          "label": "Timer text color",
+          "default": "#111111"
+        },
+        {
+          "type": "color",
+          "id": "timer_bg",
+          "label": "Timer background",
+          "default": "#f4f4f4"
+        },
+        {
+          "type": "range",
+          "id": "timer_size_desktop",
+          "label": "Desktop timer size",
+          "min": 10,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "timer_size_mobile",
+          "label": "Mobile timer size",
+          "min": 10,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "default": 13
+        },
+        {
+          "type": "range",
+          "id": "timer_padding_y",
+          "label": "Timer padding (vertical)",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "default": 2
+        },
+        {
+          "type": "range",
+          "id": "timer_padding_x",
+          "label": "Timer padding (horizontal)",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "default": 8
+        },
+        {
+          "type": "range",
+          "id": "timer_radius",
+          "label": "Timer border radius",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "default": 6
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
