@@ -113,3 +113,10 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   pages/en/pagamenti.currency.en.html: currency line with GBP for the "Pagamenti" translation.
 - Same gaps exist in the IT/DE source (no model withdrawal form, "no withdrawal while in transit", Italian law, GMT+2
   all year) – advice to the owner, not changed.
+
+## Black Friday Month (2026-10-30, user: theme "Black Friday" in draft, live Saturday 31 Oct evening)
+- Theme "Black Friday" #208380952919 = duplicate of live "Davento - size guide (live) 29 Oct" #208314597719.
+- Hero direction: option B (user's AI photo + Black Friday block as live, translatable text; desktop side by side,
+  mobile photo on top). No text inside images (multi-market IT/DE/AT/CH/UK).
+- Pricing check before "-50%": products mix compare-at (e.g. 42.95/85.90, 39.95/66.59) and no compare-at; tiers
+  2/3/4 = 10/15/20% active. EU 30-day lowest-price rule applies to the announced reduction.
