@@ -126,3 +126,11 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   templates/index.json: pp_bf_hero first, Halloween slideshow disabled (kept for rollback; original in black-friday/orig/).
   Preview checked IT, /de-de, /en-gb on mobile + desktop. Page errors "$ is not defined" and "reading 'dataset'"
   also on the live theme (not from the hero). FR has no market yet, so not previewable.
+- Categories + bestsellers + collection page made identical (user: same image sizes, arrows, look):
+  sections/pp-home-categories.liquid now uses the shared pp-row (same track, 4 columns, 12px gap, overlay arrows,
+  pp-bundle__all "see all" tile) and pp-quick-pick for the arrows (own script and row/nav CSS removed).
+  snippets/pp-card.liquid: arrows centred on the first photo (container query), mobile row edge 14px (= .amz-pw),
+  collection/search grid gap 12px desktop / 10px mobile, theme's 3px mobile offset on the collection column removed.
+  Measured in preview: desktop cat/best/collection/product-page row 341×426, gap 12, arrow on photo centre;
+  mobile rows 164×205 at 14px, collection 2 per row at 14px, gap 10. Tablet (750–989): rows 3, collection grid 4 (theme).
+  Originals in black-friday/orig/.

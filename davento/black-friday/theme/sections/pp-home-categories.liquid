@@ -1,0 +1,173 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign title = 'Kategorie'
+    when 'nl'
+      assign title = 'Categorieën'
+    when 'de'
+      assign title = 'Kategorien'
+    when 'fr'
+      assign title = 'Catégories'
+    when 'it'
+      assign title = 'Categorie'
+    when 'es'
+      assign title = 'Categorías'
+    else
+      assign title = 'Shop by category'
+  endcase
+
+  # Groups and categories come from the menu: a top-level collection link with
+  # sub items is a group (e.g. Kobiety), its collection sub items are the tiles.
+  # Menu links point at the collection itself, so translations cannot break them.
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+-%}
+
+<div class="pp-home-cat" data-pp-gender-root>
+  <div class="amz-pw pp-home-cat__inner">
+    <div class="pp-home__head">
+      <h2 class="pp-home__title">{{ title }}</h2>
+      {% render 'pp-gender-tabs', menu: menu, label: title %}
+    </div>
+
+    {%- assign first_group = true -%}
+    {%- for group in menu.links -%}
+      {%- if group.type != 'collection_link' or group.links.size == 0 -%}{%- continue -%}{%- endif -%}
+      {%- liquid
+        assign parent = group.object
+        capture see_all_key
+          render 'pp-see-all-key', collection: parent
+        endcapture
+        assign see_all_key = see_all_key | strip
+      -%}
+      <div class="pp-row pp-home-cat__panel" role="tabpanel" data-pp-row data-pp-panel="{{ parent.handle }}" {% unless first_group %}hidden{% endunless %}>
+        <ul class="pp-row__track" role="list">
+          {%- for item in group.links -%}
+            {%- if item.type != 'collection_link' -%}{%- continue -%}{%- endif -%}
+            {%- assign c = item.object -%}
+            {%- if c == blank or c.handle == parent.handle or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+            {%- liquid
+              assign label = item.title
+
+              # The collection image when set in the admin, otherwise its first product photo
+              assign img = c.image | default: c.products.first.featured_image
+            -%}
+            <li class="pp-row__item">
+              <a class="pp-home-cat__tile" href="{{ c.url }}">
+                <span class="pp-home-cat__media">
+                  {%- if img != blank -%}
+                    {{
+                      img
+                      | image_url: width: 800
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '240, 360, 480, 600, 800',
+                        sizes: '(min-width: 769px) 25vw, 45vw',
+                        alt: label
+                    }}
+                  {%- endif -%}
+                </span>
+                <span class="pp-home-cat__label">{{ label }}</span>
+              </a>
+            </li>
+          {%- endfor -%}
+          <li class="pp-row__item">
+            <a class="pp-bundle__all" href="{{ parent.url }}">
+              <span class="pp-bundle__all-text">{% render 'pp-i18n', key: see_all_key %}</span>
+              <span class="pp-bundle__all-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+        <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="-1" aria-label="←" disabled>←</button>
+        <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="1" aria-label="→">→</button>
+      </div>
+      {%- assign first_group = false -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% render 'pp-quick-pick' %}
+
+{% stylesheet %}
+  /* Same row, tile size, arrows and "see all" tile as the bestsellers (pp-row in pp-card, pp-bundle__all) */
+  .pp-home-cat {
+    padding-block: 40px 24px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .pp-home-cat__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .pp-home-cat__media {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.05);
+  }
+
+  .pp-home-cat__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .pp-home-cat__tile:hover .pp-home-cat__media img {
+    transform: scale(1.04);
+  }
+
+  .pp-home-cat__label {
+    overflow: hidden;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-home-cat {
+      padding-block: 28px 16px;
+    }
+
+    .pp-home-cat__label {
+      font-size: 0.875rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Home categories",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Categories come from the menu: each top-level collection link with sub items (e.g. Kobiety, Mężczyźni) becomes a switch, its collection sub items become the tiles, in menu order. Tiles use the collection image, or the first product photo when the collection has no image."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Home categories"
+    }
+  ]
+}
+{% endschema %}
