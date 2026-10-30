@@ -2,19 +2,20 @@
   Red Black Friday ribbon across the top-left corner of a product photo.
   Cards show "BLACK FRIDAY" (the percentage already sits next to the price);
   the product page adds the product's own discount, e.g. "BLACK FRIDAY · -50%".
-  Hides itself after the end of the sale, so nothing has to be removed by hand.
+  Hides itself after the end of the sale (snippets/pp-bf-active), so nothing has to be removed by hand.
 
   @param {object} product - The product
   @param {string} [size] - 'card' (default) or 'page'
 {%- enddoc -%}
 
 {%- liquid
-  # End of the sale: 1 December 2026, 00:00 Italian time (30 Nov 23:00 UTC)
-  assign bf_end = 1796079600
-  assign now = 'now' | date: '%s' | plus: 0
+  capture bf_on
+    render 'pp-bf-active'
+  endcapture
+  assign bf_on = bf_on | strip
   assign size = size | default: 'card'
 
-  if now < bf_end
+  if bf_on == '1'
     assign text = 'BLACK FRIDAY'
     if size == 'page'
       assign v = product.selected_or_first_available_variant
@@ -27,7 +28,7 @@
   endif
 -%}
 
-{%- if now < bf_end -%}
+{%- if bf_on == '1' -%}
   <span class="pp-bf-ribbon pp-bf-ribbon--{{ size }}" aria-hidden="true"><span>{{ text }}</span></span>
 {%- endif -%}
 

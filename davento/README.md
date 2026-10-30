@@ -143,3 +143,9 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   ("BLACK FRIDAY · -50%"; only "BLACK FRIDAY" when there is no compare-at price). Sizes: card 96px corner (72px mobile),
   product page 180px (140px mobile). Hides itself from 1 Dec 2026 00:00 Italian time (bf_end in the snippet).
   Not on the image files, so the Google Shopping images stay clean. Category tiles have no ribbon.
+- Trust bar option C everywhere pp-trust is used (home + product page): sections/pp-trust.liquid shows a red tape that
+  slowly scrolls (60s loop, pauses on hover, still for reduced motion) with "BLACK FRIDAY · <offer> · <free shipping> ·
+  <returns> · <secure payments>" in the visitor's language, plus a compact icon + title row (subtitles hidden).
+  Offer text setting "bf_offer" (upto/flat) in the section. snippets/pp-bf-active.liquid holds the one end date
+  (1 Dec 2026 00:00 Italian time) for ribbon and tape; afterwards the normal trust bar returns by itself.
+  Checked IT, /de-de, /en-gb on mobile + desktop, home and product page.
