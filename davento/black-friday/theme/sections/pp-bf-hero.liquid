@@ -60,9 +60,12 @@
 
 {% style %}
   {{ ss.heading_font | font_face: font_display: 'swap' }}
+  #shopify-section-{{ section.id }} .pp-bf {
+    --pp-bf-font: {{ ss.heading_font.family }}, {{ ss.heading_font.fallback_families }};
+  }
 {% endstyle %}
 
-<div class="pp-bf" style="--pp-bf-font: {{ ss.heading_font.family }}, {{ ss.heading_font.fallback_families }};">
+<div class="pp-bf">
   <div class="pp-bf__tapes" aria-hidden="true">
     <span class="pp-bf__tape pp-bf__tape--1">{% for i in (1..8) %}{{ tape_red }}{% endfor %}</span>
     <span class="pp-bf__tape pp-bf__tape--2">{% for i in (1..12) %}{{ tape_cream }}{% endfor %}</span>
@@ -155,8 +158,8 @@
     font-family: var(--pp-bf-font);
     font-weight: 400;
     font-size: clamp(64px, 10vw, 150px);
-    line-height: 0.9;
-    letter-spacing: 0.01em;
+    line-height: 0.95;
+    letter-spacing: 0;
     text-transform: uppercase;
   }
 
@@ -293,7 +296,7 @@
       "type": "font_picker",
       "id": "heading_font",
       "label": "Heading font",
-      "default": "anton_n4"
+      "default": "dm_serif_display_n4"
     },
     {
       "type": "collection",

@@ -134,3 +134,6 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   Measured in preview: desktop cat/best/collection/product-page row 341×426, gap 12, arrow on photo centre;
   mobile rows 164×205 at 14px, collection 2 per row at 14px, gap 10. Tablet (750–989): rows 3, collection grid 4 (theme).
   Originals in black-friday/orig/.
+- Hero font Anton → DM Serif Display (user: more classic, same design with tapes). Font variable moved into the
+  {% style %} block (family names with quotes broke the inline style attribute). Checked IT, /de-de, /en-gb mobile + desktop.
+  Seen on /en-gb: main menu says "Woman" / "Man" (should be Women / Men) – menu translation, not changed yet.
