@@ -77,37 +77,12 @@
 
   assign t2 = t2 | replace: '[n]', ss.return_days
 
-  # Black Friday: moving red tape with the offer and the benefits, compact row below (until the sale ends)
+  # Black Friday: compact cream band with red icons and serif titles (until the sale ends)
   capture bf_on
     render 'pp-bf-active'
   endcapture
   assign bf_on = bf_on | strip
-  if bf_on == '1'
-    case lang
-      when 'pl'
-        assign bf_upto = 'Do -50%'
-      when 'nl'
-        assign bf_upto = 'Tot -50%'
-      when 'de'
-        assign bf_upto = 'Bis zu -50%'
-      when 'fr'
-        assign bf_upto = "Jusqu'à -50%"
-      when 'it'
-        assign bf_upto = 'Fino al -50%'
-      when 'es'
-        assign bf_upto = 'Hasta -50%'
-      else
-        assign bf_upto = 'Up to 50% off'
-    endcase
-    if ss.bf_offer == 'flat'
-      if lang == 'en'
-        assign bf_upto = '50% off'
-      else
-        assign bf_upto = '-50%'
-      endif
-    endif
-    assign bf_line = 'Black Friday · ' | append: bf_upto | append: ' · ' | append: t1 | append: ' · ' | append: t2 | append: ' · ' | append: t3 | append: ' · ' | upcase
-  endif
+
   assign email = ss.email | default: shop.email
 
   # Opening hours: 24h clock, English gets am/pm
@@ -140,17 +115,16 @@
   endif
 -%}
 
+{%- if bf_on == '1' -%}
+  {% style %}
+    {{ ss.bf_font | font_face: font_display: 'swap' }}
+    #shopify-section-{{ section.id }} .pp-trust--bf {
+      --pp-trust-bf-font: {{ ss.bf_font.family }}, {{ ss.bf_font.fallback_families }};
+    }
+  {% endstyle %}
+{%- endif -%}
+
 <div class="pp-trust{% if bf_on == '1' %} pp-trust--bf{% endif %}">
-  {%- if bf_on == '1' -%}
-    <div class="pp-trust__tape">
-      <p class="visually-hidden">{{ bf_line }}</p>
-      <div class="pp-trust__tape-track" aria-hidden="true">
-        {%- for i in (1..2) -%}
-          <span class="pp-trust__tape-run">{% for j in (1..3) %}{{ bf_line }}{% endfor %}</span>
-        {%- endfor -%}
-      </div>
-    </div>
-  {%- endif -%}
   <ul class="pp-trust__list" role="list">
     <li class="pp-trust__item" data-pp-reveal style="--pp-delay: 0ms;">
       <svg class="pp-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -263,72 +237,49 @@
     white-space: nowrap;
   }
 
-  /* Black Friday: red tape that slowly moves (stops on hover and for reduced motion), compact row below */
+  /* Black Friday: its own cream band under the hero, red icons, serif titles, one compact row */
   .pp-trust--bf {
-    padding-block: 0 18px;
+    padding-block: 22px;
+    background: #f3efe8;
+    color: #141414;
+    border-block: 0;
   }
 
-  .pp-trust__tape {
-    overflow: hidden;
-    margin-bottom: 18px;
-    background: #c20000;
-    color: #fff;
-  }
-
-  .pp-trust__tape-track {
-    display: flex;
-    width: max-content;
-    animation: pp-trust-tape 60s linear infinite;
-  }
-
-  .pp-trust__tape:hover .pp-trust__tape-track {
-    animation-play-state: paused;
-  }
-
-  .pp-trust__tape-run {
-    display: flex;
-    align-items: center;
-    height: 46px;
-    padding-left: 0.5em;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    white-space: pre;
-  }
-
-  @keyframes pp-trust-tape {
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .pp-trust__tape-track {
-      animation: none;
-    }
+  .pp-trust--bf .pp-trust__list {
+    max-width: 1320px;
+    gap: 0;
   }
 
   .pp-trust--bf .pp-trust__item {
     flex-direction: row;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
+    padding-inline: 16px;
+  }
+
+  .pp-trust--bf .pp-trust__item + .pp-trust__item {
+    border-left: 1px solid #ddd5c9;
   }
 
   .pp-trust--bf .pp-trust__item-link {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
   }
 
   .pp-trust--bf .pp-trust__icon {
     flex: none;
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     margin: 0;
+    color: #c20000;
+    stroke-width: 1.6;
   }
 
   .pp-trust--bf .pp-trust__title {
-    font-size: 0.8125rem;
+    font-family: var(--pp-trust-bf-font);
+    font-size: 1.0625rem;
+    font-weight: 400;
     text-transform: none;
     letter-spacing: 0;
   }
@@ -343,28 +294,35 @@
     }
 
     .pp-trust--bf {
-      padding-block: 0 16px;
-    }
-
-    .pp-trust__tape {
-      margin-bottom: 16px;
-    }
-
-    .pp-trust__tape-run {
-      height: 38px;
-      font-size: 11px;
+      padding-block: 18px;
     }
 
     .pp-trust--bf .pp-trust__list {
-      gap: 14px 8px;
+      gap: 16px 0;
     }
 
     .pp-trust--bf .pp-trust__item {
       justify-content: flex-start;
+      gap: 10px;
+      padding-inline: 10px;
+    }
+
+    .pp-trust--bf .pp-trust__item + .pp-trust__item {
+      border-left: 0;
+    }
+
+    .pp-trust--bf .pp-trust__item:nth-child(even) {
+      border-left: 1px solid #ddd5c9;
+    }
+
+    .pp-trust--bf .pp-trust__icon {
+      width: 22px;
+      height: 22px;
     }
 
     .pp-trust--bf .pp-trust__title {
-      font-size: 0.75rem;
+      font-size: 0.9375rem;
+      text-align: left;
     }
 
     .pp-trust__list {
@@ -442,14 +400,10 @@
       "content": "Black Friday (shown until 1 December)"
     },
     {
-      "type": "select",
-      "id": "bf_offer",
-      "label": "Offer text in the red tape",
-      "options": [
-        { "value": "upto", "label": "Up to -50%" },
-        { "value": "flat", "label": "-50%" }
-      ],
-      "default": "upto"
+      "type": "font_picker",
+      "id": "bf_font",
+      "label": "Title font (Black Friday band)",
+      "default": "dm_serif_display_n4"
     }
   ],
   "presets": [

@@ -149,3 +149,9 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   Offer text setting "bf_offer" (upto/flat) in the section. snippets/pp-bf-active.liquid holds the one end date
   (1 Dec 2026 00:00 Italian time) for ribbon and tape; afterwards the normal trust bar returns by itself.
   Checked IT, /de-de, /en-gb on mobile + desktop, home and product page.
+- Trust bar changed to option B look (user: no moving tape, "too busy"; size/layout of the compact row, a bit more
+  spread out; own section apart from the hero): cream #f3efe8 band, red icons, titles in DM Serif Display (font picker
+  "bf_font" in the section), thin #ddd5c9 separators, 1320px wide row; mobile 2×2 with left-aligned titles. Tape markup,
+  CSS and the "bf_offer" setting removed. Hero bottom ribbons lifted (desktop 64/84px, mobile 22px) so a dark strip
+  separates the hero from the cream band. Still only until 1 Dec (pp-bf-active), then the normal trust bar.
+  Seen: /de-de menu tabs say "Frau / Mann" (should be Damen / Herren), /en-gb "Woman / Man" – menu translations.
