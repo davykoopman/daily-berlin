@@ -1,0 +1,233 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign title = 'Bestsellery'
+    when 'nl'
+      assign title = 'Bestsellers'
+    when 'de'
+      assign title = 'Bestseller'
+    when 'fr'
+      assign title = 'Meilleures ventes'
+    when 'it'
+      assign title = 'Più venduti'
+    when 'es'
+      assign title = 'Más vendidos'
+    else
+      assign title = 'Bestsellers'
+  endcase
+
+  # Groups come from the menu (same as the categories section): every top-level
+  # collection link with sub items, in menu order. Products follow the sort order
+  # of the group collection (set it to Best selling).
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+
+  capture styles
+    echo '--pp-row-columns: ' | append: ss.columns | append: '; --pp-row-gap: ' | append: ss.columns_gap | append: 'px;'
+  endcapture
+-%}
+
+<div
+  class="pp-bundle pp-home-best"
+  style="--pp-pad-top: {{ ss.padding_top }}px; --pp-pad-bottom: {{ ss.padding_bottom }}px; {{ styles }}"
+  data-pp-gender-root
+>
+  <div class="amz-pw">
+  <div class="pp-home-best__head">
+    <div class="pp-home__head">
+      <h2 class="pp-home__title">{{ title }}</h2>
+      {% render 'pp-gender-tabs', menu: menu, label: title %}
+    </div>
+    {%- if ss.show_tiers -%}
+      {% render 'pp-tier-progress', tiers: ss.tiers %}
+    {%- endif -%}
+  </div>
+
+  {%- liquid
+    assign first_group = true
+    assign root = routes.root_url
+    if root == '/'
+      assign root = ''
+    endif
+  -%}
+  {%- for group in menu.links -%}
+    {%- if group.type != 'collection_link' or group.links.size == 0 -%}{%- continue -%}{%- endif -%}
+    {%- assign source = group.object -%}
+    <div
+      class="pp-row pp-home-best__panel"
+      role="tabpanel"
+      data-pp-row
+      data-pp-panel="{{ source.handle }}"
+      {% unless first_group %}
+        hidden
+        data-pp-lazy="{{ root }}/collections/{{ source.handle }}?section_id=pp-best-panel"
+      {% endunless %}
+    >
+      {%- if first_group -%}
+        {% render 'pp-best-items', source: source, max: ss.max_products %}
+      {%- else -%}
+        <ul class="pp-row__track" role="list"></ul>
+      {%- endif -%}
+      <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="-1" aria-label="←" disabled>←</button>
+      <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="1" aria-label="→">→</button>
+    </div>
+    {%- assign first_group = false -%}
+  {%- endfor -%}
+  </div>
+  {% render 'pp-quick-pick' %}
+</div>
+
+<script>
+  // Other groups load in the background after the page (Section Rendering API),
+  // or right away when the visitor picks that group first.
+  (function () {
+    if (window.ppBestLazy) return;
+    window.ppBestLazy = true;
+    var load = function (panel) {
+      if (!panel || !panel.dataset.ppLazy || panel.ppLoading) return;
+      panel.ppLoading = true;
+      fetch(panel.dataset.ppLazy, { credentials: 'same-origin' })
+        .then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var track = doc.querySelector('.pp-row__track');
+          if (!track) return;
+          panel.querySelector('.pp-row__track').replaceWith(track);
+          delete panel.dataset.ppLazy;
+          window.dispatchEvent(new Event('resize'));
+        })
+        .catch(function () { panel.ppLoading = false; });
+    };
+    var loadAll = function () { document.querySelectorAll('[data-pp-lazy]').forEach(load); };
+    document.addEventListener('click', function (e) {
+      var tab = e.target.closest('[data-pp-tab]');
+      if (tab) load(document.querySelector('[data-pp-lazy][data-pp-panel="' + tab.dataset.ppTab + '"]'));
+    }, true);
+    var idle = window.requestIdleCallback || function (fn) { setTimeout(fn, 1200); };
+    // A group remembered from an earlier page in this visit is needed right away
+    var start = function () {
+      var wanted = null;
+      try { wanted = sessionStorage.getItem('pp-gender'); } catch (e) {}
+      if (wanted) load(document.querySelector('[data-pp-lazy][data-pp-panel="' + wanted + '"]'));
+      idle(loadAll);
+    };
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start);
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-home-best__head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+
+  .pp-home-best__head .pp-home__head {
+    margin-bottom: 0;
+  }
+
+  /* Home page flow (like Niaali): no theme gaps, soft background on "about us" */
+  body.template-index .shopify-section > .amz-isec {
+    margin: 0;
+    padding-block: 48px;
+    background: #f5f5f5;
+  }
+
+  @media screen and (max-width: 768px) {
+    body.template-index .shopify-section > .amz-isec {
+      padding-block: 6px 36px;
+    }
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Home bestsellers",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Best selling products per menu group (e.g. Kobiety, Mężczyźni) with a switch. Groups are the top-level collection links with sub items in the menu. Products follow the collection sort order (set the collections to Best selling)."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tiers",
+      "label": "Show bundle progress bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tiers",
+      "label": "Bundle tiers (quantity:percent)",
+      "default": "2:10,3:15,4:20"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Products",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Home bestsellers"
+    }
+  ]
+}
+{% endschema %}

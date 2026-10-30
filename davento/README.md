@@ -159,3 +159,14 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   hero cream ribbons mirror the red ones (same length, leave the hero at the bottom edge); trust bar during Black
   Friday = own white section with four equal cream cards (14px radius, 16px gap desktop / 10px mobile, 2×2),
   cards rise in on load one after the other and each icon pops once (no scroll reveal; still for reduced motion).
+- Colours: 4-colour palette (user: max 3–4 colours, buttons black). One place: the :root block in snippets/pp-card.liquid
+  (--pp-ink #1c1d1d, --pp-white, --pp-cream #f3efe8, --pp-red #c20000; also maps --color-foreground(-rgb/-heading),
+  --color-background that the pp files use). All pp sections/snippets point to these: #030302 / #000 / #111 / #141414
+  → ink, rgb(3 3 2 / .76) → ink 70%, #f5f5f5 / #f3f3f3 / grey image placeholders / "see all" tiles → cream,
+  rgb(194 0 0) / #c20000 → red, black borders → ink 12%; hero = one ink with a soft light centre, kicker/sub in cream.
+  Theme settings (config/settings_data.json): body/header/drawer/footer text, announcement, large image bg, footer,
+  drawer button, compare/current price → #1c1d1d; borders → #e4e4e4; sale colours #c20000; broken custom CSS
+  ".product__price.on-sale {color: #11b96f;" → ".product__price.on-sale{color:#c20000}".
+  templates/product.json price block: sale price red #c20000 (like the cards), compare and regular price ink.
+  Checked in preview (home, collection, product page): only ink, white, cream, red (+ ink transparencies) remain;
+  Apex's selected size button (#292929) is theme CSS and left as is. Originals in black-friday/orig/.

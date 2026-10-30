@@ -1,0 +1,17 @@
+config/settings_data.json
+sections/pp-bf-hero.liquid
+sections/pp-bundle.liquid
+sections/pp-collection-head.liquid
+sections/pp-faq.liquid
+sections/pp-home-best.liquid
+sections/pp-home-categories.liquid
+sections/pp-steps.liquid
+sections/pp-trust.liquid
+snippets/cart-item.liquid
+snippets/collection-grid.liquid
+snippets/pp-bf-ribbon.liquid
+snippets/pp-card.liquid
+snippets/pp-gender-tabs.liquid
+snippets/pp-product-info.liquid
+snippets/pp-quick-pick.liquid
+snippets/pp-tier-progress.liquid

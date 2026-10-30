@@ -153,12 +153,20 @@
 </div>
 
 {% stylesheet %}
-  /* Davento (Apex theme): map the theme colours to the variables the pp kit uses */
+  /* Davento palette: four colours, each with one job. Every pp section and snippet uses these.
+     Ink = all text, buttons, header, hero; white = page; cream = every soft surface; red = only discount / Black Friday.
+     Lighter text and borders are ink with transparency, never a new tint. */
   :root {
-    --color-foreground: var(--colorTextBody, #000);
-    --color-foreground-heading: var(--colorTextBody, #000);
-    --color-background: var(--colorBody, #fff);
-    --color-foreground-rgb: 0 0 0;
+    --pp-ink: #1c1d1d;
+    --pp-ink-rgb: 28 29 29;
+    --pp-white: #ffffff;
+    --pp-cream: #f3efe8;
+    --pp-red: #c20000;
+
+    --color-foreground: var(--pp-ink);
+    --color-foreground-heading: var(--pp-ink);
+    --color-background: var(--pp-white);
+    --color-foreground-rgb: var(--pp-ink-rgb);
   }
 
   .grid__item:has(> .pp-card) {
@@ -182,7 +190,7 @@
     position: relative;
     overflow: hidden;
     aspect-ratio: 4 / 5;
-    background-color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.05);
+    background-color: var(--pp-cream);
   }
 
   .pp-card__link {
@@ -221,10 +229,10 @@
     gap: 6px;
     height: 40px;
     padding: 0 14px 0 10px;
-    border: 1px solid rgb(0 0 0 / 0.12);
+    border: 1px solid rgb(var(--pp-ink-rgb) / 0.12);
     border-radius: 999px;
     background: rgb(255 255 255 / 0.92);
-    color: #030302;
+    color: var(--pp-ink);
     font: inherit;
     font-size: 0.875rem;
     line-height: 1;
@@ -271,7 +279,7 @@
     width: 28px;
     height: 28px;
     padding: 0;
-    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+    border: 1px solid rgb(var(--pp-ink-rgb) / 0.12);
     background: #fff;
     cursor: pointer;
   }
@@ -284,7 +292,7 @@
   }
 
   .pp-card__swatch.is-active {
-    border-color: var(--color-foreground-heading, #030302);
+    border-color: var(--pp-ink);
   }
 
   .pp-card__more {
@@ -294,7 +302,7 @@
 
   .pp-card__title {
     overflow: hidden;
-    color: rgb(3 3 2 / 0.76);
+    color: rgb(var(--pp-ink-rgb) / 0.7);
     font-size: 14px;
     line-height: 1.4;
     white-space: nowrap;
@@ -318,18 +326,18 @@
   }
 
   .pp-card__now--sale {
-    color: rgb(194 0 0);
+    color: var(--pp-red);
   }
 
   .pp-card__was {
-    color: rgb(3 3 2 / 0.76);
+    color: rgb(var(--pp-ink-rgb) / 0.7);
   }
 
   .pp-card__badge {
     margin-left: 2px;
     padding: 2px 6px;
     border-radius: 4px;
-    background: rgb(194 0 0);
+    background: var(--pp-red);
     color: #fff;
     font-size: 12px;
     font-weight: 600;
@@ -433,10 +441,10 @@
     justify-content: center;
     width: 44px;
     height: 44px;
-    border: 1px solid rgb(0 0 0 / 0.12);
+    border: 1px solid rgb(var(--pp-ink-rgb) / 0.12);
     border-radius: 50%;
     background: #fff;
-    color: #030302;
+    color: var(--pp-ink);
     font-size: 1.125rem;
     line-height: 1;
     box-shadow: 0 2px 10px rgb(0 0 0 / 0.08);
