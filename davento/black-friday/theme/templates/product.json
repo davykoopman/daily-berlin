@@ -95,6 +95,7 @@
         },
         "pp_delivery": {
           "type": "custom",
+          "disabled": true,
           "settings": {
             "code": "{% render 'pp-delivery', dispatch_days: '1–2' %}"
           }
@@ -110,13 +111,29 @@
           "settings": {
             "code": "{% render 'pp-product-info', product: product, email: 'support@davento.it', return_days: 60, dispatch_days: '1–2', refund_days: 7, tiers: '2:10,3:15,4:20' %}"
           }
+        },
+        "pp_rating": {
+          "type": "custom",
+          "disabled": true,
+          "settings": {
+            "code": "{% render 'pp-rating', product: product, source: 'app', manual_rating: 4.7, manual_count: 2000 %}"
+          }
+        },
+        "pp_stock": {
+          "type": "custom",
+          "disabled": true,
+          "settings": {
+            "code": "{% render 'pp-stock', product: product, threshold: 5 %}"
+          }
         }
       },
       "block_order": [
+        "pp_rating",
         "price_FpNmac",
         "pp_benefits",
         "variant_picker_Ud4caN",
         "pp_size_guide",
+        "pp_stock",
         "buy_buttons",
         "pp_delivery",
         "pp_payment",

@@ -170,3 +170,22 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   templates/product.json price block: sale price red #c20000 (like the cards), compare and regular price ink.
   Checked in preview (home, collection, product page): only ink, white, cream, red (+ ink transparencies) remain;
   Apex's selected size button (#292929) is theme CSS and left as is. Originals in black-friday/orig/.
+- NewMae-style blocks, all OFF in templates/product.json (switch on per block in the theme editor):
+  pp_rating (snippets/pp-rating.liquid, first block): stars + "4.7/5 · Valutato da oltre 2.000 clienti soddisfatti"
+  per language. source 'app' reads the reviews.rating / rating_count metafields (none exist now, so it shows
+  nothing); source 'manual' uses manual_rating / manual_count – only with real numbers (no fake social proof).
+  pp_stock (snippets/pp-stock.liquid, above buy buttons): pulsing dot + "Disponibile, pronto per la spedizione"
+  + note; low-stock text only from real Shopify stock ≤ threshold 5; follows the variant. Tested with a temporary
+  template templates/product.pp-test.json (IT desktop, DE + EN mobile). The API may not delete theme files:
+  delete that template in the admin (Edit code) – it is only reachable with ?view=pp-test.
+- Cart drawer (snippets/cart-drawer.liquid, Apex original in orig/): "Completa il tuo look" add-on row
+  (snippets/pp-cart-upsell.liquid: donna/uomo pool picked from the cart, hides products already in the cart,
+  + opens the quick pick) and 3 perks under it (snippets/pp-cart-perks.liquid: free shipping · 60-day returns ·
+  secure checkout). JSON for the quick pick moved to snippets/pp-card-data.liquid.
+- Checkout text "oppure paga in modo sicuro qui sotto" (shopify.checkout.alternative_payment_method_banner.or)
+  → "Solo il 3% ha usato la nostra garanzia soddisfatti o rimborsati" (it/de/en/fr locales). 3% not 2%: refunds
+  are 54 of 1,940 orders = 2.8%. Applies once this theme is published.
+- Product page tighter: thumbnails hidden, the theme's slider dots shown on the photo (desktop + mobile) with
+  hover arrows on desktop (snippets/pp-gallery-nav.liquid, rendered in product-images.liquid); "Spedito entro
+  1–2 giorni lavorativi" block (pp_delivery) disabled; block spacing 25px → 16px (title 10px), variant label
+  spacing smaller. pp-rating: no "+" after "oltre / über / plus de".

@@ -1,0 +1,150 @@
+{%- doc -%}
+  Stock line above the add to cart button, with a pulsing dot. Same as on NewMae, texts in
+  the visitor's language.
+  - Real stock at or below the threshold (inventory tracked by Shopify): "Only 3 left".
+  - Otherwise, when the variant can be bought: the in stock text.
+  - Sold out: nothing (the button already says sold out).
+  Exact stock numbers above the threshold are never put in the page.
+  Follows the variant picker through Apex's variant:change event.
+  The block is added disabled in templates/product.json.
+
+  @param {object} product - The product
+  @param {number} [threshold] - Low stock threshold, default 5
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign v = product.selected_or_first_available_variant
+  assign threshold = threshold | default: 5 | times: 1
+
+  case lang
+    when 'it'
+      assign in_text = 'Disponibile, pronto per la spedizione'
+      assign low_text = 'Ultimi pezzi: solo [n] disponibili'
+      assign note = 'I modelli più richiesti vanno a ruba. Se riesci ad aggiungerlo al carrello, è ancora disponibile.'
+    when 'de'
+      assign in_text = 'Auf Lager, versandbereit'
+      assign low_text = 'Nur noch [n] auf Lager'
+      assign note = 'Beliebte Modelle sind schnell vergriffen. Wenn du es in den Warenkorb legen kannst, ist es noch verfügbar.'
+    when 'fr'
+      assign in_text = 'En stock, prêt à être expédié'
+      assign low_text = 'Plus que [n] en stock'
+      assign note = "Les modèles populaires partent vite. Si vous pouvez l'ajouter au panier, il est encore disponible."
+    else
+      assign in_text = 'In stock, ready to ship'
+      assign low_text = 'Low in stock: only [n] left'
+      assign note = "Popular styles sell out fast. If you can add it to your cart, it's still available."
+  endcase
+-%}
+
+<div class="pp-stock" data-pp-stock>
+  <p class="pp-stock__line" data-pp-stock-line{% unless v.available %} hidden{% endunless %}>
+    <span class="pp-stock__dot" aria-hidden="true"></span>
+    <span data-pp-stock-text>
+      {%- if v.inventory_management == 'shopify' and v.inventory_quantity > 0 and v.inventory_quantity <= threshold -%}
+        {{ low_text | replace: '[n]', v.inventory_quantity }}
+      {%- else -%}
+        {{ in_text }}
+      {%- endif -%}
+    </span>
+  </p>
+  <p class="pp-stock__note">{{ note }}</p>
+  <script type="application/json" data-pp-stock-data>
+    {
+      "low": {{ low_text | json }},
+      "in": {{ in_text | json }},
+      "v": {
+        {%- for x in product.variants -%}
+          {%- liquid
+            assign q = 'null'
+            if x.inventory_management == 'shopify' and x.inventory_quantity > 0 and x.inventory_quantity <= threshold
+              assign q = x.inventory_quantity
+            endif
+          -%}
+          "{{ x.id }}": [{% if x.available %}1{% else %}0{% endif %},{{ q }}]{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      }
+    }
+  </script>
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-pp-stock]:not([data-ready])');
+    if (!root) return;
+    root.setAttribute('data-ready', '');
+    var data = JSON.parse(root.querySelector('[data-pp-stock-data]').textContent);
+    var line = root.querySelector('[data-pp-stock-line]');
+    var text = root.querySelector('[data-pp-stock-text]');
+    document.addEventListener('variant:change', function (e) {
+      var variant = e.detail && e.detail.variant;
+      var d = variant && data.v[String(variant.id)];
+      if (!d) return;
+      line.hidden = !d[0];
+      text.textContent = d[1] ? data.low.replace('[n]', d[1]) : data.in;
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-stock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    margin-bottom: 14px;
+  }
+
+  .pp-stock p {
+    margin: 0;
+  }
+
+  .pp-stock__line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--pp-ink);
+  }
+
+  .pp-stock__line[hidden] {
+    display: none;
+  }
+
+  .pp-stock__dot {
+    position: relative;
+    flex: 0 0 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--pp-red);
+  }
+
+  .pp-stock__dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--pp-red);
+    animation: pp-stock-pulse 1.6s ease-out infinite;
+  }
+
+  @keyframes pp-stock-pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-stock__dot::after {
+      animation: none;
+    }
+  }
+
+  .pp-stock__note {
+    font-size: 13px;
+    line-height: 1.4;
+    color: rgb(var(--pp-ink-rgb) / 0.7);
+  }
+{% endstylesheet %}

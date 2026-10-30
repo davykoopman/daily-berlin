@@ -1,0 +1,144 @@
+{%- doc -%}
+  Star rating line on the product page, e.g. "★★★★★ 4.7/5 · Rated by 2,000+ happy customers".
+  Same as on NewMae, texts in the visitor's language.
+
+  Source 'app' (default): reads the standard product metafields reviews.rating and
+  reviews.rating_count that review apps (Judge.me, Okendo, Loox, Shopify Product Reviews) fill in.
+  Nothing shows when a product has no reviews yet.
+  Source 'manual': shows rating and count from the parameters. Only use it when the numbers
+  are true (EU Omnibus rules on reviews, Google Merchant Center misrepresentation).
+
+  The block is added disabled in templates/product.json, so it never shows until it is switched on.
+
+  @param {object} product - The product
+  @param {string} [source] - 'app' (default) or 'manual'
+  @param {number} [manual_rating] - e.g. 4.7
+  @param {number} [manual_count] - e.g. 2000, shown as "2,000+"
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign source = source | default: 'app'
+  assign rating = 0
+  assign count = 0
+
+  if source == 'manual'
+    assign rating = manual_rating | default: 0 | times: 1.0
+    assign count = manual_count | default: 0
+    assign plus = '+'
+  else
+    assign r = product.metafields.reviews.rating.value
+    if r != blank
+      assign rating = r.rating | times: 1.0
+      assign scale = r.scale_max | default: 5 | times: 1.0
+      if scale != 5
+        assign rating = rating | divided_by: scale | times: 5
+      endif
+    endif
+    assign count = product.metafields.reviews.rating_count.value | default: 0
+    assign plus = ''
+  endif
+
+  # Count with the thousands separator of the language
+  assign n = count | times: 1 | append: ''
+  if count >= 1000
+    assign th = count | divided_by: 1000
+    assign rest = count | modulo: 1000 | prepend: '00' | slice: -3, 3
+    case lang
+      when 'it', 'de'
+        assign n = th | append: '.' | append: rest
+      when 'fr'
+        assign n = th | append: ' ' | append: rest
+      else
+        assign n = th | append: ',' | append: rest
+    endcase
+  endif
+  assign n = n | append: plus
+
+  case lang
+    when 'it'
+      assign text = 'Valutato da oltre [n] clienti soddisfatti'
+      assign app_text = '[n] recensioni'
+      assign of5 = 'su 5 stelle'
+    when 'de'
+      assign text = 'Bewertet von über [n] zufriedenen Kunden'
+      assign app_text = '[n] Bewertungen'
+      assign of5 = 'von 5 Sternen'
+    when 'fr'
+      assign text = 'Noté par plus de [n] clients satisfaits'
+      assign app_text = '[n] avis'
+      assign of5 = 'sur 5 étoiles'
+    else
+      assign text = 'Rated by [n] happy customers'
+      assign app_text = '[n] reviews'
+      assign of5 = 'out of 5 stars'
+  endcase
+  if source != 'manual'
+    assign text = app_text
+  endif
+  # "oltre / über / plus de" already says "more than": no + there
+  if lang == 'it' or lang == 'de' or lang == 'fr'
+    assign n = n | remove: '+'
+  endif
+  assign text = text | replace: '[n]', n
+
+  assign fill = rating | divided_by: 5.0 | times: 100 | round: 1
+  assign rating_label = rating | round: 1
+-%}
+
+{%- if rating > 0 -%}
+  <div class="pp-rating">
+    <span class="pp-rating__stars" style="--pp-fill: {{ fill }}%;" role="img" aria-label="{{ rating_label }} {{ of5 }}">
+      <span class="pp-rating__base" aria-hidden="true">★★★★★</span>
+      <span class="pp-rating__top" aria-hidden="true">★★★★★</span>
+    </span>
+    <span class="pp-rating__value">{{ rating_label }}/5</span>
+    {%- if count > 0 -%}
+      <span class="pp-rating__dot" aria-hidden="true">·</span>
+      <span class="pp-rating__text">{{ text }}</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-rating {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 6px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--pp-ink);
+  }
+
+  .pp-rating__stars {
+    position: relative;
+    display: inline-block;
+    font-size: 15px;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  .pp-rating__base {
+    color: rgb(var(--pp-ink-rgb) / 0.2);
+  }
+
+  .pp-rating__top {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--pp-fill);
+    overflow: hidden;
+    color: var(--pp-ink);
+    white-space: nowrap;
+  }
+
+  .pp-rating__value {
+    font-weight: 700;
+  }
+
+  .pp-rating__dot,
+  .pp-rating__text {
+    color: rgb(var(--pp-ink-rgb) / 0.7);
+  }
+{% endstylesheet %}

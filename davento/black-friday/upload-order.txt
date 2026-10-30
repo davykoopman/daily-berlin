@@ -1,0 +1,12 @@
+snippets/pp-card-data.liquid
+snippets/pp-card.liquid
+snippets/pp-rating.liquid
+snippets/pp-stock.liquid
+snippets/pp-cart-upsell.liquid
+snippets/pp-cart-perks.liquid
+snippets/cart-drawer.liquid
+templates/product.json
+locales/it.json
+locales/de.json
+locales/en.default.json
+locales/fr.json

@@ -1,0 +1,239 @@
+{%- doc -%}
+  "Complete your look" row in the cart drawer: compact rows (photo, title, price, "+ Add") from the
+  bestsellers of the women's or men's collection, chosen by what is in the cart (product type starts
+  with "Mens" → men). Products already in the cart are left out. "+ Add" opens the pp quick pick
+  sheet (size / colour), which adds without leaving the cart. The drawer is built once per page by
+  Apex, so the row updates itself in the browser after every cart change.
+
+  @param {string} [women] - Collection handle, default 'donna'
+  @param {string} [men] - Collection handle, default 'uomo'
+  @param {number} [max] - Products per collection, default 8
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign max = max | default: 8
+  assign w = women | default: 'donna'
+  assign m = men | default: 'uomo'
+  assign pools = w | append: ',' | append: m | split: ','
+
+  case lang
+    when 'it'
+      assign title = 'Completa il tuo look'
+      assign add = 'Aggiungi'
+    when 'de'
+      assign title = 'Vervollständige deinen Look'
+      assign add = 'Hinzufügen'
+    when 'fr'
+      assign title = 'Complétez votre look'
+      assign add = 'Ajouter'
+    else
+      assign title = 'Complete your look'
+      assign add = 'Add'
+  endcase
+-%}
+
+<div class="pp-cu" data-pp-cu hidden>
+  <p class="pp-cu__title">{{ title }}</p>
+  {%- for handle in pools -%}
+    {%- assign col = collections[handle] -%}
+    {%- if col == blank -%}{%- continue -%}{%- endif -%}
+    <div class="pp-cu__row" data-pp-cu-pool="{{ forloop.index0 }}" hidden>
+      {%- assign shown = 0 -%}
+      {%- for p in col.products -%}
+        {%- if p.available == false -%}{%- continue -%}{%- endif -%}
+        {%- if shown >= max -%}{%- break -%}{%- endif -%}
+        {%- liquid
+          assign shown = shown | plus: 1
+          assign v = p.selected_or_first_available_variant
+          assign img = p.featured_media.preview_image | default: p.featured_image
+          assign ci = -1
+          for option in p.options_with_values
+            assign on = option.name | downcase
+            if on contains 'color' or on contains 'colour' or on contains 'colore' or on contains 'farbe' or on contains 'couleur' or on contains 'kleur' or on contains 'kolor'
+              assign ci = forloop.index0
+              break
+            endif
+          endfor
+          assign cmp = v.compare_at_price | default: 0
+        -%}
+        <div class="pp-cu__item" data-pp-card data-pp-cu-product="{{ p.id }}">
+          <a class="pp-cu__img" href="{{ p.url }}" tabindex="-1" aria-hidden="true">
+            {%- if img != blank -%}
+              {{ img | image_url: width: 160 | image_tag: loading: 'lazy', width: 64, height: 80, alt: '' }}
+            {%- endif -%}
+          </a>
+          <div class="pp-cu__body">
+            <a class="pp-cu__name" href="{{ p.url }}" data-pp-card-link>{{ p.title }}</a>
+            <div class="pp-cu__price">
+              <span class="pp-cu__now{% if cmp > v.price %} pp-cu__now--sale{% endif %}">{{ v.price | money }}</span>
+              {%- if cmp > v.price -%}<s class="pp-cu__was">{{ cmp | money }}</s>{%- endif -%}
+            </div>
+            <button type="button" class="pp-cu__add" data-pp-quick aria-haspopup="dialog" aria-label="{{ add }}: {{ p.title | escape }}">+ {{ add }}</button>
+          </div>
+          {% render 'pp-card-data', product: p, variant: v, image: img, colour_index: ci %}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endfor -%}
+</div>
+
+<script>
+  (function () {
+    if (window.ppCartUpsell) return;
+    window.ppCartUpsell = true;
+    var cartUrl = (window.apx && apx.routes && apx.routes.cart) || '/cart.js';
+    var refresh = function () {
+      var box = document.querySelector('[data-pp-cu]');
+      if (!box) return;
+      fetch(cartUrl, { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (cart) {
+          var items = cart.items || [];
+          if (!items.length) { box.hidden = true; return; }
+          var men = items.filter(function (i) { return /^mens?\b/i.test(i.product_type || ''); }).length;
+          var pool = men * 2 > items.length ? '1' : '0';
+          var inCart = items.map(function (i) { return String(i.product_id); });
+          var any = false;
+          box.querySelectorAll('[data-pp-cu-pool]').forEach(function (row) {
+            var on = row.dataset.ppCuPool === pool;
+            row.hidden = !on;
+            if (!on) return;
+            row.querySelectorAll('[data-pp-cu-product]').forEach(function (item) {
+              var hide = inCart.indexOf(item.dataset.ppCuProduct) > -1;
+              item.hidden = hide;
+              if (!hide) any = true;
+            });
+          });
+          box.hidden = !any;
+        })
+        .catch(function () {});
+    };
+    document.addEventListener('cart:updated', refresh);
+    document.addEventListener('drawerOpen', function () { setTimeout(refresh, 50); });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', refresh);
+    else refresh();
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-cu {
+    margin: 18px 0 6px;
+    padding-top: 16px;
+    border-top: 1px solid rgb(var(--pp-ink-rgb) / 0.12);
+  }
+
+  .pp-cu[hidden],
+  .pp-cu__row[hidden],
+  .pp-cu__item[hidden] {
+    display: none;
+  }
+
+  .pp-cu__title {
+    margin: 0 0 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pp-ink);
+  }
+
+  .pp-cu__row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 10px) / 2);
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .pp-cu__row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pp-cu__item {
+    display: flex;
+    gap: 10px;
+    min-width: 0;
+    padding: 8px;
+    border: 1px solid rgb(var(--pp-ink-rgb) / 0.12);
+    border-radius: 10px;
+    background: var(--pp-white);
+    scroll-snap-align: start;
+  }
+
+  .pp-cu__img {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 80px;
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--pp-cream);
+  }
+
+  .pp-cu__img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pp-cu__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .pp-cu__name {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.3;
+    color: var(--pp-ink);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-decoration: none;
+  }
+
+  .pp-cu__price {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .pp-cu__now {
+    font-weight: 700;
+    color: var(--pp-ink);
+  }
+
+  .pp-cu__now--sale {
+    color: var(--pp-red);
+  }
+
+  .pp-cu__was {
+    font-size: 12px;
+    color: rgb(var(--pp-ink-rgb) / 0.7);
+  }
+
+  .pp-cu__add {
+    margin-top: auto;
+    padding: 6px 14px;
+    border: 1px solid var(--pp-ink);
+    border-radius: 999px;
+    background: var(--pp-white);
+    color: var(--pp-ink);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .pp-cu__add:hover {
+    background: var(--pp-ink);
+    color: var(--pp-white);
+  }
+{% endstylesheet %}

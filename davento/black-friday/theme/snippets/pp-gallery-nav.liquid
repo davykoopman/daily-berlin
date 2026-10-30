@@ -1,0 +1,139 @@
+{%- comment -%}
+  Product page gallery: dots instead of thumbnails, on desktop and mobile.
+  The dots (.amz-scroll-dots) come from the theme slider; this snippet shows them
+  on desktop too, lays them over the photo and adds hover arrows on desktop.
+  Rendered inside .product__main-photos (snippets/product-images.liquid).
+{%- endcomment -%}
+{%- if product.media.size > 1 -%}
+  <button type="button" class="pp-gal__arrow pp-gal__arrow--prev" data-pp-gal="-1" aria-label="←">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+  </button>
+  <button type="button" class="pp-gal__arrow pp-gal__arrow--next" data-pp-gal="1" aria-label="→">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+  </button>
+{%- endif -%}
+
+<script>
+  (function () {
+    if (window.ppGalNav) return;
+    window.ppGalNav = true;
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-pp-gal]');
+      if (!b) return;
+      var s = b.closest('.product__main-photos').querySelector('[data-product-photos]');
+      var w = s.clientWidth;
+      var max = s.scrollWidth - w;
+      var next = Math.round(s.scrollLeft / w) * w + +b.dataset.ppGal * w;
+      // Wrap around at the ends
+      if (next > max + 2) next = 0;
+      if (next < -2) next = max;
+      s.scrollTo({ left: next, behavior: 'smooth' });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  /* Thumbnails take room next to the photo: dots over the photo instead */
+  .product__photos .product__thumbs {
+    display: none !important;
+  }
+
+  .product__main-photos {
+    position: relative;
+  }
+
+  .product__main-photos .amz-scroll-dots {
+    display: flex !important;
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    z-index: 3;
+    gap: 6px;
+    margin: 0;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.7);
+    transform: translateX(-50%);
+  }
+
+  .product__main-photos .amz-scroll-dot {
+    width: 7px;
+    height: 7px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(var(--pp-ink-rgb) / 0.3);
+    cursor: pointer;
+    transition: background-color 0.2s ease, width 0.2s ease;
+  }
+
+  .product__main-photos .amz-scroll-dot.is-active {
+    width: 18px;
+    border-radius: 4px;
+    background: var(--pp-ink);
+  }
+
+  .pp-gal__arrow {
+    display: none;
+  }
+
+  @media screen and (min-width: 769px) {
+    .pp-gal__arrow {
+      display: inline-flex;
+      position: absolute;
+      top: 50%;
+      z-index: 3;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgb(255 255 255 / 0.9);
+      color: var(--pp-ink);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(-50%);
+      transition: opacity 0.2s ease;
+    }
+
+    .pp-gal__arrow svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .pp-gal__arrow--prev { left: 12px; }
+    .pp-gal__arrow--next { right: 12px; }
+
+    .product__main-photos:hover .pp-gal__arrow,
+    .pp-gal__arrow:focus-visible {
+      opacity: 1;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .product__main-photos .amz-scroll-dots {
+      bottom: 10px;
+    }
+  }
+
+  /* Product info: tighter, even spacing so everything shows at a glance */
+  .amz-prod__meta .product-block {
+    margin-bottom: 16px;
+  }
+
+  .amz-prod__meta .product-block--header {
+    margin-bottom: 10px;
+  }
+
+  .amz-prod__meta .variant-wrapper + .variant-wrapper {
+    margin-top: 14px;
+  }
+
+  .amz-prod__meta .variant__label {
+    margin-bottom: 8px;
+    letter-spacing: 0.08em;
+  }
+{% endstylesheet %}

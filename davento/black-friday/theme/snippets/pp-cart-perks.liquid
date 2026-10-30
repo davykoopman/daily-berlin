@@ -1,0 +1,77 @@
+{%- doc -%}
+  Three short reassurances above the checkout button in the cart: free shipping, returns, secure checkout.
+
+  @param {number} [return_days] - Return period, default 60
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign days = return_days | default: 60
+  case lang
+    when 'it'
+      assign t1 = 'Spedizione gratuita'
+      assign t2 = 'Reso entro [n] giorni'
+      assign t3 = 'Pagamento sicuro'
+    when 'de'
+      assign t1 = 'Kostenloser Versand'
+      assign t2 = '[n] Tage Rückgabe'
+      assign t3 = 'Sichere Zahlung'
+    when 'fr'
+      assign t1 = 'Livraison offerte'
+      assign t2 = 'Retours sous [n] jours'
+      assign t3 = 'Paiement sécurisé'
+    else
+      assign t1 = 'Free shipping'
+      assign t2 = '[n]-day returns'
+      assign t3 = 'Secure checkout'
+  endcase
+  assign t2 = t2 | replace: '[n]', days
+-%}
+
+<ul class="pp-perks" role="list">
+  <li>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/><circle cx="6.5" cy="17.25" r="1.75"/><circle cx="16.75" cy="17.25" r="1.75"/></svg>
+    {{ t1 }}
+  </li>
+  <li>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/></svg>
+    {{ t2 }}
+  </li>
+  <li>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5M12 14.5v2"/></svg>
+    {{ t3 }}
+  </li>
+</ul>
+
+{% stylesheet %}
+  .pp-perks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 16px;
+    margin: 6px 0 12px;
+    padding: 0;
+    list-style: none;
+    font-size: 12.5px;
+    line-height: 1.3;
+    color: rgb(var(--pp-ink-rgb) / 0.8);
+  }
+
+  .pp-perks li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .pp-perks svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: var(--pp-ink);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+{% endstylesheet %}
