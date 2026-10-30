@@ -127,7 +127,7 @@
           "disabled": true,
           "settings": {
             "title": "",
-            "show_note": true,
+            "show_note": false,
             "note": ""
           }
         }

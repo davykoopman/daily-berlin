@@ -197,3 +197,4 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   zufriedene Kunden"). PP Stock: no stock rule any more (user: "risico op mij") – dot + "Disponibile, pronto per
   la spedizione" + note on every product while on, hidden only on a sold-out variant; own line/note text optional.
   Tested on/off with templates/product.pp-test.json (IT/DE/EN, mobile + desktop).
+- PP Stock: note under the line off (user), setting "Show note" default off; only dot + "Disponibile, pronto per la spedizione".
