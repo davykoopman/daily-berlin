@@ -137,3 +137,9 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
 - Hero font Anton → DM Serif Display (user: more classic, same design with tapes). Font variable moved into the
   {% style %} block (family names with quotes broke the inline style attribute). Checked IT, /de-de, /en-gb mobile + desktop.
   Seen on /en-gb: main menu says "Woman" / "Man" (should be Women / Men) – menu translation, not changed yet.
+- Red Black Friday corner ribbon (user chose A, in red, not too big): snippets/pp-bf-ribbon.liquid, rendered in
+  pp-card (all cards: home bestsellers, collections, search, product page row) with "BLACK FRIDAY" and on the product
+  page photo (snippets/product-images.liquid, inside .product__main-photos) with the product's own discount
+  ("BLACK FRIDAY · -50%"; only "BLACK FRIDAY" when there is no compare-at price). Sizes: card 96px corner (72px mobile),
+  product page 180px (140px mobile). Hides itself from 1 Dec 2026 00:00 Italian time (bf_end in the snippet).
+  Not on the image files, so the Google Shopping images stay clean. Category tiles have no ribbon.

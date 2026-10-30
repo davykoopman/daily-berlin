@@ -1,0 +1,103 @@
+{%- doc -%}
+  Red Black Friday ribbon across the top-left corner of a product photo.
+  Cards show "BLACK FRIDAY" (the percentage already sits next to the price);
+  the product page adds the product's own discount, e.g. "BLACK FRIDAY · -50%".
+  Hides itself after the end of the sale, so nothing has to be removed by hand.
+
+  @param {object} product - The product
+  @param {string} [size] - 'card' (default) or 'page'
+{%- enddoc -%}
+
+{%- liquid
+  # End of the sale: 1 December 2026, 00:00 Italian time (30 Nov 23:00 UTC)
+  assign bf_end = 1796079600
+  assign now = 'now' | date: '%s' | plus: 0
+  assign size = size | default: 'card'
+
+  if now < bf_end
+    assign text = 'BLACK FRIDAY'
+    if size == 'page'
+      assign v = product.selected_or_first_available_variant
+      assign compare = v.compare_at_price | default: 0
+      if compare > v.price
+        assign pct = compare | minus: v.price | times: 100 | divided_by: compare
+        assign text = text | append: ' · -' | append: pct | append: '%'
+      endif
+    endif
+  endif
+-%}
+
+{%- if now < bf_end -%}
+  <span class="pp-bf-ribbon pp-bf-ribbon--{{ size }}" aria-hidden="true"><span>{{ text }}</span></span>
+{%- endif -%}
+
+{% stylesheet %}
+  /* Square in the corner; the band runs on the diagonal at 40% of its size, so the model stays free */
+  .pp-bf-ribbon {
+    --pp-bf-s: 96px;
+    --pp-bf-h: 18px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: var(--pp-bf-s);
+    height: var(--pp-bf-s);
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .pp-bf-ribbon > span {
+    position: absolute;
+    top: calc(var(--pp-bf-s) * 0.4 - var(--pp-bf-h) / 2);
+    left: calc(var(--pp-bf-s) * -0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--pp-bf-s) * 1.5);
+    height: var(--pp-bf-h);
+    background: #c20000;
+    color: #fff;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 3px 8px rgb(0 0 0 / 0.25);
+    transform: rotate(-45deg);
+  }
+
+  .pp-bf-ribbon--page {
+    --pp-bf-s: 180px;
+    --pp-bf-h: 30px;
+  }
+
+  .pp-bf-ribbon--page > span {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+  }
+
+  .product__main-photos:has(> .pp-bf-ribbon) {
+    position: relative;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-bf-ribbon {
+      --pp-bf-s: 72px;
+      --pp-bf-h: 15px;
+    }
+
+    .pp-bf-ribbon > span {
+      font-size: 7px;
+      letter-spacing: 0.12em;
+    }
+
+    .pp-bf-ribbon--page {
+      --pp-bf-s: 140px;
+      --pp-bf-h: 24px;
+    }
+
+    .pp-bf-ribbon--page > span {
+      font-size: 10px;
+    }
+  }
+{% endstylesheet %}
