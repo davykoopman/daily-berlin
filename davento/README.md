@@ -120,3 +120,9 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   mobile photo on top). No text inside images (multi-market IT/DE/AT/CH/UK).
 - Pricing check before "-50%": products mix compare-at (e.g. 42.95/85.90, 39.95/66.59) and no compare-at; tiers
   2/3/4 = 10/15/20% active. EU 30-day lowest-price rule applies to the announced reduction.
+- Hero (user chose option 1, without free delivery / 60-day returns line): sections/pp-bf-hero.liquid in theme
+  "Black Friday" (black-friday/theme/). Texts in code per language (it, de, fr, else English), "up to"/flat switch in
+  the section settings, Anton font via font_picker, buttons to collections donna/uomo (localized URLs).
+  templates/index.json: pp_bf_hero first, Halloween slideshow disabled (kept for rollback; original in black-friday/orig/).
+  Preview checked IT, /de-de, /en-gb on mobile + desktop. Page errors "$ is not defined" and "reading 'dataset'"
+  also on the live theme (not from the hero). FR has no market yet, so not previewable.

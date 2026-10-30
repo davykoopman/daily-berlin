@@ -1,0 +1,311 @@
+{%- doc -%}
+  Black Friday home hero, typographic (no photo), so it loads instantly.
+  Every text is live text in the visitor's language (it, de, fr, else English),
+  so the same hero works for every market. Red and cream tapes run behind the text.
+{%- enddoc -%}
+
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'it'
+      assign kick = 'Tutto novembre'
+      assign off_upto = 'Fino al -50%'
+      assign off_flat = '-50%'
+      assign sub = "Cappotti, maglieria e capi senza tempo per l'autunno-inverno."
+      assign btn_w = 'Donna'
+      assign btn_m = 'Uomo'
+    when 'de'
+      assign kick = 'Den ganzen November'
+      assign off_upto = 'Bis zu -50%'
+      assign off_flat = '-50%'
+      assign sub = 'Mäntel, Strick und zeitlose Teile für Herbst und Winter.'
+      assign btn_w = 'Damen'
+      assign btn_m = 'Herren'
+    when 'fr'
+      assign kick = 'Tout novembre'
+      assign off_upto = "Jusqu'à -50%"
+      assign off_flat = '-50%'
+      assign sub = "Manteaux, maille et pièces intemporelles pour l'automne-hiver."
+      assign btn_w = 'Femme'
+      assign btn_m = 'Homme'
+    else
+      assign kick = 'All of November'
+      assign off_upto = 'Up to 50% off'
+      assign off_flat = '50% off'
+      assign sub = 'Coats, knitwear and timeless pieces for autumn and winter.'
+      assign btn_w = 'Women'
+      assign btn_m = 'Men'
+  endcase
+
+  if ss.offer == 'flat'
+    assign off = off_flat
+  else
+    assign off = off_upto
+  endif
+
+  assign tape_red = 'BLACK FRIDAY · ' | append: off | append: ' · ' | upcase
+  assign tape_cream = 'BLACK FRIDAY · '
+
+  assign url_w = routes.collections_url | append: '/donna'
+  assign url_m = routes.collections_url | append: '/uomo'
+  if ss.collection_women != blank
+    assign url_w = ss.collection_women.url
+  endif
+  if ss.collection_men != blank
+    assign url_m = ss.collection_men.url
+  endif
+-%}
+
+{% style %}
+  {{ ss.heading_font | font_face: font_display: 'swap' }}
+{% endstyle %}
+
+<div class="pp-bf" style="--pp-bf-font: {{ ss.heading_font.family }}, {{ ss.heading_font.fallback_families }};">
+  <div class="pp-bf__tapes" aria-hidden="true">
+    <span class="pp-bf__tape pp-bf__tape--1">{% for i in (1..8) %}{{ tape_red }}{% endfor %}</span>
+    <span class="pp-bf__tape pp-bf__tape--2">{% for i in (1..12) %}{{ tape_cream }}{% endfor %}</span>
+    <span class="pp-bf__tape pp-bf__tape--3">{% for i in (1..8) %}{{ tape_red }}{% endfor %}</span>
+    <span class="pp-bf__tape pp-bf__tape--4">{% for i in (1..12) %}{{ tape_cream }}{% endfor %}</span>
+  </div>
+
+  <div class="pp-bf__content">
+    {%- if ss.show_kicker -%}
+      <p class="pp-bf__kicker">{{ shop.name }} · {{ kick }}</p>
+    {%- endif -%}
+    <h2 class="pp-bf__title">Black Friday</h2>
+    <p class="pp-bf__offer">{{ off }}</p>
+    <p class="pp-bf__sub">{{ sub }}</p>
+    <div class="pp-bf__buttons">
+      <a class="pp-bf__btn" href="{{ url_w }}">{{ btn_w }}</a>
+      <a class="pp-bf__btn pp-bf__btn--alt" href="{{ url_m }}">{{ btn_m }}</a>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .pp-bf {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 620px;
+    padding: 70px 24px;
+    color: #fff;
+    background: radial-gradient(ellipse 70% 75% at 50% 45%, #262626 0%, #131313 60%, #0a0a0a 100%);
+    text-align: center;
+  }
+
+  .pp-bf__tapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .pp-bf__tape {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 42px;
+    width: 62%;
+    white-space: nowrap;
+    overflow: hidden;
+    background: #c20000;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
+  }
+
+  .pp-bf__tape--2,
+  .pp-bf__tape--4 {
+    background: #f3efe8;
+    color: #111;
+  }
+
+  .pp-bf__tape--1 { left: -8%; top: 56px; transform: rotate(-13deg); }
+  .pp-bf__tape--2 { left: -9%; bottom: 30px; transform: rotate(8deg); width: 52%; }
+  .pp-bf__tape--3 { right: -11%; top: 28px; transform: rotate(11deg); }
+  .pp-bf__tape--4 { right: -10%; bottom: 56px; transform: rotate(-9deg); width: 55%; }
+
+  .pp-bf__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px;
+  }
+
+  .pp-bf__kicker {
+    margin: 0 0 14px;
+    color: #d8d2c8;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .pp-bf__title {
+    margin: 0;
+    color: #fff;
+    font-family: var(--pp-bf-font);
+    font-weight: 400;
+    font-size: clamp(64px, 10vw, 150px);
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  .pp-bf__offer {
+    margin: 18px 0;
+    padding: 0.06em 0.22em 0.02em;
+    background: #c20000;
+    color: #fff;
+    font-family: var(--pp-bf-font);
+    font-size: clamp(42px, 6vw, 88px);
+    line-height: 1;
+    text-transform: uppercase;
+    transform: rotate(-3deg);
+    box-shadow: 0 10px 30px rgb(194 0 0 / 0.35);
+  }
+
+  .pp-bf__sub {
+    margin: 0 0 24px;
+    color: #e8e3da;
+    font-size: 19px;
+    line-height: 1.4;
+  }
+
+  .pp-bf__buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .pp-bf__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    height: 52px;
+    background: #fff;
+    color: #111;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1.5px solid #fff;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .pp-bf__btn:hover {
+    background: transparent;
+    color: #fff;
+  }
+
+  .pp-bf__btn--alt {
+    background: transparent;
+    color: #fff;
+  }
+
+  .pp-bf__btn--alt:hover {
+    background: #fff;
+    color: #111;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-bf {
+      min-height: 0;
+      padding: 64px 18px 58px;
+    }
+
+    .pp-bf__tape {
+      height: 28px;
+      width: 140%;
+      font-size: 10px;
+    }
+
+    .pp-bf__tape--1 { left: -20%; top: 4px; transform: rotate(-9deg); }
+    .pp-bf__tape--2 { left: -18%; bottom: -4px; transform: rotate(6deg); width: 140%; }
+    .pp-bf__tape--3,
+    .pp-bf__tape--4 { display: none; }
+
+    .pp-bf__kicker {
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .pp-bf__title {
+      font-size: 72px;
+      max-width: 6ch;
+    }
+
+    .pp-bf__offer {
+      margin: 14px 0;
+      font-size: 44px;
+    }
+
+    .pp-bf__sub {
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .pp-bf__buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .pp-bf__btn {
+      width: 100%;
+      height: 48px;
+      font-size: 13px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Black Friday hero",
+  "tag": "section",
+  "class": "pp-bf-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "offer",
+      "label": "Offer text",
+      "options": [
+        { "value": "upto", "label": "Up to -50%" },
+        { "value": "flat", "label": "-50%" }
+      ],
+      "default": "upto"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_kicker",
+      "label": "Show small line above (store name · all of November)",
+      "default": true
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "anton_n4"
+    },
+    {
+      "type": "collection",
+      "id": "collection_women",
+      "label": "Button 1 collection (women)"
+    },
+    {
+      "type": "collection",
+      "id": "collection_men",
+      "label": "Button 2 collection (men)"
+    }
+  ],
+  "presets": [{ "name": "PP Black Friday hero" }]
+}
+{% endschema %}
