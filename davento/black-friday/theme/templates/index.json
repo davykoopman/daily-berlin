@@ -46,7 +46,8 @@
         "weekday_close": 17,
         "weekend_open": 9,
         "weekend_close": 16,
-        "timezone": ""
+        "timezone": "",
+        "bf_font": "dm_serif_display_n4"
       }
     },
     "pp_home_categories": {
@@ -72,7 +73,7 @@
       "type": "text-and-image",
       "name": "t:sections.text-and-image.presets.image_with_text.name",
       "settings": {
-        "image": "shopify://shop_images/Davento-about-us.png",
+        "image": "shopify://shop_images/Cozy_Holiday_Gift_Wrapping_Together.png",
         "image_mask": "none",
         "image2_mask": "none",
         "subtitle": "",
@@ -191,7 +192,8 @@
         "show_kicker": true,
         "heading_font": "dm_serif_display_n4",
         "collection_women": "donna",
-        "collection_men": "uomo"
+        "collection_men": "uomo",
+        "collection_best": "black-friday"
       }
     }
   },

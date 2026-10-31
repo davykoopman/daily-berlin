@@ -146,7 +146,7 @@
       ],
       "custom_css": [],
       "settings": {
-        "enable_sticky_atc": false,
+        "enable_sticky_atc": true,
         "sticky_atc_position": "end",
         "sticky_atc_mobile": true,
         "sticky_atc_behavior": "add_to_cart",
@@ -195,14 +195,15 @@
         "weekday_close": 17,
         "weekend_open": 9,
         "weekend_close": 16,
-        "timezone": ""
+        "timezone": "",
+        "bf_font": "dm_serif_display_n4"
       }
     },
     "text_and_image_AppCyB": {
       "type": "text-and-image",
       "name": "t:sections.text-and-image.presets.image_with_text.name",
       "settings": {
-        "image": "shopify://shop_images/Davento-about-us.png",
+        "image": "shopify://shop_images/Cozy_Holiday_Gift_Wrapping_Together.png",
         "image_mask": "none",
         "image2_mask": "none",
         "subtitle": "",

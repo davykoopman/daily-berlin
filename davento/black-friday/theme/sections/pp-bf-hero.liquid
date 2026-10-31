@@ -16,6 +16,7 @@
       assign sub = "Cappotti, maglieria e capi senza tempo per l'autunno-inverno."
       assign btn_w = 'Donna'
       assign btn_m = 'Uomo'
+      assign best = 'Scopri i bestseller Black Friday'
     when 'de'
       assign kick = 'Den ganzen November'
       assign off_upto = 'Bis zu -50%'
@@ -23,6 +24,7 @@
       assign sub = 'Mäntel, Strick und zeitlose Teile für Herbst und Winter.'
       assign btn_w = 'Damen'
       assign btn_m = 'Herren'
+      assign best = 'Black-Friday-Bestseller entdecken'
     when 'fr'
       assign kick = 'Tout novembre'
       assign off_upto = "Jusqu'à -50%"
@@ -30,6 +32,7 @@
       assign sub = "Manteaux, maille et pièces intemporelles pour l'automne-hiver."
       assign btn_w = 'Femme'
       assign btn_m = 'Homme'
+      assign best = 'Découvrir les best-sellers Black Friday'
     else
       assign kick = 'All of November'
       assign off_upto = 'Up to 50% off'
@@ -37,6 +40,7 @@
       assign sub = 'Coats, knitwear and timeless pieces for autumn and winter.'
       assign btn_w = 'Women'
       assign btn_m = 'Men'
+      assign best = 'Shop the Black Friday bestsellers'
   endcase
 
   if ss.offer == 'flat'
@@ -84,6 +88,9 @@
       <a class="pp-bf__btn" href="{{ url_w }}">{{ btn_w }}</a>
       <a class="pp-bf__btn pp-bf__btn--alt" href="{{ url_m }}">{{ btn_m }}</a>
     </div>
+    {%- if ss.collection_best != blank -%}
+      <a class="pp-bf__best" href="{{ ss.collection_best.url }}">{{ best }} <span aria-hidden="true">→</span></a>
+    {%- endif -%}
   </div>
 </div>
 
@@ -187,7 +194,8 @@
     .pp-bf__title,
     .pp-bf__offer,
     .pp-bf__sub,
-    .pp-bf__buttons {
+    .pp-bf__buttons,
+    .pp-bf__best {
       animation: none;
     }
   }
@@ -281,12 +289,38 @@
     color: #fff;
   }
 
+  .pp-bf__best {
+    display: inline-block;
+    margin-top: 20px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgb(214 168 116 / 0.6);
+    color: #d6a874;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    text-transform: uppercase;
+    animation: pp-bf-in-up 0.5s ease-out 1.05s both;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .pp-bf__best:hover {
+    color: #e8c18f;
+    border-color: #e8c18f;
+  }
+
   .pp-bf__btn--alt:hover {
     background: #fff;
     color: var(--pp-ink);
   }
 
   @media screen and (max-width: 768px) {
+    .pp-bf__best {
+      margin-top: 16px;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+    }
+
     .pp-bf {
       min-height: 0;
       padding: 64px 18px 84px;
@@ -373,6 +407,12 @@
       "type": "collection",
       "id": "collection_men",
       "label": "Button 2 collection (men)"
+    },
+    {
+      "type": "collection",
+      "id": "collection_best",
+      "label": "Small link under the buttons (Black Friday bestsellers)",
+      "info": "Empty = no link"
     }
   ],
   "presets": [{ "name": "PP Black Friday hero" }]

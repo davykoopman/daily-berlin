@@ -139,8 +139,8 @@
         .then(function (cart) { all().forEach(function (el) { render(el, cart.item_count); }); })
         .catch(function () {});
     };
-    // Horizon fires cart:update; Apex fires ajaxProduct:added and cart:updated
-    ['cart:update', 'cart:updated', 'ajaxProduct:added'].forEach(function (name) {
+    // Horizon fires cart:update; Apex fires ajaxProduct:added, cart:updated and drawerOpen (cart drawer)
+    ['cart:update', 'cart:updated', 'ajaxProduct:added', 'drawerOpen'].forEach(function (name) {
       document.addEventListener(name, refresh);
     });
     // Back/forward cache: the cart may have changed on another page

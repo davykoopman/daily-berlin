@@ -230,3 +230,23 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   ATC, conversion 1.44%. Top sellers mostly -50% (-40% some); 3 top sellers are DRAFT (cargo uomo, completo uomo
   occasioni speciali, completo donna eleganti). Mockups: dark header + red "Black Friday -50%" menu pill + bronze
   hero link + minimal trust row (recommended), cream header + dark trust cards (alternative), new home titles.
+- 31 Oct, "werk het allemaal uit" (all in draft #208380952919 unless noted):
+  - Home titles: "Shop per categoria" / "I più venduti" (translated per language, no red kicker), in DM Serif
+    Display, sentence case, 34px (26px mobile) – snippets/pp-gender-tabs.liquid + the two home sections.
+  - Trust row during Black Friday: no cream boxes; one white row, fine ink icons, small uppercase titles, thin
+    dividers (2x2 on phones); the unused serif font is no longer loaded (sections/pp-trust.liquid).
+  - Hero: small bronze link "Scopri i bestseller Black Friday →" under the buttons (setting collection_best =
+    black-friday in index.json; texts IT/DE/FR/EN).
+  - Product page: sticky add-to-cart on (enable_sticky_atc, mobile + desktop).
+  - Cart drawer: tier bar ("Aggiungi ancora 1 prodotto e risparmia il 10%") on cream at the top; refreshes on
+    drawerOpen too.
+  - Header: tried a dark header – user did not like the colours, so back to the white header. Only the menu link
+    to /collections/black-friday is a red pill while the sale runs (snippets/pp-bf-header.liquid, rendered from
+    sections/pp-announcement.liquid, which also got French texts). assets/pp-logo-white.png from the dark try is
+    unused (the API may not delete theme files).
+  - LIVE STORE: collections "Black Friday Bestsellers" (black-friday, 17 products), "… Donna" (9) and "… Uomo" (9),
+    manual order by sales of the last 60 days, published like donna/uomo, titles/descriptions translated DE/EN/FR.
+    Main menu: item "Black Friday" after Home (no sub items, so the home gender tabs stay Donna/Uomo).
+    Backup of the menu before: black-friday/orig/main-menu.json.
+  - Images below the fold: checked – they already have no src until needed, nothing to change.
+  - Editor changes in product.json/index.json (Christmas image in "Chi siamo", bf_font) were merged, not overwritten.

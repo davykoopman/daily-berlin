@@ -1,0 +1,242 @@
+{
+ "id": "gid://shopify/Menu/317429842263",
+ "handle": "main-menu",
+ "title": "Collegamenti rapidi",
+ "note": "main menu before the Black Friday item was added on 31 Oct 2026 (item gid://shopify/MenuItem/824851693911 'Black Friday' -> /collections/black-friday). To undo: remove that item.",
+ "items": [
+  {
+   "id": "gid://shopify/MenuItem/784931619159",
+   "title": "Home",
+   "type": "FRONTPAGE",
+   "url": "/",
+   "resourceId": null,
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/793252397399",
+   "title": "Donna",
+   "type": "COLLECTION",
+   "url": "/collections/donna",
+   "resourceId": "gid://shopify/Collection/687574974807",
+   "items": [
+    {
+     "id": "gid://shopify/MenuItem/793466929495",
+     "title": "Vedi tutti",
+     "type": "COLLECTION",
+     "url": "/collections/donna",
+     "resourceId": "gid://shopify/Collection/687574974807",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/813454524759",
+     "title": "Giacche e cappotti",
+     "type": "COLLECTION",
+     "url": "/collections/giacca-da-donna",
+     "resourceId": "gid://shopify/Collection/689039540567",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/813454557527",
+     "title": "Maglioni e cardigan",
+     "type": "COLLECTION",
+     "url": "/collections/maglione-da-donna",
+     "resourceId": "gid://shopify/Collection/689039737175",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793465160023",
+     "title": "Stivali",
+     "type": "COLLECTION",
+     "url": "/collections/stivali-da-donna",
+     "resourceId": "gid://shopify/Collection/688563781975",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793464373591",
+     "title": "Pantaloni e pantaloncini",
+     "type": "COLLECTION",
+     "url": "/collections/pantaloni-e-pantaloncini-da-donna",
+     "resourceId": "gid://shopify/Collection/688563585367",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793465094487",
+     "title": "Scarpe",
+     "type": "COLLECTION",
+     "url": "/collections/scarpe-da-donna",
+     "resourceId": "gid://shopify/Collection/688563749207",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/813454590295",
+     "title": "Top e camicie",
+     "type": "COLLECTION",
+     "url": "/collections/top-e-camicie-da-donna",
+     "resourceId": "gid://shopify/Collection/688563552599",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793465192791",
+     "title": "Tute intere e completi",
+     "type": "COLLECTION",
+     "url": "/collections/tute-intere-e-completi-da-donna",
+     "resourceId": "gid://shopify/Collection/688563618135",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793464111447",
+     "title": "Borse e accessori",
+     "type": "COLLECTION",
+     "url": "/collections/borse-e-accessori-da-donna",
+     "resourceId": "gid://shopify/Collection/688563847511",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793464045911",
+     "title": "Abiti",
+     "type": "COLLECTION",
+     "url": "/collections/abiti-da-donna",
+     "resourceId": "gid://shopify/Collection/688563487063",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793465127255",
+     "title": "Sandali e pantofole",
+     "type": "COLLECTION",
+     "url": "/collections/sandali-e-pantofole-da-donna",
+     "resourceId": "gid://shopify/Collection/688563814743",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/813454623063",
+     "title": "Costumi da bagno",
+     "type": "COLLECTION",
+     "url": "/collections/costumi-da-bagno-da-donna",
+     "resourceId": "gid://shopify/Collection/697109545303",
+     "items": []
+    }
+   ]
+  },
+  {
+   "id": "gid://shopify/MenuItem/793252430167",
+   "title": "Uomo",
+   "type": "COLLECTION",
+   "url": "/collections/uomo",
+   "resourceId": "gid://shopify/Collection/687575007575",
+   "items": [
+    {
+     "id": "gid://shopify/MenuItem/793466962263",
+     "title": "Vedi tutti",
+     "type": "COLLECTION",
+     "url": "/collections/uomo",
+     "resourceId": "gid://shopify/Collection/687575007575",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793464176983",
+     "title": "Giacche e cappotti",
+     "type": "COLLECTION",
+     "url": "/collections/giacche-e-cappotti-da-uomo",
+     "resourceId": "gid://shopify/Collection/688563945815",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/813454655831",
+     "title": "Maglioni",
+     "type": "COLLECTION",
+     "url": "/collections/maglione-da-uomo",
+     "resourceId": "gid://shopify/Collection/689146429783",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793464308055",
+     "title": "Maglieria e felpe con cappuccio",
+     "type": "COLLECTION",
+     "url": "/collections/maglieria-e-felpe-con-cappuccio-da-uomo",
+     "resourceId": "gid://shopify/Collection/688563978583",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793465225559",
+     "title": "Scarpe e stivali",
+     "type": "COLLECTION",
+     "url": "/collections/scarpe-e-stivali-da-uomo",
+     "resourceId": "gid://shopify/Collection/688564109655",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793464504663",
+     "title": "Pantaloni e pantaloncini",
+     "type": "COLLECTION",
+     "url": "/collections/pantaloni-e-pantaloncini-da-uomo",
+     "resourceId": "gid://shopify/Collection/688563913047",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793464144215",
+     "title": "Camicie e top",
+     "type": "COLLECTION",
+     "url": "/collections/camicie-e-top-da-uomo",
+     "resourceId": "gid://shopify/Collection/688563880279",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/793464078679",
+     "title": "Abiti e completi",
+     "type": "COLLECTION",
+     "url": "/collections/abiti-e-completi-da-uomo",
+     "resourceId": "gid://shopify/Collection/688564011351",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/813454721367",
+     "title": "Accessori",
+     "type": "COLLECTION",
+     "url": "/collections/accessori-da-uomo",
+     "resourceId": "gid://shopify/Collection/697109610839",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/813454688599",
+     "title": "Costumi da bagno",
+     "type": "COLLECTION",
+     "url": "/collections/costumi-da-bagno-da-uomo",
+     "resourceId": "gid://shopify/Collection/697109578071",
+     "items": []
+    }
+   ]
+  },
+  {
+   "id": "gid://shopify/MenuItem/787070222679",
+   "title": "Chi Siamo",
+   "type": "PAGE",
+   "url": "/pages/chi-siamo",
+   "resourceId": "gid://shopify/Page/163252011351",
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/787070255447",
+   "title": "Contatti",
+   "type": "PAGE",
+   "url": "/pages/contatti",
+   "resourceId": "gid://shopify/Page/163252109655",
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/787070288215",
+   "title": "Domande Frequenti",
+   "type": "PAGE",
+   "url": "/pages/domande-frequenti",
+   "resourceId": "gid://shopify/Page/163252044119",
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/787070320983",
+   "title": "Traccia il tuo ordine",
+   "type": "HTTP",
+   "url": "/apps/parcelpanel",
+   "resourceId": null,
+   "items": []
+  }
+ ]
+}

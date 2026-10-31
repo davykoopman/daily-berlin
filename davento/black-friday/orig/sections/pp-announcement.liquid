@@ -1,0 +1,145 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  # Bundle line from the tiers (match the automatic discounts)
+  assign pairs = ss.tiers | default: '2:10,3:15,4:20' | split: ','
+  assign tiers_text = ''
+  for pair in pairs
+    assign p = pair | strip | split: ':'
+    if lang == 'de'
+      assign part = p[0] | append: ' = -' | append: p[1] | append: ' %'
+    else
+      assign part = p[0] | append: ' = -' | append: p[1] | append: '%'
+    endif
+    if forloop.first
+      assign tiers_text = part
+    else
+      assign tiers_text = tiers_text | append: ' · ' | append: part
+    endif
+  endfor
+
+  case lang
+    when 'it'
+      assign m1 = 'Spedizione gratuita su tutti gli ordini'
+      assign m2 = 'Compra ' | append: tiers_text
+      assign m3 = ss.return_days | append: ' giorni per il reso'
+    when 'de'
+      assign m1 = 'Kostenloser Versand für alle Bestellungen'
+      assign m2 = 'Kaufe ' | append: tiers_text
+      assign m3 = ss.return_days | append: ' Tage Rückgaberecht'
+    else
+      assign m1 = 'Free shipping on all orders'
+      assign m2 = 'Buy ' | append: tiers_text
+      assign m3 = ss.return_days | append: '-day returns'
+  endcase
+-%}
+
+<div class="amz-ann-bar pp-ann" data-pp-ann data-speed="{{ ss.speed | times: 1000 }}">
+  <div class="amz-pw">
+    <ul class="pp-ann__list" role="list">
+      <li class="pp-ann__item is-active"><span class="amz-ann__lnk-txt">{{ m1 }}</span></li>
+      <li class="pp-ann__item" aria-hidden="true"><span class="amz-ann__lnk-txt">{{ m2 }}</span></li>
+      <li class="pp-ann__item" aria-hidden="true"><span class="amz-ann__lnk-txt">{{ m3 }}</span></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // The theme may rebuild the header (sticky header), so the bar is looked up
+    // again on every tick instead of keeping a reference to the first element.
+    if (window.ppAnnInit) return;
+    window.ppAnnInit = true;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var hovered = false;
+    // Pause while a real mouse is on the bar (touch taps must not freeze it)
+    document.addEventListener('pointerover', function (e) {
+      hovered = e.pointerType === 'mouse' && !!(e.target.closest && e.target.closest('[data-pp-ann]'));
+    });
+    var first = document.querySelector('[data-pp-ann]');
+    var speed = (first && parseInt(first.dataset.speed, 10)) || 4000;
+    setInterval(function () {
+      if (hovered || document.hidden) return;
+      document.querySelectorAll('[data-pp-ann]').forEach(function (bar) {
+        var items = bar.querySelectorAll('.pp-ann__item');
+        if (items.length < 2) return;
+        var i = 0;
+        items.forEach(function (it, n) { if (it.classList.contains('is-active')) i = n; });
+        items[i].classList.remove('is-active');
+        items[i].setAttribute('aria-hidden', 'true');
+        var next = items[(i + 1) % items.length];
+        next.classList.add('is-active');
+        next.removeAttribute('aria-hidden');
+      });
+    }, speed);
+  })();
+</script>
+
+{% stylesheet %}
+  /* Same bar as the theme announcement; the three messages are stacked and fade */
+  .pp-ann__list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+  }
+
+  .pp-ann__item {
+    grid-area: 1 / 1;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+  }
+
+  .pp-ann__item.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-ann__item {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Announcement bar",
+  "tag": "section",
+  "class": "pp-ann-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Three rotating messages, translated automatically: free shipping, bundle discount, return period. Match them to the policies and the store discounts."
+    },
+    {
+      "type": "text",
+      "id": "tiers",
+      "label": "Bundle tiers (quantity:percent)",
+      "default": "2:10,3:15,4:20"
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Return period in days",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Seconds per message",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "disabled_on": {
+    "groups": ["footer", "custom.popups"]
+  }
+}
+{% endschema %}

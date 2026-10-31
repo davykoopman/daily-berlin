@@ -85,6 +85,7 @@
         {%- endif -%}
 
         <div class="drawer__scrollable">
+          <div class="pp-cart-tier">{% render 'pp-tier-progress', tiers: '2:10,3:15,4:20' %}</div>
           <div data-products class="appear-animation appear-delay-2"></div>
           {% render 'pp-cart-upsell', women: 'donna', men: 'uomo', max: 8 %}
 
@@ -138,6 +139,10 @@
           {% endif %}
 
           {% render 'pp-cart-perks', return_days: 60 %}
+          <style>
+            #CartDrawer .pp-cart-tier { margin: 0 0 14px; padding: 12px 14px; border-radius: 10px; background: var(--pp-cream); }
+            #CartDrawer .pp-cart-tier .pp-tierbar { margin: 0; }
+          </style>
 
           <div class="cart__checkout-wrapper">
             <style>
