@@ -311,3 +311,8 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
 - Fix: the free gift strip lost its cream background and red icon on pages without product cards (contact, FAQ,
   about). The palette (--pp-*) was only defined in snippets/pp-card. It is now also in pp-gift-showcase (header
   group, every page), so the strip and the cart drawer look the same everywhere.
+- About page (Chi Siamo): main-page.liquid gets 2 settings (About page + About page photo). On that page the photo
+  is shown large above the text (16:9 desktop, 4:3 mobile) and the photo inside the page text is left out (all
+  languages); text is a 680px column with a larger first line. Alt text per language. page.json: about_page
+  chi-siamo, photo Cozy_Holiday_Gift_Wrapping_Together.png (swap back after Christmas in the editor). Other pages
+  that use page.json (contatti, FAQ, pagamenti) are unchanged. Originals in orig/.

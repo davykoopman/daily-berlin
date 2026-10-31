@@ -1,0 +1,17 @@
+<div class="amz-pw amz-pw--narrow page-content">
+  {%- render 'breadcrumbs' -%}
+  <header class="amz-sec-hdr">
+    <h1 class="amz-sec-hdr__ttl">{{ page.title }}</h1>
+  </header>
+
+  <div class="rte rte--nomargin">
+    {{ page.content }}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-page.name",
+  "tag": "section"
+}
+{% endschema %}
