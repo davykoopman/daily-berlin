@@ -1,7 +1,6 @@
 {%- doc -%}
   Red Black Friday ribbon across the top-left corner of a product photo.
-  Cards show "BLACK FRIDAY" (the percentage already sits next to the price);
-  the product page adds the product's own discount, e.g. "BLACK FRIDAY · -50%".
+  Only "BLACK FRIDAY" (the percentage already sits next to the price), on cards and the product page.
   Hides itself after the end of the sale (snippets/pp-bf-active), so nothing has to be removed by hand.
 
   @param {object} product - The product
@@ -17,14 +16,6 @@
 
   if bf_on == '1'
     assign text = 'BLACK FRIDAY'
-    if size == 'page'
-      assign v = product.selected_or_first_available_variant
-      assign compare = v.compare_at_price | default: 0
-      if compare > v.price
-        assign pct = compare | minus: v.price | times: 100 | divided_by: compare
-        assign text = text | append: ' · -' | append: pct | append: '%'
-      endif
-    endif
   endif
 -%}
 
@@ -68,7 +59,7 @@
   }
 
   .pp-bf-ribbon--page {
-    --pp-bf-s: 180px;
+    --pp-bf-s: 150px;
     --pp-bf-h: 30px;
   }
 
@@ -93,7 +84,7 @@
     }
 
     .pp-bf-ribbon--page {
-      --pp-bf-s: 140px;
+      --pp-bf-s: 120px;
       --pp-bf-h: 24px;
     }
 

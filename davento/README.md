@@ -198,3 +198,5 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   la spedizione" + note on every product while on, hidden only on a sold-out variant; own line/note text optional.
   Tested on/off with templates/product.pp-test.json (IT/DE/EN, mobile + desktop).
 - PP Stock: note under the line off (user), setting "Show note" default off; only dot + "Disponibile, pronto per la spedizione".
+- Product page ribbon: only "BLACK FRIDAY" (user: the percentage is already next to the price); a bit smaller
+  now the text is shorter (150px desktop / 120px mobile).
