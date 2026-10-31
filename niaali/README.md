@@ -167,3 +167,9 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
   Playfair Display too.
 - Test templates created while debugging (delete in Edit code): templates/product.t2.json, product.t3.json,
   product.t4.json, product.tc.json.
+- Round 2 (user): category photos show the whole model (no zoom, top-aligned; only the kurtki photo with a black edge
+  in the file is zoomed 3%); "O nas" compact on every page (phone photo 4:3 ≈ 290–380px, title 34px; desktop photo
+  560px, title 56px); PP Rating moved to the top of the product details list (still off) so it is easy to find in
+  the editor, PP Stock above buy buttons (off); delivery line ("Wysyłka w ciągu 1–2 dni roboczych") off; product
+  title 4px under the photo on phones; gift products (tag regalo) never shown in cross-sell, home bestsellers or
+  cart add-ons.

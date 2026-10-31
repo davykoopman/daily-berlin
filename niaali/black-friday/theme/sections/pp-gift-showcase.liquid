@@ -177,6 +177,71 @@
       border-radius: 5px;
     }
   }
+
+  /* "O nas" (media with text) on every page: compact, so the text is visible without long scrolling.
+     Phones: a lower landscape photo (faces stay in view), smaller title, less padding. Desktop: not taller than 620px. */
+  /* Product page on phones: title close under the photo */
+  @media screen and (max-width: 749px) {
+    .product-information .product-details > .group-block {
+      padding-top: 4px !important;
+    }
+
+    .product-information media-gallery {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .media-with-content .media-block {
+      height: auto !important;
+      min-height: 0 !important;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+
+    .media-with-content .media-block img,
+    .media-with-content .media-block video {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+      object-position: center 20%;
+    }
+
+    .media-with-content .media-with-content__content > .group-block-content {
+      padding-block: 22px 26px !important;
+      gap: 10px;
+    }
+
+    .media-with-content .h1,
+    .media-with-content .h1 > * {
+      font-size: 34px !important;
+      line-height: 1.1 !important;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .media-with-content .media-block {
+      height: 560px !important;
+      min-height: 0 !important;
+      max-height: 560px;
+      overflow: hidden;
+    }
+
+    .media-with-content .media-block img {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .media-with-content .media-block img {
+      object-fit: cover;
+      object-position: center 25%;
+    }
+
+    .media-with-content .h1,
+    .media-with-content .h1 > * {
+      font-size: 56px !important;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

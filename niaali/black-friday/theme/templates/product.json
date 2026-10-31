@@ -184,20 +184,9 @@
                     "show_buy_more": true
                   },
                   "blocks": {}
-                },
-                "pp_rating": {
-                  "type": "pp-rating",
-                  "disabled": true,
-                  "settings": {
-                    "source": "manual",
-                    "manual_rating": 4.7,
-                    "manual_count": 2000,
-                    "custom_text": ""
-                  }
                 }
               },
               "block_order": [
-                "pp_rating",
                 "pp_title",
                 "group_b7xNnM",
                 "pp_benefits"
@@ -260,7 +249,8 @@
               "settings": {
                 "dispatch_days": "1–2"
               },
-              "blocks": {}
+              "blocks": {},
+              "disabled": true
             },
             "payment_icons_pp": {
               "type": "payment-icons",
@@ -445,9 +435,20 @@
                 "show_note": false,
                 "note": ""
               }
+            },
+            "pp_rating": {
+              "type": "pp-rating",
+              "disabled": true,
+              "settings": {
+                "source": "manual",
+                "manual_rating": 4.7,
+                "manual_count": 2000,
+                "custom_text": ""
+              }
             }
           },
           "block_order": [
+            "pp_rating",
             "group_8fkkWP",
             "variant_picker_3Nha6V",
             "pp_stock",

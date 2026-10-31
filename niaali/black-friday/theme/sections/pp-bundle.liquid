@@ -68,7 +68,7 @@
     <ul class="pp-row__track" role="list">
       {%- assign shown = 0 -%}
       {%- for item in source.products -%}
-        {%- if item.id == current.id or item.available == false -%}{%- continue -%}{%- endif -%}
+        {%- if item.id == current.id or item.available == false or item.tags contains 'regalo' -%}{%- continue -%}{%- endif -%}
         {%- if shown >= ss.max_products -%}{%- break -%}{%- endif -%}
         {%- assign shown = shown | plus: 1 -%}
         <li class="pp-row__item">{% render 'pp-card', product: item %}</li>
