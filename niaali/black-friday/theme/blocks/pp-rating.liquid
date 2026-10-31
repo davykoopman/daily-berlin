@@ -1,0 +1,43 @@
+{%- comment -%}
+  PP Rating: star line above the product title (switch on/off with the eye in the theme editor).
+  Manual numbers only when they are true (no fake social proof).
+{%- endcomment -%}
+{%- assign bs = block.settings -%}
+<div class="pp-rating-block" {{ block.shopify_attributes }}>
+  {% render 'pp-rating',
+    product: closest.product,
+    source: bs.source,
+    custom_text: bs.custom_text,
+    manual_rating: bs.manual_rating,
+    manual_count: bs.manual_count
+  %}
+</div>
+
+{% stylesheet %}
+  .pp-rating-block {
+    width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Rating",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Source",
+      "options": [
+        { "value": "manual", "label": "Manual" },
+        { "value": "app", "label": "Review app (reviews.rating metafields)" }
+      ],
+      "default": "manual"
+    },
+    { "type": "number", "id": "manual_rating", "label": "Rating (manual)", "default": 4.7 },
+    { "type": "number", "id": "manual_count", "label": "Number of customers (manual)", "default": 2000 },
+    { "type": "text", "id": "custom_text", "label": "Own text (optional, manual)", "info": "Empty = translated text per language. Only real numbers." }
+  ],
+  "presets": [{ "name": "PP Rating" }]
+}
+{% endschema %}

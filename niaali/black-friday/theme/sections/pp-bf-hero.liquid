@@ -1,0 +1,412 @@
+{%- doc -%}
+  Black Friday home hero, typographic (no photo), so it loads instantly.
+  Every text is live text in the visitor's language (pl, nl, else English),
+  so the same hero works for every market. Red and cream tapes run behind the text.
+{%- enddoc -%}
+
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign kick = 'Cały listopad'
+      assign off_upto = 'Do -50%'
+      assign off_flat = '-50%'
+      assign sub = 'Płaszcze, swetry i ponadczasowe rzeczy na jesień i zimę.'
+      assign btn_w = 'Kobiety'
+      assign btn_m = 'Mężczyźni'
+      assign best = 'Zobacz bestsellery'
+    when 'nl'
+      assign kick = 'Heel november'
+      assign off_upto = 'Tot -50%'
+      assign off_flat = '-50%'
+      assign sub = 'Jassen, truien en tijdloze items voor herfst en winter.'
+      assign btn_w = 'Dames'
+      assign btn_m = 'Heren'
+      assign best = 'Bekijk de bestsellers'
+    else
+      assign kick = 'All of November'
+      assign off_upto = 'Up to 50% off'
+      assign off_flat = '50% off'
+      assign sub = 'Coats, knitwear and timeless pieces for autumn and winter.'
+      assign btn_w = 'Women'
+      assign btn_m = 'Men'
+      assign best = 'Shop bestsellers'
+  endcase
+
+  if ss.offer == 'flat'
+    assign off = off_flat
+  else
+    assign off = off_upto
+  endif
+
+  assign tape_red = 'BLACK FRIDAY · ' | append: off | append: ' · ' | upcase
+  assign tape_cream = 'BLACK FRIDAY · '
+
+  assign url_w = routes.collections_url | append: '/kobiety'
+  assign url_m = routes.collections_url | append: '/mezczyzni'
+  if ss.collection_women != blank
+    assign url_w = ss.collection_women.url
+  endif
+  if ss.collection_men != blank
+    assign url_m = ss.collection_men.url
+  endif
+-%}
+
+{% style %}
+  {{ ss.heading_font | font_face: font_display: 'swap' }}
+  #shopify-section-{{ section.id }} .pp-bf {
+    --pp-bf-font: {{ ss.heading_font.family }}, {{ ss.heading_font.fallback_families }};
+  }
+{% endstyle %}
+
+<div class="pp-bf">
+  <div class="pp-bf__tapes" aria-hidden="true">
+    <span class="pp-bf__tape pp-bf__tape--1">{% for i in (1..8) %}{{ tape_red }}{% endfor %}</span>
+    <span class="pp-bf__tape pp-bf__tape--2">{% for i in (1..12) %}{{ tape_cream }}{% endfor %}</span>
+    <span class="pp-bf__tape pp-bf__tape--3">{% for i in (1..8) %}{{ tape_red }}{% endfor %}</span>
+    <span class="pp-bf__tape pp-bf__tape--4">{% for i in (1..12) %}{{ tape_cream }}{% endfor %}</span>
+  </div>
+
+  <div class="pp-bf__content">
+    {%- if ss.show_kicker -%}
+      <p class="pp-bf__kicker">{{ kick }}</p>
+    {%- endif -%}
+    <h2 class="pp-bf__title">Black Friday</h2>
+    <p class="pp-bf__offer">{{ off }}</p>
+    <p class="pp-bf__sub">{{ sub }}</p>
+    <div class="pp-bf__buttons">
+      <a class="pp-bf__btn" href="{{ url_w }}">{{ btn_w }}</a>
+      <a class="pp-bf__btn pp-bf__btn--alt" href="{{ url_m }}">{{ btn_m }}</a>
+    </div>
+    {%- if ss.collection_best != blank -%}
+      <a class="pp-bf__best" href="{{ ss.collection_best.url }}">{{ best }} <span aria-hidden="true">→</span></a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .pp-bf {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 620px;
+    padding: 70px 24px;
+    color: #fff;
+    background: radial-gradient(ellipse 70% 75% at 50% 45%, rgb(255 255 255 / 0.06), transparent 70%), var(--pp-ink);
+    text-align: center;
+  }
+
+  .pp-bf__tapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .pp-bf__tape {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 42px;
+    width: 62%;
+    white-space: nowrap;
+    overflow: hidden;
+    background: var(--pp-red);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
+  }
+
+  /* Bronze ribbons (hero only), red stays for the offer */
+  .pp-bf__tape--2,
+  .pp-bf__tape--4 {
+    background: linear-gradient(100deg, #b9a58a 0%, #e9dcc8 18%, #fbf6ee 32%, #d8c3a5 48%, #a8916f 64%, #eadfcd 82%, #b9a58a 100%);
+    color: var(--pp-ink);
+  }
+
+  /* Satin shine: a light streak runs over each ribbon and the offer, one after the other, every 7s */
+  .pp-bf__tape::after,
+  .pp-bf__offer::after {
+    content: '';
+    position: absolute;
+    inset: -10%;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.5) 46%, rgb(255 255 255 / 0.8) 50%, rgb(255 255 255 / 0.5) 54%, transparent 65%);
+    transform: translateX(-110%);
+    animation: pp-bf-shine 7s ease-in-out infinite;
+  }
+
+  .pp-bf__tape--3::after { animation-delay: 0.4s; }
+  .pp-bf__tape--2::after { animation-delay: 0.8s; }
+  .pp-bf__tape--4::after { animation-delay: 1.2s; }
+  .pp-bf__offer::after { animation-delay: 1.8s; }
+
+  @keyframes pp-bf-shine {
+    0% { transform: translateX(-110%); }
+    18%, 100% { transform: translateX(110%); }
+  }
+
+  /* Entrance, once on load: title is visible from the first frame (keeps LCP), the offer stamps in */
+  .pp-bf__kicker { animation: pp-bf-in-fade 0.6s ease-out both; }
+  .pp-bf__title { animation: pp-bf-in-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .pp-bf__offer { animation: pp-bf-in-stamp 0.55s cubic-bezier(0.3, 1.4, 0.5, 1) 0.5s both; }
+  .pp-bf__sub { animation: pp-bf-in-up 0.5s ease-out 0.85s both; }
+  .pp-bf__buttons { animation: pp-bf-in-up 0.5s ease-out 0.95s both; }
+
+  @keyframes pp-bf-in-fade {
+    from { opacity: 0.3; }
+  }
+
+  @keyframes pp-bf-in-rise {
+    from { opacity: 0.35; transform: translateY(16px); }
+  }
+
+  @keyframes pp-bf-in-stamp {
+    0% { opacity: 0; transform: scale(1.9) rotate(-12deg); }
+    55% { opacity: 1; transform: scale(0.94) rotate(-2deg); }
+    100% { opacity: 1; transform: rotate(-3deg); }
+  }
+
+  @keyframes pp-bf-in-up {
+    from { opacity: 0; transform: translateY(10px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-bf__tape::after,
+    .pp-bf__offer::after {
+      display: none;
+    }
+
+    .pp-bf__kicker,
+    .pp-bf__title,
+    .pp-bf__offer,
+    .pp-bf__sub,
+    .pp-bf__buttons,
+    .pp-bf__best {
+      animation: none;
+    }
+  }
+
+  /* Cream tapes mirror the red ones: same length, leaving the hero at the bottom edge as the red ones leave at the top */
+  .pp-bf__tape--1 { left: -8%; top: 56px; transform: rotate(-13deg); }
+  .pp-bf__tape--2 { left: -8%; bottom: 56px; transform: rotate(13deg); }
+  .pp-bf__tape--3 { right: -11%; top: 28px; transform: rotate(11deg); }
+  .pp-bf__tape--4 { right: -11%; bottom: 28px; transform: rotate(-11deg); }
+
+  .pp-bf__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px;
+  }
+
+  .pp-bf__kicker {
+    margin: 0 0 14px;
+    color: var(--pp-champagne, #d8c3a5);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  .pp-bf__title {
+    margin: 0;
+    color: #fff;
+    font-family: var(--pp-bf-font);
+    font-weight: 400;
+    font-size: clamp(64px, 10vw, 150px);
+    line-height: 0.95;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .pp-bf__offer {
+    position: relative;
+    overflow: hidden;
+    margin: 18px 0;
+    padding: 0.06em 0.22em 0.02em;
+    background: var(--pp-red);
+    color: #fff;
+    font-family: var(--pp-bf-font);
+    font-size: clamp(42px, 6vw, 88px);
+    line-height: 1;
+    text-transform: uppercase;
+    transform: rotate(-3deg);
+    box-shadow: 0 10px 30px rgb(194 0 0 / 0.35);
+  }
+
+  .pp-bf__sub {
+    margin: 0 0 24px;
+    color: var(--pp-cream);
+    font-size: 19px;
+    line-height: 1.4;
+  }
+
+  .pp-bf__buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .pp-bf__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    height: 52px;
+    background: #fff;
+    color: var(--pp-ink);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1.5px solid #fff;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .pp-bf__btn:hover {
+    background: transparent;
+    color: #fff;
+  }
+
+  .pp-bf__btn--alt {
+    background: transparent;
+    color: #fff;
+  }
+
+  .pp-bf__best {
+    display: inline-block;
+    margin-top: 20px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid rgb(216 195 165 / 0.6);
+    color: var(--pp-champagne, #d8c3a5);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    text-transform: uppercase;
+    animation: pp-bf-in-up 0.5s ease-out 1.05s both;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .pp-bf__best:hover {
+    color: #fbf6ee;
+    border-color: #fbf6ee;
+  }
+
+  .pp-bf__btn--alt:hover {
+    background: #fff;
+    color: var(--pp-ink);
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-bf__best {
+      margin-top: 16px;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+    }
+
+    .pp-bf {
+      min-height: 0;
+      padding: 64px 18px 84px;
+    }
+
+    .pp-bf__tape {
+      height: 28px;
+      width: 140%;
+      font-size: 10px;
+    }
+
+    .pp-bf__tape--1 { left: -20%; top: 4px; transform: rotate(-9deg); }
+    .pp-bf__tape--2 { left: -20%; bottom: 4px; transform: rotate(9deg); }
+    .pp-bf__tape--3,
+    .pp-bf__tape--4 { display: none; }
+
+    .pp-bf__kicker {
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .pp-bf__title {
+      font-size: 72px;
+      max-width: 6ch;
+    }
+
+    .pp-bf__offer {
+      margin: 14px 0;
+      font-size: 44px;
+    }
+
+    .pp-bf__sub {
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .pp-bf__buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .pp-bf__btn {
+      width: 100%;
+      height: 48px;
+      font-size: 13px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Black Friday hero",
+  "tag": "section",
+  "class": "pp-bf-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "offer",
+      "label": "Offer text",
+      "options": [
+        { "value": "upto", "label": "Up to -50%" },
+        { "value": "flat", "label": "-50%" }
+      ],
+      "default": "upto"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_kicker",
+      "label": "Show small line above (store name · all of November)",
+      "default": true
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "cormorant_n6"
+    },
+    {
+      "type": "collection",
+      "id": "collection_women",
+      "label": "Button 1 collection (women)"
+    },
+    {
+      "type": "collection",
+      "id": "collection_men",
+      "label": "Button 2 collection (men)"
+    },
+    {
+      "type": "collection",
+      "id": "collection_best",
+      "label": "Small link under the buttons (Black Friday bestsellers)",
+      "info": "Empty = no link"
+    }
+  ],
+  "presets": [{ "name": "PP Black Friday hero" }]
+}
+{% endschema %}

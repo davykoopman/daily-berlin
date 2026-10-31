@@ -1,0 +1,63 @@
+{%- doc -%}
+  Black Friday badge while the sale runs (snippets/pp-bf-active): a small red label "BLACK FRIDAY" on the photo.
+  Niaali look: a straight label in the top-left corner (Davento uses a diagonal ribbon).
+  - mode 'card' (default): the label itself, inside .pp-card__media (position: relative).
+  - mode 'pdp': CSS that puts the same label on the first product photo (no change to the theme gallery).
+  Not in the image files, so Google Shopping images stay clean.
+
+  @param {string} [mode] - 'card' or 'pdp'
+{%- enddoc -%}
+{%- capture bf_on -%}{%- render 'pp-bf-active' -%}{%- endcapture -%}
+{%- if bf_on contains '1' -%}
+  {%- if mode == 'pdp' -%}
+    <style>
+      .product-information media-gallery { position: relative; }
+      .product-information media-gallery::before {
+        content: 'BLACK FRIDAY';
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        z-index: 3;
+        padding: 7px 12px 6px;
+        background: var(--pp-red, #c20000);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        line-height: 1;
+        pointer-events: none;
+      }
+      @media screen and (max-width: 749px) {
+        .product-information media-gallery::before { top: 10px; left: 10px; padding: 6px 10px 5px; font-size: 11px; }
+      }
+    </style>
+  {%- else -%}
+    <span class="pp-bf-badge" aria-hidden="true">BLACK FRIDAY</span>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-bf-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    padding: 5px 8px 4px;
+    background: var(--pp-red, #c20000);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-bf-badge {
+      top: 6px;
+      left: 6px;
+      padding: 4px 6px 3px;
+      font-size: 9px;
+    }
+  }
+{% endstylesheet %}

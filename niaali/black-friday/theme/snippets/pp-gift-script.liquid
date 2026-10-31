@@ -1,0 +1,139 @@
+{%- doc -%}
+  Script for every free gift box (snippets/pp-gift-cart): progress, pick/swap, keeps max 1 gift and none under the
+  minimum. Rendered once per page by sections/pp-gift-showcase (header group).
+{%- enddoc -%}
+<script>
+  (function () {
+    if (window.ppGiftInit) return;
+    window.ppGiftInit = true;
+    var busy = false;
+    var cartUrl = '{{ routes.cart_url }}';
+    var root = '{{ routes.root_url }}'.replace(/\/$/, '');
+    // Same money format as the rest of the store (e.g. €45,05); other currencies via Intl
+    var shopFormat = {{ shop.money_format | json }};
+    var shopCurrency = '{{ shop.currency }}';
+    var fmt = function (cents) {
+      var cur = (window.Shopify && Shopify.currency && Shopify.currency.active) || '{{ cart.currency.iso_code }}';
+      if (cur === shopCurrency && shopFormat) {
+        var n = (cents / 100).toFixed(2), parts = n.split('.');
+        var thou = function (x, sep) { return x.replace(/\B(?=(\d{3})+(?!\d))/g, sep); };
+        return shopFormat.replace(/\{\{\s*(\w+)\s*\}\}/, function (m, k) {
+          if (k === 'amount_with_comma_separator') return thou(parts[0], '.') + ',' + parts[1];
+          if (k === 'amount_no_decimals_with_comma_separator') return thou(String(Math.round(cents / 100)), '.');
+          if (k === 'amount_no_decimals') return thou(String(Math.round(cents / 100)), ',');
+          return thou(parts[0], ',') + '.' + parts[1];
+        });
+      }
+      try { return new Intl.NumberFormat(document.documentElement.lang || 'pl', { style: 'currency', currency: cur }).format(cents / 100); }
+      catch (e) { return (cents / 100).toFixed(2); }
+    };
+    var data = function () {
+      var el = document.querySelector('[data-pp-gift-data]');
+      try { return JSON.parse(el.textContent); } catch (e) { return { min: 8000, gifts: [] }; }
+    };
+    var rate = function () { return +((window.Shopify && Shopify.currency && Shopify.currency.rate) || 1); };
+    // Section ids of the theme cart (drawer / cart page): sent with every change so the theme can redraw them
+    var sectionIds = function () {
+      var ids = [];
+      document.querySelectorAll('cart-items-component[data-section-id]').forEach(function (el) {
+        if (ids.indexOf(el.dataset.sectionId) < 0) ids.push(el.dataset.sectionId);
+      });
+      return ids.join(',');
+    };
+    var post = function (url, body) {
+      body.sections = sectionIds();
+      return fetch(root + url, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json(); });
+    };
+    // Tell the theme (Fabric) the cart changed: its drawer and cart page redraw from the returned sections
+    var refreshDrawer = function (res) {
+      return import('@theme/events').then(function (ev) {
+        document.dispatchEvent(new ev.CartUpdateEvent({}, 'pp-gift', {
+          source: 'pp-gift',
+          itemCount: res && typeof res.item_count === 'number' ? res.item_count : undefined,
+          sections: (res && res.sections) || {}
+        }));
+      }).catch(function () {});
+    };
+
+    var render = function (cart) {
+      var d = data();
+      var ids = d.gifts.map(function (g) { return g.id; });
+      var min = d.local || Math.ceil(d.min * rate());
+      var total = 0, inCart = [];
+      cart.items.forEach(function (it) {
+        if (ids.indexOf(it.variant_id) > -1) inCart.push(it);
+        else total += it.final_line_price;
+      });
+      var reached = total >= min;
+
+      // Keep the cart honest: no gift under the minimum, never more than one gift
+      if (!busy && (inCart.length && !reached || inCart.length > 1 || (inCart[0] && inCart[0].quantity > 1))) {
+        busy = true;
+        var updates = {};
+        inCart.forEach(function (it, i) { updates[it.key] = reached && i === 0 ? 1 : 0; });
+        post('/cart/update.js', { updates: updates }).then(function (res) { busy = false; refreshDrawer(res); }).catch(function () { busy = false; });
+        return;
+      }
+      var chosen = reached && inCart[0] ? inCart[0].variant_id : null;
+
+      document.querySelectorAll('[data-pp-gift]').forEach(function (box) {
+        if (!d.gifts.length) { box.hidden = true; return; }
+        box.hidden = false;
+        box.setAttribute('data-pp-done', '');
+        var msg = box.querySelector('[data-pp-gift-msg]');
+        var fill = box.querySelector('[data-pp-gift-fill]');
+        fill.style.width = Math.min(100, Math.round(total / min * 100)) + '%';
+        box.classList.toggle('is-reached', reached);
+        if (!reached) msg.innerHTML = box.dataset.tMore.replace('[x]', '<strong>' + fmt(min - total) + '</strong>');
+        else if (chosen) msg.textContent = box.dataset.tChosen.replace('[n]', d.gifts.filter(function (g) { return g.id === chosen; })[0].title);
+        else msg.textContent = box.dataset.tUnlocked;
+        var grid = box.querySelector('[data-pp-gift-grid]');
+        if (!grid) return;
+        grid.innerHTML = d.gifts.map(function (g) {
+          return '<button type="button" class="pp-gift__it' + (g.id === chosen ? ' is-on' : '') + '" data-pp-gift-pick="' + g.id + '"' + (reached ? '' : ' disabled') + ' aria-pressed="' + (g.id === chosen) + '">' +
+            '<img src="' + g.img + '" alt="" width="120" height="120" loading="lazy">' +
+            '<span class="pp-gift__name">' + g.title + '</span>' +
+            '<span class="pp-gift__price"><s>' + g.price + '</s> <b>' + box.dataset.tFree + '</b></span></button>';
+        }).join('');
+        var note = box.querySelector('[data-pp-gift-note]');
+        if (note) note.textContent = reached ? (chosen ? box.dataset.tSwap : box.dataset.tNote) : box.dataset.tNote;
+      });
+    };
+
+    var load = function () {
+      if (!document.querySelector('[data-pp-gift]')) return;
+      fetch(root + '/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(render).catch(function () {});
+    };
+
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-pp-gift-pick]');
+      if (!b || b.disabled || busy) return;
+      var id = +b.dataset.ppGiftPick;
+      busy = true;
+      fetch(root + '/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (cart) {
+        var ids = data().gifts.map(function (g) { return g.id; });
+        var updates = {};
+        cart.items.forEach(function (it) { if (ids.indexOf(it.variant_id) > -1) updates[it.key] = 0; });
+        var done = Object.keys(updates).length ? post('/cart/update.js', { updates: updates }) : Promise.resolve();
+        return done.then(function () { return post('/cart/add.js', { items: [{ id: id, quantity: 1 }] }); });
+      }).then(function () {
+        // add.js returns the line, not the cart: fetch the redrawn sections once more
+        return fetch(root + '/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ updates: {}, sections: sectionIds() }) }).then(function (r) { return r.json(); });
+      }).then(function (res) { busy = false; refreshDrawer(res); }).catch(function () { busy = false; load(); });
+    });
+
+    // Fabric: cart:update after every add/change (also ours); the drawer is redrawn, so render again
+    document.addEventListener('cart:update', function () { setTimeout(load, 250); });
+    document.addEventListener('dialog:open', function () { setTimeout(load, 50); });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) load(); });
+    // A gift box that the theme just drew (drawer opened / redrawn) and that is not filled yet
+    var t;
+    new MutationObserver(function () {
+      if (!document.querySelector('[data-pp-gift]:not([data-pp-done])')) return;
+      clearTimeout(t);
+      t = setTimeout(load, 60);
+    }).observe(document.documentElement, { childList: true, subtree: true });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load); else load();
+  })();
+</script>

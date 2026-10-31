@@ -1,0 +1,18 @@
+{%- comment -%}
+  Black Friday: text of the "Prezent gratis" tab on the product page, in the visitor's language with the minimum
+  in the visitor's currency (snippets/pp-gift-text + pp-gift-min).
+{%- endcomment -%}
+{%- capture gift_min -%}{%- render 'pp-gift-min' -%}{%- endcapture -%}
+{%- capture body -%}{%- render 'pp-gift-text', key: 'tab_body' -%}{%- endcapture -%}
+<div class="rte pp-gift-tab" {{ block.shopify_attributes }}>{{ body | strip | replace: '[min]', gift_min }}</div>
+
+{% schema %}
+{
+  "name": "PP Gift tab text",
+  "tag": null,
+  "settings": [
+    { "type": "paragraph", "content": "Free gift text (PL/NL/EN) with the minimum per currency. Texts: snippets/pp-gift-text." }
+  ],
+  "presets": [{ "name": "PP Gift tab text" }]
+}
+{% endschema %}

@@ -1,0 +1,125 @@
+{%- doc -%}
+  "In stock" line above the add to cart button, with a pulsing dot. Same as on NewMae, texts
+  in the visitor's language. Not linked to Shopify stock: it shows on every product while the
+  "PP Stock" block is on (owner's decision), and hides only on a sold out variant.
+  Theme block blocks/pp-stock.liquid, added disabled in templates/product.json.
+
+  @param {object} product - The product
+  @param {string} [title] - Own line text instead of the translated one
+  @param {string} [note] - Own note text instead of the translated one
+  @param {boolean} [show_note] - Show the note under the line, default true
+{%- enddoc -%}
+
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  assign v = product.selected_or_first_available_variant
+
+  case lang
+    when 'pl'
+      assign in_text = 'Dostępny, gotowy do wysyłki'
+      assign note_text = 'Najpopularniejsze modele szybko się wyprzedają. Jeśli możesz dodać go do koszyka, jest jeszcze dostępny.'
+    when 'nl'
+      assign in_text = 'Op voorraad, klaar voor verzending'
+      assign note_text = 'Populaire modellen zijn snel uitverkocht. Kun je het in je winkelmandje leggen, dan is het nog beschikbaar.'
+    else
+      assign in_text = 'In stock, ready to ship'
+      assign note_text = "Popular styles sell out fast. If you can add it to your cart, it's still available."
+  endcase
+  if title != blank
+    assign in_text = title
+  endif
+  if note != blank
+    assign note_text = note
+  endif
+-%}
+
+<div class="pp-stock" data-pp-stock{% unless v.available %} hidden{% endunless %}>
+  <p class="pp-stock__line">
+    <span class="pp-stock__dot" aria-hidden="true"></span>
+    <span>{{ in_text }}</span>
+  </p>
+  {%- unless show_note == false -%}
+    <p class="pp-stock__note">{{ note_text }}</p>
+  {%- endunless -%}
+  <script type="application/json" data-pp-stock-data>
+    {%- capture ids -%}{%- for x in product.variants -%}{%- if x.available -%}"{{ x.id }}",{%- endif -%}{%- endfor -%}{%- endcapture -%}
+    [{{ ids | remove_last: ',' }}]
+  </script>
+</div>
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-pp-stock]:not([data-ready])');
+    if (!root) return;
+    root.setAttribute('data-ready', '');
+    var available = JSON.parse(root.querySelector('[data-pp-stock-data]').textContent);
+    // Hide on a sold out variant (the button already says sold out)
+    // Fabric: variant:update, resource = the new variant (null when the combination does not exist)
+    document.addEventListener('variant:update', function (e) {
+      var variant = e.detail && e.detail.resource;
+      root.hidden = !variant || available.indexOf(String(variant.id)) < 0;
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-stock {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .pp-stock[hidden] {
+    display: none;
+  }
+
+  .pp-stock p {
+    margin: 0;
+  }
+
+  .pp-stock__line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--pp-ink);
+  }
+
+  .pp-stock__dot {
+    position: relative;
+    flex: 0 0 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--pp-red);
+  }
+
+  .pp-stock__dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--pp-red);
+    animation: pp-stock-pulse 1.6s ease-out infinite;
+  }
+
+  @keyframes pp-stock-pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    100% { transform: scale(2.6); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-stock__dot::after {
+      animation: none;
+    }
+  }
+
+  .pp-stock__note {
+    font-size: 13px;
+    line-height: 1.4;
+    color: rgb(var(--pp-ink-rgb) / 0.7);
+  }
+{% endstylesheet %}

@@ -1,0 +1,432 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign all_label = 'Wszystko'
+    when 'nl'
+      assign all_label = 'Alles'
+    when 'de'
+      assign all_label = 'Alle'
+    when 'fr'
+      assign all_label = 'Tout'
+    when 'it'
+      assign all_label = 'Tutto'
+    when 'es'
+      assign all_label = 'Todo'
+    else
+      assign all_label = 'All'
+  endcase
+
+  # Groups come from the menu: a top-level collection link with sub items is a
+  # group (e.g. Kobiety), its collection sub items are the chips, in menu order.
+  # Menu links point at the collection itself, so translations cannot break them.
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+
+  # The group this collection is the parent of, or one of the sub items of
+  assign group_link = blank
+  for link in menu.links
+    if link.type != 'collection_link' or link.links.size == 0
+      continue
+    endif
+    if link.object.handle == collection.handle
+      assign group_link = link
+      break
+    endif
+    for item in link.links
+      if item.type == 'collection_link' and item.object.handle == collection.handle
+        assign group_link = link
+        break
+      endif
+    endfor
+    if group_link != blank
+      break
+    endif
+  endfor
+  assign group_parent = group_link.object
+-%}
+
+<div class="pp-collection-head color-{{ ss.color_scheme }}">
+  <div class="pp-collection-head__inner">
+    <h1 class="pp-collection-head__title">{{ collection.title }}</h1>
+
+    {%- if ss.show_tiers -%}
+      <div class="pp-collection-head__tiers">
+        {% render 'pp-gift-cart', layout: 'line' %}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%}
+      Bestseller collections (handles bestsellery, -damskie, -meskie) are not in a menu group:
+      they get their own chips All | Women | Men.
+    {%- endcomment -%}
+    {%- assign best_handle = collection.handle | slice: 0, 11 -%}
+    {%- if group_link == blank and best_handle == 'bestsellery' -%}
+      {%- liquid
+        case lang
+          when 'pl'
+            assign l_w = 'Damskie'
+            assign l_m = 'Męskie'
+          when 'nl'
+            assign l_w = 'Dames'
+            assign l_m = 'Heren'
+          else
+            assign l_w = 'Women'
+            assign l_m = 'Men'
+        endcase
+        assign best_list = 'bestsellery,bestsellery-damskie,bestsellery-meskie' | split: ','
+      -%}
+      <nav class="pp-chips pp-chips--center" aria-label="{{ collection.title | escape }}">
+        <ul class="pp-chips__list" role="list">
+          {%- for h in best_list -%}
+            {%- assign c = collections[h] -%}
+            {%- if c == blank -%}{%- continue -%}{%- endif -%}
+            {%- liquid
+              case forloop.index
+                when 1
+                  assign label = all_label
+                when 2
+                  assign label = l_w
+                else
+                  assign label = l_m
+              endcase
+            -%}
+            <li>
+              <a
+                class="pp-chip{% if collection.handle == h %} is-active{% endif %}"
+                href="{{ c.url }}"
+                {% if collection.handle == h %}aria-current="page"{% endif %}
+              >
+                {{- label -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    {%- if group_link != blank -%}
+      <nav class="pp-chips" aria-label="{{ group_link.title | escape }}">
+        <ul class="pp-chips__list" role="list">
+          <li>
+            <a
+              class="pp-chip{% if collection.handle == group_parent.handle %} is-active{% endif %}"
+              href="{{ group_parent.url }}"
+              {% if collection.handle == group_parent.handle %}aria-current="page"{% endif %}
+            >
+              {{- all_label -}}
+            </a>
+          </li>
+          {%- for item in group_link.links -%}
+            {%- if item.type != 'collection_link' -%}{%- continue -%}{%- endif -%}
+            {%- assign c = item.object -%}
+            {%- if c == blank or c.handle == group_parent.handle or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+            <li>
+              <a
+                class="pp-chip{% if collection.handle == c.handle %} is-active{% endif %}"
+                href="{{ c.url }}"
+                {% if collection.handle == c.handle %}aria-current="page"{% endif %}
+              >
+                {{- item.title -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* Bestseller chips: centred (3 short chips always fit, also on phones) */
+  .pp-chips--center .pp-chips__list {
+    justify-content: center !important;
+  }
+
+  .pp-collection-head .pp-gift--line {
+    margin-inline: auto;
+  }
+
+  .pp-collection-head {
+    padding-block: 32px 20px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .pp-collection-head__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: var(--page-width, 1400px);
+    margin: 0 auto;
+    padding-inline: var(--page-margin, 40px);
+    text-align: center;
+  }
+
+  .pp-collection-head__title {
+    margin: 0;
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
+  .pp-collection-head__tiers {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .pp-collection-head__tiers .pp-tierbar {
+    max-width: 420px;
+  }
+
+  .pp-chips {
+    width: 100%;
+  }
+
+  .pp-chips__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.2);
+    border-radius: 999px;
+    color: var(--color-foreground);
+    font-size: 0.875rem;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .pp-chip:hover {
+    border-color: var(--color-foreground-heading, #030302);
+  }
+
+  .pp-chip.is-active {
+    border-color: var(--color-foreground-heading, #030302);
+    background: var(--color-foreground-heading, #030302);
+    color: var(--color-background, #fff);
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-collection-head {
+      padding-block: 20px 12px;
+    }
+
+    .pp-collection-head__inner {
+      gap: 12px;
+      padding-inline: 16px;
+    }
+
+    .pp-collection-head__title {
+      font-size: 1.5rem;
+    }
+
+    /* One swipeable row on phones, bleeding to the screen edge */
+    .pp-chips {
+      margin-inline: -16px;
+      width: calc(100% + 32px);
+    }
+
+    .pp-chips__list {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      padding-inline: 16px;
+      scrollbar-width: none;
+      scroll-snap-type: x proximity;
+    }
+
+    .pp-chips__list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pp-chips__list li {
+      scroll-snap-align: start;
+    }
+
+    .pp-chip {
+      height: 34px;
+      padding: 0 14px;
+      font-size: 0.8125rem;
+    }
+  }
+  /* Collection grid: clean, aligned cards (same look as the product page) */
+  .main-collection-grid .product-badges {
+    display: none;
+  }
+
+  @media screen and (min-width: 990px) {
+    .main-collection-grid .product-grid:not([product-grid-view='zoom-out']) {
+      --product-grid-columns-desktop: repeat(4, minmax(0, 1fr)) !important;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 989px) {
+    .main-collection-grid .product-grid:not([product-grid-view='zoom-out']) {
+      --product-grid-columns-desktop: repeat(3, minmax(0, 1fr)) !important;
+    }
+  }
+
+  /* Title always one line */
+  .main-collection-grid .product-grid__card [class*='product_title'] {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .main-collection-grid .product-grid__card [class*='product_title'],
+  .main-collection-grid .product-grid__card [class*='product_title'] * {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* Price, compare-at price and badge on one line */
+  .main-collection-grid .product-grid__card [ref='priceContainer'] {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .main-collection-grid .product-grid__card .save-price {
+    margin-left: 2px;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+
+  /* Colour swatches: one fixed-height row, so every card lines up */
+  .main-collection-grid .product-grid__card variant-swatch-king {
+    display: block;
+    height: 28px;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .swatches {
+    margin: 0 !important;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .swatch-view {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 4px;
+    margin: 0 !important;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .swatch-view-item,
+  .main-collection-grid .product-grid__card variant-swatch-king .swatch-image-wrapper {
+    width: 28px !important;
+    height: 28px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .swatch-image,
+  .main-collection-grid .product-grid__card variant-swatch-king .star-set-image {
+    width: 26px !important;
+    height: 26px !important;
+    margin: 1px !important;
+  }
+
+  .main-collection-grid .product-grid__card variant-swatch-king .minification-text {
+    font-size: 12px;
+    line-height: 26px;
+  }
+
+  .main-collection-grid .product-grid__card:not(:has(variant-swatch-king)) > .group-block {
+    margin-top: 38px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-collection-grid .product-grid {
+      --product-grid-gap: 28px 12px;
+    }
+
+    .main-collection-grid .product-grid__card [class*='product_title'],
+    .main-collection-grid .product-grid__card [class*='product_title'] * {
+      font-size: 0.8125rem;
+    }
+
+    /* Sized so price, old price and badge fit one line on 360px phones */
+    .main-collection-grid .product-grid__card [ref='priceContainer'],
+    .main-collection-grid .product-grid__card [ref='priceContainer'] > * {
+      gap: 4px;
+      font-size: 0.75rem;
+    }
+
+    .main-collection-grid .product-grid__card .compare-at-price {
+      font-size: 11px;
+    }
+
+    .main-collection-grid .product-grid__card .save-price {
+      margin-left: 0;
+      padding: 1px 4px;
+      font-size: 10px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Collection heading",
+  "tag": "section",
+  "enabled_on": {
+    "templates": [
+      "collection"
+    ]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Title, bundle progress bar and category buttons. The buttons come from the menu: the sub items of the menu group this collection belongs to, with the menu titles, in menu order."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tiers",
+      "label": "Show bundle progress bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tiers",
+      "label": "Bundle tiers (quantity:percent, match the store discount)",
+      "default": "2:10,3:15,4:20"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Collection heading"
+    }
+  ]
+}
+{% endschema %}

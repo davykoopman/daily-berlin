@@ -1,0 +1,27 @@
+{%- comment -%}
+  PP Stock: pulsing dot + "Dostępny, gotowy do wysyłki" above the buy buttons (switch on/off with the eye in the
+  theme editor). Not linked to stock levels (owner's decision); hidden on a sold out variant.
+{%- endcomment -%}
+{%- assign bs = block.settings -%}
+<div class="pp-stock-block" {{ block.shopify_attributes }}>
+  {% render 'pp-stock', product: closest.product, title: bs.title, note: bs.note, show_note: bs.show_note %}
+</div>
+
+{% stylesheet %}
+  .pp-stock-block {
+    width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Stock",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Own line text (optional)", "info": "Empty = translated text per language" },
+    { "type": "checkbox", "id": "show_note", "label": "Show note", "default": false },
+    { "type": "text", "id": "note", "label": "Own note text (optional)" }
+  ],
+  "presets": [{ "name": "PP Stock" }]
+}
+{% endschema %}
