@@ -288,3 +288,10 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   (EN Bestsellers, DE Bestseller, FR Best-sellers) and the collections Bestseller / Bestseller Donna / Bestseller Uomo
   (DE … Damen/Herren, EN Bestsellers Women/Men, FR Best-sellers Femme/Homme). Handles stay black-friday(-donna/-uomo),
   so links and the red menu pill keep working.
+- Mobile product page alignment (user: not aligned): the theme gave the product column 3px extra left padding on
+  phones (17 vs 14px everywhere else) → removed, photo full-bleed with -14px (now exactly 0..screen width, no
+  sideways scroll). Sizes on one line on phones (button pickers only, equal width). Cross-sell title "Completa il
+  tuo ordine" in DM Serif like the home titles (pp-trust loads the bf_font again for that). Benefit bullets
+  top-aligned and the gift line shortened to one line ("Ancora €7,05 per un regalo gratuito" / "Regalo gratuito
+  incluso ✓", DE/FR/EN too). Gift strip on phones uses a short text ("Regalo gratuito sopra €80") so it stays on one
+  line. Checked at 375 and 390px.

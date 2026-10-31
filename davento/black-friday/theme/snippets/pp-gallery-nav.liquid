@@ -140,4 +140,54 @@
     margin-bottom: 8px;
     letter-spacing: 0.08em;
   }
+
+  /* Cross-sell title on the product page: same serif title as the home sections */
+  .pp-bundle__title {
+    font-family: 'DM Serif Display', Georgia, 'Times New Roman', serif !important;
+    font-size: 2.125rem !important;
+    font-weight: 400 !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    /* Same 14px page edge as every other section: the theme adds 3px to the product column on phones */
+    .page-content--product .grid__item {
+      padding-left: 0;
+    }
+
+    .page-content--product .product__main-photos {
+      margin-left: -14px;
+      margin-right: -14px;
+    }
+
+    /* Sizes on one line on phones (only the button pickers, not the colour photos) */
+    .amz-prod__meta .variant-input-wrap:has(.variant__button-label) {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
+    }
+
+    .amz-prod__meta .variant-input-wrap:has(.variant__button-label) .variant-input {
+      flex: 1 1 0;
+      min-width: 0;
+      margin: 0;
+    }
+
+    .amz-prod__meta .variant-input-wrap:has(.variant__button-label) .variant__button-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-width: 0;
+      margin: 0;
+      padding: 0 2px;
+      font-size: 13px;
+    }
+
+    .pp-bundle__title {
+      font-size: 1.625rem !important;
+    }
+  }
 {% endstylesheet %}

@@ -115,7 +115,12 @@
   endif
 -%}
 
-{%- comment -%} The bf_font setting is no longer used (titles are now small sans caps), so no extra font loads. {%- endcomment -%}
+{%- comment -%} The bf_font (DM Serif Display) is loaded for the serif section titles (pp-home__title, product cross-sell). {%- endcomment -%}
+{%- if ss.bf_font != blank -%}
+  {% style %}
+    {{ ss.bf_font | font_face: font_display: 'swap' }}
+  {% endstyle %}
+{%- endif -%}
 
 <div class="pp-trust{% if bf_on == '1' %} pp-trust--bf{% endif %}">
   <ul class="pp-trust__list" role="list">

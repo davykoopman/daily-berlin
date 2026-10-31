@@ -127,13 +127,14 @@
 
   .pp-benefit {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
     margin: 0;
   }
 
   .pp-benefit--gift {
     font-weight: 600;
+    color: var(--pp-ink);
   }
 
   .pp-benefit--gift .pp-benefit__icon {
@@ -144,6 +145,7 @@
     flex: 0 0 20px;
     width: 20px;
     height: 20px;
+    margin-top: -1px;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.5;
