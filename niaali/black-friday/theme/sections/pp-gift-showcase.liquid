@@ -19,7 +19,7 @@
   assign handles = 'prezent-apaszka-marina,prezent-etui-na-karty,prezent-portfel-klasyczny,prezent-bransoletka-pancerka' | split: ','
 -%}
 {%- comment -%}
-  Titles on every page in the Black Friday serif (Cormorant), sentence case.
+  Titles on every page in the Black Friday serif (Playfair Display, bold), sentence case.
   This section is in the header group, so the font loads on every page.
 {%- endcomment -%}
 {%- assign tf = section.settings.title_font -%}
@@ -31,7 +31,9 @@
     .pp-home__title,
     .pp-bundle__title,
     .pp-collection-head__title,
-    .pp-trust__title-bf {
+    .pp-trust__title-bf,
+    .text-block h2,
+    .text-block h3 {
       font-family: {{ tf.family }}, {{ tf.fallback_families }} !important;
       font-weight: {{ tf.weight }} !important;
       font-style: normal !important;
@@ -54,7 +56,7 @@
         {%- assign g = all_products[h] -%}
         {%- if g == blank -%}{%- continue -%}{%- endif -%}
         <li class="pp-giftbar__item" title="{{ g.title | escape }} – {{ free | strip }}">
-          {{ g.featured_image | image_url: width: 96 | image_tag: loading: 'lazy', width: 32, height: 32, alt: g.title }}
+          {{ g.featured_image | image_url: width: 192, height: 192, crop: 'center' | image_tag: width: 32, height: 32, alt: g.title, fetchpriority: 'low' }}
         </li>
       {%- endfor -%}
     </ul>
@@ -185,7 +187,7 @@
       "type": "font_picker",
       "id": "title_font",
       "label": "Title font (all pages)",
-      "default": "cormorant_n6"
+      "default": "playfair_display_n7"
     },
     {
       "type": "paragraph",

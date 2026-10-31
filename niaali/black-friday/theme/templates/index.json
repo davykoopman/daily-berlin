@@ -126,7 +126,7 @@
         "show_tiers": true,
         "tiers": "2:10,3:15,4:20",
         "max_products": 8,
-        "columns": 4,
+        "columns": 5,
         "columns_gap": 12,
         "section_width": "page-width",
         "color_scheme": "scheme-1",
@@ -538,7 +538,7 @@
       "settings": {
         "offer": "upto",
         "show_kicker": true,
-        "heading_font": "cormorant_n6",
+        "heading_font": "playfair_display_n7",
         "collection_women": "kobiety",
         "collection_men": "mezczyzni",
         "collection_best": "bestsellery"

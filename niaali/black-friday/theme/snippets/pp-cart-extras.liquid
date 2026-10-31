@@ -29,23 +29,43 @@
   endfor
 -%}
 
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  case lang
+    when 'pl'
+      assign t_save = 'Oszczędzasz'
+      assign t_ship = 'Darmowa dostawa'
+      assign t_ret = 'Zwrot ' | append: return_days | append: ' dni'
+      assign t_pay = 'Bezpieczna płatność'
+    when 'nl'
+      assign t_save = 'Je bespaart'
+      assign t_ship = 'Gratis verzending'
+      assign t_ret = return_days | append: ' dagen retour'
+      assign t_pay = 'Veilig betalen'
+    else
+      assign t_save = 'You save'
+      assign t_ship = 'Free shipping'
+      assign t_ret = return_days | append: '-day returns'
+      assign t_pay = 'Secure checkout'
+  endcase
+-%}
 <div class="pp-cart-extras">
   {%- if total_save > 0 -%}
-    {%- capture save_money -%}{{ total_save | money }}{%- endcapture -%}
-    <p class="pp-cart-saving">{% render 'pp-i18n', key: 'you_save', n: save_money %}</p>
+    {%- comment -%} Black Friday: short red line with the total saving (compare-at + discounts, gifts not counted) {%- endcomment -%}
+    <p class="pp-cart-saving"><span>{{ t_save }}</span><span>−{{ total_save | money }}</span></p>
   {%- endif -%}
   <ul class="pp-cart-trust" role="list">
     <li>
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/><circle cx="6.5" cy="17.25" r="1.75"/><circle cx="16.75" cy="17.25" r="1.75"/></svg>
-      {% render 'pp-i18n', key: 'free_shipping' %}
+      {{ t_ship }}
     </li>
     <li>
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/></svg>
-      {% render 'pp-i18n', key: 'returns_days', n: return_days %}
+      {{ t_ret }}
     </li>
     <li>
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>
-      {% render 'pp-i18n', key: 'secure_checkout' %}
+      {{ t_pay }}
     </li>
   </ul>
 </div>
@@ -126,5 +146,39 @@
   .pp-cart-tier--page {
     padding: 0 0 14px;
     margin-bottom: 8px;
+  }
+
+  /* Black Friday: compact – saving as one red line, the 3 promises on one line next to each other */
+  .pp-cart-extras {
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .pp-cart-extras .pp-cart-saving {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--pp-red, #c20000);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  .pp-cart-extras .pp-cart-trust {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .pp-cart-extras .pp-cart-trust li {
+    gap: 4px;
+  }
+
+  .pp-cart-extras .pp-cart-trust svg {
+    width: 13px;
+    height: 13px;
   }
 {% endstylesheet %}
