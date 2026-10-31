@@ -18,6 +18,28 @@
   endcapture
   assign handles = 'regalo-foulard-marina,regalo-portacarte-nero,regalo-portafoglio-classico,regalo-bracciale-grumetta' | split: ','
 -%}
+{%- comment -%}
+  Titles on every page in the serif of the Black Friday hero (DM Serif Display), sentence case.
+  This section is in the header group, so the font loads on every page.
+{%- endcomment -%}
+{%- assign tf = section.settings.title_font -%}
+{%- if tf != blank -%}
+  {% style %}
+    {{ tf | font_face: font_display: 'swap' }}
+    h1, h2, .h1, .h2,
+    .product-single__title,
+    .pp-home__title,
+    .pp-bundle__title,
+    .pp-collection-head__title,
+    .section-header__title {
+      font-family: {{ tf.family }}, {{ tf.fallback_families }} !important;
+      font-weight: {{ tf.weight }} !important;
+      font-style: normal !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+    }
+  {% endstyle %}
+{%- endif -%}
 <div class="pp-giftbar">
   <div class="amz-pw pp-giftbar__inner">
     <p class="pp-giftbar__text">
@@ -146,6 +168,12 @@
   "tag": "section",
   "class": "pp-giftbar-section",
   "settings": [
+    {
+      "type": "font_picker",
+      "id": "title_font",
+      "label": "Title font (all pages)",
+      "default": "dm_serif_display_n4"
+    },
     {
       "type": "paragraph",
       "content": "Slim free gift strip with the 4 gift photos, meant for the header group (under the menu, every page). Gifts and minimum amount: snippets/pp-gift-min.liquid (keep them the same as the automatic discount 'Free Gift')."

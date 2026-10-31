@@ -295,3 +295,10 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   top-aligned and the gift line shortened to one line ("Ancora €7,05 per un regalo gratuito" / "Regalo gratuito
   incluso ✓", DE/FR/EN too). Gift strip on phones uses a short text ("Regalo gratuito sopra €80") so it stays on one
   line. Checked at 375 and 390px.
+- All titles in DM Serif Display, sentence case (user): sections/pp-gift-showcase (header group, every page) has a
+  font picker "Title font (all pages)" (default dm_serif_display_n4), loads it and sets h1/h2/.h1/.h2, product title,
+  collection title, home/cross-sell titles to it (no uppercase, no letter spacing). Theme setting
+  type_header_font_family (Tenor Sans) left untouched. Footer headings follow too.
+  Collection page: gift line centred under the centred title. Hero link shortened to "Scopri i bestseller →"
+  (DE Bestseller entdecken, FR Voir les best-sellers, EN Shop bestsellers). Checked collection, product, home,
+  mobile 390 + desktop 1440.
