@@ -302,3 +302,9 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   Collection page: gift line centred under the centred title. Hero link shortened to "Scopri i bestseller →"
   (DE Bestseller entdecken, FR Voir les best-sellers, EN Shop bestsellers). Checked collection, product, home,
   mobile 390 + desktop 1440.
+- Bestseller collections much bigger (LIVE STORE, user): every product that sold ≥2 units in the last 120 days
+  (list in black-friday/data/bestsellers-120d.txt, bathrobe and bra left out) → Bestseller Donna 123, Bestseller
+  Uomo 126 (split by donna/uomo/unisex in the title), sorted Best selling. "Bestseller" (black-friday) now uses
+  both as sub-collections (248, stays in sync). Drafts in the list do not show in the shop.
+  Theme: Bestseller pages get chips Tutto | Donna | Uomo (DE Alle/Damen/Herren, FR Tout/Femme/Homme, EN All/Women/
+  Men) in pp-collection-head; chips are centred on phones when they fit, otherwise swipe from the left as before.

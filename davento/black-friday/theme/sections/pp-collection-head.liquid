@@ -60,6 +60,58 @@
       </div>
     {%- endif -%}
 
+    {%- comment -%}
+      Bestseller collections (handles black-friday, -donna, -uomo) are not in a menu group:
+      they get their own chips All | Women | Men.
+    {%- endcomment -%}
+    {%- assign best_handle = collection.handle | slice: 0, 12 -%}
+    {%- if group_link == blank and best_handle == 'black-friday' -%}
+      {%- liquid
+        case lang
+          when 'de'
+            assign l_w = 'Damen'
+            assign l_m = 'Herren'
+          when 'fr'
+            assign l_w = 'Femme'
+            assign l_m = 'Homme'
+          when 'it'
+            assign l_w = 'Donna'
+            assign l_m = 'Uomo'
+          else
+            assign l_w = 'Women'
+            assign l_m = 'Men'
+        endcase
+        assign best_list = 'black-friday,black-friday-donna,black-friday-uomo' | split: ','
+      -%}
+      <nav class="pp-chips" aria-label="{{ collection.title | escape }}">
+        <ul class="pp-chips__list" role="list">
+          {%- for h in best_list -%}
+            {%- assign c = collections[h] -%}
+            {%- if c == blank -%}{%- continue -%}{%- endif -%}
+            {%- liquid
+              case forloop.index
+                when 1
+                  assign label = all_label
+                when 2
+                  assign label = l_w
+                else
+                  assign label = l_m
+              endcase
+            -%}
+            <li>
+              <a
+                class="pp-chip{% if collection.handle == h %} is-active{% endif %}"
+                href="{{ c.url }}"
+                {% if collection.handle == h %}aria-current="page"{% endif %}
+              >
+                {{- label -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
     {%- if group_link != blank -%}
       <nav class="pp-chips" aria-label="{{ group_link.title | escape }}">
         <ul class="pp-chips__list" role="list">
@@ -197,6 +249,15 @@
 
     .pp-chips__list li {
       scroll-snap-align: start;
+    }
+
+    /* Centred when the chips fit on the screen (e.g. Tutto | Donna | Uomo), swipeable from the left when not */
+    .pp-chips__list li:first-child {
+      margin-left: auto;
+    }
+
+    .pp-chips__list li:last-child {
+      margin-right: auto;
     }
 
     .pp-chip {
