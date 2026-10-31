@@ -2,7 +2,7 @@
  "id": "gid://shopify/Menu/317429842263",
  "handle": "main-menu",
  "title": "Collegamenti rapidi",
- "note": "main menu before the Black Friday item was added on 31 Oct 2026 (item gid://shopify/MenuItem/824851693911 'Black Friday' -> /collections/black-friday). To undo: remove that item.",
+ "note": "main menu before the Black Friday item was added on 31 Oct 2026 (item gid://shopify/MenuItem/824851693911 'Bestseller' (first called 'Black Friday') -> /collections/black-friday). To undo: remove that item.",
  "items": [
   {
    "id": "gid://shopify/MenuItem/784931619159",

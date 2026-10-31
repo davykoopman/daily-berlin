@@ -3,7 +3,7 @@
   (a span that pp-gift-min converts to the visitor's currency), [x] / [n] are filled in by the caller.
   One place for the gift texts: announcement bar, product page, home section, cart drawer.
 
-  @param {string} key - ann, short, cross, title, sub, more, unlocked, chosen, swap, free, note, tab_title, tab_body
+  @param {string} key - ann, short, pdp_yes, pdp_more, cross, title, sub, more, unlocked, chosen, swap, free, note, tab_title, tab_body
 {%- enddoc -%}
 {%- liquid
   assign lang = request.locale.iso_code | slice: 0, 2 | downcase
@@ -14,6 +14,10 @@
           echo 'Regalo gratuito per ordini sopra [min]'
         when 'short'
           echo 'Regalo gratuito per ordini sopra [min]'
+        when 'pdp_yes'
+          echo 'Con questo articolo ricevi un regalo gratuito ✓'
+        when 'pdp_more'
+          echo 'Con questo articolo mancano solo [x] per un regalo gratuito'
         when 'cross'
           echo 'Completa il tuo ordine'
         when 'title'
@@ -43,6 +47,10 @@
           echo 'Gratis-Geschenk ab [min] Bestellwert'
         when 'short'
           echo 'Gratis-Geschenk ab [min] Bestellwert'
+        when 'pdp_yes'
+          echo 'Mit diesem Artikel bekommst du ein Gratis-Geschenk ✓'
+        when 'pdp_more'
+          echo 'Mit diesem Artikel fehlen nur noch [x] für ein Gratis-Geschenk'
         when 'cross'
           echo 'Ergänze deine Bestellung'
         when 'title'
@@ -72,6 +80,10 @@
           echo "Cadeau offert dès [min] d'achat"
         when 'short'
           echo "Cadeau offert dès [min] d'achat"
+        when 'pdp_yes'
+          echo 'Avec cet article, un cadeau vous est offert ✓'
+        when 'pdp_more'
+          echo 'Avec cet article, plus que [x] pour un cadeau offert'
         when 'cross'
           echo 'Complétez votre commande'
         when 'title'
@@ -101,6 +113,10 @@
           echo 'Free gift with orders over [min]'
         when 'short'
           echo 'Free gift with orders over [min]'
+        when 'pdp_yes'
+          echo 'This item gets you a free gift ✓'
+        when 'pdp_more'
+          echo 'With this item, just [x] more for a free gift'
         when 'cross'
           echo 'Complete your order'
         when 'title'

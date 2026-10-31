@@ -281,3 +281,10 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   sopra €80" + the 4 gifts as 32px (26px mobile) photos. Placed in sections/header-group.json after the header
   (every page; original in orig/sections/header-group.json), removed from index.json. The announcement bar no longer
   repeats the gift (rotates free shipping / 60-day returns). Checked home + collection, desktop + mobile.
+- Product page gift line is personal (snippets/pp-benefits.liquid): this product (current variant) + the cart against
+  the €80 minimum → "Con questo articolo ricevi un regalo gratuito ✓" or "Con questo articolo mancano solo €45,05 per
+  un regalo gratuito" (DE/FR/EN too, UK in £); follows variant and cart changes; general text if the script fails.
+- LIVE STORE: "Black Friday" renamed "Bestseller" (user: Black Friday sounds odd as a collection): menu item
+  (EN Bestsellers, DE Bestseller, FR Best-sellers) and the collections Bestseller / Bestseller Donna / Bestseller Uomo
+  (DE … Damen/Herren, EN Bestsellers Women/Men, FR Best-sellers Femme/Homme). Handles stay black-friday(-donna/-uomo),
+  so links and the red menu pill keep working.
