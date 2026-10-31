@@ -188,3 +188,7 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
 - Policies: return 60 days, 1–2 / 3–7 / 4–9 working days, cut-off 14:00, hours – identical in PL/NL/EN; no Mix & Match
   or Halloween anywhere. Open (owner/legal): policies and contact name "Niaali, Składowa 11, Lublin, Poland" while the
   legal notice names "DK Interim Management, Venray, Nederland"; legal notice is Dutch only (no PL/EN translation).
+- LIVE 31 Oct evening: owner published "Black Friday" (#209387651404 is MAIN). MIX & MATCH -10/-15/-20% deactivated
+  right after (not deleted). Active automatic discount: only "Free Gift". Live test PL / NL / UK: gift €0 in cart,
+  removed automatically under the minimum, re-pick works; checkout NL € 115,90 for 2 jackets + free scarf (€ 135,85
+  crossed out), PL 560,90 zł, UK £100.00; iDEAL shown for NL.
