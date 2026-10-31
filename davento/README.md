@@ -200,3 +200,5 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
 - PP Stock: note under the line off (user), setting "Show note" default off; only dot + "Disponibile, pronto per la spedizione".
 - Product page ribbon: only "BLACK FRIDAY" (user: the percentage is already next to the price); a bit smaller
   now the text is shorter (150px desktop / 120px mobile).
+- Hero kicker without the shop name ("TUTTO NOVEMBRE"). Sparkle options A (gold foil edges + shine + gold title),
+  B (glitter tapes + twinkles), C (gold dust + glow) shown as preview screenshots only; waiting for the user's pick.
