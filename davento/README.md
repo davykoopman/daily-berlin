@@ -329,3 +329,11 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   Now 0 / > 0. Tested: IT strip €80 + "Ancora €17,05", UK £70 + "£16.00 more", CH "CHF 80" + "Noch 14,00 CHF".
 - Product title on phones (user GO, option A): 20px (was 26px), at most 2 lines with … , margin 0 0 6px
   (.amz-prod__ttl in pp-gallery-nav). Desktop unchanged.
+- 31 Oct evening (user, urgent): new theme copy "Black Friday v2 (snelle cadeaukeuze)" #208484860247 = duplicate of
+  the live "Black Friday". Changes:
+  - snippets/pp-gift-cart: gift pick/swap shows at once (optimistic), ONE /cart/update.js (old gift 0, new gift 1,
+    keyed by variant id) instead of cart.js + update.js + add.js, cart rendered from the response, rapid clicks send
+    only the last choice; after the theme redraws the drawer the gift box is filled at once from the last cart.
+  - snippets/cart-item: "Rimuovi" text link → small bin icon at the right of the line, next to the product (no own
+    row); same remove behaviour (drawer: hidden minus button script in pp-cart-perks).
+  - sections/pp-gift-showcase: gift photos in the strip loaded at 192px (sharp; was 96px).

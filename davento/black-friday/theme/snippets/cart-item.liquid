@@ -163,8 +163,8 @@
         </div>
 
         <div class="cart__remove">
-          <a href="{{ routes.cart_change_url }}?id={{ product.key }}&amp;quantity=0" class="text-link">
-            {{ 'cart.general.remove' | t }}
+          <a href="{{ routes.cart_change_url }}?id={{ product.key }}&amp;quantity=0" class="pp-bin" aria-label="{{ 'cart.general.remove' | t }}: {{ product.product.title | escape }}" title="{{ 'cart.general.remove' | t }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M9.5 7V4.75h5V7M6.5 7l.9 12.25a1.5 1.5 0 0 0 1.5 1.4h6.2a1.5 1.5 0 0 0 1.5-1.4L17.5 7M10 11v6M14 11v6"/></svg>
           </a>
         </div>
       </div>
@@ -184,6 +184,12 @@
   .cart__discount-tags { display:none !important; }
   /* No quantity selector anywhere (owner): the input stays for the theme's cart form, only a small remove link shows */
   .cart__item .js-qty__wrapper { display:none !important; }
-  .cart__item .cart__remove { display:block !important; margin-top:4px; }
-  .cart__item .cart__remove a { font-size:12px; color:rgb(var(--pp-ink-rgb) / 0.6); text-decoration:underline; text-underline-offset:2px; }
+  /* Remove = small bin icon at the right of the line, next to the product (no own row, no text) */
+  .cart__item { position:relative; }
+  .cart__item .cart__item-title { padding-right:30px; }
+  .cart__item .cart__item-sub { margin:0 !important; padding:0 !important; min-height:0 !important; }
+  .cart__item .cart__remove { display:block !important; position:absolute; top:0; right:0; margin:0 !important; }
+  .cart__item .cart__remove a.pp-bin { display:flex; align-items:center; justify-content:center; width:28px; height:28px; color:rgb(var(--pp-ink-rgb) / 0.55); text-decoration:none; }
+  .cart__item .cart__remove a.pp-bin:hover { color:var(--pp-ink); }
+  .cart__item .cart__remove svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 </style>

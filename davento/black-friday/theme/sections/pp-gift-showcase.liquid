@@ -52,7 +52,7 @@
         {%- assign g = all_products[h] -%}
         {%- if g == blank -%}{%- continue -%}{%- endif -%}
         <li class="pp-giftbar__item" title="{{ g.title | escape }} – {{ free | strip }}">
-          {{ g.featured_image | image_url: width: 96 | image_tag: loading: 'lazy', width: 32, height: 32, alt: g.title }}
+          {{ g.featured_image | image_url: width: 192, height: 192, crop: 'center' | image_tag: width: 32, height: 32, alt: g.title, fetchpriority: 'low' }}
         </li>
       {%- endfor -%}
     </ul>

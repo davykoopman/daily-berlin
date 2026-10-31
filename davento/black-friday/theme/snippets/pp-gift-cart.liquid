@@ -94,7 +94,10 @@
       document.dispatchEvent(new CustomEvent('cart:updated', { detail: {} }));
     };
 
+    var lastCart = null;
     var render = function (cart) {
+      if (!cart || !cart.items) return;
+      lastCart = cart;
       var d = data();
       var ids = d.gifts.map(function (g) { return g.id; });
       var min = d.local || Math.ceil(d.min * rate());
@@ -110,7 +113,7 @@
         busy = true;
         var updates = {};
         inCart.forEach(function (it, i) { updates[it.key] = reached && i === 0 ? 1 : 0; });
-        post('/cart/update.js', { updates: updates }).then(function () { busy = false; refreshDrawer(); }).catch(function () { busy = false; });
+        post('/cart/update.js', { updates: updates }).then(function (res) { busy = false; render(res); refreshDrawer(); }).catch(function () { busy = false; });
         return;
       }
       var chosen = reached && inCart[0] ? inCart[0].variant_id : null;
@@ -118,6 +121,7 @@
       document.querySelectorAll('[data-pp-gift]').forEach(function (box) {
         if (!d.gifts.length) { box.hidden = true; return; }
         box.hidden = false;
+        box.setAttribute('data-pp-done', '');
         var msg = box.querySelector('[data-pp-gift-msg]');
         var fill = box.querySelector('[data-pp-gift-fill]');
         fill.style.width = Math.min(100, Math.round(total / min * 100)) + '%';
@@ -143,23 +147,52 @@
       fetch(root + '/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(render).catch(function () {});
     };
 
+    // Pick / swap a gift. Fast: the choice shows at once (optimistic), then ONE request removes the old gift and adds
+    // the new one (updates keyed by variant id). The response is the new cart, so no extra fetch is needed.
+    var pending = null;
     document.addEventListener('click', function (e) {
       var b = e.target.closest('[data-pp-gift-pick]');
-      if (!b || b.disabled || busy) return;
+      if (!b || b.disabled) return;
       var id = +b.dataset.ppGiftPick;
-      busy = true;
-      fetch(root + '/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (cart) {
-        var ids = data().gifts.map(function (g) { return g.id; });
+      var d = data();
+      var gift = d.gifts.filter(function (g) { return g.id === id; })[0];
+      document.querySelectorAll('[data-pp-gift]').forEach(function (box) {
+        box.querySelectorAll('[data-pp-gift-pick]').forEach(function (x) {
+          var on = +x.dataset.ppGiftPick === id;
+          x.classList.toggle('is-on', on);
+          x.setAttribute('aria-pressed', on);
+        });
+        var msg = box.querySelector('[data-pp-gift-msg]');
+        if (msg && gift) msg.textContent = box.dataset.tChosen.replace('[n]', gift.title);
+        var note = box.querySelector('[data-pp-gift-note]');
+        if (note) note.textContent = box.dataset.tSwap;
+      });
+      if (busy) { pending = id; return; }
+      var send = function (vid) {
+        busy = true;
         var updates = {};
-        cart.items.forEach(function (it) { if (ids.indexOf(it.variant_id) > -1) updates[it.key] = 0; });
-        var done = Object.keys(updates).length ? post('/cart/update.js', { updates: updates }) : Promise.resolve();
-        return done.then(function () { return post('/cart/add.js', { items: [{ id: id, quantity: 1 }] }); });
-      }).then(function () { busy = false; refreshDrawer(); load(); }).catch(function () { busy = false; load(); });
+        d.gifts.forEach(function (g) { updates[g.id] = g.id === vid ? 1 : 0; });
+        post('/cart/update.js', { updates: updates }).then(function (res) {
+          busy = false;
+          if (pending && pending !== vid) { var next = pending; pending = null; return send(next); }
+          pending = null;
+          render(res);
+          refreshDrawer();
+        }).catch(function () { busy = false; pending = null; load(); });
+      };
+      send(id);
     });
 
     ['cart:updated', 'ajaxProduct:added', 'drawerOpen', 'cart:update'].forEach(function (n) {
       document.addEventListener(n, function () { setTimeout(load, 250); });
     });
+    // The theme redrew the drawer: fill the new gift box at once from the last known cart (no empty flash), then refresh
+    var mt;
+    new MutationObserver(function () {
+      if (!lastCart || !document.querySelector('[data-pp-gift]:not([data-pp-done])')) return;
+      clearTimeout(mt);
+      mt = setTimeout(function () { render(lastCart); }, 0);
+    }).observe(document.documentElement, { childList: true, subtree: true });
     window.addEventListener('pageshow', function (e) { if (e.persisted) load(); });
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load); else load();
   })();
