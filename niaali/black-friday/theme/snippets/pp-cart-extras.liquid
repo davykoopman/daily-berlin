@@ -76,6 +76,27 @@
     display: none !important;
   }
 
+  /* No own row for the bin: on narrow carts (drawer, phones) it sits bottom right, under the price */
+  @container cart-items (max-width: 719px) {
+    .cart-items__table-row {
+      position: relative;
+      grid-template-areas:
+        'media details price'
+        'media error error' !important;
+    }
+
+    .cart-items__table-row .cart-items__quantity {
+      position: absolute;
+      top: 30px;
+      right: 0;
+      margin: 0 !important;
+    }
+
+    .cart-items__table-row .cart-items__remove {
+      margin: 0 !important;
+    }
+  }
+
   .pp-cart-extras {
     display: flex;
     flex-direction: column;

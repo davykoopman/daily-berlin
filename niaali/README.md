@@ -199,3 +199,6 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
   rapid clicks send only the last choice. Drawer line updated after ~1.2–1.5 s in the background. Tested PL + NL:
   rapid 3 clicks → exactly 1 gift (the last, 0 zł / €0), removing the jacket → gift removed, no JS errors.
   Waiting for the owner to publish v2.
+- v2 (#209403576652) also: cart bin under the price on the right (no own row; rows ~20px lower on phones and in the
+  drawer), removing still works; the English discount name "Free Gift" is no longer printed under cart lines
+  (snippets/cart-products: allocations titled "Free Gift" skipped; the 0,00 price shows the gift is free).
