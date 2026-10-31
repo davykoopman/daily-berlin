@@ -316,3 +316,7 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   languages); text is a 680px column with a larger first line. Alt text per language. page.json: about_page
   chi-siamo, photo Cozy_Holiday_Gift_Wrapping_Together.png (swap back after Christmas in the editor). Other pages
   that use page.json (contatti, FAQ, pagamenti) are unchanged. Originals in orig/.
+- Cart drawer: "Risparmi in totale / Du sparst insgesamt / Vous économisez / You save −X" (red, bold) above the
+  subtotal. = per line (compare-at or original price − paid) × qty + order discounts. Free gifts (tag regalo) count
+  0, no gift text (user). Hidden when 0. cart-item.liquid carries data-pp-save per line; the drawer script sums it
+  after every cart change. Tested IT (−130,90 € on 2 jackets, unchanged after picking a gift) and UK (−£111.00).

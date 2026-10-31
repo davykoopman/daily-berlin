@@ -113,6 +113,53 @@
             {% endif %}
           </div>
 
+          {%- comment -%} Davento: total saving (compare-at / old prices + discounts, free gifts not counted) {%- endcomment -%}
+          {%- liquid
+            assign pp_save = 0
+            for item in cart.items
+              unless item.product.tags contains 'regalo'
+                assign pp_was = item.original_price
+                if item.variant.compare_at_price > pp_was
+                  assign pp_was = item.variant.compare_at_price
+                endif
+                assign pp_ls = pp_was | times: item.quantity | minus: item.final_line_price
+                if pp_ls > 0
+                  assign pp_save = pp_save | plus: pp_ls
+                endif
+              endunless
+            endfor
+            for d in cart.cart_level_discount_applications
+              assign pp_save = pp_save | plus: d.total_allocated_amount
+            endfor
+            assign pp_lang = request.locale.iso_code | slice: 0, 2 | downcase
+            case pp_lang
+              when 'it'
+                assign pp_save_label = 'Risparmi in totale'
+              when 'de'
+                assign pp_save_label = 'Du sparst insgesamt'
+              when 'fr'
+                assign pp_save_label = 'Vous économisez'
+              else
+                assign pp_save_label = 'You save'
+            endcase
+          -%}
+          <div class="cart__item-row pp-cart-save" data-pp-save-row{% if pp_save <= 0 %} hidden{% endif %}>
+            <div>{{ pp_save_label }}</div>
+            <div data-pp-save-total>−{{ pp_save | money }}</div>
+          </div>
+          <style>
+            #CartDrawer .pp-cart-save {
+              display: flex;
+              justify-content: space-between;
+              align-items: baseline;
+              margin-bottom: 4px;
+              color: var(--pp-red);
+              font-size: 14px;
+              font-weight: 700;
+            }
+            #CartDrawer .pp-cart-save[hidden] { display: none; }
+          </style>
+
           <div class="cart__item-sub cart__item-row cart__subtotal-row">
             <div class="ajaxcart__subtotal">{{ 'cart.general.subtotal' | t }}</div>
             <div data-subtotal>{{ cart.total_price | money }}</div>
@@ -226,12 +273,31 @@
                 if (elSubtotal) elSubtotal.textContent = text;
               }
 
+              // Davento: total saving = line savings rendered on the cart items + order discounts
+              var _lastCart = null;
+              function setSaving(cart) {
+                if (cart) _lastCart = cart;
+                var row = document.querySelector('#CartDrawer [data-pp-save-row]');
+                if (!row) return;
+                var save = 0;
+                document.querySelectorAll('#CartDrawer [data-products] [data-pp-save]').forEach(function (el) {
+                  save += parseInt(el.getAttribute('data-pp-save'), 10) || 0;
+                });
+                var apps = (_lastCart && _lastCart.cart_level_discount_applications) || [];
+                apps.forEach(function (d) { save += Number(d.total_allocated_amount) || 0; });
+                if (!_lastCart || !_lastCart.item_count) save = 0;
+                row.hidden = save <= 0;
+                var el = row.querySelector('[data-pp-save-total]');
+                if (el && save > 0) el.textContent = '\u2212' + formatMoneyFromCents(save);
+              }
+
               function fetchCartAndUpdate() {
                 return fetch((window.apx && apx.routes && apx.routes.cart) ? apx.routes.cart : '/cart.js', { credentials: 'same-origin' })
                   .then(function (r) { return r.json(); })
                   .then(function (cart) {
                     var cents = (cart && typeof cart.total_price === 'number') ? cart.total_price : 0;
                     setTotalsFromCents(cents);
+                    setSaving(cart);
                   })
                   .catch(function () {});
               }

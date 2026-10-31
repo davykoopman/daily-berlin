@@ -1,4 +1,21 @@
-<div class="cart__item" data-key="{{ product.key }}">
+{%- comment -%}
+  Davento: saving on this line for the "total saving" row in the cart drawer
+  (old price or compare-at price minus what the customer pays). Free gifts (tag regalo) count 0.
+{%- endcomment -%}
+{%- liquid
+  assign pp_line_save = 0
+  unless product.product.tags contains 'regalo'
+    assign pp_unit_was = product.original_price
+    if product.variant.compare_at_price > pp_unit_was
+      assign pp_unit_was = product.variant.compare_at_price
+    endif
+    assign pp_line_save = pp_unit_was | times: product.quantity | minus: product.final_line_price
+    if pp_line_save < 0
+      assign pp_line_save = 0
+    endif
+  endunless
+-%}
+<div class="cart__item" data-key="{{ product.key }}" data-pp-save="{{ pp_line_save }}">
   <div class="cart__image">
     {% if product.image != blank %}
       <a href="{{ product.url }}" class="image-wrap">
