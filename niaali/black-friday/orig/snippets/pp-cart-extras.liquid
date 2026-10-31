@@ -1,0 +1,114 @@
+{%- doc -%}
+  Niaali cart summary extras (drawer and cart page), full width under the total:
+  "You save €X on this order" (compare-at minus price of every line + automatic discounts) and the
+  store promises (free shipping · N-day returns · secure checkout). Texts follow the visitor's language.
+
+  @param {number} [return_days] - Return period in days (refund policy), default 60
+{%- enddoc -%}
+
+{%- liquid
+  assign return_days = return_days | default: 60
+  assign sale_save = 0
+  for item in cart.items
+    if item.variant.compare_at_price > item.original_price
+      assign line_save = item.variant.compare_at_price | minus: item.original_price | times: item.quantity
+      assign sale_save = sale_save | plus: line_save
+    endif
+  endfor
+  assign total_save = sale_save | plus: cart.total_discount
+-%}
+
+<div class="pp-cart-extras">
+  {%- if total_save > 0 -%}
+    {%- capture save_money -%}{{ total_save | money }}{%- endcapture -%}
+    <p class="pp-cart-saving">{% render 'pp-i18n', key: 'you_save', n: save_money %}</p>
+  {%- endif -%}
+  <ul class="pp-cart-trust" role="list">
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/><circle cx="6.5" cy="17.25" r="1.75"/><circle cx="16.75" cy="17.25" r="1.75"/></svg>
+      {% render 'pp-i18n', key: 'free_shipping' %}
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/></svg>
+      {% render 'pp-i18n', key: 'returns_days', n: return_days %}
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>
+      {% render 'pp-i18n', key: 'secure_checkout' %}
+    </li>
+  </ul>
+</div>
+
+{% stylesheet %}
+  .pp-cart-extras {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .pp-cart-saving {
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #fdf0f0;
+    color: #c20000;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .pp-cart-saving strong {
+    font-weight: 800;
+  }
+
+  .pp-cart-trust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.3;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.75);
+  }
+
+  .pp-cart-trust li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .pp-cart-trust svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Tier bar at the top of the cart drawer */
+  .pp-cart-tier {
+    padding: 4px var(--cart-drawer-padding, 20px) 14px;
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.08);
+  }
+
+  .pp-cart-tier .pp-tierbar {
+    max-width: none;
+  }
+
+  .pp-cart-tier .pp-tierbar__msg {
+    font-size: 13px;
+  }
+
+  .pp-cart-tier--page {
+    padding: 0 0 14px;
+    margin-bottom: 8px;
+  }
+{% endstylesheet %}

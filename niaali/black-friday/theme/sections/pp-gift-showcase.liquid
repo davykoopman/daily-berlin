@@ -1,0 +1,196 @@
+{%- comment -%}
+  Free gift strip, directly under the header on every page (header group, after the header):
+  "Prezent gratis przy zamówieniu od 349 zł" with the 4 gifts as small photos. Slim, one line.
+  Texts from snippets/pp-gift-text, gifts and minimum from snippets/pp-gift-min.
+{%- endcomment -%}
+{%- liquid
+  capture min
+    render 'pp-gift-min'
+  endcapture
+  capture msg
+    render 'pp-gift-text', key: 'short'
+  endcapture
+  capture free
+    render 'pp-gift-text', key: 'free'
+  endcapture
+  capture msg_short
+    render 'pp-gift-text', key: 'bar'
+  endcapture
+  assign handles = 'prezent-apaszka-marina,prezent-etui-na-karty,prezent-portfel-klasyczny,prezent-bransoletka-pancerka' | split: ','
+-%}
+{%- comment -%}
+  Titles on every page in the Black Friday serif (Cormorant), sentence case.
+  This section is in the header group, so the font loads on every page.
+{%- endcomment -%}
+{%- assign tf = section.settings.title_font -%}
+{%- if tf != blank -%}
+  {% style %}
+    {{ tf | font_face: font_display: 'swap' }}
+    h1, h2, .h1, .h2,
+    .pp-title,
+    .pp-home__title,
+    .pp-bundle__title,
+    .pp-collection-head__title,
+    .pp-trust__title-bf {
+      font-family: {{ tf.family }}, {{ tf.fallback_families }} !important;
+      font-weight: {{ tf.weight }} !important;
+      font-style: normal !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+    }
+  {% endstyle %}
+{%- endif -%}
+{% render 'pp-bf-header' %}
+<div class="pp-giftbar">
+  <div class="pp-giftbar__inner">
+    <p class="pp-giftbar__text">
+      <svg class="pp-giftbar__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5h17v10h-17zM2.5 6.5h19v4h-19zM12 6.5v14M12 6.5c-1.8-3.6-6.5-3.6-6.5-.9 0 1.6 3.6.9 6.5.9zm0 0c1.8-3.6 6.5-3.6 6.5-.9 0 1.6-3.6.9-6.5.9z"/></svg>
+      <span class="pp-giftbar__long">{{ msg | strip | replace: '[min]', min }}</span>
+      <span class="pp-giftbar__short">{{ msg_short | strip | replace: '[min]', min }}</span>
+    </p>
+    <ul class="pp-giftbar__list" role="list">
+      {%- for h in handles -%}
+        {%- assign g = all_products[h] -%}
+        {%- if g == blank -%}{%- continue -%}{%- endif -%}
+        <li class="pp-giftbar__item" title="{{ g.title | escape }} – {{ free | strip }}">
+          {{ g.featured_image | image_url: width: 96 | image_tag: loading: 'lazy', width: 32, height: 32, alt: g.title }}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* Niaali Black Friday palette: black ink, white, Niaali beige for soft surfaces, red only for discounts / Black
+     Friday, champagne only in the hero. One place for every pp file (this section is on every page). */
+  :root {
+    --pp-ink: #121212;
+    --pp-ink-rgb: 18 18 18;
+    --pp-white: #ffffff;
+    --pp-cream: #edebe7;
+    --pp-red: #c20000;
+    --pp-champagne: #d8c3a5;
+  }
+
+  .pp-giftbar {
+    background: var(--pp-cream);
+    color: var(--pp-ink);
+    border-bottom: 1px solid rgb(var(--pp-ink-rgb) / 0.06);
+  }
+
+  .pp-giftbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    min-height: 44px;
+    padding: 6px 16px;
+  }
+
+  .pp-giftbar__text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .pp-giftbar__text .pp-gift-min {
+    color: var(--pp-red);
+  }
+
+  .pp-giftbar__short {
+    display: none;
+  }
+
+  .pp-giftbar__icon {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--pp-red);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .pp-giftbar__list {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-giftbar__item {
+    margin: 0;
+  }
+
+  .pp-giftbar__item img {
+    display: block;
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: var(--pp-white);
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-giftbar__inner {
+      gap: 10px;
+      min-height: 40px;
+      padding-inline: 14px;
+    }
+
+    .pp-giftbar__text {
+      gap: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .pp-giftbar__long {
+      display: none;
+    }
+
+    .pp-giftbar__short {
+      display: inline;
+    }
+
+    .pp-giftbar__icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .pp-giftbar__list {
+      gap: 4px;
+    }
+
+    .pp-giftbar__item img {
+      width: 26px;
+      height: 26px;
+      border-radius: 5px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Free gift bar",
+  "tag": "section",
+  "class": "pp-giftbar-section",
+  "settings": [
+    {
+      "type": "font_picker",
+      "id": "title_font",
+      "label": "Title font (all pages)",
+      "default": "cormorant_n6"
+    },
+    {
+      "type": "paragraph",
+      "content": "Slim free gift strip with the 4 gift photos, meant for the header group (under the menu, every page). Gifts and minimum amount: snippets/pp-gift-min.liquid (keep them the same as the automatic discount 'Free Gift')."
+    }
+  ],
+  "presets": [{ "name": "PP Free gift bar" }]
+}
+{% endschema %}

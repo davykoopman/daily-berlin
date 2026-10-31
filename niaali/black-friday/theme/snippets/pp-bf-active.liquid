@@ -1,0 +1,12 @@
+{%- doc -%}
+  Prints "1" while the Black Friday sale runs, nothing afterwards. One place for the end date (hero, badge on
+  product photos, trust row, red menu link).
+{%- enddoc -%}
+{%- liquid
+  # End of the sale: 1 December 2026, 00:00 Polish time (30 Nov 23:00 UTC)
+  assign bf_end = 1796079600
+  assign now = 'now' | date: '%s' | plus: 0
+  if now < bf_end
+    echo '1'
+  endif
+-%}

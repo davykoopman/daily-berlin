@@ -1,0 +1,23 @@
+{%- comment -%}
+  Bestsellery menu link (any link to /collections/bestsellery…), on every page (rendered by the gift bar in the
+  header group): a red tag in the header while the sale runs (snippets/pp-bf-active), red bold text afterwards.
+  In the mobile menu it is red bold text.
+{%- endcomment -%}
+{%- capture bf_on -%}{%- render 'pp-bf-active' -%}{%- endcapture -%}
+<style>
+  {%- if bf_on contains '1' %}
+  .header-menu a.menu-list__link[href*="/collections/bestsellery"] .menu-list__link-title {
+    padding: 5px 12px;
+    border-radius: 4px;
+    background: var(--pp-red, #c20000);
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .header-menu a.menu-list__link[href*="/collections/bestsellery"]:hover .menu-list__link-title { background: #a30000; }
+  {%- else %}
+  .header-menu a.menu-list__link[href*="/collections/bestsellery"] .menu-list__link-title { color: var(--pp-red, #c20000); font-weight: 700; }
+  {%- endif %}
+  .header__drawer a[href*="/collections/bestsellery"],
+  .menu-drawer a[href*="/collections/bestsellery"] { color: var(--pp-red, #c20000) !important; font-weight: 700; }
+</style>

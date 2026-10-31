@@ -1,0 +1,57 @@
+{%- doc -%}
+  The free gift offer in one place: the 4 gift products and the minimum order amount.
+  - mode 'amount' (default): prints the minimum, e.g. 349 zł / €80 / £70.
+  - mode 'json': prints {"min":34900,"local":8000|null,"gifts":[…]} for the cart scripts.
+  Minimum per currency (owner): PLN 349 zł, EUR €80 (NL), GBP £70 (UK) – round amounts. Any other currency: 349 zł
+  converted and rounded up. The automatic discount "Free Gift" (buy from Kobiety/Mężczyźni, get 1 gift free) is set
+  at 339 zł, which is below all three shown amounts (≈ €77 / £65), so the gift is always free when the theme lets a
+  customer pick it.
+
+  @param {string} [mode] - 'amount' or 'json'
+{%- enddoc -%}
+{%- liquid
+  # Minimum in the shop currency (PLN), in grosze
+  assign min_cents = 34900
+  # Fixed round minimum in the visitor's currency, in cents (0 = convert the PLN amount)
+  assign local_cents = 0
+  case cart.currency.iso_code
+    when 'PLN'
+      assign local_cents = 34900
+    when 'EUR'
+      assign local_cents = 8000
+    when 'GBP'
+      assign local_cents = 7000
+  endcase
+  assign handles = 'prezent-apaszka-marina,prezent-etui-na-karty,prezent-portfel-klasyczny,prezent-bransoletka-pancerka' | split: ','
+-%}
+{%- if mode == 'json' -%}
+  {"min":{{ min_cents }},"local":{% if local_cents > 0 %}{{ local_cents }}{% else %}null{% endif %},"gifts":[
+  {%- for h in handles -%}
+    {%- assign g = all_products[h] -%}
+    {%- if g != blank and g.available -%}
+      {%- assign v = g.selected_or_first_available_variant -%}
+      {"id":{{ v.id }},"title":{{ g.title | json }},"price":{{ v.price | money | json }},"img":{{ g.featured_image | image_url: width: 240 | json }}}{% unless forloop.last %},{% endunless %}
+    {%- endif -%}
+  {%- endfor -%}
+  ]}
+{%- elsif local_cents > 0 -%}
+  <span class="pp-gift-min">{{ local_cents | money_without_trailing_zeros }}</span>
+{%- else -%}
+  <span class="pp-gift-min" data-pp-gift-min="{{ min_cents }}">{{ min_cents | money_without_trailing_zeros }}</span>
+  <script>
+    (function () {
+      if (window.ppGiftMin) return;
+      window.ppGiftMin = true;
+      var run = function () {
+        var cur = window.Shopify && Shopify.currency;
+        if (!cur || !cur.rate || +cur.rate === 1) return;
+        document.querySelectorAll('[data-pp-gift-min]:not([data-done])').forEach(function (el) {
+          var v = Math.ceil(+el.dataset.ppGiftMin / 100 * +cur.rate);
+          try { el.textContent = new Intl.NumberFormat(document.documentElement.lang || 'pl', { style: 'currency', currency: cur.active, maximumFractionDigits: 0 }).format(v); } catch (e) {}
+          el.setAttribute('data-done', '');
+        });
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+    })();
+  </script>
+{%- endif -%}

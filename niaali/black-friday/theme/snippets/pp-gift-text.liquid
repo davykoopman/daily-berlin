@@ -1,0 +1,99 @@
+{%- doc -%}
+  Texts for the free gift offer, in the visitor's language (pl, nl, else English). [min] becomes the minimum order
+  amount (snippets/pp-gift-min), [x] / [n] are filled in by the caller.
+  One place for the gift texts: gift bar, product page, collection head, cart drawer.
+
+  @param {string} key - short, bar, pdp_yes, pdp_more, cross, more, unlocked, chosen, swap, free, note, tab_title, tab_body
+{%- enddoc -%}
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  case lang
+    when 'pl'
+      case key
+        when 'short'
+          echo 'Prezent gratis przy zamówieniu od [min]'
+        when 'bar'
+          echo 'Prezent gratis od [min]'
+        when 'pdp_yes'
+          echo 'Prezent gratis w zestawie ✓'
+        when 'pdp_more'
+          echo 'Brakuje [x] do prezentu gratis'
+        when 'cross'
+          echo 'Uzupełnij zamówienie'
+        when 'more'
+          echo 'Brakuje [x] do Twojego prezentu gratis'
+        when 'unlocked'
+          echo 'Prezent odblokowany! Wybierz jeden'
+        when 'chosen'
+          echo 'Twój prezent: [n] ✓'
+        when 'swap'
+          echo 'Kliknij inny prezent, aby go zmienić'
+        when 'free'
+          echo 'GRATIS'
+        when 'note'
+          echo '1 prezent na zamówienie'
+        when 'tab_title'
+          echo 'Prezent gratis'
+        when 'tab_body'
+          echo '<p>Przy każdym zamówieniu od [min] otrzymujesz wybrany prezent: apaszkę, etui na karty, portfel lub bransoletkę.</p><p>Wybierz go w koszyku, a wyślemy go razem z zamówieniem.</p>'
+      endcase
+    when 'nl'
+      case key
+        when 'short'
+          echo 'Gratis cadeau bij bestellingen vanaf [min]'
+        when 'bar'
+          echo 'Gratis cadeau vanaf [min]'
+        when 'pdp_yes'
+          echo 'Gratis cadeau inbegrepen ✓'
+        when 'pdp_more'
+          echo 'Nog [x] voor een gratis cadeau'
+        when 'cross'
+          echo 'Maak je bestelling compleet'
+        when 'more'
+          echo 'Nog [x] voor je gratis cadeau'
+        when 'unlocked'
+          echo 'Cadeau ontgrendeld! Kies er een'
+        when 'chosen'
+          echo 'Jouw cadeau: [n] ✓'
+        when 'swap'
+          echo 'Tik op een ander cadeau om te wisselen'
+        when 'free'
+          echo 'GRATIS'
+        when 'note'
+          echo '1 cadeau per bestelling'
+        when 'tab_title'
+          echo 'Gratis cadeau'
+        when 'tab_body'
+          echo '<p>Bij elke bestelling vanaf [min] krijg je een cadeau naar keuze: een sjaaltje, een pasjeshouder, een portemonnee of een armband.</p><p>Kies het in je winkelmandje, dan versturen we het met je bestelling mee.</p>'
+      endcase
+    else
+      case key
+        when 'short'
+          echo 'Free gift with orders over [min]'
+        when 'bar'
+          echo 'Free gift over [min]'
+        when 'pdp_yes'
+          echo 'Free gift included ✓'
+        when 'pdp_more'
+          echo '[x] more for a free gift'
+        when 'cross'
+          echo 'Complete your order'
+        when 'more'
+          echo '[x] more for your free gift'
+        when 'unlocked'
+          echo 'Gift unlocked! Pick one'
+        when 'chosen'
+          echo 'Your gift: [n] ✓'
+        when 'swap'
+          echo 'Tap another gift to swap'
+        when 'free'
+          echo 'FREE'
+        when 'note'
+          echo '1 gift per order'
+        when 'tab_title'
+          echo 'Free gift'
+        when 'tab_body'
+          echo '<p>With every order over [min] you get a gift of your choice: a scarf, a card holder, a wallet or a bracelet.</p><p>Pick it in your cart and it ships with your order.</p>'
+      endcase
+  endcase
+-%}
