@@ -97,7 +97,7 @@
     var render = function (cart) {
       var d = data();
       var ids = d.gifts.map(function (g) { return g.id; });
-      var min = Math.ceil(d.min * rate());
+      var min = d.local || Math.ceil(d.min * rate());
       var total = 0, inCart = [];
       cart.items.forEach(function (it) {
         if (ids.indexOf(it.variant_id) > -1) inCart.push(it);

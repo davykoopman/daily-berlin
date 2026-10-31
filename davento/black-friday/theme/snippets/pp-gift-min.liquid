@@ -2,7 +2,9 @@
   The free gift offer in one place: the 4 gift products and the minimum order amount.
   - mode 'amount' (default): prints the minimum as a span, e.g. €80. The script below rounds it up into the
     visitor's currency (Shopify converts the discount minimum the same way, so the shown amount is never too low).
-  - mode 'json': prints {"min":8000,"gifts":[…]} for the cart scripts.
+  - mode 'json': prints {"min":8000,"local":7000|null,"gifts":[…]} for the cart scripts.
+  Round amounts per currency (user): GBP £70, CHF 80 CHF. These are higher than €80 converted (≈ £68 / 76 CHF),
+  so the discount always applies when the theme lets a customer pick a gift. Other currencies: €80 converted, rounded up.
   The automatic discount "Free Gift" (buy €80 from Donna/Uomo, get 1 gift free) must use the same amount and products.
 
   @param {string} [mode] - 'amount' or 'json'
@@ -10,10 +12,18 @@
 {%- liquid
   # Minimum in the shop currency (EUR), in cents
   assign min_cents = 8000
+  # Fixed round minimum in the visitor's currency, in cents (blank = convert the EUR amount)
+  assign local_cents = blank
+  case cart.currency.iso_code
+    when 'GBP'
+      assign local_cents = 7000
+    when 'CHF'
+      assign local_cents = 8000
+  endcase
   assign handles = 'regalo-foulard-marina,regalo-portacarte-nero,regalo-portafoglio-classico,regalo-bracciale-grumetta' | split: ','
 -%}
 {%- if mode == 'json' -%}
-  {"min":{{ min_cents }},"gifts":[
+  {"min":{{ min_cents }},"local":{% if local_cents %}{{ local_cents }}{% else %}null{% endif %},"gifts":[
   {%- for h in handles -%}
     {%- assign g = all_products[h] -%}
     {%- if g != blank and g.available -%}
@@ -23,7 +33,11 @@
   {%- endfor -%}
   ]}
 {%- else -%}
+  {%- if local_cents -%}
+  <span class="pp-gift-min">{{ local_cents | money_without_trailing_zeros }}</span>
+{%- else -%}
   <span class="pp-gift-min" data-pp-gift-min="{{ min_cents }}">{{ min_cents | money_without_trailing_zeros }}</span>
+{%- endif -%}
   <script>
     (function () {
       if (window.ppGiftMin) return;

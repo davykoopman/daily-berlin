@@ -320,3 +320,7 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   subtotal. = per line (compare-at or original price − paid) × qty + order discounts. Free gifts (tag regalo) count
   0, no gift text (user). Hidden when 0. cart-item.liquid carries data-pp-save per line; the drawer script sums it
   after every cart change. Tested IT (−130,90 € on 2 jackets, unchanged after picking a gift) and UK (−£111.00).
+- Free gift minimum per currency (user): UK £70, Switzerland 80 CHF (fixed, round), euro markets €80, any other
+  currency €80 converted and rounded up. Set in snippets/pp-gift-min.liquid (local_cents); the strip, product page
+  line/tab, collection heads and cart all use it. The automatic discount stays at €80 (≈ £68 / 76 CHF), lower than
+  the shown amounts, so a customer who reaches £70 / 80 CHF always gets the gift for free.

@@ -54,6 +54,7 @@
           window.ppGiftPdp = true;
           var shopFormat = {{ shop.money_format | json }};
           var shopCurrency = '{{ shop.currency }}';
+          var minLocal = {% render 'pp-gift-min', mode: 'json' %}.local;
           var minCents = {% render 'pp-gift-min', mode: 'json' %}.min;
           var giftIds = {% render 'pp-gift-min', mode: 'json' %}.gifts.map(function (g) { return g.id; });
           var root = '{{ routes.root_url }}'.replace(/\/$/, '');
@@ -75,7 +76,7 @@
             if (!el) return;
             var prices = JSON.parse(el.dataset.prices);
             var rate = +((window.Shopify && Shopify.currency && Shopify.currency.rate) || 1);
-            var min = Math.ceil(minCents * rate);
+            var min = minLocal || Math.ceil(minCents * rate);
             var v = el.dataset.variant;
             // Prices on the page are in the visitor's currency already; count this item once
             var total = cartTotal + (cartVariants.indexOf(+v) > -1 ? 0 : (prices[v] || 0));
