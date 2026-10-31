@@ -258,3 +258,16 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   Portafoglio Classico (regalo-portafoglio-classico), Bracciale Grumetta (regalo-bracciale-grumetta) – men.
   Not built yet (waiting for GO): automatic "Regalo gratuito" discount (buy X get Y, €80 on non-gift products,
   1 gift at 100%), Mix & Save excluding gifts, gift picker + €80 progress in the cart drawer.
+- Free gift replaces Mix & Save (user GO, 31 Oct):
+  - LIVE STORE: Mix & Save -10/-15/-20% deactivated (status expired, not deleted – reactivate in Discounts).
+    New automatic discount "Free Gift" (gid://shopify/DiscountAutomaticNode/1956016816471): buy at least €80 from
+    the collections Donna or Uomo (gifts are in neither), get 1 of the 4 regalo products 100% off, once per order,
+    combines with product/order/shipping discounts. Title is not translatable (Shopify), so it is in English.
+  - Theme (draft): snippets/pp-gift-min (the 4 gift handles + minimum €80 in one place; converts the amount to
+    the visitor's currency), pp-gift-text (all gift texts IT/DE/FR/EN), pp-gift-cart (cart drawer block: progress
+    "Ancora €X…", gifts locked under €80, pick/swap from €80, gift removed automatically under €80, max 1;
+    layout 'line' = progress line on pages), sections/pp-gift-showcase (home: cream band with the 4 gifts, after
+    the trust row). Replaced the bundle discount everywhere: announcement (gift message first), product page
+    bullet (pp-benefits, original in orig/), product info tab "Regalo gratuito", product cross-sell title
+    "Completa il tuo ordine" + gift line, collection head and home bestsellers (gift line instead of tier bar),
+    cart drawer (gift block instead of tier bar). pp-tier-progress is no longer used.

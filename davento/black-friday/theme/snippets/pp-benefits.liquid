@@ -1,0 +1,89 @@
+{%- doc -%}
+  Product page bullets under the price: free shipping, money back period and
+  the free gift offer. Texts come from pp-i18n / pp-gift-text (storefront language).
+  Apex port of the Niaali pp-benefits block (Apex has no theme blocks).
+
+  @param {number} [return_days] - Return period from the refund policy, default 60
+  @param {boolean} [divider] - Line above the bullets, default true
+{%- enddoc -%}
+
+{%- liquid
+  assign return_days = return_days | default: 60
+  assign divider = divider | default: true, allow_false: true
+-%}
+
+<div class="pp-benefits-wrap{% if divider %} pp-benefits-wrap--divider{% endif %}">
+  <ul class="pp-benefits" role="list">
+    <li class="pp-benefit">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/>
+        <circle cx="6.5" cy="17.25" r="1.75"/>
+        <circle cx="16.75" cy="17.25" r="1.75"/>
+      </svg>
+      <span>{% render 'pp-i18n', key: 'free_shipping' %}</span>
+    </li>
+    <li class="pp-benefit">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 3l7.5 3v5.5c0 4.5-3.2 8.3-7.5 9.5-4.3-1.2-7.5-5-7.5-9.5V6L12 3z"/>
+        <path d="M8.75 12.25l2.25 2.25 4.25-4.5"/>
+      </svg>
+      <span>{% render 'pp-i18n', key: 'money_back', n: return_days %}</span>
+    </li>
+    <li class="pp-benefit pp-benefit--gift">
+      <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M3.5 10.5h17v10h-17zM2.5 6.5h19v4h-19zM12 6.5v14M12 6.5c-1.8-3.6-6.5-3.6-6.5-.9 0 1.6 3.6.9 6.5.9zm0 0c1.8-3.6 6.5-3.6 6.5-.9 0 1.6-3.6.9-6.5.9z"/>
+      </svg>
+      {%- capture gift_min -%}{%- render 'pp-gift-min' -%}{%- endcapture -%}
+      {%- capture gift_txt -%}{%- render 'pp-gift-text', key: 'short' -%}{%- endcapture -%}
+      <span>{{ gift_txt | strip | replace: '[min]', gift_min }}</span>
+    </li>
+  </ul>
+</div>
+
+{% stylesheet %}
+  .pp-benefits-wrap {
+    width: 100%;
+  }
+
+  .pp-benefits-wrap--divider {
+    padding-top: 18px;
+    border-top: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+  .pp-benefits {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--color-foreground);
+  }
+
+  .pp-benefit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .pp-benefit--gift {
+    font-weight: 600;
+  }
+
+  .pp-benefit--gift .pp-benefit__icon {
+    color: var(--pp-red);
+  }
+
+  .pp-benefit__icon {
+    flex: 0 0 20px;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+{% endstylesheet %}

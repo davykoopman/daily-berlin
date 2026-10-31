@@ -1,0 +1,128 @@
+{%- doc -%}
+  Texts for the free gift offer, in the visitor's language. [min] becomes the minimum order amount
+  (a span that pp-gift-min converts to the visitor's currency), [x] / [n] are filled in by the caller.
+  One place for the gift texts: announcement bar, product page, home section, cart drawer.
+
+  @param {string} key - ann, short, cross, title, sub, more, unlocked, chosen, swap, free, note, tab_title, tab_body
+{%- enddoc -%}
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+  case lang
+    when 'it'
+      case key
+        when 'ann'
+          echo 'Regalo gratuito per ordini sopra [min]'
+        when 'short'
+          echo 'Regalo gratuito per ordini sopra [min]'
+        when 'cross'
+          echo 'Completa il tuo ordine'
+        when 'title'
+          echo 'Il tuo regalo gratuito'
+        when 'sub'
+          echo 'Per ogni ordine sopra [min] scegli uno di questi regali nel carrello.'
+        when 'more'
+          echo 'Ancora [x] per il tuo regalo gratuito'
+        when 'unlocked'
+          echo 'Hai sbloccato un regalo! Scegline uno'
+        when 'chosen'
+          echo 'Il tuo regalo: [n] ✓'
+        when 'swap'
+          echo 'Tocca un altro regalo per cambiarlo'
+        when 'free'
+          echo 'GRATIS'
+        when 'note'
+          echo '1 regalo per ordine'
+        when 'tab_title'
+          echo 'Regalo gratuito'
+        when 'tab_body'
+          echo '<p>Per ogni ordine sopra [min] ricevi un regalo a scelta: un foulard, un portacarte, un portafoglio o un bracciale.</p><p>Lo scegli direttamente nel carrello e arriva insieme al tuo ordine.</p>'
+      endcase
+    when 'de'
+      case key
+        when 'ann'
+          echo 'Gratis-Geschenk ab [min] Bestellwert'
+        when 'short'
+          echo 'Gratis-Geschenk ab [min] Bestellwert'
+        when 'cross'
+          echo 'Ergänze deine Bestellung'
+        when 'title'
+          echo 'Dein Gratis-Geschenk'
+        when 'sub'
+          echo 'Ab [min] Bestellwert wählst du im Warenkorb eines dieser Geschenke.'
+        when 'more'
+          echo 'Noch [x] bis zu deinem Gratis-Geschenk'
+        when 'unlocked'
+          echo 'Geschenk freigeschaltet! Wähle eins'
+        when 'chosen'
+          echo 'Dein Geschenk: [n] ✓'
+        when 'swap'
+          echo 'Tippe auf ein anderes, um zu wechseln'
+        when 'free'
+          echo 'GRATIS'
+        when 'note'
+          echo '1 Geschenk pro Bestellung'
+        when 'tab_title'
+          echo 'Gratis-Geschenk'
+        when 'tab_body'
+          echo '<p>Ab [min] Bestellwert bekommst du ein Geschenk deiner Wahl: ein Tuch, ein Kartenetui, eine Geldbörse oder ein Armband.</p><p>Du wählst es direkt im Warenkorb, es kommt mit deiner Bestellung.</p>'
+      endcase
+    when 'fr'
+      case key
+        when 'ann'
+          echo "Cadeau offert dès [min] d'achat"
+        when 'short'
+          echo "Cadeau offert dès [min] d'achat"
+        when 'cross'
+          echo 'Complétez votre commande'
+        when 'title'
+          echo 'Votre cadeau offert'
+        when 'sub'
+          echo "Dès [min] d'achat, choisissez l'un de ces cadeaux dans le panier."
+        when 'more'
+          echo 'Plus que [x] pour votre cadeau offert'
+        when 'unlocked'
+          echo 'Cadeau débloqué ! Choisissez-en un'
+        when 'chosen'
+          echo 'Votre cadeau : [n] ✓'
+        when 'swap'
+          echo 'Touchez un autre cadeau pour changer'
+        when 'free'
+          echo 'OFFERT'
+        when 'note'
+          echo '1 cadeau par commande'
+        when 'tab_title'
+          echo 'Cadeau offert'
+        when 'tab_body'
+          echo "<p>Dès [min] d'achat, recevez le cadeau de votre choix : un foulard, un porte-cartes, un portefeuille ou un bracelet.</p><p>Vous le choisissez dans le panier, il arrive avec votre commande.</p>"
+      endcase
+    else
+      case key
+        when 'ann'
+          echo 'Free gift with orders over [min]'
+        when 'short'
+          echo 'Free gift with orders over [min]'
+        when 'cross'
+          echo 'Complete your order'
+        when 'title'
+          echo 'Your free gift'
+        when 'sub'
+          echo 'With every order over [min], pick one of these gifts in your cart.'
+        when 'more'
+          echo '[x] more for your free gift'
+        when 'unlocked'
+          echo 'Gift unlocked! Pick one'
+        when 'chosen'
+          echo 'Your gift: [n] ✓'
+        when 'swap'
+          echo 'Tap another gift to swap'
+        when 'free'
+          echo 'FREE'
+        when 'note'
+          echo '1 gift per order'
+        when 'tab_title'
+          echo 'Free gift'
+        when 'tab_body'
+          echo '<p>With every order over [min] you get a gift of your choice: a scarf, a card holder, a wallet or a bracelet.</p><p>Pick it in your cart and it ships with your order.</p>'
+      endcase
+  endcase
+-%}

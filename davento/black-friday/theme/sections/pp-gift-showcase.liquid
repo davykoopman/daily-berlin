@@ -1,0 +1,186 @@
+{%- comment -%}
+  Home: the free gift offer with the 4 gifts, so visitors know it before they shop.
+  Texts from snippets/pp-gift-text, gifts and minimum from snippets/pp-gift-min.
+{%- endcomment -%}
+{%- liquid
+  capture min
+    render 'pp-gift-min'
+  endcapture
+  capture title
+    render 'pp-gift-text', key: 'title'
+  endcapture
+  capture sub
+    render 'pp-gift-text', key: 'sub'
+  endcapture
+  capture free
+    render 'pp-gift-text', key: 'free'
+  endcapture
+  assign handles = 'regalo-foulard-marina,regalo-portacarte-nero,regalo-portafoglio-classico,regalo-bracciale-grumetta' | split: ','
+-%}
+<div class="pp-giftshow">
+  <div class="amz-pw pp-giftshow__inner">
+    <div class="pp-giftshow__text">
+      <svg class="pp-giftshow__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5h17v10h-17zM2.5 6.5h19v4h-19zM12 6.5v14M12 6.5c-1.8-3.6-6.5-3.6-6.5-.9 0 1.6 3.6.9 6.5.9zm0 0c1.8-3.6 6.5-3.6 6.5-.9 0 1.6-3.6.9-6.5.9z"/></svg>
+      <h2 class="pp-giftshow__title">{{ title | strip }}</h2>
+      <p class="pp-giftshow__sub">{{ sub | strip | replace: '[min]', min }}</p>
+    </div>
+    <ul class="pp-giftshow__list" role="list">
+      {%- for h in handles -%}
+        {%- assign g = all_products[h] -%}
+        {%- if g == blank -%}{%- continue -%}{%- endif -%}
+        <li class="pp-giftshow__item">
+          <span class="pp-giftshow__img">
+            {{ g.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200, 300, 400', sizes: '(min-width: 769px) 160px, 40vw', alt: g.title }}
+          </span>
+          <span class="pp-giftshow__name">{{ g.title }}</span>
+          <span class="pp-giftshow__price"><s>{{ g.price | money }}</s> <b>{{ free | strip }}</b></span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% stylesheet %}
+  .pp-giftshow {
+    padding-block: 40px;
+    background: var(--pp-cream);
+    color: var(--pp-ink);
+  }
+
+  .pp-giftshow__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    align-items: center;
+    gap: 40px;
+  }
+
+  .pp-giftshow__icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 10px;
+    fill: none;
+    stroke: var(--pp-red);
+    stroke-width: 1.4;
+    stroke-linejoin: round;
+  }
+
+  .pp-giftshow__title {
+    margin: 0 0 10px;
+    font-family: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+    font-size: 2.125rem;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .pp-giftshow__sub {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgb(var(--pp-ink-rgb) / 0.8);
+  }
+
+  .pp-giftshow__sub .pp-gift-min {
+    font-weight: 700;
+    color: var(--pp-red);
+  }
+
+  .pp-giftshow__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-giftshow__item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+  }
+
+  .pp-giftshow__img {
+    display: block;
+    overflow: hidden;
+    margin-bottom: 4px;
+    border-radius: 10px;
+    background: var(--pp-white);
+  }
+
+  .pp-giftshow__img img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  .pp-giftshow__name {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .pp-giftshow__price {
+    font-size: 13px;
+  }
+
+  .pp-giftshow__price s {
+    color: rgb(var(--pp-ink-rgb) / 0.55);
+  }
+
+  .pp-giftshow__price b {
+    color: var(--pp-red);
+    letter-spacing: 0.04em;
+  }
+
+  @media screen and (max-width: 768px) {
+    .pp-giftshow {
+      padding-block: 28px;
+    }
+
+    .pp-giftshow__inner {
+      grid-template-columns: 1fr;
+      gap: 18px;
+      text-align: center;
+    }
+
+    .pp-giftshow__icon {
+      margin-inline: auto;
+    }
+
+    .pp-giftshow__title {
+      font-size: 1.625rem;
+    }
+
+    .pp-giftshow__sub {
+      font-size: 14px;
+    }
+
+    .pp-giftshow__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      text-align: left;
+    }
+
+    .pp-giftshow__name {
+      font-size: 13px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Free gift",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows the free gift offer with the 4 gift products. Gifts and minimum amount: snippets/pp-gift-min.liquid (keep them the same as the automatic discount 'Free Gift')."
+    }
+  ],
+  "presets": [{ "name": "PP Free gift" }]
+}
+{% endschema %}

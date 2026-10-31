@@ -52,8 +52,8 @@
 <div class="pp-bundle" style="--pp-pad-top: {{ ss.padding_top }}px; --pp-pad-bottom: {{ ss.padding_bottom }}px; {{ styles }}">
   <div class="amz-pw">
     <div class="pp-bundle__head">
-      <h2 class="pp-bundle__title h2">{% render 'pp-i18n', key: 'bundle_title' %}</h2>
-      {% render 'pp-tier-progress', tiers: ss.tiers %}
+      <h2 class="pp-bundle__title h2">{% render 'pp-gift-text', key: 'cross' %}</h2>
+      {% render 'pp-gift-cart', layout: 'line' %}
     </div>
 
     <div class="pp-row" data-pp-row>

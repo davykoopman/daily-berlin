@@ -1,0 +1,44 @@
+{%- doc -%}
+  The free gift offer in one place: the 4 gift products and the minimum order amount.
+  - mode 'amount' (default): prints the minimum as a span, e.g. €80. The script below rounds it up into the
+    visitor's currency (Shopify converts the discount minimum the same way, so the shown amount is never too low).
+  - mode 'json': prints {"min":8000,"gifts":[…]} for the cart scripts.
+  The automatic discount "Free Gift" (buy €80 from Donna/Uomo, get 1 gift free) must use the same amount and products.
+
+  @param {string} [mode] - 'amount' or 'json'
+{%- enddoc -%}
+{%- liquid
+  # Minimum in the shop currency (EUR), in cents
+  assign min_cents = 8000
+  assign handles = 'regalo-foulard-marina,regalo-portacarte-nero,regalo-portafoglio-classico,regalo-bracciale-grumetta' | split: ','
+-%}
+{%- if mode == 'json' -%}
+  {"min":{{ min_cents }},"gifts":[
+  {%- for h in handles -%}
+    {%- assign g = all_products[h] -%}
+    {%- if g != blank and g.available -%}
+      {%- assign v = g.selected_or_first_available_variant -%}
+      {"id":{{ v.id }},"title":{{ g.title | json }},"price":{{ v.price | money | json }},"img":{{ g.featured_image | image_url: width: 240 | json }}}{% unless forloop.last %},{% endunless %}
+    {%- endif -%}
+  {%- endfor -%}
+  ]}
+{%- else -%}
+  <span class="pp-gift-min" data-pp-gift-min="{{ min_cents }}">{{ min_cents | money_without_trailing_zeros }}</span>
+  <script>
+    (function () {
+      if (window.ppGiftMin) return;
+      window.ppGiftMin = true;
+      var run = function () {
+        var cur = window.Shopify && Shopify.currency;
+        if (!cur || !cur.rate || +cur.rate === 1) return;
+        document.querySelectorAll('[data-pp-gift-min]:not([data-done])').forEach(function (el) {
+          var v = Math.ceil(+el.dataset.ppGiftMin / 100 * +cur.rate);
+          try { el.textContent = new Intl.NumberFormat(document.documentElement.lang || 'it', { style: 'currency', currency: cur.active, maximumFractionDigits: 0 }).format(v); } catch (e) {}
+          el.setAttribute('data-done', '');
+        });
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+      document.addEventListener('pp:gift-min', run);
+    })();
+  </script>
+{%- endif -%}

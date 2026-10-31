@@ -97,14 +97,18 @@
       assign bundle_note = 'The discount is applied automatically in the cart.'
   endcase
 
-  capture b_bundle
-    echo '<p>' | append: bundle_intro | append: '</p><ul>'
-    for pair in pairs
-      assign p = pair | strip | split: ':'
-      echo '<li>' | append: bundle_line | replace: '[q]', p[0] | replace: '[p]', p[1] | append: '</li>'
-    endfor
-    echo '</ul><p>' | append: bundle_note | append: '</p>'
+  # Free gift tab (replaces the bundle discount tab; texts in snippets/pp-gift-text)
+  capture gift_min
+    render 'pp-gift-min'
   endcapture
+  capture t_bundle
+    render 'pp-gift-text', key: 'tab_title'
+  endcapture
+  capture b_bundle
+    render 'pp-gift-text', key: 'tab_body'
+  endcapture
+  assign t_bundle = t_bundle | strip
+  assign b_bundle = b_bundle | strip | replace: '[min]', gift_min
 
   capture description
     if product.empty?
