@@ -60,6 +60,21 @@
 </div>
 
 {% stylesheet %}
+  /* Davento palette, same as snippets/pp-card. Repeated here because this section is on every page
+     (header group): pages without product cards (contact, FAQ, about) otherwise miss the colours. */
+  :root {
+    --pp-ink: #1c1d1d;
+    --pp-ink-rgb: 28 29 29;
+    --pp-white: #ffffff;
+    --pp-cream: #f3efe8;
+    --pp-red: #c20000;
+
+    --color-foreground: var(--pp-ink);
+    --color-foreground-heading: var(--pp-ink);
+    --color-background: var(--pp-white);
+    --color-foreground-rgb: var(--pp-ink-rgb);
+  }
+
   .pp-giftbar {
     background: var(--pp-cream);
     color: var(--pp-ink);

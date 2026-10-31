@@ -308,3 +308,6 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   both as sub-collections (248, stays in sync). Drafts in the list do not show in the shop.
   Theme: Bestseller pages get chips Tutto | Donna | Uomo (DE Alle/Damen/Herren, FR Tout/Femme/Homme, EN All/Women/
   Men) in pp-collection-head; chips are centred on phones when they fit, otherwise swipe from the left as before.
+- Fix: the free gift strip lost its cream background and red icon on pages without product cards (contact, FAQ,
+  about). The palette (--pp-*) was only defined in snippets/pp-card. It is now also in pp-gift-showcase (header
+  group, every page), so the strip and the cart drawer look the same everywhere.
