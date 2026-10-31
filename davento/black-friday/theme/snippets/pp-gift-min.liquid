@@ -12,8 +12,8 @@
 {%- liquid
   # Minimum in the shop currency (EUR), in cents
   assign min_cents = 8000
-  # Fixed round minimum in the visitor's currency, in cents (blank = convert the EUR amount)
-  assign local_cents = blank
+  # Fixed round minimum in the visitor's currency, in cents (0 = convert the EUR amount)
+  assign local_cents = 0
   case cart.currency.iso_code
     when 'GBP'
       assign local_cents = 7000
@@ -23,7 +23,7 @@
   assign handles = 'regalo-foulard-marina,regalo-portacarte-nero,regalo-portafoglio-classico,regalo-bracciale-grumetta' | split: ','
 -%}
 {%- if mode == 'json' -%}
-  {"min":{{ min_cents }},"local":{% if local_cents %}{{ local_cents }}{% else %}null{% endif %},"gifts":[
+  {"min":{{ min_cents }},"local":{% if local_cents > 0 %}{{ local_cents }}{% else %}null{% endif %},"gifts":[
   {%- for h in handles -%}
     {%- assign g = all_products[h] -%}
     {%- if g != blank and g.available -%}
@@ -33,7 +33,7 @@
   {%- endfor -%}
   ]}
 {%- else -%}
-  {%- if local_cents -%}
+  {%- if local_cents > 0 -%}
   <span class="pp-gift-min">{{ local_cents | money_without_trailing_zeros }}</span>
 {%- else -%}
   <span class="pp-gift-min" data-pp-gift-min="{{ min_cents }}">{{ min_cents | money_without_trailing_zeros }}</span>

@@ -324,3 +324,8 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   currency €80 converted and rounded up. Set in snippets/pp-gift-min.liquid (local_cents); the strip, product page
   line/tab, collection heads and cart all use it. The automatic discount stays at €80 (≈ £68 / 76 CHF), lower than
   the shown amounts, so a customer who reaches £70 / 80 CHF always gets the gift for free.
+- Fix: the £70/80 CHF change used `assign x = blank`, which Liquid treats as true → the euro markets showed no amount
+  ("Regalo gratuito per ordini sopra" + nothing) and the gift JSON had "local":, for a few minutes in the draft theme.
+  Now 0 / > 0. Tested: IT strip €80 + "Ancora €17,05", UK £70 + "£16.00 more", CH "CHF 80" + "Noch 14,00 CHF".
+- Product title on phones (user GO, option A): 20px (was 26px), at most 2 lines with … , margin 0 0 6px
+  (.amz-prod__ttl in pp-gallery-nav). Desktop unchanged.

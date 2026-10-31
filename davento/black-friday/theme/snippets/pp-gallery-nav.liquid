@@ -189,5 +189,16 @@
     .pp-bundle__title {
       font-size: 1.625rem !important;
     }
+
+    /* Product title on phones: 20px, at most 2 lines (longer titles end with …), less space around it */
+    .amz-prod__ttl.amz-prod__ttl {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      margin: 0 0 6px;
+      font-size: 20px !important;
+      line-height: 1.25 !important;
+    }
   }
 {% endstylesheet %}
