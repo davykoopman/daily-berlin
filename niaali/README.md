@@ -175,3 +175,16 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
   cart add-ons.
 - Product page gift bullet (user): no counter any more, plain text per market: "Prezent gratis przy zamówieniu od
   349 zł" / "Gratis cadeau bij bestelling vanaf €80" / "Free gift with orders over £70" (pp-gift-text key pdp_static).
+- Pre-launch QA (31 Oct, evening), PL / nl-nl / en-gb, mobile + desktop, 15 pages each (home, bestseller and other
+  collections, product, O nas, contact, FAQ, 4 policies, cart, search): no Liquid errors, no missing translations,
+  no Polish text on NL/EN pages, no horizontal scroll, no JS errors. Purchase flow per market: gift bar
+  349 zł / €80 / £70, product gift line, cart unlock + pick works, saving line, 3 promises, no qty selector,
+  checkout in the right language with "Tylko 3% / Slechts 3% / Only 3%". Gift is NOT €0 yet because MIX & MATCH
+  (still active) wins → deactivate at publish.
+- Fixes during QA: tab "Prezent gratis" NL/EN translation was the old "Combineer en bespaar" → "Gratis cadeau" /
+  "Free gift"; size guide had no Dutch (showed English) → Dutch added (pp-size-guide-i18n); LIVE STORE menu
+  translations: NL Homepagina/Vrouwen/Mannen → Home/Dames/Heren, EN Home page/Men's → Home/Men; PP Rating and
+  PP Stock sit closer to title / buy button when switched on.
+- Policies: return 60 days, 1–2 / 3–7 / 4–9 working days, cut-off 14:00, hours – identical in PL/NL/EN; no Mix & Match
+  or Halloween anywhere. Open (owner/legal): policies and contact name "Niaali, Składowa 11, Lublin, Poland" while the
+  legal notice names "DK Interim Management, Venray, Nederland"; legal notice is Dutch only (no PL/EN translation).
