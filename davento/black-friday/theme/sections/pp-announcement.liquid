@@ -2,15 +2,6 @@
   assign ss = section.settings
   assign lang = request.locale.iso_code | slice: 0, 2 | downcase
 
-  # Second message: the free gift offer (was the bundle discount)
-  capture gift_min
-    render 'pp-gift-min'
-  endcapture
-  capture m2
-    render 'pp-gift-text', key: 'ann'
-  endcapture
-  assign m2 = m2 | strip | replace: '[min]', gift_min
-
   case lang
     when 'it'
       assign m1 = 'Spedizione gratuita su tutti gli ordini'
@@ -32,8 +23,7 @@
 <div class="amz-ann-bar pp-ann" data-pp-ann data-speed="{{ ss.speed | times: 1000 }}">
   <div class="amz-pw">
     <ul class="pp-ann__list" role="list">
-      <li class="pp-ann__item is-active"><span class="amz-ann__lnk-txt">{{ m2 }}</span></li>
-      <li class="pp-ann__item" aria-hidden="true"><span class="amz-ann__lnk-txt">{{ m1 }}</span></li>
+      <li class="pp-ann__item is-active"><span class="amz-ann__lnk-txt">{{ m1 }}</span></li>
       <li class="pp-ann__item" aria-hidden="true"><span class="amz-ann__lnk-txt">{{ m3 }}</span></li>
     </ul>
   </div>
@@ -108,7 +98,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Three rotating messages, translated automatically: free gift (snippets/pp-gift-min / pp-gift-text), free shipping, return period. Match them to the policies and the store discounts. The bundle tiers setting is no longer used."
+      "content": "Two rotating messages, translated automatically: free shipping, return period (the free gift has its own strip under the header: sections/pp-gift-showcase). Match them to the policies and the store discounts. The bundle tiers setting is no longer used."
     },
     {
       "type": "text",

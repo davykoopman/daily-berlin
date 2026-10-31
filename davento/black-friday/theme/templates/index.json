@@ -50,10 +50,6 @@
         "bf_font": "dm_serif_display_n4"
       }
     },
-    "pp_gift_showcase": {
-      "type": "pp-gift-showcase",
-      "settings": {}
-    },
     "pp_home_categories": {
       "type": "pp-home-categories",
       "settings": {
@@ -205,7 +201,6 @@
     "pp_bf_hero",
     "slideshow_iJ73j4",
     "pp_trust",
-    "pp_gift_showcase",
     "pp_home_categories",
     "pp_home_best",
     "text_and_image_3Hjyqh",

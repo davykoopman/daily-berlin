@@ -276,3 +276,8 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
     swap works, removing an item under €80 removes the gift; checkout €117,85 → €97,90 with the gift free.
     UK shows "£68" / "£67.98 more" (converted), DE in German. Amounts use the store money format (€45,05).
     Note: Shopify's bot check blocks a headless browser now and then; tests use a normal browser identity.
+- Gift strip instead of the big home section (user: "veel kleiner", idea: under the menu on every page): section
+  pp-gift-showcase is now a slim cream bar (45px desktop / 41px mobile): gift icon + "Regalo gratuito per ordini
+  sopra €80" + the 4 gifts as 32px (26px mobile) photos. Placed in sections/header-group.json after the header
+  (every page; original in orig/sections/header-group.json), removed from index.json. The announcement bar no longer
+  repeats the gift (rotates free shipping / 60-day returns). Checked home + collection, desktop + mobile.
