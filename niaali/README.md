@@ -151,3 +151,8 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
     product gift line (68,55 zł / € 22,05 left), chips, cross-sell title, cart pick → "Twój prezent: Apaszka Marina ✓".
     Gift NOT €0 yet in the cart while MIX & MATCH is active (Shopify applies the bigger Mix & Match discount instead
     of combining) → deactivate Mix & Match when publishing.
+- Feedback round 1 (user): menu under the logo (header menu_row bottom, centred); hero offer in Geist bold (Cormorant
+  had sinking figures), "Black Friday" on one line and centred on phones; trust row smaller (22px icons, 12px text,
+  56px apart on desktop, 2x2 on phones); categories = bestsellers (5 per row, 262x328 desktop / 164x205 mobile, both
+  4:5, same left edge); titles Playfair Display 700 (also FAQ / text headings); cart: "Oszczędzasz −X" red line +
+  "Darmowa dostawa · Zwrot 60 dni · Bezpieczna płatność" on one line; gift photos 192px (sharp).

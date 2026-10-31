@@ -370,10 +370,13 @@
 
   /* Phones: "Black Friday" on one line */
   @media screen and (max-width: 749px) {
+    /* Centred on the screen, not in the (narrower) content column */
     .pp-bf__title {
-      align-self: stretch;
-      width: 100%;
-      font-size: 12.5vw;
+      align-self: center;
+      width: 100vw;
+      max-width: none;
+      margin-inline: calc(50% - 50vw);
+      font-size: 12vw;
       white-space: nowrap;
       text-align: center;
     }

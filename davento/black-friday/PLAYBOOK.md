@@ -173,6 +173,20 @@ Volgorde: cadeaublok → producten → "Completa il tuo look" → totale bespari
 - Notitie onder de voorraadregel; aantal-kiezer in het mandje; veel tekst in de cross-sell tegels.
 - Cadeauwaarde (€19,95) meetellen als besparing of cadeautekst in het mandje.
 
+## 12b. Lessen uit Niaali (altijd zo doen)
+
+- Categorieën en bestsellers op de home: **exact even groot** (zelfde aantal per rij, zelfde foto-verhouding, zelfde
+  rand en tussenruimte; desktop 5 per rij, tablet 3, mobiel 42vw). Meten in de preview, niet aannemen.
+- Titels **vetgedrukt** (serif in 700, bijv. Playfair Display 700); ook koppen in teksten (FAQ, "O nas").
+- Cijfers in het aanbod ("-50%") in een letter met rechte cijfers (sans, vet); sommige serifs hebben zakkende cijfers.
+- Mobiel: "Black Friday" op één regel, gecentreerd op het scherm.
+- Menu onder het logo (logo gecentreerd, menu gecentreerd eronder).
+- Trust-rij compact: kleine iconen (22px), kleine tekst, op desktop ver uit elkaar, mobiel 2×2.
+- Mandje: weinig tekst. Besparing als één rode regel ("Oszczędzasz −X"), 3 punten naast elkaar op één regel.
+- Kleine foto's (cadeaubalk) altijd met 3–6× resolutie laden (bijv. 192px voor 32px), anders onscherp.
+- Fabric/Horizon: scripts in het mandje draaien niet na een redraw → script in de header group, mandje redraw via
+  `@theme/events` CartUpdateEvent met `sections`.
+
 ## 13. Checklist voor de volgende store
 
 1. Live theme dupliceren → "Black Friday"; originelen bewaren.
