@@ -1,0 +1,212 @@
+{
+ "id": "gid://shopify/Menu/311323459916",
+ "title": "Hoofdmenu",
+ "handle": "main-menu",
+ "items": [
+  {
+   "id": "gid://shopify/MenuItem/781260063052",
+   "title": "Strona główna",
+   "type": "FRONTPAGE",
+   "url": "/",
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/891028898124",
+   "title": "Kobiety",
+   "type": "COLLECTION",
+   "resourceId": "gid://shopify/Collection/662916170060",
+   "items": [
+    {
+     "id": "gid://shopify/MenuItem/915081986380",
+     "title": "Zobacz wszystko",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/662916170060",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905079456076",
+     "title": "Kurtki i płaszcze",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/694706635084",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905079554380",
+     "title": "Swetry",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/694706536780",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082051916",
+     "title": "Bluzy",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701537100",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082182988",
+     "title": "Botki i kozaki",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701438796",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082117452",
+     "title": "Spodnie",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701406028",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082019148",
+     "title": "Marynarki",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701569868",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905079423308",
+     "title": "Buty",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/694706667852",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082084684",
+     "title": "Bluzki i topy",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701635404",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082150220",
+     "title": "Komplety",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701602636",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082215756",
+     "title": "Akcesoria",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701668172",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905079521612",
+     "title": "Sukienki i spódnice",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/693207466316",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905079488844",
+     "title": "Sandały i kapcie",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/693207695692",
+     "items": []
+    }
+   ]
+  },
+  {
+   "id": "gid://shopify/MenuItem/891028996428",
+   "title": "Mężczyźni",
+   "type": "COLLECTION",
+   "resourceId": "gid://shopify/Collection/662916137292",
+   "items": [
+    {
+     "id": "gid://shopify/MenuItem/915082248524",
+     "title": "Zobacz wszystko",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/662916137292",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905081258316",
+     "title": "Kurtki i płaszcze",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/694706471244",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905081323852",
+     "title": "Swetry",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/694706504012",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082281292",
+     "title": "Bluzy",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701373260",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905081192780",
+     "title": "Buty i obuwie",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/693207138636",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905081291084",
+     "title": "Spodnie i szorty",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/693207040332",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082314060",
+     "title": "Koszule i koszulki",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701504332",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/905081225548",
+     "title": "Garnitury i komplety",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/693206778188",
+     "items": []
+    },
+    {
+     "id": "gid://shopify/MenuItem/915082346828",
+     "title": "Akcesoria",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/695701471564",
+     "items": []
+    }
+   ]
+  },
+  {
+   "id": "gid://shopify/MenuItem/781260128588",
+   "title": "O nas",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/700751315276",
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/781260161356",
+   "title": "Kontakt",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/700091072844",
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/781260194124",
+   "title": "Często zadawane pytania",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/700691546444",
+   "items": []
+  },
+  {
+   "id": "gid://shopify/MenuItem/893787210060",
+   "title": "Śledzenie przesyłki",
+   "type": "HTTP",
+   "url": "https://niaali.com/apps/parcelpanel",
+   "items": []
+  }
+ ]
+}

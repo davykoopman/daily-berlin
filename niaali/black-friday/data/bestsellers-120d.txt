@@ -1,0 +1,154 @@
+W	16121904922956	Damska kurtka na chłodniejsze jesienne i zimowe dni	36
+W	16145832313164	Damska ocieplana kurtka oversize z kapturem	34
+M	15813621973324	Męskie eleganckie mokasyny wsuwane na formalne okazje	33
+M	16124810854732	Męska kurtka na chłodniejsze dni wiosny i jesieni	21
+M	16124810756428	Męski płaszcz klasyczny na chłodniejsze jesienne dni	20
+M	16071087980876	Męski dres z bluzą z kapturem	18
+W	16060124496204	Damska sukienka koronkowa z dekoltem z tyłu Romantyczny Wieczór Elegancka	17
+W	15795106513228	Damska spódnica midi z satynowym wykończeniem na co dzień	17
+M	16087886365004	Męska kurtka polowa na jesienne codzienne zestawy	13
+M	16153310200140	Męska koszula jeansowa w stylu western z kieszeniami	12
+M	16148412957004	Męska kurtka pikowana z kapturem na zimne dni	11
+M	16086210838860	Męska kurtka bomber z kołnierzem na chłodne dni	10
+W	16091858600268	Damska kurtka puchowa idealna na chłodne dni	10
+M	16087887839564	Męska kurtka bomberka na jesienne i zimowe dni	8
+W	16062899126604	Damska torba na ramię z regulowanym paskiem	7
+M	16086210216268	Męskie spodnie jogger do codziennych miejskich swobodnych zestawów	7
+M	16124811575628	Męska kamizelka na chłodniejsze jesienne i zimowe dni	5
+M	16117783527756	Męski komplet dresowy z kapturem na co dzień	5
+M	16082491081036	Męska kurtka outdoorowa na chłodne jesienne i zimowe dni	5
+M	16086206480716	Męska koszula z kołnierzykiem na różne okazje	4
+skip	16060125184332	Męskie szorty cargo na przygody i czas wolny	4
+W	16156081750348	Damski sweter z dekoltem w serek o luźnym kroju	4
+W	16103171817804	Damska kurtka puchowa z kapturem na chłodne dni	4
+M	16062891262284	Męskie spodnie z kantem z szeroką nogawką	4
+M	16145865245004	Męska kurtka pikowana z dzianinowymi rękawami	4
+M	16087911891276	Męska kurtka na chłodniejsze dni jesieni i zimy	4
+M	16071300612428	Męski komplet sportowy z kurtką i spodniami	4
+skip	15792309895500	Damskie klapki z dwoma paskami i regulowanymi klamrami na lato	4
+W	16143438446924	Damska bluza w kolorowe paski z krótkim zamkiem	3
+M	16054071591244	Męskie chodaki do codziennych zestawów	3
+W	16143444541772	Damska długa kamizelka futerkowa bez rękawów	3
+M	16069158306124	Męskie eleganckie półbuty do formalnych zestawów	3
+M	16145867931980	Męska koszula w kratę w wyrazistych kolorach	3
+skip	16060124135756	Damskie spodnie letnie na ciepłe dni	3
+M	16124812722508	Męska kurtka bomberka na chłodniejsze jesienne dni	3
+M	15798932275532	Męskie lekkie sneakersy z dzianiny na co dzień	3
+M	16124810395980	Męskie buty za kostkę na chłodniejsze dni	3
+W	16103214088524	Damska kurtka z kapturem na chłodniejsze jesienne dni	3
+W	16062893785420	Damska sukienka kopertowa z wieloma możliwościami	3
+W	16129835860300	Damska kurtka narciarska na zimowe dni	3
+M	16080382329164	Męska kurtka z kapturem na jesienne wyjścia	3
+W	15845981159756	Mira | Damska Spódnica Midi – Plisowany Klasyczny Fason	2
+W	16150576431436	Damska długa parka zimowa z futrzanym kapturem	2
+M	16116962165068	Męskie spodnie na czas wolny i aktywne dni	2
+M	16076895322444	Męska kurtka zimowa z kapturem	2
+W	16087868277068	Damska kamizelka do codziennych jesiennych zestawień	2
+W	16143436546380	Damski sweter z dekoltem V w stokrotki na jesień	2
+M	16116960559436	Męski trzyczęściowy garnitur na eleganckie okazje	2
+W	16087879811404	Damski długi płaszcz wiązany do eleganckich jesiennych zestawów	2
+M	16082493505868	Męskie spodnie z prążkowaną fakturą do codziennych stylizacji	2
+W	16091130528076	Damskie mokasyny na co dzień do eleganckich zestawów	2
+M	16117782315340	Męskie botki z ozdobnymi paskami na zimę	2
+W	16156096102732	Damska marynarka w jodełkę zapinana na guziki	2
+W	15832830968140	Karolina | Damska Torebka Pleciona – Lekka Torba na Ramię	2
+W	16145851744588	Damska bluza z kapturem i gwiazdą na plecach	2
+W	16126273159500	Damski kardigan z ozdobnymi guzikami na chłodniejsze dni	2
+M	16136774517068	Męskie spodnie z elastycznym pasem i sznurkiem	2
+W	16087860150604	Damski komplet z kołnierzykiem i szerokimi spodniami na co dzień	2
+W	16103189512524	Damska krótka kurtka typu trencz na jesień	2
+skip	15789995884876	Hania | Damski Minimalistyczne Klapki – Otwarty Nosek z Paskami na Palec	2
+M	16153321505100	Męska kurtka przejściowa ze stójką i kieszeniami	2
+W	16148224966988	Damskie botki zimowe z zamkiem i ociepleniem	2
+W	16121906659660	Damski kardigan dzianinowy na chłodniejsze jesienne dni	2
+W	16143408169292	Damski elegancki komplet z asymetryczną bluzką ze stójką i szerokimi spodniami	2
+W	16163565928780	Damski kardigan z dzianiny zapinany na guziki na co dzień	2
+M	16156106686796	Męski sweter prążkowany ze stójką i suwakiem	2
+M	16116969013580	Męski sweter polo z długim rękawem	2
+W	16087884562764	Damskie botki z klamrami na chłodniejsze jesienne dni	2
+W	16070220480844	Damskie botki z perforowanym wykończeniem	2
+M	15825769103692	Arlo | Męskie Zamszowe Mokasyny Casual – Klasyczny Komfort na Co Dzień	2
+W	16163581329740	Damska kurtka pikowana z kapturem i ściągaczem w talii	2
+W	16087874470220	Damski komplet koszula i spodnie na różne okazje	2
+W	16159101485388	Damska kurtka lotniczka z kożuszkiem i paskiem	2
+M	16153292964172	Męski długi płaszcz o dopasowanym kroju	2
+skip	15825797316940	Selena | Damska Pleciona Torebka Plażowa Shopper – Lekka Torba Letnia Boho	2
+skip	15800612979020	Gizela | Damska Sukienka Maxi z Falbanami – Elegancka Sukienka Halter	1
+M	16088745017676	Męska kurtka miejska na chłodniejsze dni jesieni zimy	1
+M	16070219432268	Męskie spodnie o swobodnym kroju	1
+W	16091084816716	Damska kurtka motocyklowa na chłodniejsze dni jesienią	1
+W	16087863820620	Damski płaszcz z klasycznym kołnierzem na chłodniejsze dni	1
+W	16145847451980	Damskie botki z zamkiem i ozdobnym sznurowaniem	1
+W	16153330450764	Damski kardigan ze stójką o luźnym kroju	1
+M	16086208053580	Męska kurtka z klasycznym kołnierzykiem na przejściową pogodę	1
+W	16143653798220	Damska marynarka na jeden guzik z długim rękawem	1
+skip	15797430714700	Irena | Damska Sukienka Midi w Kwiatowy Wzór – Falbany i Dekolt w Serek na Lato	1
+M	16124810199372	Męski kardigan do garderoby na chłodniejsze dni	1
+skip	15832886935884	Nikola | Męskie Spodnie Lniane – Lekkie Wygodne Spodnie na Co Dzień	1
+W	16091823931724	Damski elegancki komplet z marynarką i prostymi spodniami	1
+W	16121909150028	Damski kardigan na chłodniejsze jesienne i zimowe dni	1
+M	16091085013324	Męski elegancki płaszcz na chłodniejsze jesienne dni	1
+M	16143244951884	Męska czapka beanie z puszystą podszewką na zimowe dni	1
+W	16126270701900	Damska kurtka polarowa na chłodniejsze dni	1
+M	16116954202444	Męskie spodnie cargo z kieszeniami na codzienne wyjścia	1
+W	16069150933324	Damski komplet piżamowy na spokojne wieczory	1
+M	16143654519116	Męska kamizelka w jodełkę z klapami i guzikami	1
+M	16145865539916	Męski sweter z naszywkami na ramionach i łokciach	1
+M	16116963475788	Męskie botki kowbojskie do wyrazistych zestawów	1
+M	16070220054860	Męski sweter z szerokim kołnierzem	1
+W	15795109429580	Nasha | Damska Sukienka Midi w Paski – Bezrękawnik z Rozkloszowanym Dołem	1
+M	16153316393292	Męski sweter rozpinany ze stójką i ciepłą podszewką	1
+W	15829923758412	Nika | Damska Pleciona Torba na Ramię – Torebka Szydełkowa Boho	1
+W	16124809806156	Damski kardigan do garderoby na chłodniejsze dni	1
+M	16087876043084	Męski kardigan do eleganckich codziennych zestawów na jesień	1
+M	16070219759948	Męski komplet z koszulą i spodniami	1
+M	16076834373964	Męskie sznurowane obuwie na różne okazje	1
+W	16080385999180	Damskie ponczo z kołnierzem na chłodniejsze dni	1
+W	16124809380172	Damski sweter do garderoby na chłodniejsze dni	1
+M	15798926737740	Męskie mokasyny wsuwane z kontrastową podeszwą na co dzień	1
+M	16080384033100	Męska kurtka na chłodniejsze dni	1
+W	16091860271436	Damskie wsuwane półbuty na co dzień	1
+M	16071087554892	Męski komplet z bluzą z kapturem	1
+M	16072658256204	Męskie sneakersy wiązane na co dzień	1
+W	16091833106764	Damska marynarka do eleganckich zestawów	1
+W	16182857597260	Damski luźny sweter z dekoltem w serek na co dzień	1
+W	16150555230540	Damska puszysta kurtka ze sztucznego futra z długim włosiem na zimę	1
+W	15838790287692	Bianka | Damska Długa Spódnica – Tiulowy Model z Warstwowymi Falbanami	1
+W	16148219363660	Damski długi płaszcz dwurzędowy z paskiem	1
+skip	15876785406284	Marcin | Męski Kapelusz Plażowy – Pleciony Design z Ochroną Przed Słońcem	1
+M	16124810658124	Męska kurtka z kołnierzem na chłodniejsze dni	1
+M	16080381509964	Męskie wysokie buty na co dzień	1
+W	15841129201996	Rika | Damska Długa Spódnica – Kwiatowy Zwiewny Fason	1
+M	16153312264524	Męski dwurzędowy trencz o dopasowanym kroju	1
+W	16126308614476	Damski kardigan w kwiatowy wzór z guzikami	1
+W	16156073558348	Damski komplet dzianinowy sweter i spodnie	1
+M	16153288212812	Męskie spodnie cargo w stylu techwear	1
+W	16069157683532	Damski elegancki kombinezon na wyjątkowe okazje	1
+W	16143620473164	Damska marynarka bez zapięcia z klasycznymi klapami	1
+M	16148216054092	Męska kurtka softshell z kapturem	1
+M	15876787831116	Arek | Męski Kapelusz Jazzowy – Elegancki Filcowy Styl z Ozdobnym Paskiem	1
+M	15832873501004	Mikołaj | Męska Koszula Casual – Lekka Elegancka Koszula na Co Dzień	1
+W	16080383050060	Damski komplet z bluzą z kapturem	1
+W	16126307041612	Damska bluza z okrągłym dekoltem i długimi rękawami	1
+W	16076901155148	Damskie botki na chłodniejsze pory roku	1
+M	16082495209804	Męskie spodnie jogger do sportowych i codziennych zestawów	1
+W	16091859124556	Damskie półbuty sznurowane na co dzień	1
+W	16143653110092	Damska dwurzędowa marynarka z dzianinowymi rękawami	1
+M	16087872471372	Męski komplet z koszulą na chłodniejsze dni jesieni	1
+W	15845982765388	Nora | Damska Długa Spódnica – Elegancki Plisowany Fason	1
+M	16087883088204	Męska kurtka na chłodniejsze dni jesienne i zimowe	1
+M	16082491441484	Męski kardigan o klasycznym charakterze na chłodniejsze dni	1
+M	16116955119948	Kurtka męska ze stójką i kieszeniami zapinanymi	1
+W	16169667658060	Damska bardzo długa kurtka pikowana z kapturem na zimę	1
+W	16143437300044	Damski sweter z dekoltem V i ażurowymi rękawami	1
+M	16117779038540	Męskie botki sznurowane na chłodniejsze dni jesieni	1
+W	16176809345356	Damski puszysty sweter z półgolfem i bufiastymi rękawami	1
+M	16148245152076	Męska bluza z kapturem i kieszenią kangurką	1
+M	16143652979020	Męska sztruksowa marynarka z kamizelką	1
+M	15825780244812	Dario | Męskie Klasyczne Mokasyny Skórzane – Elegancki Styl Casual	1
+W	16159103123788	Damska ultralekka kurtka puchowa z kapturem	1
+W	15841124286796	Olivia | Damska Długa Spódnica – Rozkloszowany Model z Wysokim Stanem	1
+M	16082138825036	Męski komplet dresowy z kapturem na chłodniejsze dni	1
+W	16103216841036	Kurtka damska inspirowana stylem motocyklowym na chłodniejsze dni	1
+M	16124811411788	Męski kardigan dzianinowy na chłodniejsze dni	1
+W	16143442215244	Damski cienki sweter w kwiaty na okres przejściowy	1

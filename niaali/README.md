@@ -105,3 +105,20 @@ Built in nl/theme (originals in nl/orig). Tested in preview on PL, NL and GB, mo
 - Still open: iDEAL not yet shown at NL checkout (owner enables it in Shopify Payments).
 - Swatch King uninstalled by the owner (2026-10-18). Live check PL/NL/GB, mobile and desktop: square photo
   swatches from the theme code, colour name updates on click, no leftover app code, no script errors.
+
+## Black Friday (2026-10-31, user GO: same as Davento, slightly different look, keep red + black, own cart)
+Draft theme "Black Friday" #209387651404 = duplicate of live "Niaali - size guide (live) 29 Oct" #209223450956.
+Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
+- LIVE STORE gifts (same as Davento, 84,95 zł ≈ €19,95): Apaszka Marina (prezent-apaszka-marina, 16260116578636),
+  Etui na Karty (prezent-etui-na-karty, 16260116611404) – women; Portfel Klasyczny (prezent-portfel-klasyczny,
+  16260116644172), Bransoletka Pancerka (prezent-bransoletka-pancerka, 16260116676940) – men. Tags regalo +
+  regalo-donna/regalo-uomo (same tags as Davento so the theme code is shared), type Prezent, not tracked, active,
+  Online Store channel only (not Google/Shop), seo.hidden, in no collection, NL/EN translated, Davento photos.
+- LIVE STORE discount "Free Gift" (gid://shopify/DiscountAutomaticNode/2291414761804): buy ≥ 349 zł from Kobiety or
+  Mężczyźni, 1 gift 100% off, once per order, combines with product/order/shipping discounts.
+- MIX & MATCH -10/-15/-20% still ACTIVE on purpose: the live theme still advertises it. Deactivate when the Black
+  Friday theme is published (ids 2289031053644 / 2289031086412 / 2289031119180).
+- LIVE STORE collections (sold ≥1 in 120 days, summer items left out; list data/bestsellers-120d.txt):
+  Bestsellery Damskie (bestsellery-damskie, 72), Bestsellery Męskie (bestsellery-meskie, 73), Bestsellery
+  (bestsellery, sub-collections of both, 145), Best selling sort, all 4 channels, NL/EN titles.
+  Main menu: "Bestsellery" after Strona główna (NL/EN Bestsellers). Backup: black-friday/orig/main-menu.json.
