@@ -58,18 +58,19 @@
           assign cmp = v.compare_at_price | default: 0
         -%}
         <div class="pp-cu__item" data-pp-card data-pp-cu-product="{{ p.id }}">
-          <a class="pp-cu__img" href="{{ p.url }}" tabindex="-1" aria-hidden="true">
-            {%- if img != blank -%}
-              {{ img | image_url: width: 160 | image_tag: loading: 'lazy', width: 64, height: 80, alt: '' }}
-            {%- endif -%}
-          </a>
-          <div class="pp-cu__body">
-            <a class="pp-cu__name" href="{{ p.url }}" data-pp-card-link>{{ p.title }}</a>
-            <div class="pp-cu__price">
-              <span class="pp-cu__now{% if cmp > v.price %} pp-cu__now--sale{% endif %}">{{ v.price | money }}</span>
-              {%- if cmp > v.price -%}<s class="pp-cu__was">{{ cmp | money }}</s>{%- endif -%}
-            </div>
-            <button type="button" class="pp-cu__add" data-pp-quick aria-haspopup="dialog" aria-label="{{ add }}: {{ p.title | escape }}">+ {{ add }}</button>
+          <div class="pp-cu__media">
+            <a class="pp-cu__img" href="{{ p.url }}" data-pp-card-link aria-label="{{ p.title | escape }}">
+              {%- if img != blank -%}
+                {{ img | image_url: width: 300 | image_tag: loading: 'lazy', width: 150, height: 188, alt: '' }}
+              {%- endif -%}
+            </a>
+            <button type="button" class="pp-cu__add" data-pp-quick aria-haspopup="dialog" aria-label="{{ add }}: {{ p.title | escape }}">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <div class="pp-cu__price">
+            <span class="pp-cu__now{% if cmp > v.price %} pp-cu__now--sale{% endif %}">{{ v.price | money }}</span>
+            {%- if cmp > v.price -%}<s class="pp-cu__was">{{ cmp | money }}</s>{%- endif -%}
           </div>
           {% render 'pp-card-data', product: p, variant: v, image: img, colour_index: ci %}
         </div>
@@ -136,10 +137,11 @@
     color: var(--pp-ink);
   }
 
+  /* Simple tiles: photo with a round + button, price under it (no names: less text, more photo) */
   .pp-cu__row {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% - 10px) / 2);
+    grid-auto-columns: calc((100% - 2 * 10px) / 3);
     gap: 10px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
@@ -152,21 +154,21 @@
 
   .pp-cu__item {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 6px;
     min-width: 0;
-    padding: 8px;
-    border: 1px solid rgb(var(--pp-ink-rgb) / 0.12);
-    border-radius: 10px;
-    background: var(--pp-white);
     scroll-snap-align: start;
   }
 
+  .pp-cu__media {
+    position: relative;
+  }
+
   .pp-cu__img {
-    flex: 0 0 64px;
-    width: 64px;
-    height: 80px;
+    display: block;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
-    border-radius: 6px;
+    border-radius: 8px;
     background: var(--pp-cream);
   }
 
@@ -177,31 +179,41 @@
     object-fit: cover;
   }
 
-  .pp-cu__body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    min-width: 0;
+  .pp-cu__add {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--pp-ink);
+    color: var(--pp-white);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+    cursor: pointer;
+    transition: transform 0.15s ease;
   }
 
-  .pp-cu__name {
-    max-width: 100%;
-    overflow: hidden;
-    font-size: 13px;
-    line-height: 1.3;
-    color: var(--pp-ink);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-decoration: none;
+  .pp-cu__add svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .pp-cu__add:hover {
+    transform: scale(1.08);
   }
 
   .pp-cu__price {
     display: flex;
-    gap: 6px;
+    flex-wrap: wrap;
+    gap: 0 6px;
     align-items: baseline;
     font-size: 13px;
-    white-space: nowrap;
+    line-height: 1.3;
   }
 
   .pp-cu__now {
@@ -214,26 +226,15 @@
   }
 
   .pp-cu__was {
-    font-size: 12px;
-    color: rgb(var(--pp-ink-rgb) / 0.7);
+    font-size: 11px;
+    color: rgb(var(--pp-ink-rgb) / 0.6);
   }
 
-  .pp-cu__add {
-    margin-top: auto;
-    padding: 6px 14px;
-    border: 1px solid var(--pp-ink);
-    border-radius: 999px;
-    background: var(--pp-white);
-    color: var(--pp-ink);
-    font: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .pp-cu__add:hover {
-    background: var(--pp-ink);
-    color: var(--pp-white);
+  @media screen and (max-width: 768px) {
+    /* A bit of the third tile shows, so it is clear the row swipes */
+    .pp-cu__row {
+      grid-auto-columns: calc((100% - 2 * 8px) / 2.6);
+      gap: 8px;
+    }
   }
 {% endstylesheet %}

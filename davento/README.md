@@ -213,3 +213,9 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   the input stays for the theme's cart form), small "Rimuovi"/remove link shown instead. In the drawer the link uses
   the theme's hidden minus button so the drawer updates in place (snippets/pp-cart-perks.liquid script). Product page
   and quick pick had no quantity field. Cart perks smaller (11px text, 13px icons). Tested mobile + desktop.
+- Cart "Completa il tuo look" simplified (user: less text): photo tiles (4:5) with a round black "+" on the photo and
+  only the price under it; no names, no "Aggiungi" text. 3 per row on desktop, 2.6 on mobile (third tile peeks, so it
+  is clear the row swipes). Adding from a tile tested IT desktop + EN mobile (cart 1 → 2).
+- Automatic discounts renamed in the live store (user asked): "2/3/4 articoli = 10/15/20% di sconto" →
+  "Mix & Save -10%", "-15%", "-20%" (still active, same rules). Discount titles are not translatable in Shopify
+  (no discount type in TranslatableResourceType / Translate & Adapt), so one neutral name works for all markets.
