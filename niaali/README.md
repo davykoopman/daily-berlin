@@ -122,3 +122,32 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
   Bestsellery Damskie (bestsellery-damskie, 72), Bestsellery Męskie (bestsellery-meskie, 73), Bestsellery
   (bestsellery, sub-collections of both, 145), Best selling sort, all 4 channels, NL/EN titles.
   Main menu: "Bestsellery" after Strona główna (NL/EN Bestsellers). Backup: black-friday/orig/main-menu.json.
+- Free Gift discount minimum lowered to 339 zł (shown: 349 zł PL, €80 NL, £70 UK). Rates in the preview: EUR 0.2271,
+  GBP 0.1930 per zł → 349 zł would be €79.26 / £67.34, too close to €80 / £70; at 339 zł (≈ €77 / £65) the gift is
+  always free when the theme lets a customer pick it. PL market prices are +10% (gift shows 93,45 zł in PL).
+- THEME (draft #209387651404), all in niaali/black-friday/theme (originals in orig/):
+  - Gift system: snippets/pp-gift-min (34900 PLN; local EUR 8000, GBP 7000), pp-gift-text (pl/nl/en),
+    pp-gift-cart (markup), pp-gift-script (one script per page, from the header group: Fabric morphs the drawer and
+    does not run scripts inside it; uses @theme/events CartUpdateEvent + cart sections to redraw).
+  - sections/pp-gift-showcase in header-group after the header: beige gift bar + palette (:root --pp-*, ink #121212,
+    beige #edebe7, red #c20000, champagne #d8c3a5) + title font Cormorant (cormorant_n6) for h1/h2/pp titles +
+    red "Bestsellery" menu tag (snippets/pp-bf-header) + end date snippets/pp-bf-active (1 Dec 2026, 00:00 PL).
+  - Announcement bar: Halloween and Mix & Match messages disabled; free shipping + 60-day returns remain.
+  - Home: sections/pp-bf-hero first (typographic, red + champagne ribbons, Cormorant, PL/NL/EN, Kobiety/Mężczyźni,
+    link "Zobacz bestsellery" → bestsellery); Halloween hero disabled (kept).
+  - Badge "BLACK FRIDAY" (straight red label, top-left) on every pp-card and the first product photo
+    (snippets/pp-bf-badge; product page via CSS from the benefits block).
+  - Gift line instead of the tier bar: home bestsellers, collection head, product cross-sell; cart drawer + cart page
+    gift block (pick/swap, max 1, removed under the minimum). Cross-sell title "Uzupełnij zamówienie" (pp-gift-text).
+  - Collection head: chips Wszystko | Damskie | Męskie on the 3 Bestsellery collections (NL Alles/Dames/Heren).
+  - Product page: third bullet = personal gift line (variant + cart vs minimum; Fabric variant:update/cart:update);
+    "Łącz i oszczędzaj" tab → "Prezent gratis" with blocks/pp-gift-tab (PL/NL/EN text; tab heading itself is a
+    template setting: NL/EN translation still to add in Translate & Adapt / T-Lab); new blocks PP Rating (above the
+    title) and PP Stock (above buy buttons), both disabled.
+  - Cart: no quantity selector (bin icon removes), "Oszczędzasz X" without the gift's price.
+  - Checkout line (locales pl/nl/en): "Tylko 3% klientów skorzystało z gwarancji zwrotu pieniędzy" (refunds 2.5%
+    of sales, 60 days).
+  - Tested in preview (PL mobile + desktop, /nl-nl, /en-gb): gift bar 349 zł / €80 / £70, hero, red menu tag, badge,
+    product gift line (68,55 zł / € 22,05 left), chips, cross-sell title, cart pick → "Twój prezent: Apaszka Marina ✓".
+    Gift NOT €0 yet in the cart while MIX & MATCH is active (Shopify applies the bigger Mix & Match discount instead
+    of combining) → deactivate Mix & Match when publishing.
