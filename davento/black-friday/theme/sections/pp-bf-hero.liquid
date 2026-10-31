@@ -152,10 +152,43 @@
     18%, 100% { transform: translateX(110%); }
   }
 
+  /* Entrance, once on load: title is visible from the first frame (keeps LCP), the offer stamps in */
+  .pp-bf__kicker { animation: pp-bf-in-fade 0.6s ease-out both; }
+  .pp-bf__title { animation: pp-bf-in-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .pp-bf__offer { animation: pp-bf-in-stamp 0.55s cubic-bezier(0.3, 1.4, 0.5, 1) 0.5s both; }
+  .pp-bf__sub { animation: pp-bf-in-up 0.5s ease-out 0.85s both; }
+  .pp-bf__buttons { animation: pp-bf-in-up 0.5s ease-out 0.95s both; }
+
+  @keyframes pp-bf-in-fade {
+    from { opacity: 0.3; }
+  }
+
+  @keyframes pp-bf-in-rise {
+    from { opacity: 0.35; transform: translateY(16px); }
+  }
+
+  @keyframes pp-bf-in-stamp {
+    0% { opacity: 0; transform: scale(1.9) rotate(-12deg); }
+    55% { opacity: 1; transform: scale(0.94) rotate(-2deg); }
+    100% { opacity: 1; transform: rotate(-3deg); }
+  }
+
+  @keyframes pp-bf-in-up {
+    from { opacity: 0; transform: translateY(10px); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .pp-bf__tape::after,
     .pp-bf__offer::after {
       display: none;
+    }
+
+    .pp-bf__kicker,
+    .pp-bf__title,
+    .pp-bf__offer,
+    .pp-bf__sub,
+    .pp-bf__buttons {
+      animation: none;
     }
   }
 

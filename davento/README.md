@@ -206,3 +206,6 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   #d6a874, title white, offer red. Satin shine (white streak) runs over the 4 ribbons and the offer one after the
   other every 7s (CSS only, off for reduced motion). Only in sections/pp-bf-hero.liquid; rest of the site keeps
   ink/white/cream/red. Checked IT + /de-de, mobile + desktop.
+- Hero entrance animation (once on load, CSS only): kicker and title visible from the first frame and settle
+  (opacity .3/.35 → 1, 16px rise; never invisible, so LCP is not delayed), offer stamps in at 0.5s (scale 1.9,
+  -12° → -3°), sub + buttons fade up at 0.85/0.95s. Off for reduced motion. Checked mobile + desktop, end state ok.
