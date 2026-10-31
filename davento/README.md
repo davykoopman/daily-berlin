@@ -223,3 +223,10 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   --pp-row-columns 5). Category photos (new Christmas shots are portrait 2:3) now show in full at 2:3, so no cut
   heads or heels; "see all" tile 2:3 too; category arrows centred on the 2:3 photo. Bestsellers stay 4:5.
   Tablet 3 per row and mobile swipe width unchanged. New category photos should be shot 2:3.
+- Analysis 31 Oct (advice only, nothing changed): speed (mobile, slow 4G + 4x CPU, draft): product LCP 1.8s, home
+  hero title 1.7s; the late "LCP" (4–5s) is Shopify's cookie banner text. 175 requests, ~1.4 MB; images ~0.7 MB;
+  22 below-the-fold images load eagerly on collections (8 on home). Scripts: pixels (wpm 83 KB, Klaviyo, Clarity,
+  wetracked, Google Ads) – tracking, not touched. Traffic 30d: 88% mobile; mobile ATC 5.1%, checkout reached 65% of
+  ATC, conversion 1.44%. Top sellers mostly -50% (-40% some); 3 top sellers are DRAFT (cargo uomo, completo uomo
+  occasioni speciali, completo donna eleganti). Mockups: dark header + red "Black Friday -50%" menu pill + bronze
+  hero link + minimal trust row (recommended), cream header + dark trust cards (alternative), new home titles.
