@@ -3,7 +3,7 @@
   amount (snippets/pp-gift-min), [x] / [n] are filled in by the caller.
   One place for the gift texts: gift bar, product page, collection head, cart drawer.
 
-  @param {string} key - short, bar, pdp_yes, pdp_more, cross, more, unlocked, chosen, swap, free, note, tab_title, tab_body
+  @param {string} key - pdp_static, short, bar, pdp_yes, pdp_more, cross, more, unlocked, chosen, swap, free, note, tab_title, tab_body
 {%- enddoc -%}
 {%- liquid
   assign lang = request.locale.iso_code | slice: 0, 2 | downcase
@@ -14,6 +14,8 @@
           echo 'Prezent gratis przy zamówieniu od [min]'
         when 'bar'
           echo 'Prezent gratis od [min]'
+        when 'pdp_static'
+          echo 'Prezent gratis przy zamówieniu od [min]'
         when 'pdp_yes'
           echo 'Prezent gratis w zestawie ✓'
         when 'pdp_more'
@@ -43,6 +45,8 @@
           echo 'Gratis cadeau bij bestellingen vanaf [min]'
         when 'bar'
           echo 'Gratis cadeau vanaf [min]'
+        when 'pdp_static'
+          echo 'Gratis cadeau bij bestelling vanaf [min]'
         when 'pdp_yes'
           echo 'Gratis cadeau inbegrepen ✓'
         when 'pdp_more'
@@ -72,6 +76,8 @@
           echo 'Free gift with orders over [min]'
         when 'bar'
           echo 'Free gift over [min]'
+        when 'pdp_static'
+          echo 'Free gift with orders over [min]'
         when 'pdp_yes'
           echo 'Free gift included ✓'
         when 'pdp_more'

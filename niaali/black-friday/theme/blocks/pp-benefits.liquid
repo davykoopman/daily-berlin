@@ -36,75 +36,10 @@
       <svg class="pp-benefit__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path d="M3.5 10.5h17v10h-17zM2.5 6.5h19v4h-19zM12 6.5v14M12 6.5c-1.8-3.6-6.5-3.6-6.5-.9 0 1.6 3.6.9 6.5.9zm0 0c1.8-3.6 6.5-3.6 6.5-.9 0 1.6-3.6.9-6.5.9z"/>
       </svg>
+      {%- comment -%} Owner: plain text with what the gift is – no counter {%- endcomment -%}
       {%- capture gift_min -%}{%- render 'pp-gift-min' -%}{%- endcapture -%}
-      {%- capture gift_txt -%}{%- render 'pp-gift-text', key: 'short' -%}{%- endcapture -%}
-      {%- capture gift_yes -%}{%- render 'pp-gift-text', key: 'pdp_yes' -%}{%- endcapture -%}
-      {%- capture gift_more -%}{%- render 'pp-gift-text', key: 'pdp_more' -%}{%- endcapture -%}
-      {%- comment -%}
-        Personal line on the product page: this product (current variant) plus the cart, against the gift
-        minimum. The general text shows first and stays if the script cannot run.
-      {%- endcomment -%}
-      <span
-        data-pp-gift-pdp
-        data-yes="{{ gift_yes | strip | escape }}"
-        data-more="{{ gift_more | strip | escape }}"
-        data-variant="{{ pp_product.selected_or_first_available_variant.id }}"
-        data-prices="{ {%- for v in pp_product.variants -%}&quot;{{ v.id }}&quot;:{{ v.price }}{% unless forloop.last %},{% endunless %}{%- endfor -%} }"
-      >{{ gift_txt | strip | replace: '[min]', gift_min }}</span>
-      <script>
-        (function () {
-          if (window.ppGiftPdp) return;
-          window.ppGiftPdp = true;
-          var shopFormat = {{ shop.money_format | json }};
-          var shopCurrency = '{{ shop.currency }}';
-          var minLocal = {% render 'pp-gift-min', mode: 'json' %}.local;
-          var minCents = {% render 'pp-gift-min', mode: 'json' %}.min;
-          var giftIds = {% render 'pp-gift-min', mode: 'json' %}.gifts.map(function (g) { return g.id; });
-          var root = '{{ routes.root_url }}'.replace(/\/$/, '');
-          var fmt = function (cents) {
-            var cur = (window.Shopify && Shopify.currency && Shopify.currency.active) || shopCurrency;
-            if (cur === shopCurrency && shopFormat) {
-              var parts = (cents / 100).toFixed(2).split('.');
-              var t = function (x, sep) { return x.replace(/\B(?=(\d{3})+(?!\d))/g, sep); };
-              return shopFormat.replace(/\{\{\s*(\w+)\s*\}\}/, function (m, k) {
-                return k === 'amount_with_comma_separator' ? t(parts[0], '.') + ',' + parts[1] : t(parts[0], ',') + '.' + parts[1];
-              });
-            }
-            try { return new Intl.NumberFormat(document.documentElement.lang || 'pl', { style: 'currency', currency: cur }).format(cents / 100); }
-            catch (e) { return (cents / 100).toFixed(2); }
-          };
-          var cartTotal = 0, cartVariants = [];
-          var draw = function () {
-            var el = document.querySelector('[data-pp-gift-pdp]');
-            if (!el) return;
-            var prices = JSON.parse(el.dataset.prices);
-            var rate = +((window.Shopify && Shopify.currency && Shopify.currency.rate) || 1);
-            var min = minLocal || Math.ceil(minCents * rate);
-            var v = el.dataset.variant;
-            // Prices on the page are in the visitor's currency already; count this item once
-            var total = cartTotal + (cartVariants.indexOf(+v) > -1 ? 0 : (prices[v] || 0));
-            el.textContent = total >= min ? el.dataset.yes : el.dataset.more.replace('[x]', fmt(min - total));
-          };
-          var load = function () {
-            fetch(root + '/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(function (c) {
-              cartTotal = 0; cartVariants = [];
-              c.items.forEach(function (it) {
-                if (giftIds.indexOf(it.variant_id) > -1) return;
-                cartTotal += it.final_line_price;
-                cartVariants.push(it.variant_id);
-              });
-              draw();
-            }).catch(function () {});
-          };
-          // Fabric: variant:update (resource = the new variant), cart:update after every cart change
-          document.addEventListener('variant:update', function (e) {
-            var el = document.querySelector('[data-pp-gift-pdp]');
-            if (el && e.detail && e.detail.resource && e.detail.resource.id) { el.dataset.variant = e.detail.resource.id; draw(); }
-          });
-          document.addEventListener('cart:update', function () { setTimeout(load, 300); });
-          if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load); else load();
-        })();
-      </script>
+      {%- capture gift_txt -%}{%- render 'pp-gift-text', key: 'pdp_static' -%}{%- endcapture -%}
+      <span>{{ gift_txt | strip | replace: '[min]', gift_min }}</span>
     </li>
   {%- endif -%}
 </ul>
@@ -118,6 +53,15 @@
 
   .pp-benefit--gift .pp-benefit__icon {
     color: var(--pp-red, #c20000);
+  }
+
+  /* The gift line can take two lines on phones: icon stays at the top */
+  .pp-benefits .pp-benefit--gift {
+    align-items: flex-start;
+  }
+
+  .pp-benefit--gift .pp-benefit__icon {
+    margin-top: -1px;
   }
 
   /*

@@ -173,3 +173,5 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
   the editor, PP Stock above buy buttons (off); delivery line ("Wysyłka w ciągu 1–2 dni roboczych") off; product
   title 4px under the photo on phones; gift products (tag regalo) never shown in cross-sell, home bestsellers or
   cart add-ons.
+- Product page gift bullet (user): no counter any more, plain text per market: "Prezent gratis przy zamówieniu od
+  349 zł" / "Gratis cadeau bij bestelling vanaf €80" / "Free gift with orders over £70" (pp-gift-text key pdp_static).
