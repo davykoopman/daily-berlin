@@ -219,3 +219,7 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
 - Automatic discounts renamed in the live store (user asked): "2/3/4 articoli = 10/15/20% di sconto" →
   "Mix & Save -10%", "-15%", "-20%" (still active, same rules). Discount titles are not translatable in Shopify
   (no discount type in TranslatableResourceType / Translate & Adapt), so one neutral name works for all markets.
+- Home categories + bestsellers: 5 per row on desktop (was 4; index.json pp-home-best columns 5, pp-home-categories
+  --pp-row-columns 5). Category photos (new Christmas shots are portrait 2:3) now show in full at 2:3, so no cut
+  heads or heels; "see all" tile 2:3 too; category arrows centred on the 2:3 photo. Bestsellers stay 4:5.
+  Tablet 3 per row and mobile swipe width unchanged. New category photos should be shot 2:3.

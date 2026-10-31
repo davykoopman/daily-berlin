@@ -109,10 +109,23 @@
     text-decoration: none;
   }
 
+  /* 5 per row on desktop, like the bestsellers; category photos are portrait 2:3 and show in full (no cut heads/feet) */
+  .pp-home-cat {
+    --pp-row-columns: 5;
+  }
+
+  .pp-home-cat .pp-row__arrow {
+    top: calc((100cqw - (var(--pp-row-cols) - 1) * var(--pp-row-gap, 12px)) / var(--pp-row-cols) * 0.75 - 22px);
+  }
+
+  .pp-home-cat .pp-bundle__all {
+    aspect-ratio: 2 / 3;
+  }
+
   .pp-home-cat__media {
     display: block;
     overflow: hidden;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 2 / 3;
     background-color: var(--pp-cream);
   }
 
