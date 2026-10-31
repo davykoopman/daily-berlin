@@ -250,3 +250,11 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
     Backup of the menu before: black-friday/orig/main-menu.json.
   - Images below the fold: checked – they already have no src until needed, nothing to change.
   - Editor changes in product.json/index.json (Christmas image in "Chi siamo", bf_font) were merged, not overwritten.
+- Free gift (LIVE STORE, 31 Oct): 4 products listed for the "free gift above €80" plan, price €19,95 each, tag
+  regalo + regalo-donna / regalo-uomo, type Regalo, inventory not tracked, active + published (needed to add them
+  to the cart), hidden from search (seo.hidden = 1), in no collection; titles/descriptions translated (EN text
+  without the € amount because of the GBP market):
+  Foulard Marina (/products/regalo-foulard-marina), Portacarte Nero (regalo-portacarte-nero) – women;
+  Portafoglio Classico (regalo-portafoglio-classico), Bracciale Grumetta (regalo-bracciale-grumetta) – men.
+  Not built yet (waiting for GO): automatic "Regalo gratuito" discount (buy X get Y, €80 on non-gift products,
+  1 gift at 100%), Mix & Save excluding gifts, gift picker + €80 progress in the cart drawer.
