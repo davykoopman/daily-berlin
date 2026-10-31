@@ -156,3 +156,14 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
   56px apart on desktop, 2x2 on phones); categories = bestsellers (5 per row, 262x328 desktop / 164x205 mobile, both
   4:5, same left edge); titles Playfair Display 700 (also FAQ / text headings); cart: "Oszczędzasz −X" red line +
   "Darmowa dostawa · Zwrot 60 dni · Bezpieczna płatność" on one line; gift photos 192px (sharp).
+- Fix: blocks/pp-rating.liquid and blocks/pp-stock.liquid had never been uploaded, so templates/product.json (which
+  references them) was silently rejected – no rating/stock blocks, no "Prezent gratis" tab until now. Uploaded; the
+  product template now has PP Rating (above the title) and PP Stock (above buy buttons), both OFF like Davento, and
+  the gift tab. Lesson: after every upsert check checksum/updatedAt of EVERY file, JSON templates too.
+- "O nas" photo (user): Cozy_Christmas_Couple_Portrait_1.png in the about section of home, product page and the
+  O nas page hero (page.about). Legacy templates product.sale-pdp / product.shoes-pdp (no product uses them) refuse
+  any save (old invalid content) – left as they are.
+- Category photos scaled 4% (hides thin black edges inside some category image files). Footer column titles in
+  Playfair Display too.
+- Test templates created while debugging (delete in Edit code): templates/product.t2.json, product.t3.json,
+  product.t4.json, product.tc.json.

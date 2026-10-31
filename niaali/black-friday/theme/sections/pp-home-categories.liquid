@@ -172,11 +172,13 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    /* Slight zoom hides thin dark edges that some category photos have in the file itself */
+    transform: scale(1.04);
     transition: transform 0.4s ease;
   }
 
   .pp-home-cat__tile:hover .pp-home-cat__media img {
-    transform: scale(1.04);
+    transform: scale(1.08);
   }
 
   .pp-home-cat__label {

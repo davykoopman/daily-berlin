@@ -33,7 +33,9 @@
     .pp-collection-head__title,
     .pp-trust__title-bf,
     .text-block h2,
-    .text-block h3 {
+    .text-block h3,
+    [id*='footer'] summary,
+    [id*='footer'] summary * {
       font-family: {{ tf.family }}, {{ tf.fallback_families }} !important;
       font-weight: {{ tf.weight }} !important;
       font-style: normal !important;

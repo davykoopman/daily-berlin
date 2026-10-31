@@ -1,0 +1,129 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "Title",
+          "settings": {
+            "text": "<h1>{{ closest.page.title }}</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
+        "page-content": {
+          "type": "page-content",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
+      "disabled": true,
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 80
+      }
+    },
+    "1771212012658f1991": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_6b2d3dd_fPwxBE": {
+          "type": "ai_gen_block_6b2d3dd",
+          "settings": {
+            "hero_image": "shopify://shop_images/Cozy_Christmas_Couple_Portrait_1.png",
+            "hero_heading": "<p>Nasze informacje</p>",
+            "hero_text": "<p><strong>Nazwa firmy</strong>: Niaali<br/><strong>Adres</strong>: Składowa 11, 20-305 Lublin, Poland<br/><strong>Email</strong>: <a href=\"mailto:support@niaali.com\">support@niaali.com</a></p><p><strong>Godziny obsługi klienta</strong>:<br/><strong>Poniedziałek – Piątek</strong>: 8:00 – 17:00<br/><strong>Sobota – Niedziela:</strong> 9:00 – 16:00<br/>Średni czas odpowiedzi wynosi do 12 godzin.</p>",
+            "extra_heading": "<p>Zakorzeniony w jakości, zaprojektowany z myślą o Tobie.</p>",
+            "extra_text": "<p>Nasze kreatywne centrum to miejsce, w którym powstają koncepcje, kroje i kierunek każdej kolekcji. Tworzymy z myślą o kobietach i mężczyznach, dopasowując fasony, styl i charakter ubrań do aktualnych trendów oraz codziennych potrzeb.</p>",
+            "extra_text_align": "center",
+            "column_1_heading": "<p>Nasze wartości</p>",
+            "column_1_text": "<p>Jakość, zrównoważony rozwój i ponadczasowy design są podstawą wszystkiego, co tworzymy. Wierzymy w modę, która przetrwa próbę czasu.</p>",
+            "column_2_heading": "<p>Pozostańmy w kontakcie</p>",
+            "column_2_text": "<p>Śledź nas na Instagramie, aby uzyskać dostęp do najnowszych kolekcji, materiałów zza kulis oraz inspiracji stylizacyjnych.</p>",
+            "instagram_url": "https://www.instagram.com/niaalifashion/",
+            "instagram_text": "Śledź nas na Instagramie",
+            "desktop_width_percent": 100,
+            "section_padding": 60,
+            "section_spacing": 60,
+            "content_gap": 40,
+            "text_spacing": 20,
+            "column_padding": 30,
+            "column_background": "#f9f9f9",
+            "column_border_radius": 8,
+            "column_border_width": 0,
+            "column_border_color": "#e6e6e6",
+            "image_border_radius": 8,
+            "background_color": "#ffffff",
+            "heading_color": "#000000",
+            "text_color": "#666666",
+            "link_color": "#000000",
+            "link_hover_color": "#666666",
+            "heading_size": 42,
+            "extra_heading_size": 32,
+            "column_heading_size": 24,
+            "text_size": 16
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_6b2d3dd_fPwxBE"
+      ],
+      "settings": {
+        "content_direction": "column",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 12,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1771212012658f1991"
+  ]
+}
