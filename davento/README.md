@@ -271,3 +271,8 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
     bullet (pp-benefits, original in orig/), product info tab "Regalo gratuito", product cross-sell title
     "Completa il tuo ordine" + gift line, collection head and home bestsellers (gift line instead of tier bar),
     cart drawer (gift block instead of tier bar). pp-tier-progress is no longer used.
+  - Tested (preview, mobile + desktop): announcement + product bullet + product tab + cross-sell + home section show
+    the gift; cart under €80 "Ancora €45,05…" with locked gifts; from €80 pick → gift line €0,00 (discount applied),
+    swap works, removing an item under €80 removes the gift; checkout €117,85 → €97,90 with the gift free.
+    UK shows "£68" / "£67.98 more" (converted), DE in German. Amounts use the store money format (€45,05).
+    Note: Shopify's bot check blocks a headless browser now and then; tests use a normal browser identity.

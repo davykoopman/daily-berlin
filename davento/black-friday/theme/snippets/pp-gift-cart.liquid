@@ -61,8 +61,21 @@
     var busy = false;
     var cartUrl = '{{ routes.cart_url }}';
     var root = '{{ routes.root_url }}'.replace(/\/$/, '');
+    // Same money format as the rest of the store (e.g. €45,05); other currencies via Intl
+    var shopFormat = {{ shop.money_format | json }};
+    var shopCurrency = '{{ shop.currency }}';
     var fmt = function (cents) {
       var cur = (window.Shopify && Shopify.currency && Shopify.currency.active) || '{{ cart.currency.iso_code }}';
+      if (cur === shopCurrency && shopFormat) {
+        var n = (cents / 100).toFixed(2), parts = n.split('.');
+        var thou = function (x, sep) { return x.replace(/\B(?=(\d{3})+(?!\d))/g, sep); };
+        return shopFormat.replace(/\{\{\s*(\w+)\s*\}\}/, function (m, k) {
+          if (k === 'amount_with_comma_separator') return thou(parts[0], '.') + ',' + parts[1];
+          if (k === 'amount_no_decimals_with_comma_separator') return thou(String(Math.round(cents / 100)), '.');
+          if (k === 'amount_no_decimals') return thou(String(Math.round(cents / 100)), ',');
+          return thou(parts[0], ',') + '.' + parts[1];
+        });
+      }
       try { return new Intl.NumberFormat(document.documentElement.lang || 'it', { style: 'currency', currency: cur }).format(cents / 100); }
       catch (e) { return (cents / 100).toFixed(2); }
     };
