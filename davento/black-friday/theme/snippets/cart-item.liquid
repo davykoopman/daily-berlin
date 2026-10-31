@@ -165,4 +165,8 @@
   .cart__item-price-col .cart-price-save { font-size:13px; font-weight:600; color: var(--colorTextSavings); }
   .cart__item-price-col .product__unit-price { font-size:12px; margin-top:2px; }
   .cart__discount-tags { display:none !important; }
+  /* No quantity selector anywhere (owner): the input stays for the theme's cart form, only a small remove link shows */
+  .cart__item .js-qty__wrapper { display:none !important; }
+  .cart__item .cart__remove { display:block !important; margin-top:4px; }
+  .cart__item .cart__remove a { font-size:12px; color:rgb(var(--pp-ink-rgb) / 0.6); text-decoration:underline; text-underline-offset:2px; }
 </style>

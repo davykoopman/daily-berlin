@@ -209,3 +209,7 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
 - Hero entrance animation (once on load, CSS only): kicker and title visible from the first frame and settle
   (opacity .3/.35 → 1, 16px rise; never invisible, so LCP is not delayed), offer stamps in at 0.5s (scale 1.9,
   -12° → -3°), sub + buttons fade up at 0.85/0.95s. Off for reduced motion. Checked mobile + desktop, end state ok.
+- No quantity selector anywhere (owner: nobody uses it): hidden in snippets/cart-item.liquid (drawer + /cart page;
+  the input stays for the theme's cart form), small "Rimuovi"/remove link shown instead. In the drawer the link uses
+  the theme's hidden minus button so the drawer updates in place (snippets/pp-cart-perks.liquid script). Product page
+  and quick pick had no quantity field. Cart perks smaller (11px text, 13px icons). Tested mobile + desktop.
