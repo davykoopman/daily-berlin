@@ -202,3 +202,7 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   now the text is shorter (150px desktop / 120px mobile).
 - Hero kicker without the shop name ("TUTTO NOVEMBRE"). Sparkle options A (gold foil edges + shine + gold title),
   B (glitter tapes + twinkles), C (gold dust + glow) shown as preview screenshots only; waiting for the user's pick.
+- Hero (user picked V3 without the bronze frame on the offer): bottom ribbons bronze-gold gradient, kicker bronze
+  #d6a874, title white, offer red. Satin shine (white streak) runs over the 4 ribbons and the offer one after the
+  other every 7s (CSS only, off for reduced motion). Only in sections/pp-bf-hero.liquid; rest of the site keeps
+  ink/white/cream/red. Checked IT + /de-de, mobile + desktop.

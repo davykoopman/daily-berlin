@@ -123,10 +123,40 @@
     box-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
   }
 
+  /* Bronze ribbons (hero only), red stays for the offer */
   .pp-bf__tape--2,
   .pp-bf__tape--4 {
-    background: var(--pp-cream);
+    background: linear-gradient(100deg, #8a5a2b 0%, #c08a4e 18%, #e8c18f 32%, #b07a42 48%, #7a4e24 64%, #c99a62 82%, #8a5a2b 100%);
     color: var(--pp-ink);
+  }
+
+  /* Satin shine: a light streak runs over each ribbon and the offer, one after the other, every 7s */
+  .pp-bf__tape::after,
+  .pp-bf__offer::after {
+    content: '';
+    position: absolute;
+    inset: -10%;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.5) 46%, rgb(255 255 255 / 0.8) 50%, rgb(255 255 255 / 0.5) 54%, transparent 65%);
+    transform: translateX(-110%);
+    animation: pp-bf-shine 7s ease-in-out infinite;
+  }
+
+  .pp-bf__tape--3::after { animation-delay: 0.4s; }
+  .pp-bf__tape--2::after { animation-delay: 0.8s; }
+  .pp-bf__tape--4::after { animation-delay: 1.2s; }
+  .pp-bf__offer::after { animation-delay: 1.8s; }
+
+  @keyframes pp-bf-shine {
+    0% { transform: translateX(-110%); }
+    18%, 100% { transform: translateX(110%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-bf__tape::after,
+    .pp-bf__offer::after {
+      display: none;
+    }
   }
 
   /* Cream tapes mirror the red ones: same length, leaving the hero at the bottom edge as the red ones leave at the top */
@@ -146,7 +176,7 @@
 
   .pp-bf__kicker {
     margin: 0 0 14px;
-    color: rgb(243 239 232 / 0.8);
+    color: #d6a874;
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.3em;
@@ -165,6 +195,8 @@
   }
 
   .pp-bf__offer {
+    position: relative;
+    overflow: hidden;
     margin: 18px 0;
     padding: 0.06em 0.22em 0.02em;
     background: var(--pp-red);
