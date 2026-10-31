@@ -192,3 +192,10 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
   right after (not deleted). Active automatic discount: only "Free Gift". Live test PL / NL / UK: gift €0 in cart,
   removed automatically under the minimum, re-pick works; checkout NL € 115,90 for 2 jackets + free scarf (€ 135,85
   crossed out), PL 560,90 zł, UK £100.00; iDEAL shown for NL.
+- Gift pick was slow on the live theme (2.5–4.3 s before anything changed: 4 requests in a row). New theme copy
+  "Black Friday v2 (snelle cadeaukeuze)" #209403576652 (duplicate of the live theme) with a faster
+  snippets/pp-gift-script: the choice shows at once (optimistic, 0.02–0.04 s), ONE /cart/update.js (old gift 0 + new
+  gift 1, keyed by variant id, with the drawer sections) instead of 4 requests, cart rendered from that response,
+  rapid clicks send only the last choice. Drawer line updated after ~1.2–1.5 s in the background. Tested PL + NL:
+  rapid 3 clicks → exactly 1 gift (the last, 0 zł / €0), removing the jacket → gift removed, no JS errors.
+  Waiting for the owner to publish v2.
