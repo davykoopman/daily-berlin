@@ -74,7 +74,18 @@
         {%- assign g = all_products[h] -%}
         {%- if g == blank -%}{%- continue -%}{%- endif -%}
         <li class="pp-giftbar__item" title="{{ g.title | escape }} – {{ free | strip }}">
-          {{ g.featured_image | image_url: width: 192, height: 192, crop: 'center' | image_tag: width: 32, height: 32, alt: g.title, fetchpriority: 'low' }}
+          {%- comment -%} Plain img: image_tag with width 32 would also shrink the file to 32px (blurry on phones).
+            96px for normal screens, 192px for retina, shown at 32px (26px on phones). {%- endcomment -%}
+          <img
+            src="{{ g.featured_image | image_url: width: 192, height: 192, crop: 'center' }}"
+            srcset="{{ g.featured_image | image_url: width: 96, height: 96, crop: 'center' }} 96w, {{ g.featured_image | image_url: width: 192, height: 192, crop: 'center' }} 192w"
+            sizes="32px"
+            width="32"
+            height="32"
+            alt="{{ g.title | escape }}"
+            loading="eager"
+            decoding="async"
+          >
         </li>
       {%- endfor -%}
     </ul>

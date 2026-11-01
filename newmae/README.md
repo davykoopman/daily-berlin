@@ -153,3 +153,9 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
 - Tested (preview, mobile 390 + desktop 1440): 12 pages, no Liquid/JS errors, no horizontal scroll, no Halloween /
   Fall Clearance / October 31 / Buy more / Mix & Save texts. Flow: $45.05 more under the minimum, pick in ~0.15 s,
   line in ~1.3 s, 3 rapid swaps → 1 gift, removing items below $90 removes the gift. Footer aligned (16px).
+- Round 2 (user, 1 Nov): typographic Black Friday hero like the other stores (sections/pp-bf-hero: warm black,
+  rust + champagne tapes, Cormorant title, offer in Manrope bold, "Up to 70% off", Women / Men → black-friday-women
+  / -men, Shop bestsellers) first on the home page; photo hero (pp_hero) OFF, kept for after 1 Dec. Gift bar with the
+  4 photos ON under the black banner (banner no longer repeats "Free gift over $90").
+  Gift photos sharp: plain <img> with srcset 96w / 192w at 32px. Found: `image_tag: width: 32` also rewrites the
+  file URL to width=32 (blurry) – the same code is in Davento v2, Niaali and Migesi pp-gift-showcase (fix there too).

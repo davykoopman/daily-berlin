@@ -162,7 +162,7 @@
       "settings": {
         "label": "BLACK FRIDAY",
         "headline": "Up to 70% off",
-        "subline": "Free gift over $90",
+        "subline": "",
         "end": "2026-11-30T23:59:59-05:00",
         "show_countdown": true,
         "countdown_label": "Ends in",
@@ -177,7 +177,7 @@
       "type": "pp-gift-showcase",
       "settings": {
         "title_font": "cormorant_n6",
-        "show_bar": false
+        "show_bar": true
       }
     }
   },

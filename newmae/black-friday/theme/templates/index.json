@@ -28,7 +28,8 @@
         "link_1": "shopify://collections/black-friday-women",
         "button_2": "Shop men's sale",
         "link_2": "shopify://collections/black-friday-men"
-      }
+      },
+      "disabled": true
     },
     "pp_trust": {
       "type": "pp-trust",
@@ -246,9 +247,21 @@
         "return_days": 60,
         "late_days": 7
       }
+    },
+    "pp_bf_hero": {
+      "type": "pp-bf-hero",
+      "settings": {
+        "offer": "upto",
+        "show_kicker": true,
+        "heading_font": "cormorant_n6",
+        "collection_women": "black-friday-women",
+        "collection_men": "black-friday-men",
+        "collection_best": "bestsellers"
+      }
     }
   },
   "order": [
+    "pp_bf_hero",
     "pp_hero",
     "pp_trust",
     "pp_home_categories",
