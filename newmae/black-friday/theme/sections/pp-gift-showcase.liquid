@@ -95,13 +95,14 @@
 
 {% stylesheet %}
   /* NewMae Black Friday palette: the brand's warm black as ink (Black Friday banner, badge), white page, NewMae warm
-     grey for soft surfaces, the store's own rust only for discounts / gift accents. One place for every pp file. */
+     grey for soft surfaces, Black Friday red (#c20000, same as Davento / Niaali) for every discount, the Black
+     Friday label, the Bestsellers menu tag and the hero offer. One place for every pp file. */
   :root {
     --pp-ink: #1c1714;
     --pp-ink-rgb: 28 23 20;
     --pp-white: #ffffff;
     --pp-cream: #f3efeb;
-    --pp-red: #a94416;
+    --pp-red: #c20000;
     --pp-champagne: #d8c3a5;
   }
 
@@ -169,20 +170,54 @@
     background: var(--pp-white);
   }
 
-  /* Black Friday: every icon in the warm black of the theme on a soft warm grey circle (user: the rust icons did
-     not fit); rust stays for prices and the -X% boxes only */
+  /* Black Friday red on every discount (user: everything about the sale in red), overriding the store's rust:
+     sale price + -X% box (theme price snippet, pp cards, quick pick, cart add-ons) and the cart saving line */
+  [ref='priceContainer'] .price--sale,
+  .pp-card__now--sale,
+  .pp-mini__now--sale,
+  .pp-qp__now--sale,
+  .pp-upsell__pct {
+    color: var(--pp-red) !important;
+  }
+
+  .price-save,
+  .pp-card__badge,
+  .pp-qp__badge {
+    background: var(--pp-red) !important;
+  }
+
+  .pp-cart-saving {
+    background: rgb(194 0 0 / 0.07) !important;
+    color: var(--pp-red) !important;
+  }
+
+  /* Trust cards stand out more: warm grey card, black icon circle with a white icon, bolder title */
+  .pp-trust__item {
+    border-color: transparent !important;
+    background: var(--pp-cream) !important;
+  }
+
   .pp-trust__icon {
-    background: rgb(var(--pp-ink-rgb) / 0.06) !important;
-    color: var(--pp-ink) !important;
+    background: var(--pp-ink) !important;
+    color: #fff !important;
+  }
+
+  .pp-trust__title {
+    font-weight: 600 !important;
+    color: var(--pp-ink);
+  }
+
+  .pp-trust__text {
+    color: rgb(var(--pp-ink-rgb) / 0.8) !important;
   }
 
   .pp-giftbar__icon,
   .pp-gift__icon {
-    stroke: var(--pp-ink) !important;
+    stroke: var(--pp-red) !important;
   }
 
   .pp-benefit--gift .pp-benefit__icon {
-    color: var(--pp-ink) !important;
+    color: var(--pp-red) !important;
   }
 
   /* Product page on phones: photo directly under the Black Friday banner (no white strip) */

@@ -163,3 +163,9 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
   announcement bar (links to /collections/black-friday), then free shipping and 60-day returns. Icons (trust row,
   gift bar, gift bullet, cart gift block) in the warm black #1c1714 on a soft warm grey circle instead of rust; rust
   stays for prices and -X% boxes (CSS in sections/pp-gift-showcase).
+- Round 4 (user, 1 Nov): product photo without the "BLACK FRIDAY" label (only the variant photo; cards keep it).
+  Everything Black Friday / discount in Black Friday red #c20000 (sale price, -X% box, pp cards, quick pick, cart
+  add-ons, cart saving line, cart sale line, Black Friday label, Bestsellers menu tag, hero tapes + offer, gift bar
+  and gift icons): --pp-red in pp-gift-showcase + overrides there. Primary buttons black (config/settings_data:
+  palette_primary_button_background #65432B → foreground #1C1714). Trust cards stand out: warm grey card, black icon
+  circle with a white icon, title 600.

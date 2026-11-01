@@ -6,7 +6,6 @@
   class="pp-benefits-wrap{% if bs.show_divider %} pp-benefits-wrap--divider{% endif %}"
   {{ block.shopify_attributes }}
 >
-{%- render 'pp-bf-badge', mode: 'pdp' -%}
 <ul class="pp-benefits" role="list">
   {%- if bs.show_shipping -%}
     <li class="pp-benefit">
@@ -88,7 +87,7 @@
   }
 
   .pp-benefit--gift .pp-benefit__icon {
-    color: var(--pp-red, #a94416);
+    color: var(--pp-red, #c20000);
   }
 
   /*
