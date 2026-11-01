@@ -1,0 +1,209 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign title = 'Bestsellery'
+    when 'nl'
+      assign title = 'Bestsellers'
+    when 'de'
+      assign title = 'Bestseller'
+    when 'fr'
+      assign title = 'Meilleures ventes'
+    when 'it'
+      assign title = 'Più venduti'
+    when 'es'
+      assign title = 'Más vendidos'
+    else
+      assign title = 'Bestsellers'
+  endcase
+
+  # Groups come from the menu (same as the categories section): every top-level
+  # collection link with sub items, in menu order. Products follow the sort order
+  # of the group collection (set it to Best selling).
+  assign menu = ss.menu
+  if menu == blank
+    assign menu = linklists['main-menu']
+  endif
+
+  capture styles
+    echo '--pp-row-columns: ' | append: ss.columns | append: '; --pp-row-gap: ' | append: ss.columns_gap | append: 'px;'
+  endcapture
+-%}
+
+<div
+  class="section section--{{ ss.section_width }} spacing-style pp-bundle pp-home-best"
+  style="{% render 'spacing-style', settings: ss %} {{ styles }}"
+  data-pp-gender-root
+>
+  <div class="pp-home-best__head">
+    <div class="pp-home__head">
+      <h2 class="pp-home__title">{{ title }}</h2>
+      {% render 'pp-gender-tabs', menu: menu, label: title %}
+    </div>
+    {%- if ss.show_tiers -%}
+      {% render 'pp-tier-progress', tiers: ss.tiers %}
+    {%- endif -%}
+  </div>
+
+  {%- assign first_group = true -%}
+  {%- for group in menu.links -%}
+    {%- if group.type != 'collection_link' or group.links.size == 0 -%}{%- continue -%}{%- endif -%}
+    {%- liquid
+      assign source = group.object
+      capture see_all_key
+        render 'pp-see-all-key', collection: source
+      endcapture
+      assign see_all_key = see_all_key | strip
+
+      capture see_all_label
+        render 'pp-i18n', key: see_all_key
+      endcapture
+    -%}
+
+    <div
+      class="pp-row pp-home-best__panel"
+      role="tabpanel"
+      data-pp-row
+      data-pp-panel="{{ source.handle }}"
+      {% unless first_group %}hidden{% endunless %}
+    >
+      <ul class="pp-row__track" role="list">
+        {%- assign shown = 0 -%}
+        {%- for item in source.products -%}
+          {%- if item.available == false -%}{%- continue -%}{%- endif -%}
+          {%- if shown >= ss.max_products -%}{%- break -%}{%- endif -%}
+          {%- assign shown = shown | plus: 1 -%}
+          <li class="pp-row__item">{% render 'pp-card', product: item %}</li>
+        {%- endfor -%}
+        <li class="pp-row__item">
+          <a class="pp-bundle__all" href="{{ source.url }}">
+            <span class="pp-bundle__all-text">{{ see_all_label | strip }}</span>
+            <span class="pp-bundle__all-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      </ul>
+      <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="-1" aria-label="←" disabled>←</button>
+      <button type="button" class="pp-row__arrow" data-pp-row-arrow data-dir="1" aria-label="→">→</button>
+    </div>
+    {%- assign first_group = false -%}
+  {%- endfor -%}
+  {% render 'pp-quick-pick' %}
+</div>
+
+{% render 'pp-alove-style' %}
+
+{% stylesheet %}
+  .pp-home-best__head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+
+  .pp-home-best__head .pp-home__head {
+    margin-bottom: 0;
+  }
+
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Home bestsellers",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Best selling products per menu group (e.g. Kobiety, Mężczyźni) with a switch. Groups are the top-level collection links with sub items in the menu. Products follow the collection sort order (set the collections to Best selling)."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tiers",
+      "label": "Show bundle progress bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tiers",
+      "label": "Bundle tiers (quantity:percent)",
+      "default": "2:10,3:15,4:20"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Products",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Home bestsellers"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,29 @@
+{%- doc -%}
+  Picks the "see the whole collection" text key for a menu group, from the
+  group collection's handle and title (any language). Women words are checked
+  first, because "women" contains "men". Unknown groups get the neutral text.
+
+  @param {object} collection - Parent collection of the menu group
+{%- enddoc -%}
+
+{%- liquid
+  assign probe = collection.handle | append: ' ' | append: collection.title | downcase
+  assign women_words = 'kobiet,damsk,women,woman,ladies,dames,damen,femme,donna,mujer' | split: ','
+  assign men_words = 'mezczy,mężczy,mesk,męsk,men,man,heren,herren,homme,uomo,hombre' | split: ','
+  assign result = 'see_all'
+  for w in women_words
+    if probe contains w
+      assign result = 'see_all_women'
+      break
+    endif
+  endfor
+  if result == 'see_all'
+    for w in men_words
+      if probe contains w
+        assign result = 'see_all_men'
+        break
+      endif
+    endfor
+  endif
+  echo result
+-%}

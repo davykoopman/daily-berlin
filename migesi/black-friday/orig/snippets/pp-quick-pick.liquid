@@ -1,0 +1,588 @@
+{%- doc -%}
+  Behaviour for pp-card (snippets/pp-card): the quick pick sheet (colour and size,
+  add to cart), colour thumbnails on the card, the hover image and the arrows of
+  the pp scroll rows. Render once per section; the script only runs once per page.
+  Adding uses the standard /cart/add.js and then tells the theme (Dwell/Horizon
+  cart events), so the theme cart drawer and cart count update and the drawer
+  opens. If the theme events are not available, the shopper goes to the cart page.
+{%- enddoc -%}
+
+<script type="application/json" data-pp-qp-i18n>
+  {
+    "add": {{ 'actions.add_to_cart' | t | json }},
+    "soldOut": {{ 'products.product.sold_out' | t | json }},
+    "unavailable": {{ 'products.product.unavailable' | t | json }},
+    "error": {{ 'products.product.add_to_cart_error' | t | json }},
+    "close": {{ 'accessibility.close_dialog' | t | json }},
+    "cartUrl": {{ routes.cart_url | json }},
+    "root": {{ routes.root_url | json }}
+  }
+</script>
+
+<script>
+  (function () {
+    if (window.ppQuickPick) return;
+    window.ppQuickPick = true;
+
+    var i18nEl = document.querySelector('[data-pp-qp-i18n]');
+    var i18n = i18nEl ? JSON.parse(i18nEl.textContent) : {};
+    var root = (i18n.root || '/').replace(/\/?$/, '/');
+    var dialog, state;
+
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text != null) e.textContent = text;
+      return e;
+    }
+
+    function build() {
+      dialog = el('dialog', 'pp-qp');
+      dialog.setAttribute('aria-label', '');
+      var inner = el('div', 'pp-qp__inner');
+      var close = el('button', 'pp-qp__close', '×');
+      close.type = 'button';
+      close.setAttribute('aria-label', i18n.close || 'Close');
+      close.addEventListener('click', hide);
+      var head = el('div', 'pp-qp__head');
+      var img = el('img', 'pp-qp__img');
+      img.alt = '';
+      img.width = 96;
+      img.height = 120;
+      var info = el('div', 'pp-qp__info');
+      var title = el('a', 'pp-qp__title');
+      var price = el('div', 'pp-qp__price');
+      info.append(title, price);
+      head.append(img, info);
+      var options = el('div', 'pp-qp__options');
+      var error = el('p', 'pp-qp__error');
+      error.hidden = true;
+      var add = el('button', 'pp-qp__add');
+      add.type = 'button';
+      add.addEventListener('click', addToCart);
+      options.addEventListener('change', onChange);
+      inner.append(close, head, options, error, add);
+      dialog.append(inner);
+      // Click on the backdrop closes
+      dialog.addEventListener('click', function (e) {
+        if (e.target === dialog) hide();
+      });
+      document.body.append(dialog);
+    }
+
+    function hide() {
+      if (dialog && dialog.open) dialog.close();
+    }
+
+    function findVariant(selected) {
+      return state.data.variants.find(function (v) {
+        return v[1].every(function (value, i) {
+          return value === selected[i];
+        });
+      });
+    }
+
+    function open(card) {
+      var dataEl = card.querySelector('[data-pp-card-data]');
+      if (!dataEl) return;
+      if (!dialog) build();
+      var data = JSON.parse(dataEl.textContent);
+      var start = Number(card.dataset.ppVariant || data.selected);
+      var startVariant = data.variants.find(function (v) { return v[0] === start; }) ||
+        data.variants.find(function (v) { return v[2]; }) || data.variants[0];
+      var cardImg = card.querySelector('.pp-card__img:not(.pp-card__img--hover)');
+      // Start with the photo the card already loaded, so the sheet shows it instantly
+      state = { data: data, selected: startVariant[1].slice(), cardImg: cardImg && (cardImg.currentSrc || cardImg.src) };
+
+      var title = dialog.querySelector('.pp-qp__title');
+      title.textContent = data.title;
+      title.href = data.url;
+      dialog.setAttribute('aria-label', data.title);
+
+      var options = dialog.querySelector('.pp-qp__options');
+      options.textContent = '';
+      // A single option with a single value (one variant) needs no picker
+      if (!(data.variants.length === 1 && data.options.length === 1 && data.options[0].values.length <= 1)) {
+        data.options.forEach(function (option, i) {
+          var fieldset = el('fieldset', 'pp-qp__option');
+          var legend = el('legend', 'pp-qp__legend');
+          legend.append(option.name + ': ', el('span', 'pp-qp__chosen', option.values[state.selected[i]]));
+          fieldset.append(legend);
+          var list = el('div', 'pp-qp__values' + (i === data.colour ? ' pp-qp__values--colour' : ''));
+          option.values.forEach(function (value, valueIndex) {
+            var label = el('label', 'pp-qp__value');
+            var input = el('input');
+            input.type = 'radio';
+            input.name = 'pp-qp-' + i;
+            input.value = valueIndex;
+            input.dataset.index = i;
+            input.checked = valueIndex === state.selected[i];
+            label.append(input);
+            if (i === data.colour) {
+              var thumb = el('img');
+              thumb.src = data.images[valueIndex] || data.image;
+              thumb.alt = value;
+              thumb.width = 48;
+              thumb.height = 60;
+              thumb.loading = 'lazy';
+              label.append(thumb);
+              label.title = value;
+            } else {
+              label.append(el('span', '', value));
+            }
+            list.append(label);
+          });
+          fieldset.append(list);
+          options.append(fieldset);
+        });
+      }
+
+      dialog.querySelector('.pp-qp__error').hidden = true;
+      update();
+      dialog.showModal();
+    }
+
+    function onChange(e) {
+      var input = e.target;
+      if (!input.matches('input[type=radio]')) return;
+      var optionIndex = Number(input.dataset.index);
+      state.selected[optionIndex] = Number(input.value);
+      input.closest('fieldset').querySelector('.pp-qp__chosen').textContent = state.data.options[optionIndex].values[Number(input.value)];
+      dialog.querySelector('.pp-qp__error').hidden = true;
+      update();
+    }
+
+    function update() {
+      var data = state.data;
+      var variant = findVariant(state.selected);
+      state.variant = variant;
+
+      // Grey out values that are sold out with the other current choices
+      dialog.querySelectorAll('.pp-qp__value input').forEach(function (input) {
+        var i = Number(input.dataset.index);
+        var test = state.selected.slice();
+        test[i] = Number(input.value);
+        var match = findVariant(test);
+        input.parentElement.classList.toggle('is-unavailable', !match || !match[2]);
+      });
+
+      var img = dialog.querySelector('.pp-qp__img');
+      var colourValue = data.colour >= 0 ? state.selected[data.colour] : -1;
+      var next = state.cardImg || (colourValue >= 0 && data.images[colourValue]) || data.image;
+      state.cardImg = null;
+      if (img.getAttribute('src') !== next) img.src = next;
+
+      var price = dialog.querySelector('.pp-qp__price');
+      price.textContent = '';
+      var p = data.prices[variant ? variant[3] : 0];
+      if (p) {
+        price.append(el('span', 'pp-qp__now' + (p[1] ? ' pp-qp__now--sale' : ''), p[0]));
+        if (p[1]) {
+          price.append(el('s', 'pp-qp__was', p[1]), el('span', 'pp-qp__badge', '-' + p[2] + '%'));
+        }
+      }
+
+      var add = dialog.querySelector('.pp-qp__add');
+      add.disabled = !variant || !variant[2];
+      add.textContent = !variant ? i18n.unavailable : variant[2] ? i18n.add : i18n.soldOut;
+    }
+
+    function addToCart() {
+      var variant = state.variant;
+      if (!variant || !variant[2]) return;
+      var add = dialog.querySelector('.pp-qp__add');
+      add.disabled = true;
+      add.setAttribute('aria-busy', 'true');
+
+      // Section ids of the theme cart (drawer), so the theme can redraw it
+      var sections = [];
+      document.querySelectorAll('cart-items-component[data-section-id]').forEach(function (el) {
+        if (sections.indexOf(el.dataset.sectionId) < 0) sections.push(el.dataset.sectionId);
+      });
+
+      var themeEvents = import('@shopify/events').catch(function () { return null; });
+      var deferred = null;
+      themeEvents
+        .then(function (ev) {
+          if (!ev || !ev.CartLinesUpdateEvent) return;
+          deferred = ev.CartLinesUpdateEvent.createPromise();
+          // Sent from inside the sheet: the theme opens its drawer once the sheet has closed
+          dialog.dispatchEvent(
+            new ev.CartLinesUpdateEvent({
+              action: 'add',
+              context: 'product',
+              lines: [{ merchandiseId: String(variant[0]), quantity: 1 }],
+              promise: deferred.promise,
+            })
+          );
+        })
+        .then(function () {
+          return fetch(root + 'cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ items: [{ id: variant[0], quantity: 1 }], sections: sections.join(',') }),
+          });
+        })
+        .then(function (response) {
+          return response.json().then(function (body) {
+            if (!response.ok) throw new Error(body.description || body.message || i18n.error);
+            return body;
+          });
+        })
+        .then(function (added) {
+          hide();
+          if (!deferred) {
+            window.location.href = i18n.cartUrl || '/cart';
+            return;
+          }
+          return themeEvents.then(function (ev) {
+            return fetch(root + 'cart.js', { headers: { Accept: 'application/json' } })
+              .then(function (r) { return r.json(); })
+              .then(function (cart) {
+                deferred.resolve({
+                  cart: ev.CartLinesUpdateEvent.createCartFromAjaxResponse(cart),
+                  detail: { items: cart.items, source: 'pp-quick-pick', itemCount: 1, sections: added.sections, didError: false },
+                });
+              });
+          });
+        })
+        .catch(function (error) {
+          if (deferred) deferred.reject(error);
+          var box = dialog.querySelector('.pp-qp__error');
+          box.textContent = error.message || i18n.error;
+          box.hidden = false;
+        })
+        .finally(function () {
+          add.removeAttribute('aria-busy');
+          update();
+        });
+    }
+
+    // Card behaviour (delegated, so it works for every card on the page)
+    document.addEventListener('click', function (e) {
+      var quick = e.target.closest('[data-pp-quick]');
+      if (quick) {
+        e.preventDefault();
+        open(quick.closest('[data-pp-card]'));
+        return;
+      }
+
+      var swatch = e.target.closest('[data-pp-swatch]');
+      if (swatch) {
+        e.preventDefault();
+        var card = swatch.closest('[data-pp-card]');
+        card.querySelectorAll('[data-pp-swatch]').forEach(function (s) {
+          s.classList.toggle('is-active', s === swatch);
+        });
+        var img = card.querySelector('.pp-card__img:not(.pp-card__img--hover)');
+        if (img && swatch.dataset.img) {
+          img.removeAttribute('srcset');
+          img.src = swatch.dataset.img;
+        }
+        card.dataset.ppVariant = swatch.dataset.variant;
+        card.querySelectorAll('[data-pp-card-link]').forEach(function (a) {
+          var url = new URL(a.href, location.href);
+          url.searchParams.set('variant', swatch.dataset.variant);
+          a.href = url.pathname + url.search;
+        });
+        return;
+      }
+
+      var arrow = e.target.closest('[data-pp-row-arrow]');
+      if (arrow) {
+        var track = arrow.closest('[data-pp-row]').querySelector('.pp-row__track');
+        track.scrollBy({ left: Number(arrow.dataset.dir) * track.clientWidth * 0.9, behavior: 'smooth' });
+        return;
+      }
+
+      if (e.target.closest('[data-pp-tab]')) requestAnimationFrame(updateArrows);
+    });
+
+    // Second image on hover: only loaded when a mouse is on the card
+    document.addEventListener('pointerover', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      var card = e.target.closest && e.target.closest('[data-pp-card]');
+      var hover = card && card.querySelector('.pp-card__img--hover[data-srcset]');
+      if (!hover) return;
+      hover.srcset = hover.dataset.srcset;
+      hover.removeAttribute('data-srcset');
+    });
+
+    function updateArrows() {
+      document.querySelectorAll('[data-pp-row]').forEach(function (row) {
+        var track = row.querySelector('.pp-row__track');
+        var max = track.scrollWidth - track.clientWidth - 2;
+        row.querySelectorAll('[data-pp-row-arrow]').forEach(function (a) {
+          a.disabled = a.dataset.dir === '-1' ? track.scrollLeft <= 2 : track.scrollLeft >= max;
+        });
+      });
+    }
+
+    document.addEventListener(
+      'scroll',
+      function (e) {
+        if (e.target.classList && e.target.classList.contains('pp-row__track')) updateArrows();
+      },
+      { capture: true, passive: true }
+    );
+    window.addEventListener('resize', updateArrows, { passive: true });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', updateArrows);
+    else updateArrows();
+  })();
+</script>
+
+{% stylesheet %}
+  .pp-qp {
+    width: min(440px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: var(--color-background, #fff);
+    color: var(--color-foreground, #1f2a1f);
+    box-shadow: 0 10px 40px rgb(0 0 0 / 0.18);
+  }
+
+  .pp-qp::backdrop {
+    background: rgb(0 0 0 / 0.4);
+  }
+
+  .pp-qp[open] {
+    animation: ppQpIn 0.2s ease-out;
+  }
+
+  @keyframes ppQpIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  .pp-qp__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .pp-qp__close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .pp-qp__head {
+    display: flex;
+    gap: 14px;
+    padding-right: 36px;
+  }
+
+  .pp-qp__img {
+    flex: 0 0 auto;
+    width: 96px;
+    height: 120px;
+    object-fit: cover;
+    background: rgb(0 0 0 / 0.05);
+  }
+
+  .pp-qp__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .pp-qp__title {
+    display: -webkit-box;
+    overflow: hidden;
+    color: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    text-decoration: none;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .pp-qp__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+  }
+
+  .pp-qp__now {
+    font-weight: 600;
+  }
+
+  .pp-qp__now--sale {
+    color: rgb(168 35 27);
+  }
+
+  .pp-qp__was {
+    color: rgb(31 42 31 / 0.6);
+    font-size: 13px;
+  }
+
+  .pp-qp__badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgb(168 35 27);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .pp-qp__options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .pp-qp__option {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .pp-qp__legend {
+    margin-bottom: 8px;
+    padding: 0;
+    font-size: 14px;
+  }
+
+  .pp-qp__chosen {
+    font-weight: 600;
+  }
+
+  .pp-qp__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pp-qp__value {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid rgb(0 0 0 / 0.18);
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .pp-qp__value input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pp-qp__value:has(input:checked) {
+    border-color: #1f2a1f;
+    background: #1f2a1f;
+    color: #fff;
+  }
+
+  .pp-qp__value:has(input:focus-visible) {
+    outline: 2px solid #1f2a1f;
+    outline-offset: 2px;
+  }
+
+  .pp-qp__value.is-unavailable {
+    color: rgb(0 0 0 / 0.35);
+    background-image: linear-gradient(to top right, transparent calc(50% - 0.5px), rgb(0 0 0 / 0.25) 50%, transparent calc(50% + 0.5px));
+  }
+
+  .pp-qp__value.is-unavailable:has(input:checked) {
+    color: #fff;
+  }
+
+  .pp-qp__values--colour .pp-qp__value {
+    width: 50px;
+    height: 62px;
+    min-width: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  .pp-qp__values--colour .pp-qp__value img {
+    width: 48px;
+    height: 60px;
+    object-fit: cover;
+  }
+
+  .pp-qp__values--colour .pp-qp__value:has(input:checked) {
+    background: #fff;
+    outline: 2px solid #1f2a1f;
+    outline-offset: 1px;
+  }
+
+  .pp-qp__values--colour .pp-qp__value.is-unavailable img {
+    opacity: 0.4;
+  }
+
+  .pp-qp__error {
+    margin: 0;
+    color: rgb(168 35 27);
+    font-size: 14px;
+  }
+
+  .pp-qp__add {
+    height: 52px;
+    border: 0;
+    border-radius: 6px;
+    background: #1f2a1f;
+    color: #fff;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .pp-qp__add[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .pp-qp__add[aria-busy='true'] {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  /* Bottom sheet on phones */
+  @media screen and (max-width: 749px) {
+    .pp-qp {
+      width: 100%;
+      max-width: 100%;
+      max-height: 88dvh;
+      margin: auto 0 0;
+      border-radius: 14px 14px 0 0;
+    }
+
+    .pp-qp__inner {
+      padding: 18px 16px calc(16px + env(safe-area-inset-bottom));
+    }
+
+    @keyframes ppQpIn {
+      from {
+        transform: translateY(100%);
+      }
+    }
+  }
+{% endstylesheet %}

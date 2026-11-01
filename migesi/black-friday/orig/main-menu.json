@@ -1,0 +1,208 @@
+{
+ "title": "Quick Links",
+ "handle": "main-menu",
+ "items": [
+  {
+   "id": "gid://shopify/MenuItem/792354095451",
+   "title": "Home",
+   "type": "FRONTPAGE",
+   "url": "/"
+  },
+  {
+   "id": "gid://shopify/MenuItem/792354128219",
+   "title": "Women",
+   "type": "COLLECTION",
+   "resourceId": "gid://shopify/Collection/682722558299",
+   "items": [
+    {
+     "id": "gid://shopify/MenuItem/808872903003",
+     "title": "Shop All Women",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722558299"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808872935771",
+     "title": "Jackets & Coats",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722591067"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873001307",
+     "title": "Knitwear",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722656603"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873034075",
+     "title": "Cardigans",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722689371"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873230683",
+     "title": "Boots",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722885979"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873132379",
+     "title": "Trousers & Jeans",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722787675"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808872968539",
+     "title": "Blazers",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722623835"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873197915",
+     "title": "Shoes",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722853211"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873066843",
+     "title": "Tops & Blouses",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722722139"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873165147",
+     "title": "Sets & Co-ords",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722820443"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873263451",
+     "title": "Bags & Accessories",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722918747"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873099611",
+     "title": "Dresses & Jumpsuits",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722754907"
+    }
+   ]
+  },
+  {
+   "id": "gid://shopify/MenuItem/792526553435",
+   "title": "Men",
+   "type": "COLLECTION",
+   "resourceId": "gid://shopify/Collection/682722951515",
+   "items": [
+    {
+     "id": "gid://shopify/MenuItem/808873296219",
+     "title": "Shop All Men",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722951515"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873328987",
+     "title": "Jackets & Coats",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682722984283"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873394523",
+     "title": "Knitwear",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723049819"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873427291",
+     "title": "Cardigans",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723082587"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873460059",
+     "title": "Hoodies & Sweatshirts",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723115355"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873689435",
+     "title": "Boots",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723344731"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873558363",
+     "title": "Trousers & Jeans",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723213659"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873361755",
+     "title": "Suits & Blazers",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723017051"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873656667",
+     "title": "Shoes",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723311963"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873492827",
+     "title": "Shirts",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723148123"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873623899",
+     "title": "Sets & Co-ords",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723279195"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873722203",
+     "title": "Bags & Accessories",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723377499"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873525595",
+     "title": "T-Shirts & Polos",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723180891"
+    },
+    {
+     "id": "gid://shopify/MenuItem/808873591131",
+     "title": "Shorts",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/682723246427"
+    }
+   ]
+  },
+  {
+   "id": "gid://shopify/MenuItem/792537137499",
+   "title": "About Us",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/166296584539"
+  },
+  {
+   "id": "gid://shopify/MenuItem/792537170267",
+   "title": "Contact",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/165935612251"
+  },
+  {
+   "id": "gid://shopify/MenuItem/792537203035",
+   "title": "FAQ",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/166379913563"
+  },
+  {
+   "id": "gid://shopify/MenuItem/793207538011",
+   "title": "Track Your Order",
+   "type": "HTTP",
+   "url": "/apps/parcelpanel"
+  }
+ ]
+}

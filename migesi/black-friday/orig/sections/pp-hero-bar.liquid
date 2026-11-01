@@ -1,0 +1,155 @@
+{%- comment -%}
+  Styling only: homepage hero without a box. Beige text and buttons sit straight on the photo,
+  on a soft dark gradient at the bottom of the hero so everything stays readable. Renders no markup.
+{%- endcomment -%}
+
+{% stylesheet %}
+  /* Soft dark gradient at the bottom of the photo */
+  .hero .hero__media-grid::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 60%;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.62) 0%, rgb(0 0 0 / 0.35) 45%, rgb(0 0 0 / 0) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .hero .hero__content-wrapper {
+    position: absolute !important;
+    top: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 28px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    transform: translateX(-50%);
+    width: min(480px, calc(100% - 32px)) !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    background: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    z-index: 3;
+  }
+
+  .hero .hero__content-wrapper > .text-block {
+    padding-inline: 0 !important;
+    text-align: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+  }
+
+  .hero .hero__content-wrapper h2,
+  .hero .hero__content-wrapper > rte-formatter p {
+    width: 100%;
+    text-align: center !important;
+    color: #f6f2eb !important;
+    text-shadow: 0 2px 14px rgb(0 0 0 / 0.5);
+  }
+
+  .hero .hero__content-wrapper h2 {
+    margin: 0 !important;
+    font-size: 34px !important;
+    line-height: 1.1 !important;
+  }
+
+  .hero .hero__content-wrapper > rte-formatter,
+  .hero .hero__content-wrapper > rte-formatter p {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 600;
+  }
+
+  .hero .hero__content-wrapper a.button {
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    height: 50px;
+    padding-inline: 20px !important;
+    justify-content: center;
+    font-weight: 600;
+  }
+
+  /* Primary button: solid beige with dark green text */
+  .hero .hero__content-wrapper > a.button {
+    width: 100% !important;
+    flex: none !important;
+    background: #f6f2eb !important;
+    color: #2f3b2f !important;
+    border: 1px solid #f6f2eb !important;
+  }
+
+  .hero .hero__content-wrapper .group-block,
+  .hero .hero__content-wrapper .group-block-content {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .hero .hero__content-wrapper .group-block-content {
+    gap: 10px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Secondary buttons: see-through with a beige border and beige text */
+  .hero .hero__content-wrapper .group-block-content > a.button {
+    flex: 1 1 0 !important;
+    width: auto !important;
+    background: rgb(255 255 255 / 0.16) !important;
+    color: #f6f2eb !important;
+    border: 1px solid #f6f2eb !important;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Mobile: the hero is as tall as the photo (2:3), so on every phone all three faces stay in view */
+  @media screen and (max-width: 749px) {
+    .hero {
+      min-height: 150vw !important;
+    }
+
+    .hero .hero__media {
+      object-position: 50% 0% !important;
+    }
+  }
+
+  /* Desktop: same stacked layout as mobile, a bit higher up and with bigger text */
+  @media screen and (min-width: 750px) {
+    .hero .hero__content-wrapper {
+      bottom: clamp(72px, 13vh, 130px) !important;
+    }
+
+    .hero .hero__content-wrapper h2 {
+      font-size: 56px !important;
+    }
+
+    .hero .hero__content-wrapper > rte-formatter,
+    .hero .hero__content-wrapper > rte-formatter p {
+      font-size: 22px !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Hero bar style",
+  "settings": [],
+  "presets": [
+    {
+      "name": "PP Hero bar style"
+    }
+  ]
+}
+{% endschema %}

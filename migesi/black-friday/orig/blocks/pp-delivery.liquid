@@ -1,0 +1,76 @@
+<p class="pp-delivery" {{ block.shopify_attributes }}>
+  <svg class="pp-delivery__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M3.5 7.5 12 3.5l8.5 4v9L12 20.5l-8.5-4z"/>
+    <path d="M3.5 7.5 12 11.5l8.5-4M12 11.5v9"/>
+  </svg>
+  <span>{% render 'pp-i18n', key: 'dispatch', n: block.settings.dispatch_days %}</span>
+</p>
+
+{% stylesheet %}
+  /*
+    Sits right under the add to cart button.
+    --pp-layout-gap: gap between blocks in product details (12px in the template).
+  */
+  .pp-delivery {
+    --pp-layout-gap: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin: calc(12px - var(--pp-layout-gap)) 0 calc(16px - var(--pp-layout-gap));
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.75);
+    text-align: center;
+  }
+
+
+  .pp-delivery__icon {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Payment icons under the delivery line: one row in the product column */
+  .product-details .payment-icons__list {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .product-details .payment-icons__item svg {
+    width: 34px;
+    height: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Delivery time",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Text is translated automatically. Match the shipping policy."
+    },
+    {
+      "type": "text",
+      "id": "dispatch_days",
+      "label": "Dispatch time in business days",
+      "default": "1–2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Delivery time",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

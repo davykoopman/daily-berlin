@@ -1,0 +1,159 @@
+{%- doc -%}
+  Texts for the pp-size-guide popup in the storefront language (it, de, es,
+  pl, else en). Prints them joined by "|~|" in this fixed order: link, close,
+  size, chest, waist, hips, shoe, foot, sub_women, sub_men, sub_shoes, fit,
+  fit_shoes, exchange, how, how_chest, how_waist, how_hips, how_foot, note,
+  sub_garment, fit_garment, how_garment, length, sleeve, shoulder, inseam,
+  pants_length.
+
+  @param {string} lang - Two-letter storefront language
+  @param {string} gender - "women" or "men"
+{%- enddoc -%}
+
+{%- case lang -%}
+  {%- when 'it' -%}
+    Guida alle taglie|~|
+    Chiudi|~|
+    Taglia|~|
+    Petto|~|
+    Vita|~|
+    Fianchi|~|
+    Taglia EU|~|
+    Lunghezza piede|~|
+    Misure del corpo donna|~|
+    Misure del corpo uomo|~|
+    Lunghezza del piede|~|
+    Le misure si riferiscono al corpo, non al capo. Se sei tra due taglie, scegli quella più grande.|~|
+    Se sei tra due misure, scegli quella più grande.|~|
+    Taglia sbagliata? Il cambio è sempre possibile – scrivici.|~|
+    Come prendere le misure|~|
+    <strong>Petto:</strong> nel punto più ampio, con il metro orizzontale sotto le ascelle.|~|
+    <strong>Vita:</strong> nel punto più stretto del busto, appena sopra l’ombelico.|~|
+    <strong>Fianchi:</strong> nel punto più ampio dei glutei, con i piedi uniti.|~|
+    <strong>Piede:</strong> appoggia il tallone al muro su un foglio e misura dal tallone alla punta del dito più lungo.|~|
+    Misure indicative, possono variare di 1–2 cm.|~|
+    Misure del capo|~|
+    Sono le misure del capo, non del corpo. Confrontale con un capo simile che ti sta bene.|~|
+    <strong>Come confrontare:</strong> stendi un capo simile che ti sta bene. Petto: da ascella ad ascella × 2. Lunghezza: dal punto più alto della spalla all’orlo. Manica: dalla cucitura della spalla al polsino.|~|
+    Lunghezza|~|
+    Manica|~|
+    Spalle|~|
+    Interno gamba|~|
+    Lunghezza pantaloni
+  {%- when 'de' -%}
+    Größentabelle|~|
+    Schließen|~|
+    Größe|~|
+    Brust|~|
+    Taille|~|
+    Hüfte|~|
+    EU-Größe|~|
+    Fußlänge|~|
+    Körpermaße Damen|~|
+    Körpermaße Herren|~|
+    Fußlänge|~|
+    Die Maße beziehen sich auf den Körper, nicht auf das Kleidungsstück. Liegst du zwischen zwei Größen, wähle die größere.|~|
+    Liegst du zwischen zwei Größen, wähle die größere.|~|
+    Falsche Größe? Ein Umtausch ist jederzeit möglich – schreib uns einfach.|~|
+    So misst du richtig|~|
+    <strong>Brust:</strong> an der breitesten Stelle, Maßband waagerecht unter den Achseln.|~|
+    <strong>Taille:</strong> an der schmalsten Stelle, knapp über dem Bauchnabel.|~|
+    <strong>Hüfte:</strong> an der breitesten Stelle des Gesäßes, Füße geschlossen.|~|
+    <strong>Fuß:</strong> Ferse an die Wand, auf ein Blatt Papier stellen und von der Ferse bis zur längsten Zehe messen.|~|
+    Richtwerte, Abweichungen von 1–2 cm sind möglich.|~|
+    Maße des Kleidungsstücks|~|
+    Das sind die Maße des Kleidungsstücks, nicht des Körpers. Vergleiche sie mit einem ähnlichen Teil, das dir gut passt.|~|
+    <strong>So vergleichst du:</strong> Lege ein ähnliches Teil, das dir gut passt, flach hin. Brust: von Achsel zu Achsel × 2. Länge: vom höchsten Punkt der Schulter bis zum Saum. Ärmel: von der Schulternaht bis zum Bündchen.|~|
+    Länge|~|
+    Ärmel|~|
+    Schulter|~|
+    Innenbein|~|
+    Hosenlänge
+  {%- when 'es' -%}
+    Guía de tallas|~|
+    Cerrar|~|
+    Talla|~|
+    Pecho|~|
+    Cintura|~|
+    Cadera|~|
+    Talla EU|~|
+    Largo del pie|~|
+    Medidas corporales de mujer|~|
+    Medidas corporales de hombre|~|
+    Largo del pie|~|
+    Las medidas son del cuerpo, no de la prenda. Si estás entre dos tallas, elige la más grande.|~|
+    Si estás entre dos tallas, elige la más grande.|~|
+    ¿Talla equivocada? El cambio siempre es posible: escríbenos.|~|
+    Cómo tomar tus medidas|~|
+    <strong>Pecho:</strong> en la parte más ancha, con la cinta horizontal bajo las axilas.|~|
+    <strong>Cintura:</strong> en la parte más estrecha, justo encima del ombligo.|~|
+    <strong>Cadera:</strong> en la parte más ancha de los glúteos, con los pies juntos.|~|
+    <strong>Pie:</strong> apoya el talón contra la pared sobre un papel y mide desde el talón hasta la punta del dedo más largo.|~|
+    Medidas orientativas, pueden variar 1–2 cm.|~|
+    Medidas de la prenda|~|
+    Son las medidas de la prenda, no del cuerpo. Compáralas con una prenda parecida que te quede bien.|~|
+    <strong>Cómo comparar:</strong> extiende una prenda parecida que te quede bien. Pecho: de axila a axila × 2. Largo: desde el punto más alto del hombro hasta el bajo. Manga: desde la costura del hombro hasta el puño.|~|
+    Largo|~|
+    Manga|~|
+    Hombros|~|
+    Entrepierna|~|
+    Largo del pantalón
+  {%- when 'pl' -%}
+    Tabela rozmiarów|~|
+    Zamknij|~|
+    Rozmiar|~|
+    {% if gender == 'men' %}Klatka piersiowa{% else %}Biust{% endif %}|~|
+    Talia|~|
+    Biodra|~|
+    Rozmiar EU|~|
+    Długość stopy|~|
+    Wymiary ciała – kobiety|~|
+    Wymiary ciała – mężczyźni|~|
+    Długość stopy|~|
+    Wymiary dotyczą ciała, a nie ubrania. Jeśli jesteś pomiędzy dwoma rozmiarami, wybierz większy.|~|
+    Jeśli jesteś pomiędzy dwoma rozmiarami, wybierz większy.|~|
+    Zły rozmiar? Wymiana jest zawsze możliwa – napisz do nas.|~|
+    Jak się zmierzyć|~|
+    <strong>Biust / klatka piersiowa:</strong> w najszerszym miejscu, taśma poziomo pod pachami.|~|
+    <strong>Talia:</strong> w najwęższym miejscu, tuż nad pępkiem.|~|
+    <strong>Biodra:</strong> w najszerszym miejscu pośladków, stopy razem.|~|
+    <strong>Stopa:</strong> stań piętą przy ścianie na kartce papieru i zmierz od pięty do najdłuższego palca.|~|
+    Wartości orientacyjne, mogą się różnić o 1–2 cm.|~|
+    Wymiary ubrania|~|
+    To wymiary ubrania, a nie ciała. Porównaj je z podobnym ubraniem, które dobrze na Tobie leży.|~|
+    <strong>Jak porównać:</strong> połóż płasko podobne ubranie, które dobrze na Tobie leży. Biust / klatka: od pachy do pachy × 2. Długość: od najwyższego punktu ramienia do dołu. Rękaw: od szwu na ramieniu do mankietu.|~|
+    Długość|~|
+    Rękaw|~|
+    Ramiona|~|
+    Długość wewnętrzna nogawki|~|
+    Długość spodni
+  {%- else -%}
+    Size guide|~|
+    Close|~|
+    Size|~|
+    {% if gender == 'men' %}Chest{% else %}Bust{% endif %}|~|
+    Waist|~|
+    Hips|~|
+    EU size|~|
+    Foot length|~|
+    Women’s body measurements|~|
+    Men’s body measurements|~|
+    Foot length|~|
+    These are body measurements, not garment measurements. If you are between two sizes, choose the larger one.|~|
+    If you are between two sizes, choose the larger one.|~|
+    Wrong size? Exchanges are always possible – just email us.|~|
+    How to measure|~|
+    <strong>Bust / chest:</strong> at the fullest point, tape level under the armpits.|~|
+    <strong>Waist:</strong> at the narrowest point, just above the belly button.|~|
+    <strong>Hips:</strong> at the fullest point of the seat, feet together.|~|
+    <strong>Foot:</strong> stand with your heel against a wall on a sheet of paper and measure from heel to longest toe.|~|
+    Guide values, may vary by 1–2 cm (about 1/2 in).|~|
+    Garment measurements|~|
+    These are the garment’s own measurements, not body measurements. Compare them with a similar item that fits you well.|~|
+    <strong>How to compare:</strong> lay a similar item that fits you well flat. Chest: armpit to armpit × 2. Length: from the highest point of the shoulder to the hem. Sleeve: from the shoulder seam to the cuff.|~|
+    Length|~|
+    Sleeve|~|
+    Shoulder|~|
+    Inseam|~|
+    Trouser length
+{%- endcase -%}

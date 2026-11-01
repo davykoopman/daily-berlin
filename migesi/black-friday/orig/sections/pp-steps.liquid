@@ -1,0 +1,236 @@
+{%- liquid
+  assign ss = section.settings
+  assign lang = request.locale.iso_code | slice: 0, 2 | downcase
+
+  case lang
+    when 'pl'
+      assign heading = 'Jak to działa?'
+      assign t1 = 'Zamów'
+      assign s1 = 'Wybierz swój rozmiar – dostawa jest zawsze darmowa.'
+      assign t2 = 'Przymierz w domu'
+      assign s2 = 'Wysyłamy w ciągu [d] dni roboczych, z numerem śledzenia.'
+      assign t3 = 'Nie pasuje? Bez problemu'
+      assign s3 = 'Masz [n] dni na zwrot, a wymiana rozmiaru lub modelu jest możliwa.'
+    when 'nl'
+      assign heading = 'Hoe werkt het?'
+      assign t1 = 'Bestel'
+      assign s1 = 'Kies je maat – verzending is altijd gratis.'
+      assign t2 = 'Pas thuis'
+      assign s2 = 'We versturen binnen [d] werkdagen, met track & trace.'
+      assign t3 = 'Past het niet? Geen probleem'
+      assign s3 = 'Je hebt [n] dagen om te retourneren, en ruilen van maat of model kan.'
+    when 'de'
+      assign heading = 'So funktioniert’s'
+      assign t1 = 'Bestellen'
+      assign s1 = 'Wähle deine Größe – der Versand ist immer kostenlos.'
+      assign t2 = 'Zu Hause anprobieren'
+      assign s2 = 'Wir versenden innerhalb von [d] Werktagen, mit Sendungsverfolgung.'
+      assign t3 = 'Passt nicht? Kein Problem'
+      assign s3 = 'Du hast [n] Tage für die Rückgabe, und ein Umtausch von Größe oder Modell ist möglich.'
+    when 'fr'
+      assign heading = 'Comment ça marche ?'
+      assign t1 = 'Commandez'
+      assign s1 = 'Choisissez votre taille – la livraison est toujours gratuite.'
+      assign t2 = 'Essayez chez vous'
+      assign s2 = 'Nous expédions sous [d] jours ouvrés, avec suivi.'
+      assign t3 = 'Ça ne va pas ? Aucun souci'
+      assign s3 = 'Vous avez [n] jours pour retourner, et l’échange de taille ou de modèle est possible.'
+    when 'it'
+      assign heading = 'Come funziona?'
+      assign t1 = 'Ordina'
+      assign s1 = 'Scegli la tua taglia – la spedizione è sempre gratuita.'
+      assign t2 = 'Provalo a casa'
+      assign s2 = 'Spediamo entro [d] giorni lavorativi, con tracciamento.'
+      assign t3 = 'Non va bene? Nessun problema'
+      assign s3 = 'Hai [n] giorni per il reso, ed è possibile cambiare taglia o modello.'
+    when 'es'
+      assign heading = '¿Cómo funciona?'
+      assign t1 = 'Pide'
+      assign s1 = 'Elige tu talla – el envío es siempre gratis.'
+      assign t2 = 'Pruébatelo en casa'
+      assign s2 = 'Enviamos en [d] días hábiles, con seguimiento.'
+      assign t3 = '¿No te queda bien? Sin problema'
+      assign s3 = 'Tienes [n] días para devolverlo, y puedes cambiar de talla o modelo.'
+    else
+      assign heading = 'How it works'
+      assign t1 = 'Order'
+      assign s1 = 'Choose your size – UK delivery is always free.'
+      assign t2 = 'Try it on at home'
+      assign s2 = 'We dispatch within [d] business days, with tracked delivery.'
+      assign t3 = 'Not quite right?'
+      assign s3 = 'You have [n] days to request a return, and exchanges for a different size or colour are possible.'
+  endcase
+
+  assign s2 = s2 | replace: '[d]', ss.dispatch_days
+  assign s3 = s3 | replace: '[n]', ss.return_days
+-%}
+
+<div class="pp-steps">
+  <div class="pp-steps__inner">
+    <h2 class="pp-steps__heading">{{ heading }}</h2>
+    <ol class="pp-steps__list" role="list">
+      <li class="pp-steps__item" data-pp-reveal style="--pp-delay: 0ms;">
+        <span class="pp-steps__num" aria-hidden="true">1</span>
+        <div>
+          <p class="pp-steps__title">{{ t1 }}</p>
+          <p class="pp-steps__text">{{ s1 }}</p>
+        </div>
+      </li>
+      <li class="pp-steps__item" data-pp-reveal style="--pp-delay: 90ms;">
+        <span class="pp-steps__num" aria-hidden="true">2</span>
+        <div>
+          <p class="pp-steps__title">{{ t2 }}</p>
+          <p class="pp-steps__text">{{ s2 }}</p>
+        </div>
+      </li>
+      <li class="pp-steps__item" data-pp-reveal style="--pp-delay: 180ms;">
+        <span class="pp-steps__num" aria-hidden="true">3</span>
+        <div>
+          <p class="pp-steps__title">{{ t3 }}</p>
+          <p class="pp-steps__text">{{ s3 }}</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>
+
+{% render 'pp-reveal' %}
+
+{% render 'pp-alove-style' %}
+
+{% stylesheet %}
+  .pp-steps {
+    padding-block: 48px;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .pp-steps__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .pp-steps__heading {
+    margin: 0 0 28px;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .pp-steps__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: none;
+  }
+
+  .pp-steps__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .pp-steps__num {
+    display: grid;
+    place-items: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .pp-steps__title {
+    margin: 0 0 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .pp-steps__text {
+    margin: 0 auto;
+    max-width: 300px;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.7);
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-steps {
+      padding-block: 36px;
+    }
+
+    .pp-steps__inner {
+      padding: 0 16px;
+    }
+
+    .pp-steps__heading {
+      margin-bottom: 20px;
+      font-size: 1.25rem;
+      text-align: left;
+    }
+
+    .pp-steps__list {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .pp-steps__item {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 14px;
+      text-align: left;
+    }
+
+    .pp-steps__num {
+      flex-basis: 32px;
+      width: 32px;
+      height: 32px;
+      font-size: 0.875rem;
+    }
+
+    .pp-steps__text {
+      max-width: none;
+      margin: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP How it works",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Texts are translated automatically. Match the numbers to the policies."
+    },
+    {
+      "type": "text",
+      "id": "dispatch_days",
+      "label": "Dispatch time in business days",
+      "default": "1–2"
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Return period in days",
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP How it works"
+    }
+  ]
+}
+{% endschema %}

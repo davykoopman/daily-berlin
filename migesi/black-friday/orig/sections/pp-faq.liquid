@@ -1,0 +1,285 @@
+{%- liquid
+  assign ss = section.settings
+  assign email = ss.email | default: shop.email
+
+  assign root = routes.root_url
+  if root == '/'
+    assign root = ''
+  endif
+  assign shipping_url = root | append: '/pages/shipping-policy'
+  assign refund_url = root | append: '/pages/refund-and-return-policy'
+  capture mail
+    echo '<a href="mailto:' | append: email | append: '">' | append: email | append: '</a>'
+  endcapture
+
+  # Payment methods: the ones enabled in the checkout, with their brand names
+  assign pay_names = ''
+  for type in shop.enabled_payment_types
+    case type
+      when 'visa'
+        assign n = 'Visa'
+      when 'master'
+        assign n = 'Mastercard'
+      when 'maestro'
+        assign n = 'Maestro'
+      when 'american_express'
+        assign n = 'American Express'
+      when 'apple_pay'
+        assign n = 'Apple Pay'
+      when 'google_pay'
+        assign n = 'Google Pay'
+      when 'shopify_pay'
+        assign n = 'Shop Pay'
+      when 'paypal'
+        assign n = 'PayPal'
+      when 'klarna'
+        assign n = 'Klarna'
+      when 'unionpay'
+        assign n = 'UnionPay'
+      when 'diners_club'
+        assign n = 'Diners Club'
+      when 'jcb'
+        assign n = 'JCB'
+      when 'discover'
+        assign n = 'Discover'
+      else
+        assign n = type | replace: '_', ' ' | capitalize
+    endcase
+    assign pay_names = pay_names | append: n | append: '|'
+  endfor
+  assign pay_list = pay_names | split: '|'
+  assign pay_text = ''
+  for n in pay_list
+    if forloop.first
+      assign pay_text = n
+    elsif forloop.last
+      assign pay_text = pay_text | append: ' and ' | append: n
+    else
+      assign pay_text = pay_text | append: ', ' | append: n
+    endif
+  endfor
+
+  # The store sells in English only (United Kingdom)
+  assign q1 = 'Is UK delivery free?'
+  capture a1
+    echo '<p>Yes, delivery is free on every UK order, with no minimum spend and no hidden costs. Every parcel is tracked.</p>'
+  endcapture
+  assign q2 = 'How long does delivery take?'
+  capture a2
+    echo '<p>We prepare your order within ' | append: ss.dispatch_days | append: ' business days and email you the tracking link as soon as it ships. Delivery usually takes ' | append: ss.delivery_days | append: ' business days in total. All details are in our <a href="' | append: shipping_url | append: '">Shipping Policy</a>.</p>'
+  endcapture
+  assign q3 = 'How do returns and exchanges work?'
+  capture a3
+    echo '<p>You have ' | append: ss.return_days | append: ' days from delivery to request a return, and exchanges for another size or colour are possible too. Email us at ' | append: mail | append: ' with your order number and we send you the next steps. There is no restocking fee. The full conditions, including return shipping, are in our <a href="' | append: refund_url | append: '">Refund and Return Policy</a>.</p>'
+  endcapture
+  assign q4 = 'Which payment methods do you accept?'
+  capture a4
+    echo '<p>We accept ' | append: pay_text | append: '. Every payment is processed securely with SSL encryption.</p>'
+  endcapture
+  assign q5 = 'What if my order has not arrived?'
+  capture a5
+    echo '<p>First check the tracking link in your shipping confirmation email. If more than ' | append: ss.late_days | append: ' business days have passed since dispatch and your parcel has not arrived, email us at ' | append: mail | append: ' and we will look into it right away.</p>'
+  endcapture
+  assign q6 = 'How can I contact you?'
+  capture a6
+    echo '<p>Email us anytime at ' | append: mail | append: '. Add your order number if your question is about an order, and we aim to reply within 1–2 business days.</p>'
+  endcapture
+-%}
+
+<div class="pp-faq">
+  <div class="pp-faq__inner">
+    <h2 class="pp-faq__heading">{{ ss.heading }}</h2>
+    {%- for i in (1..6) -%}
+      {%- liquid
+        case i
+          when 1
+            assign q = q1
+            assign a = a1
+          when 2
+            assign q = q2
+            assign a = a2
+          when 3
+            assign q = q3
+            assign a = a3
+          when 4
+            assign q = q4
+            assign a = a4
+          when 5
+            assign q = q5
+            assign a = a5
+          when 6
+            assign q = q6
+            assign a = a6
+        endcase
+      -%}
+      {%- if i == 4 and pay_text == blank -%}{%- continue -%}{%- endif -%}
+      <details class="pp-faq__item">
+        <summary class="pp-faq__q">
+          <span>{{ q }}</span>
+          <span class="pp-faq__icon" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq__a">{{ a }}</div>
+      </details>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% render 'pp-alove-style' %}
+
+{% stylesheet %}
+  /* Centred block: heading, questions and answers share one centre line */
+  .pp-faq {
+    padding-block: 48px;
+    background: #f5f5f5;
+    color: var(--color-foreground);
+  }
+
+  .pp-faq__inner {
+    max-width: 860px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+
+  .pp-faq__heading {
+    margin: 0 0 20px;
+    text-align: center;
+  }
+
+  .pp-faq__item {
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+  .pp-faq__item:first-of-type {
+    border-top: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.12);
+  }
+
+  .pp-faq__q {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    padding: 12px 36px;
+    font-weight: 500;
+    line-height: 1.35;
+    text-align: center;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .pp-faq__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .pp-faq__icon {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    transform: translateY(-50%);
+  }
+
+  .pp-faq__icon::before,
+  .pp-faq__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 14px;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease;
+  }
+
+  .pp-faq__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .pp-faq__item[open] .pp-faq__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .pp-faq__a {
+    padding: 0 8px 18px;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  .pp-faq__a p {
+    margin: 0;
+  }
+
+  .pp-faq__a a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pp-faq {
+      padding-block: 32px;
+    }
+
+    .pp-faq__q {
+      min-height: 52px;
+      font-size: 0.9375rem;
+    }
+
+    .pp-faq__a {
+      font-size: 0.875rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP FAQ",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Match the numbers to the shipping and refund policies. Payment methods come from the checkout."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently asked questions"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Customer service email (empty = store email)"
+    },
+    {
+      "type": "text",
+      "id": "dispatch_days",
+      "label": "Processing time in business days",
+      "default": "1–2"
+    },
+    {
+      "type": "text",
+      "id": "delivery_days",
+      "label": "Total delivery time in business days",
+      "default": "7–11"
+    },
+    {
+      "type": "number",
+      "id": "return_days",
+      "label": "Return period in days",
+      "default": 14
+    },
+    {
+      "type": "number",
+      "id": "late_days",
+      "label": "Contact us after this many business days since dispatch",
+      "default": 7
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP FAQ"
+    }
+  ]
+}
+{% endschema %}
