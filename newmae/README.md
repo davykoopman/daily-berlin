@@ -159,3 +159,7 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
   4 photos ON under the black banner (banner no longer repeats "Free gift over $90").
   Gift photos sharp: plain <img> with srcset 96w / 192w at 32px. Found: `image_tag: width: 32` also rewrites the
   file URL to width=32 (blurry) – the same code is in Davento v2, Niaali and Migesi pp-gift-showcase (fix there too).
+- Round 3 (user, 1 Nov): black sale banner OFF (kept); "BLACK FRIDAY · UP TO 70% OFF" is now the first message in the
+  announcement bar (links to /collections/black-friday), then free shipping and 60-day returns. Icons (trust row,
+  gift bar, gift bullet, cart gift block) in the warm black #1c1714 on a soft warm grey circle instead of rust; rust
+  stays for prices and -X% boxes (CSS in sections/pp-gift-showcase).

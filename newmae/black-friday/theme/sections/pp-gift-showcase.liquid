@@ -169,6 +169,22 @@
     background: var(--pp-white);
   }
 
+  /* Black Friday: every icon in the warm black of the theme on a soft warm grey circle (user: the rust icons did
+     not fit); rust stays for prices and the -X% boxes only */
+  .pp-trust__icon {
+    background: rgb(var(--pp-ink-rgb) / 0.06) !important;
+    color: var(--pp-ink) !important;
+  }
+
+  .pp-giftbar__icon,
+  .pp-gift__icon {
+    stroke: var(--pp-ink) !important;
+  }
+
+  .pp-benefit--gift .pp-benefit__icon {
+    color: var(--pp-ink) !important;
+  }
+
   /* Product page on phones: photo directly under the Black Friday banner (no white strip) */
   @media screen and (max-width: 749px) {
     #MainContent .product-information.section {
