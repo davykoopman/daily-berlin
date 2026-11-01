@@ -88,10 +88,15 @@
       return fetch(root + url, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) })
         .then(function (r) { return r.json(); });
     };
-    // Tell the theme the cart changed so the drawer redraws (Apex rebuilds the drawer on ajaxProduct:added)
-    var refreshDrawer = function () {
-      document.dispatchEvent(new CustomEvent('ajaxProduct:added', { detail: { product: {} } }));
-      document.dispatchEvent(new CustomEvent('cart:updated', { detail: {} }));
+    // Redraw only the product lines (Apex 'cart:build'), not 'ajaxProduct:added': that one also re-opens the drawer
+    // (open animation, focus) and made the drawer flicker after every gift choice.
+    // Our own events must not trigger another /cart.js load + render (that second pass was the visible flicker).
+    var quiet = false;
+    var refreshDrawer = function (cart) {
+      quiet = true;
+      document.dispatchEvent(new CustomEvent('cart:build'));
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
+      quiet = false;
     };
 
     var lastCart = null;
@@ -113,7 +118,7 @@
         busy = true;
         var updates = {};
         inCart.forEach(function (it, i) { updates[it.key] = reached && i === 0 ? 1 : 0; });
-        post('/cart/update.js', { updates: updates }).then(function (res) { busy = false; render(res); refreshDrawer(); }).catch(function () { busy = false; });
+        post('/cart/update.js', { updates: updates }).then(function (res) { busy = false; render(res); refreshDrawer(res); }).catch(function () { busy = false; });
         return;
       }
       var chosen = reached && inCart[0] ? inCart[0].variant_id : null;
@@ -131,12 +136,23 @@
         else msg.textContent = box.dataset.tUnlocked;
         var grid = box.querySelector('[data-pp-gift-grid]');
         if (!grid) return;
-        grid.innerHTML = d.gifts.map(function (g) {
-          return '<button type="button" class="pp-gift__it' + (g.id === chosen ? ' is-on' : '') + '" data-pp-gift-pick="' + g.id + '"' + (reached ? '' : ' disabled') + ' aria-pressed="' + (g.id === chosen) + '">' +
-            '<img src="' + g.img + '" alt="" width="120" height="120" loading="lazy">' +
-            '<span class="pp-gift__name">' + g.title + '</span>' +
-            '<span class="pp-gift__price"><s>' + g.price + '</s> <b>' + box.dataset.tFree + '</b></span></button>';
-        }).join('');
+        // Same gifts and same state: only switch the ticks, keep the images in place (no reload, no flicker)
+        var sig = d.gifts.map(function (g) { return g.id; }).join(',') + '|' + reached;
+        if (grid.dataset.sig === sig) {
+          grid.querySelectorAll('[data-pp-gift-pick]').forEach(function (x) {
+            var on = +x.dataset.ppGiftPick === chosen;
+            x.classList.toggle('is-on', on);
+            x.setAttribute('aria-pressed', on);
+          });
+        } else {
+          grid.dataset.sig = sig;
+          grid.innerHTML = d.gifts.map(function (g) {
+            return '<button type="button" class="pp-gift__it' + (g.id === chosen ? ' is-on' : '') + '" data-pp-gift-pick="' + g.id + '"' + (reached ? '' : ' disabled') + ' aria-pressed="' + (g.id === chosen) + '">' +
+              '<img src="' + g.img + '" alt="" width="120" height="120" loading="lazy">' +
+              '<span class="pp-gift__name">' + g.title + '</span>' +
+              '<span class="pp-gift__price"><s>' + g.price + '</s> <b>' + box.dataset.tFree + '</b></span></button>';
+          }).join('');
+        }
         var note = box.querySelector('[data-pp-gift-note]');
         if (note) note.textContent = reached ? (chosen ? box.dataset.tSwap : box.dataset.tNote) : box.dataset.tNote;
       });
@@ -177,14 +193,14 @@
           if (pending && pending !== vid) { var next = pending; pending = null; return send(next); }
           pending = null;
           render(res);
-          refreshDrawer();
+          refreshDrawer(res);
         }).catch(function () { busy = false; pending = null; load(); });
       };
       send(id);
     });
 
     ['cart:updated', 'ajaxProduct:added', 'drawerOpen', 'cart:update'].forEach(function (n) {
-      document.addEventListener(n, function () { setTimeout(load, 250); });
+      document.addEventListener(n, function () { if (!quiet && !busy) setTimeout(load, 250); });
     });
     // The theme redrew the drawer: fill the new gift box at once from the last known cart (no empty flash), then refresh
     var mt;

@@ -337,3 +337,11 @@ shop policies. Markets UK/FR not created yet (media buyer). Policies are written
   - snippets/cart-item: "Rimuovi" text link → small bin icon at the right of the line, next to the product (no own
     row); same remove behaviour (drawer: hidden minus button script in pp-cart-perks).
   - sections/pp-gift-showcase: gift photos in the strip loaded at 192px (sharp; was 96px).
+- 1 Nov (user: v2 still lags/flickers when swapping a gift): snippets/pp-gift-cart in v2 →
+  - drawer refresh via Apex 'cart:build' (only rebuilds the product lines) instead of 'ajaxProduct:added' (that one
+    also re-opened the drawer = open animation/focus jump on every choice);
+  - our own cart:updated (now with detail.cart = update.js response) no longer triggers an extra /cart.js load and
+    second render (quiet flag; also skipped while a request is running);
+  - gift grid is only rebuilt when the gift list or reached-state changes; otherwise only the ticks switch, so the
+    images stay in place (no reload flash).
+  Upload verified (md5 d02f954a…). Bot check blocks automated browser tests → user tests the preview.
