@@ -113,3 +113,43 @@
 - Home proportions: trust cards, categories and bestsellers share one width (page width, 40px / 16px margins);
   categories and bestsellers both 5 per row on desktop (3 on tablet, 42vw on mobile), so tiles and product cards
   are the same size; on mobile the WOMEN/MEN switch sits under the title in both sections.
+
+## Black Friday (2026-11-01, user GO: same as Davento/Niaali/Migesi, keep the 70% promotion and what is already there,
+## Fall Clearance → Black Friday + bestsellers, 4 gifts, bundle discount off, rating + stock created but off)
+Draft theme "Black Friday" #210137088325 = duplicate of live "Newmae - size guide (live) 29 Oct" #209889919301.
+Files: black-friday/theme (changed/new), black-friday/orig (before), black-friday/data/bestsellers.json.
+- LIVE STORE gifts ($19.95, type Gift, vendor Newmae, tags regalo + regalo-donna/-uomo, not tracked, no SKU, Online
+  Store only, seo.hidden, in no collection, Davento photos): Marina Scarf (gift-marina-scarf), Card Holder
+  (gift-card-holder), Classic Wallet (gift-classic-wallet), Curb Chain Bracelet (gift-curb-chain-bracelet).
+- LIVE STORE discount "Free Gift" (gid://shopify/DiscountAutomaticNode/2266421035333): spend $90 on WOMEN or MEN,
+  1 gift 100% off, once per order, combines with all, 1 Nov 00:00 UTC → 1 Dec 05:00 UTC (= 00:00 US Eastern).
+  AOV last 365 days $62.49 (84 orders).
+- Mix & Save 10/15/20% still ACTIVE on purpose (live theme advertises it). In the preview test Shopify applied
+  Mix & Save 20% instead of the free gift (gift $19.95 in the cart) → deactivate the 3 Mix & Save discounts when the
+  Black Friday theme is published (ids 2256740319557 / 2256740352325 / 2256740385093).
+- LIVE STORE collections: Bestsellers Women (16) / Men (26) / Bestsellers (42, sub-collections) from sales in the
+  last 120 days (summer items + drafts left out); Black Friday Sale (black-friday, compare-at > 0, 681),
+  black-friday-women (463), black-friday-men (218) – same rules as fall-clearance (kept, not deleted).
+  Main menu: "Bestsellers" after Home (backup black-friday/orig/main-menu.json).
+- Theme:
+  - Header: "BUY MORE, SAVE MORE" announcement off; sale banner = "BLACK FRIDAY · Up to 70% off | Free gift over $90 |
+    Ends in …" (warm black #1c1714, countdown to 30 Nov 23:59 EST, links to /collections/black-friday).
+    pp-gift-showcase in the header group with the gift bar OFF (setting show_bar; the banner says it) – loads palette,
+    Cormorant 600 titles, rust "Bestsellers" menu pill, gift script.
+  - Home hero: BLACK FRIDAY / Up to 70% off / "+ a free gift with orders over $90. Ends November 30." / Shop women's
+    sale, Shop men's sale → black-friday-women / -men. "Black Friday Bestsellers" from bestsellers-women / -men.
+  - snippets/pp-tier-progress shows the gift line while Black Friday runs (home bestsellers, collection head,
+    product cross-sell); bundle bar back after 1 Dec. Cart totals: no bundle bar, saving without the gift's price.
+  - Badge "BLACK FRIDAY" (warm black) on cards and the first product photo; chips All | Women | Men on the
+    bestsellers and black-friday collections.
+  - Product: third bullet "Free gift with orders over $90"; accordion Mix & Save → Free gift (pp-gift-tab);
+    cross-sell title "Complete your order"; PP Rating OFF (prefilled 4.7 / 2,000+ as before), PP Stock OFF,
+    delivery line OFF; sale badge stays off (end texts updated to November 30); photo directly under the banner on
+    phones.
+  - Cart: Black Friday sale line (warm black) + gift block on top (fast pick from Niaali/Migesi, standard
+    shopify:cart:lines-update events), bin icon instead of "Remove", no quantity selector, "Free Gift" name hidden,
+    add-ons "Complete your look · Black Friday bestsellers".
+  - Not added: checkout line "Only 3% …" – not true for NewMae (5 of 84 orders refunded = 6%, $471.71 of $5,368 = 8.8%).
+- Tested (preview, mobile 390 + desktop 1440): 12 pages, no Liquid/JS errors, no horizontal scroll, no Halloween /
+  Fall Clearance / October 31 / Buy more / Mix & Save texts. Flow: $45.05 more under the minimum, pick in ~0.15 s,
+  line in ~1.3 s, 3 rapid swaps → 1 gift, removing items below $90 removes the gift. Footer aligned (16px).

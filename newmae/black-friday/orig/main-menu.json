@@ -1,0 +1,166 @@
+{
+ "title": "Main menu",
+ "handle": "main-menu",
+ "items": [
+  {
+   "id": "gid://shopify/MenuItem/867857563973",
+   "title": "Home",
+   "type": "FRONTPAGE",
+   "url": "/"
+  },
+  {
+   "id": "gid://shopify/MenuItem/890231161157",
+   "title": "WOMEN",
+   "type": "COLLECTION",
+   "resourceId": "gid://shopify/Collection/702450565445",
+   "items": [
+    {
+     "id": "gid://shopify/MenuItem/895382094149",
+     "title": "Shop All Women",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/702450565445"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382126917",
+     "title": "Jackets & Coats",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592183621"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382159685",
+     "title": "Sweaters & Cardigans",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592216389"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382323525",
+     "title": "Shoes",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592380229"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382257989",
+     "title": "Trousers & Jeans",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592314693"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382290757",
+     "title": "Sets & Loungewear",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592347461"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382192453",
+     "title": "Tops & Blouses",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592249157"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382356293",
+     "title": "Accessories",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592412997"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382225221",
+     "title": "Dresses",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592281925"
+    }
+   ]
+  },
+  {
+   "id": "gid://shopify/MenuItem/890231783749",
+   "title": "MEN",
+   "type": "COLLECTION",
+   "resourceId": "gid://shopify/Collection/702450106693",
+   "items": [
+    {
+     "id": "gid://shopify/MenuItem/895382389061",
+     "title": "Shop All Men",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/702450106693"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382421829",
+     "title": "Jackets & Coats",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704591888709"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382454597",
+     "title": "Sweaters & Cardigans",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704591921477"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382683973",
+     "title": "Shoes",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592150853"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382552901",
+     "title": "Trousers & Jeans",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592019781"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382651205",
+     "title": "Sets & Tracksuits",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592118085"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382487365",
+     "title": "Shirts",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704591954245"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382618437",
+     "title": "Suits",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592085317"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382520133",
+     "title": "T-Shirts & Polos",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704591987013"
+    },
+    {
+     "id": "gid://shopify/MenuItem/895382585669",
+     "title": "Shorts",
+     "type": "COLLECTION",
+     "resourceId": "gid://shopify/Collection/704592052549"
+    }
+   ]
+  },
+  {
+   "id": "gid://shopify/MenuItem/872144470341",
+   "title": "About Us",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/725596963141"
+  },
+  {
+   "id": "gid://shopify/MenuItem/872144961861",
+   "title": "FAQs",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/725615575365"
+  },
+  {
+   "id": "gid://shopify/MenuItem/872144535877",
+   "title": "Contact Us",
+   "type": "PAGE",
+   "resourceId": "gid://shopify/Page/724926136645"
+  },
+  {
+   "id": "gid://shopify/MenuItem/872291336517",
+   "title": "Track Your Order",
+   "type": "HTTP",
+   "url": "/apps/parcelpanel"
+  }
+ ]
+}

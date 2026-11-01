@@ -1,0 +1,119 @@
+{%- doc -%}
+  Sale line under the price: "You save $25.00 · Sale ends October 31".
+  Amount = compare-at price minus price of the selected variant; follows the variant picker
+  (variant:update event). Hidden when the variant has no discount, and after the end moment.
+{%- enddoc -%}
+
+{%- liquid
+  assign bs = block.settings
+  assign p = closest.product
+  assign v = p.selected_or_first_available_variant
+  assign end_unix = bs.end | date: '%s' | times: 1
+  assign now_unix = 'now' | date: '%s' | times: 1
+  assign live = true
+  if bs.end != blank and now_unix >= end_unix
+    assign live = false
+  endif
+  assign save = 0
+  if v.compare_at_price > v.price
+    assign save = v.compare_at_price | minus: v.price
+  endif
+-%}
+
+{%- if live or request.design_mode -%}
+  <p class="pp-sale-badge" data-pp-sale-end-hide data-pp-save="{{ block.id }}"{% if save == 0 %} hidden{% endif %} {{ block.shopify_attributes }}>
+    <span>{{ bs.save_label }} <strong data-pp-save-amount>{{ save | money }}</strong></span>
+    {%- if bs.end_text != blank -%}
+      <span aria-hidden="true">·</span>
+      <span>{{ bs.end_text }}</span>
+    {%- endif -%}
+    <script type="application/json" data-pp-save-data>
+      { {%- for x in p.variants -%}"{{ x.id }}": {% if x.compare_at_price > x.price %}{{ x.compare_at_price | minus: x.price | money | json }}{% else %}null{% endif %}{% unless forloop.last %},{% endunless %}{%- endfor -%} }
+    </script>
+  </p>
+  <script>
+    (function () {
+      var el = document.querySelector('[data-pp-save="{{ block.id }}"]');
+      if (!el || el.dataset.ready) return;
+      el.dataset.ready = '1';
+      var data = JSON.parse(el.querySelector('[data-pp-save-data]').textContent);
+      var amount = el.querySelector('[data-pp-save-amount]');
+      var show = function (id) {
+        if (!(String(id) in data)) return;
+        var a = data[String(id)];
+        el.hidden = !a;
+        if (a) amount.textContent = a;
+      };
+      document.addEventListener('variant:update', function (e) {
+        var r = e.detail && e.detail.resource;
+        if (r && r.id) show(r.id);
+      });
+      document.addEventListener('change', function (e) {
+        if (!e.target.closest || !e.target.closest('variant-picker, .variant-picker, form')) return;
+        setTimeout(function () {
+          var id = new URLSearchParams(location.search).get('variant');
+          if (id) show(id);
+        }, 150);
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .pp-sale-badge {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 8px;
+    margin: 0;
+    color: #a94416;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .pp-sale-badge[hidden] {
+    display: none;
+  }
+
+  .pp-sale-badge strong {
+    font-weight: 800;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PP Sale savings",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows the real saving of the selected variant (compare-at minus price), until the end moment."
+    },
+    {
+      "type": "text",
+      "id": "save_label",
+      "label": "Savings label",
+      "default": "You save"
+    },
+    {
+      "type": "text",
+      "id": "end_text",
+      "label": "End text",
+      "default": "Sale ends October 31"
+    },
+    {
+      "type": "text",
+      "id": "end",
+      "label": "Sale ends (ISO with offset)",
+      "default": "2026-10-31T23:59:59-04:00"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PP Sale savings",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

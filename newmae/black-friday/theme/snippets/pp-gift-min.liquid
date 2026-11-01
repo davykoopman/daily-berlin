@@ -1,0 +1,51 @@
+{%- doc -%}
+  The free gift offer in one place: the 4 gift products and the minimum order amount.
+  - mode 'amount' (default): prints the minimum, $90.
+  - mode 'json': prints {"min":9000,"local":9000,"gifts":[…]} for the cart scripts.
+  NewMae sells in USD only (US). The automatic discount "Free Gift" (spend $90 on WOMEN or MEN, get 1 gift free)
+  uses the same $90, so the gift is free as soon as the theme lets a customer pick it.
+
+  @param {string} [mode] - 'amount' or 'json'
+{%- enddoc -%}
+{%- liquid
+  # Minimum in the shop currency (USD), in cents
+  assign min_cents = 9000
+  # Fixed round minimum in the visitor's currency, in cents (0 = convert the USD amount)
+  assign local_cents = 0
+  case cart.currency.iso_code
+    when 'USD'
+      assign local_cents = 9000
+  endcase
+  assign handles = 'gift-marina-scarf,gift-card-holder,gift-classic-wallet,gift-curb-chain-bracelet' | split: ','
+-%}
+{%- if mode == 'json' -%}
+  {"min":{{ min_cents }},"local":{% if local_cents > 0 %}{{ local_cents }}{% else %}null{% endif %},"gifts":[
+  {%- for h in handles -%}
+    {%- assign g = all_products[h] -%}
+    {%- if g != blank and g.available -%}
+      {%- assign v = g.selected_or_first_available_variant -%}
+      {"id":{{ v.id }},"title":{{ g.title | json }},"price":{{ v.price | money | json }},"img":{{ g.featured_image | image_url: width: 240 | json }}}{% unless forloop.last %},{% endunless %}
+    {%- endif -%}
+  {%- endfor -%}
+  ]}
+{%- elsif local_cents > 0 -%}
+  <span class="pp-gift-min">{{ local_cents | money_without_trailing_zeros }}</span>
+{%- else -%}
+  <span class="pp-gift-min" data-pp-gift-min="{{ min_cents }}">{{ min_cents | money_without_trailing_zeros }}</span>
+  <script>
+    (function () {
+      if (window.ppGiftMin) return;
+      window.ppGiftMin = true;
+      var run = function () {
+        var cur = window.Shopify && Shopify.currency;
+        if (!cur || !cur.rate || +cur.rate === 1) return;
+        document.querySelectorAll('[data-pp-gift-min]:not([data-done])').forEach(function (el) {
+          var v = Math.ceil(+el.dataset.ppGiftMin / 100 * +cur.rate);
+          try { el.textContent = new Intl.NumberFormat(document.documentElement.lang || 'en-US', { style: 'currency', currency: cur.active, maximumFractionDigits: 0 }).format(v); } catch (e) {}
+          el.setAttribute('data-done', '');
+        });
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+    })();
+  </script>
+{%- endif -%}

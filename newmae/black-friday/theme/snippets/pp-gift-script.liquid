@@ -1,0 +1,195 @@
+{%- doc -%}
+  Script for every free gift box (snippets/pp-gift-cart): progress, pick/swap, keeps max 1 gift and none under the
+  minimum. Rendered once per page by sections/pp-gift-showcase (header group).
+{%- enddoc -%}
+<script>
+  (function () {
+    if (window.ppGiftInit) return;
+    window.ppGiftInit = true;
+    var busy = false;
+    var cartUrl = '{{ routes.cart_url }}';
+    var root = '{{ routes.root_url }}'.replace(/\/$/, '');
+    // Same money format as the rest of the store (e.g. $45.05); other currencies via Intl
+    var shopFormat = {{ shop.money_format | json }};
+    var shopCurrency = '{{ shop.currency }}';
+    var fmt = function (cents) {
+      var cur = (window.Shopify && Shopify.currency && Shopify.currency.active) || '{{ cart.currency.iso_code }}';
+      if (cur === shopCurrency && shopFormat) {
+        var n = (cents / 100).toFixed(2), parts = n.split('.');
+        var thou = function (x, sep) { return x.replace(/\B(?=(\d{3})+(?!\d))/g, sep); };
+        return shopFormat.replace(/\{\{\s*(\w+)\s*\}\}/, function (m, k) {
+          if (k === 'amount_with_comma_separator') return thou(parts[0], '.') + ',' + parts[1];
+          if (k === 'amount_no_decimals_with_comma_separator') return thou(String(Math.round(cents / 100)), '.');
+          if (k === 'amount_no_decimals') return thou(String(Math.round(cents / 100)), ',');
+          return thou(parts[0], ',') + '.' + parts[1];
+        });
+      }
+      try { return new Intl.NumberFormat(document.documentElement.lang || 'en-US', { style: 'currency', currency: cur }).format(cents / 100); }
+      catch (e) { return (cents / 100).toFixed(2); }
+    };
+    var data = function () {
+      var el = document.querySelector('[data-pp-gift-data]');
+      try { return JSON.parse(el.textContent); } catch (e) { return { min: 9000, gifts: [] }; }
+    };
+    var rate = function () { return +((window.Shopify && Shopify.currency && Shopify.currency.rate) || 1); };
+    // Section ids of the theme cart (drawer / cart page): sent with every change so the theme can redraw them
+    var sectionIds = function () {
+      var ids = [];
+      document.querySelectorAll('cart-items-component[data-section-id]').forEach(function (el) {
+        if (ids.indexOf(el.dataset.sectionId) < 0) ids.push(el.dataset.sectionId);
+      });
+      return ids.join(',');
+    };
+    var post = function (url, body) {
+      body.sections = sectionIds();
+      body.sections_url = window.location.pathname;
+      return fetch(root + url, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json(); });
+    };
+    // Tell the theme (this Horizon version) the cart changed: it listens to the standard Shopify event
+    // 'shopify:cart:lines-update' and redraws drawer / cart page / cart bubble from the sections in the result.
+    var refreshDrawer = function (res, lines) {
+      if (!res || !res.items) return;
+      return import('@shopify/events').then(function (ev) {
+        var E = ev.CartLinesUpdateEvent;
+        var deferred = E.createPromise();
+        var evt = new E({
+          action: 'update',
+          context: 'cart',
+          lines: lines && lines.length ? lines : [{ id: String(res.items[0] ? res.items[0].key : '0'), quantity: res.items[0] ? res.items[0].quantity : 0 }],
+          promise: deferred.promise,
+          detail: { source: 'pp-gift' }
+        });
+        document.dispatchEvent(evt);
+        deferred.resolve({
+          cart: E.createCartFromAjaxResponse(res),
+          detail: { sections: res.sections || {}, items: res.items, itemCount: res.item_count, source: 'pp-gift', didError: false }
+        });
+      }).catch(function () {});
+    };
+    var giftLines = function (res, ids) {
+      return (res.items || []).filter(function (it) { return ids.indexOf(it.variant_id) > -1; })
+        .map(function (it) { return { id: it.key, quantity: it.quantity }; });
+    };
+
+    var lastCart = null;
+    var render = function (cart) {
+      if (!cart || !cart.items) return;
+      lastCart = cart;
+      var d = data();
+      var ids = d.gifts.map(function (g) { return g.id; });
+      var min = d.local || Math.ceil(d.min * rate());
+      var total = 0, inCart = [];
+      cart.items.forEach(function (it) {
+        if (ids.indexOf(it.variant_id) > -1) inCart.push(it);
+        else total += it.final_line_price;
+      });
+      var reached = total >= min;
+
+      // Keep the cart honest: no gift under the minimum, never more than one gift
+      if (!busy && (inCart.length && !reached || inCart.length > 1 || (inCart[0] && inCart[0].quantity > 1))) {
+        busy = true;
+        var updates = {};
+        inCart.forEach(function (it, i) { updates[it.key] = reached && i === 0 ? 1 : 0; });
+        post('/cart/update.js', { updates: updates }).then(function (res) { busy = false; render(res); refreshDrawer(res, giftLines(res, ids)); }).catch(function () { busy = false; });
+        return;
+      }
+      var chosen = reached && inCart[0] ? inCart[0].variant_id : null;
+
+      document.querySelectorAll('[data-pp-gift]').forEach(function (box) {
+        if (!d.gifts.length) { box.hidden = true; return; }
+        box.hidden = false;
+        box.setAttribute('data-pp-done', '');
+        var msg = box.querySelector('[data-pp-gift-msg]');
+        var fill = box.querySelector('[data-pp-gift-fill]');
+        fill.style.width = Math.min(100, Math.round(total / min * 100)) + '%';
+        box.classList.toggle('is-reached', reached);
+        if (!reached) msg.innerHTML = box.dataset.tMore.replace('[x]', '<strong>' + fmt(min - total) + '</strong>');
+        else if (chosen) msg.textContent = box.dataset.tChosen.replace('[n]', d.gifts.filter(function (g) { return g.id === chosen; })[0].title);
+        else msg.textContent = box.dataset.tUnlocked;
+        var grid = box.querySelector('[data-pp-gift-grid]');
+        if (!grid) return;
+        // Same gifts and same state: only switch the ticks, the images stay in place (no reload flash)
+        var sig = d.gifts.map(function (g) { return g.id; }).join(',') + '|' + reached;
+        if (grid.dataset.sig === sig) {
+          grid.querySelectorAll('[data-pp-gift-pick]').forEach(function (x) {
+            var on = +x.dataset.ppGiftPick === chosen;
+            x.classList.toggle('is-on', on);
+            x.setAttribute('aria-pressed', on);
+          });
+        } else {
+          grid.dataset.sig = sig;
+          grid.innerHTML = d.gifts.map(function (g) {
+            return '<button type="button" class="pp-gift__it' + (g.id === chosen ? ' is-on' : '') + '" data-pp-gift-pick="' + g.id + '"' + (reached ? '' : ' disabled') + ' aria-pressed="' + (g.id === chosen) + '">' +
+              '<img src="' + g.img + '" alt="" width="120" height="120" loading="lazy">' +
+              '<span class="pp-gift__name">' + g.title + '</span>' +
+              '<span class="pp-gift__price"><s>' + g.price + '</s> <b>' + box.dataset.tFree + '</b></span></button>';
+          }).join('');
+        }
+        var note = box.querySelector('[data-pp-gift-note]');
+        if (note) note.textContent = reached ? (chosen ? box.dataset.tSwap : box.dataset.tNote) : box.dataset.tNote;
+      });
+    };
+
+    var load = function () {
+      if (!document.querySelector('[data-pp-gift]')) return;
+      fetch(root + '/cart.js', { headers: { Accept: 'application/json' } }).then(function (r) { return r.json(); }).then(render).catch(function () {});
+    };
+
+    // Pick / swap a gift. Fast: the choice shows at once (optimistic), then ONE request removes the old gift and adds
+    // the new one (updates keyed by variant id) and returns the cart + the redrawn drawer sections.
+    var pending = null;
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-pp-gift-pick]');
+      if (!b || b.disabled) return;
+      var id = +b.dataset.ppGiftPick;
+      var d = data();
+      var gift = d.gifts.filter(function (g) { return g.id === id; })[0];
+      // Instant feedback in every gift box
+      document.querySelectorAll('[data-pp-gift]').forEach(function (box) {
+        box.querySelectorAll('[data-pp-gift-pick]').forEach(function (x) {
+          var on = +x.dataset.ppGiftPick === id;
+          x.classList.toggle('is-on', on);
+          x.setAttribute('aria-pressed', on);
+        });
+        var msg = box.querySelector('[data-pp-gift-msg]');
+        if (msg && gift) msg.textContent = box.dataset.tChosen.replace('[n]', gift.title);
+        var note = box.querySelector('[data-pp-gift-note]');
+        if (note) note.textContent = box.dataset.tSwap;
+      });
+      if (busy) { pending = id; return; } // a request is running: send the latest choice when it is done
+      var send = function (vid) {
+        busy = true;
+        var updates = {};
+        d.gifts.forEach(function (g) { updates[g.id] = g.id === vid ? 1 : 0; });
+        post('/cart/update.js', { updates: updates }).then(function (res) {
+          busy = false;
+          if (pending && pending !== vid) { var next = pending; pending = null; return send(next); }
+          pending = null;
+          render(res);
+          refreshDrawer(res, giftLines(res, d.gifts.map(function (g) { return g.id; })));
+        }).catch(function () { busy = false; pending = null; load(); });
+      };
+      send(id);
+    });
+
+    // Horizon: 'shopify:cart:lines-update' after every add / change / remove. Ours are skipped (already rendered from
+    // the response); for the others wait for the theme's result, then check the gift against the new cart.
+    document.addEventListener('shopify:cart:lines-update', function (e) {
+      if (e.detail && e.detail.source === 'pp-gift') return;
+      var go = function () { setTimeout(load, 50); };
+      if (e.promise && e.promise.then) e.promise.then(go, go); else setTimeout(load, 300);
+    });
+    document.addEventListener('dialog:open', function () { setTimeout(load, 50); });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) load(); });
+    // A gift box that the theme just drew (drawer opened / redrawn) and that is not filled yet
+    var t;
+    new MutationObserver(function () {
+      if (!document.querySelector('[data-pp-gift]:not([data-pp-done])')) return;
+      if (lastCart) render(lastCart);
+      clearTimeout(t);
+      t = setTimeout(load, 60);
+    }).observe(document.documentElement, { childList: true, subtree: true });
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load); else load();
+  })();
+</script>

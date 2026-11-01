@@ -1,0 +1,40 @@
+{%- doc -%}
+  Texts for the free gift offer, in English (NewMae sells to the US only). [min] becomes the minimum order
+  amount (snippets/pp-gift-min), [x] / [n] are filled in by the caller.
+  One place for the gift texts: gift bar, product page, collection head, cart drawer.
+
+  @param {string} key - pdp_static, short, bar, pdp_yes, pdp_more, cross, more, unlocked, chosen, swap, free, note, tab_title, tab_body
+{%- enddoc -%}
+{%- liquid
+  # NewMae is English only (US)
+  case key
+    when 'short'
+      echo 'Free gift with orders over [min]'
+    when 'bar'
+      echo 'Free gift over [min]'
+    when 'pdp_static'
+      echo 'Free gift with orders over [min]'
+    when 'pdp_yes'
+      echo 'Free gift included ✓'
+    when 'pdp_more'
+      echo '[x] more for a free gift'
+    when 'cross'
+      echo 'Complete your order'
+    when 'more'
+      echo '[x] more for your free gift'
+    when 'unlocked'
+      echo 'Gift unlocked! Pick one'
+    when 'chosen'
+      echo 'Your gift: [n] ✓'
+    when 'swap'
+      echo 'Tap another gift to swap'
+    when 'free'
+      echo 'FREE'
+    when 'note'
+      echo '1 gift per order'
+    when 'tab_title'
+      echo 'Free gift'
+    when 'tab_body'
+      echo '<p>With every order over [min] you get a gift of your choice: a scarf, a card holder, a wallet or a bracelet.</p><p>Pick it in your cart and it ships with your order.</p>'
+  endcase
+-%}
