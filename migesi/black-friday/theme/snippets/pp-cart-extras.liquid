@@ -1,0 +1,212 @@
+{%- doc -%}
+  Migesi cart summary extras (drawer and cart page), full width under the total:
+  "You save £X" (compare-at minus price of every line + order discounts, free gifts not counted) and the
+  store promises (free UK delivery · 14-day returns · secure checkout, as in the shipping and refund policy).
+
+  @param {number} [return_days] - Return period in days (refund policy), default 14
+{%- enddoc -%}
+
+{%- liquid
+  assign return_days = return_days | default: 14
+  # Black Friday: per line (compare-at or original price − paid) × qty; free gifts (tag regalo) are not counted,
+  # so the gift's own price never inflates the saving. Order-level discounts (codes) are added.
+  assign total_save = 0
+  for item in cart.items
+    if item.product.tags contains 'regalo'
+      continue
+    endif
+    assign was = item.original_price
+    if item.variant.compare_at_price > was
+      assign was = item.variant.compare_at_price
+    endif
+    assign line_save = was | times: item.quantity | minus: item.final_line_price
+    if line_save > 0
+      assign total_save = total_save | plus: line_save
+    endif
+  endfor
+  for d in cart.cart_level_discount_applications
+    assign total_save = total_save | plus: d.total_allocated_amount
+  endfor
+-%}
+
+{%- liquid
+  assign t_save = 'You save'
+  assign t_ship = 'Free UK delivery'
+  assign t_ret = return_days | append: '-day returns'
+  assign t_pay = 'Secure checkout'
+-%}
+<div class="pp-cart-extras">
+  {%- if total_save > 0 -%}
+    {%- comment -%} Black Friday: short red line with the total saving (compare-at + discounts, gifts not counted) {%- endcomment -%}
+    <p class="pp-cart-saving"><span>{{ t_save }}</span><span>−{{ total_save | money }}</span></p>
+  {%- endif -%}
+  <ul class="pp-cart-trust" role="list">
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 6.5h11v8.75h-11zM13.5 9.5h4l3 3v2.75h-7z"/><circle cx="6.5" cy="17.25" r="1.75"/><circle cx="16.75" cy="17.25" r="1.75"/></svg>
+      {{ t_ship }}
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.5M20 4v4.5h-4.5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.5M4 20v-4.5h4.5"/></svg>
+      {{ t_ret }}
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>
+      {{ t_pay }}
+    </li>
+  </ul>
+</div>
+
+{% stylesheet %}
+  /* Black Friday: no quantity selector anywhere in the cart (owner: nobody uses it); the bin icon removes a line */
+  .cart-items__quantity .quantity-selector {
+    display: none !important;
+  }
+
+  /* No own row for the bin: on narrow carts (drawer, phones) it sits on the right, under the price.
+     Migesi's Horizon has two row layouts (cart page / drawer with variant + unit price rows): both lose only the
+     quantity row. */
+  @container cart-items (max-width: 719px) {
+    .cart-items__table-row {
+      position: relative;
+      grid-template-areas:
+        'media details price'
+        'media error error' !important;
+    }
+
+    .cart-items__table-row.cart-items__table-row--full-width-variants {
+      grid-template-areas:
+        'media details price'
+        'media variants variants'
+        'media unit_price unit_price'
+        'media error error' !important;
+    }
+
+    .cart-items__table-row .cart-items__variants-wrapper {
+      padding-right: 34px;
+    }
+
+    .cart-items__table-row .cart-items__quantity {
+      position: absolute;
+      top: 30px;
+      right: 0;
+      margin: 0 !important;
+    }
+
+    .cart-items__table-row .cart-items__remove {
+      margin: 0 !important;
+    }
+  }
+
+  .pp-cart-extras {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .pp-cart-saving {
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #fbf1f0;
+    color: var(--pp-red, #a8231b);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .pp-cart-saving strong {
+    font-weight: 800;
+  }
+
+  .pp-cart-trust {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.3;
+    color: rgb(var(--color-foreground-rgb, 0 0 0) / 0.75);
+  }
+
+  .pp-cart-trust li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .pp-cart-trust svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Gift block at the top of the cart drawer / cart page */
+  .pp-cart-tier {
+    padding: 4px var(--cart-drawer-padding, 20px) 14px;
+    border-bottom: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.08);
+  }
+
+  .pp-cart-tier .pp-tierbar {
+    max-width: none;
+  }
+
+  .pp-cart-tier .pp-tierbar__msg {
+    font-size: 13px;
+  }
+
+  /* Drawer: the gift block sits inside the item list, which already has the drawer padding: same left edge as the
+     products, no extra line */
+  .pp-cart-tier--drawer {
+    padding: 0 0 14px;
+    border-bottom: 0;
+  }
+
+  .pp-cart-tier--page {
+    padding: 0 0 14px;
+    margin-bottom: 8px;
+  }
+
+  /* Black Friday: compact – saving as one red line, the 3 promises on one line next to each other */
+  .pp-cart-extras {
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .pp-cart-extras .pp-cart-saving {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--pp-red, #a8231b);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  .pp-cart-extras .pp-cart-trust {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .pp-cart-extras .pp-cart-trust li {
+    gap: 4px;
+  }
+
+  .pp-cart-extras .pp-cart-trust svg {
+    width: 13px;
+    height: 13px;
+  }
+{% endstylesheet %}

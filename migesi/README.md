@@ -23,3 +23,33 @@ User GO (1 Nov): same as Davento + Niaali, same free gifts, bundle (stacking) di
   Bestsellers Women (bestsellers-women, 18), Bestsellers Men (bestsellers-men, 23), Bestsellers (bestsellers,
   sub-collections of both, 41). Best selling sort, all 4 channels.
 - Main menu: "Bestsellers" after Home. Backup: black-friday/orig/main-menu.json.
+
+## Black Friday – theme (draft "Black Friday" #204029624667, not published)
+All changed files in black-friday/theme (originals in black-friday/orig/). Ported from Niaali (Horizon family) and
+Davento lessons; Migesi look: deep green ink #1f2a1f, Migesi cream #f6f2eb, the store's own sale red #a8231b,
+champagne only in the hero; titles Playfair Display 700 (also about/footer headings; product description headings
+stay regular). English only, GBP, £70.
+- Gift system: snippets/pp-gift-min (£70, 4 gift handles), pp-gift-text (EN), pp-gift-cart (markup), pp-gift-script
+  (fast pick from Niaali v2 + Davento v2: optimistic, ONE /cart/update.js, last click wins, gift photos stay in place).
+  This Horizon version has no CartUpdateEvent: the script dispatches the standard 'shopify:cart:lines-update'
+  (CartLinesUpdateEvent from @shopify/events, promise resolved with the update.js cart + sections) so drawer, cart
+  page and cart bubble redraw; it listens to the same event for the theme's own adds/removes.
+- sections/pp-gift-showcase in header-group after the header: cream gift bar + palette + title font + red
+  "Bestsellers" menu tag (pp-bf-header) + end date pp-bf-active (1 Dec 2026 00:00 UK = discount end).
+- Announcement bar: Halloween + "Mix & save" off; free UK delivery + 14-day returns stay.
+- Home: pp-bf-hero first ("Up to 70% off", Jost bold offer, Women / Men / Shop bestsellers); Halloween hero off;
+  trust row compact (36px round icons); bestsellers 5 per row from bestsellers-women / -men (no summer items).
+- Badge "BLACK FRIDAY" on cards and the first product photo; gift line instead of the tier bar (home bestsellers,
+  collection head, product cross-sell "Complete your order"); chips All | Women | Men on the 3 bestseller collections.
+- Product page: third bullet "Free gift with orders over £70"; accordion "Mix & Save" → "Free gift" (pp-gift-tab);
+  PP Rating (top, OFF, rating 0 = shows nothing until real numbers are entered) and PP Stock (above buy buttons, OFF);
+  delivery line off.
+- Cart (drawer + page): gift block on top, no quantity selector, bin on the right under the price, "Free Gift"
+  discount name hidden (£0.00 says it). Under the total (snippets/tax-info, was the bundle tier bar): "You save £X"
+  (gifts not counted) + Free UK delivery · 14-day returns · Secure checkout.
+- Tested in preview (1 Nov, mobile 390 + desktop 1440): 13 pages each, no Liquid/JS errors from the theme, no
+  horizontal scroll, no Halloween / Mix & save / 50% / Polish text. Flow: under £70 "£39.05 more for your free gift",
+  gifts locked; over £70 pick → line at £0.00 in ~1 s (UI instant), 3 rapid swaps → exactly 1 gift (the last),
+  drawer pick works, removing an item below £70 removes the gift automatically.
+- At publish: deactivate the 3 bundle discounts (with them active Shopify gives Buy-2/3 instead of combining once
+  the gift is gone; seen in the test: £73.71 after removing the gift).

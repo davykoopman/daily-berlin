@@ -1,0 +1,19 @@
+{%- doc -%}
+  Migesi (Alove kit): under the cart total (drawer and cart page), instead of the theme tax/shipping line (hidden in
+  the store CSS). Black Friday: the bundle progress bar is gone (bundle discount off); shows snippets/pp-cart-extras:
+  "You save £X" (gifts not counted) + free UK delivery · 14-day returns · secure checkout (shipping and refund policy).
+
+  @param {boolean} [has_discounts_enabled] - Kept for the theme call, not used.
+{%- enddoc -%}
+
+{% render 'pp-cart-extras', return_days: 14 %}
+
+{% render 'pp-alove-style' %}
+
+{% stylesheet %}
+  .cart-totals__tax-note:has(.pp-cart-extras) {
+    display: block !important;
+    width: 100%;
+    color: var(--color-foreground);
+  }
+{% endstylesheet %}
