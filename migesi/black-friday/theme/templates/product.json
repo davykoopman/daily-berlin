@@ -410,7 +410,6 @@
             },
             "pp_stock": {
               "type": "pp-stock",
-              "disabled": true,
               "settings": {
                 "title": "",
                 "show_note": false,

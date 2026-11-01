@@ -52,6 +52,8 @@
           <div class="pp-cart-tier pp-cart-tier--page">{% render 'pp-gift-cart' %}</div>
         {%- endunless -%}
         {%- content_for 'block', id: 'cart-page-items', type: '_cart-products' %}
+        {% render 'pp-cart-upsell', context: 'page', limit: 8 %}
+        {% render 'pp-quick-pick' %}
       </div>
 
       {%- unless cart.empty? -%}

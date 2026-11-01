@@ -115,6 +115,9 @@
                   {%- comment -%} Migesi Black Friday: free gift block at the top of the drawer {%- endcomment -%}
                   <div class="pp-cart-tier pp-cart-tier--drawer">{% render 'pp-gift-cart' %}</div>
                   {% render 'cart-products', context: 'drawer' %}
+                  {%- comment -%} Black Friday: "Complete your look" add-ons, like Davento / Niaali {%- endcomment -%}
+                  {% render 'pp-cart-upsell', context: 'drawer', limit: 6 %}
+                  {% render 'pp-quick-pick' %}
                 </scroll-hint>
 
                 <div class="cart-drawer__summary">

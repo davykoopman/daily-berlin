@@ -11,13 +11,25 @@
     manual_rating: bs.manual_rating,
     manual_count: bs.manual_count
   %}
+  {%- comment -%} Theme editor only: without a rating the block shows nothing on the site; say why {%- endcomment -%}
+  {%- if request.design_mode and bs.source == 'manual' and bs.manual_rating <= 0 -%}
+    <p class="pp-rating-hint">PP Rating: fill in the real rating and number of customers in this block's settings (only real numbers). Nothing is shown to customers until then.</p>
+  {%- endif -%}
 </div>
 
 {% stylesheet %}
-  /* Close to the next block (title / buy button): cancels most of the 28px gap between product detail blocks */
+  /* Close to the title: Migesi's product details have a 12px gap, pull 6px so 6px stay */
   .pp-rating-block {
     width: 100%;
-    margin-bottom: -18px;
+    margin-bottom: -6px;
+  }
+
+  .pp-rating-hint {
+    margin: 0;
+    padding: 6px 10px;
+    border: 1px dashed currentColor;
+    font-size: 12px;
+    opacity: 0.7;
   }
 {% endstylesheet %}
 

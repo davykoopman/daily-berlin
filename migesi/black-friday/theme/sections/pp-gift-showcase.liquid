@@ -195,8 +195,18 @@
 
   /* "About" (media with text) on every page: compact, so the text is visible without long scrolling.
      Phones: a lower landscape photo (faces stay in view), smaller title, less padding. Desktop: not taller than 620px. */
-  /* Product page on phones: title close under the photo */
+  /* Product page on phones: photo directly under the gift bar (no white strip), title close under the photo */
   @media screen and (max-width: 749px) {
+    #MainContent .product-information.section {
+      padding-block-start: 0 !important;
+    }
+
+    /* Footer on phones: every column on the same left edge as the page (some had 16px extra) */
+    footer .group-block,
+    footer .menu__details {
+      padding-inline: 0 !important;
+    }
+
     .product-information .product-details > .group-block {
       padding-top: 4px !important;
     }

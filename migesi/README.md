@@ -53,3 +53,17 @@ stay regular). English only, GBP, £70.
   drawer pick works, removing an item below £70 removes the gift automatically.
 - At publish: deactivate the 3 bundle discounts (with them active Shopify gives Buy-2/3 instead of combining once
   the gift is gone; seen in the test: £73.71 after removing the gift).
+- Round 2 (user feedback, 1 Nov):
+  - Product page on phones: photo directly under the gift bar (section top padding 0 on phones; was a 21px white strip).
+  - PP Stock: Migesi's product details have a 12px gap (Niaali 28px), so the -16px pull made the line overlap the
+    button → -4px (12px under sizes, 8px above the button, dot centred). Switched ON in the draft (user turned it on).
+  - PP Rating: shows nothing while the rating is 0 (no real numbers yet); in the theme editor a dashed hint says to
+    fill in the real rating + number of customers. Pull to the title -6px.
+  - Footer on phones: every column on the same 16px left edge (group-block / menu details padding removed).
+  - Cart add-ons "Complete your look" (snippets/pp-cart-upsell + pp-card-data from Niaali) in drawer and cart page,
+    from bestsellers-women / -men, "+ Add" opens the quick pick sheet; no gifts, nothing already in the cart.
+  - Checkout line (locales/en.default.json, shopify.checkout.alternative_payment_method_banner.or):
+    "or pay securely below" → "Only 3% of our customers returned their order". Checked: 2 of 69 orders refunded in
+    the last 365 days (2.9%), £85.90 of £3,505.49 sales returned (2.5%).
+  - Live theme still shows Halloween (announcement + hero): writes to the live theme are blocked for the API → owner
+    switches it off in the editor (or publishes the Black Friday theme).
