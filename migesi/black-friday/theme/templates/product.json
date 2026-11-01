@@ -402,8 +402,8 @@
               "disabled": true,
               "settings": {
                 "source": "manual",
-                "manual_rating": 0,
-                "manual_count": 0,
+                "manual_rating": 4.7,
+                "manual_count": 2000,
                 "custom_text": ""
               },
               "blocks": {}

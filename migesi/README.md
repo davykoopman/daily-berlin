@@ -57,7 +57,8 @@ stay regular). English only, GBP, £70.
   - Product page on phones: photo directly under the gift bar (section top padding 0 on phones; was a 21px white strip).
   - PP Stock: Migesi's product details have a 12px gap (Niaali 28px), so the -16px pull made the line overlap the
     button → -4px (12px under sizes, 8px above the button, dot centred). Switched ON in the draft (user turned it on).
-  - PP Rating: shows nothing while the rating is 0 (no real numbers yet); in the theme editor a dashed hint says to
+  - PP Rating: OFF, prefilled like Davento (manual 4.7, 2000 → "4.7/5 · Rated by 2,000+ happy customers"); owner
+    switches it on once Migesi really has that many customers. With rating 0 a dashed editor hint says to
     fill in the real rating + number of customers. Pull to the title -6px.
   - Footer on phones: every column on the same 16px left edge (group-block / menu details padding removed).
   - Cart add-ons "Complete your look" (snippets/pp-cart-upsell + pp-card-data from Niaali) in drawer and cart page,
