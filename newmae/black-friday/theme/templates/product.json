@@ -95,8 +95,7 @@
                 "manual_rating": 4.7,
                 "manual_text": "Rated by 2,000+ happy customers"
               },
-              "blocks": {},
-              "disabled": true
+              "blocks": {}
             },
             "pp_title": {
               "type": "pp-title",
@@ -176,11 +175,10 @@
                 "in_stock_text": "In stock, ready to ship",
                 "low_text": "Low in stock: only [n] left",
                 "threshold": 5,
-                "note": "Popular styles sell out fast. If you can add it to your cart, it's still available.",
+                "note": "",
                 "dot_color": "#a94416"
               },
-              "blocks": {},
-              "disabled": true
+              "blocks": {}
             },
             "buy_buttons_eYQEYi": {
               "type": "buy-buttons",
@@ -245,13 +243,13 @@
             },
             "pp_delivery": {
               "type": "pp-delivery",
+              "disabled": true,
               "settings": {
                 "dispatch_days": "1–2",
                 "eta_min": 0,
                 "eta_max": 9
               },
-              "blocks": {},
-              "disabled": true
+              "blocks": {}
             },
             "payment_icons_pp": {
               "type": "payment-icons",

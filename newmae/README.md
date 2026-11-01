@@ -169,3 +169,11 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
   and gift icons): --pp-red in pp-gift-showcase + overrides there. Primary buttons black (config/settings_data:
   palette_primary_button_background #65432B → foreground #1C1714). Trust cards stand out: warm grey card, black icon
   circle with a white icon, title 600.
+- LIVE 1 Nov (owner published "Black Friday" #210137088325 = MAIN). Mix & Save 10/15/20% deactivated right after
+  (EXPIRED, not deleted). Active automatic discount: only "Free Gift". Live test (no preview): $45.05 more under the
+  minimum; over $90 pick → gift $0.00 in ~1 s, total $134.85 for 3 items (no Mix & Save any more), 3 rapid swaps →
+  1 gift, removing items below $90 removes the gift; announcement "BLACK FRIDAY · UP TO 70% OFF", no Halloween /
+  Fall Clearance text.
+- The owner switched PP Rating ("4.7 · Rated by 2,000+ happy customers", manual) and PP Stock ON in the editor
+  before publishing (templates/product.json 16:27, synced into black-friday/theme). 84 orders in the last 365 days,
+  no review app → the 2,000+ claim is not backed by data (FTC rule on fake reviews / Google Merchant Center risk).
