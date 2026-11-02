@@ -202,3 +202,9 @@ Playbook: davento/black-friday/PLAYBOOK.md. Work files: niaali/black-friday/.
 - v2 (#209403576652) also: cart bin under the price on the right (no own row; rows ~20px lower on phones and in the
   drawer), removing still works; the English discount name "Free Gift" is no longer printed under cart lines
   (snippets/cart-products: allocations titled "Free Gift" skipped; the 0,00 price shows the gift is free).
+- v3 (2 Nov, user): theme copy "Black Friday v3 (totaal)" #209504272716 (duplicate of live v2 #209403576652), files in
+  black-friday/v3 (orig/theme). Cart: "Verwacht totaal" → total label in the market language (PL Suma, NL Totaal,
+  EN Total; snippets/cart-summary), tax/shipping line under the total removed ("Gratis verzending inbegrepen"; the
+  3 promises below already say free shipping). Gift bar photos sharp: plain img 96w/192w (image_tag width 32 shrank
+  the file to 32px). Tested PL / nl-nl / en-gb: Suma 280,45 zł, Totaal €57,95, Total £50.00, no line under it.
+  Waiting for the owner to publish v3.
