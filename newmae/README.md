@@ -177,3 +177,20 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
 - The owner switched PP Rating ("4.7 · Rated by 2,000+ happy customers", manual) and PP Stock ON in the editor
   before publishing (templates/product.json 16:27, synced into black-friday/theme). 84 orders in the last 365 days,
   no review app → the 2,000+ claim is not backed by data (FTC rule on fake reviews / Google Merchant Center risk).
+
+## Domain switch Newmae → Vinci (vincifashion.com), 4 Nov (agency checklist, user GO)
+- Step 1 (ads off): done by the user. Domain www.vincifashion.com connected in Shopify (Namecheap DNS, SSL live),
+  NOT primary yet.
+- Step 2: theme copy "Vinci - domain switch (werk)" #210421350725 (duplicate of live "Black Friday" #210137088325).
+  Logo VINCI_Elegant_Serif_Logo.png, favicon Vinci_Favicon_V.png (cleaned copy of Elegant_Black_Serif_V_Favicon.png:
+  the upload had the grey "transparent" checker pattern baked into its pixels). Newmae → Vinci,
+  support@newmae.com → support@vincifashion.com, newmae.com → vincifashion.com in config/settings_data,
+  sections/footer-group, sections/pp-ugc, templates/index, product, collection, page.about-us, page.contact-us,
+  page.faq (files in vinci/theme, originals in vinci/orig). Image file names (newmae-*.png) kept on purpose.
+  Code comments "NewMae" left (not visible). Remaining "Newmae" on the site = store name (Settings → Store details:
+  logo alt, hidden h1, copyright, schema.org) → changes when the owner renames the store.
+- Step 3 prepared (vinci/texts/new, originals in texts/orig, ids in texts/ids.json): 5 Shopify policies
+  (shopPolicyUpdate) and page payment-policy. Pages about-us / faqs / contact have no body (text is in the theme).
+- Products: vendor "Newmae" on all 973 (incl. the 4 gifts), SEO title "… | Newmae" on 592; no "Newmae" in titles,
+  descriptions or tags; collections and blog clean (old Fall Clearance collection texts still mention the bundle
+  offer, unrelated to the switch). Data in vinci/data/p1–p4.json.
