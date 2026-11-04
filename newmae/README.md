@@ -194,3 +194,15 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
 - Products: vendor "Newmae" on all 973 (incl. the 4 gifts), SEO title "… | Newmae" on 592; no "Newmae" in titles,
   descriptions or tags; collections and blog clean (old Fall Clearance collection texts still mention the bundle
   offer, unrelated to the switch). Data in vinci/data/p1–p4.json.
+- Step B, 4 Nov (user GO), all checked:
+  - Logo: the trimmed VINCI_Logo_Header.png (1457×321, no empty space) replaces the old logo, which had about 60%
+    empty space. logo_height is 28 on desktop and 22 on mobile, so the logo shows noticeably bigger in the preview.
+  - Page payment-policy: updated with pageUpdate.
+  - Products: vendor is now "Vinci" on all 973 (0 still "Newmae"). The SEO title on 592 products changed from
+    "| Newmae" to "| Vinci", with the existing SEO description sent along. Done with productUpdate in 13 batches
+    (bulk operations and >16 KB documents are blocked in MCP, so the input goes in GraphQL variables).
+    Afterwards all 973 were re-read: every SEO title is OK.
+  - 5 Shopify policies: shopPolicyUpdate needs the scope write_legal_policies, which the MCP app does not have.
+    The owner pastes texts/new/policy-*.html (Settings → Policies → <> HTML view).
+  - Owner did step C: store name "Vinci Fashion", store email and sender email support@vincifashion.com
+    (domain authenticated).

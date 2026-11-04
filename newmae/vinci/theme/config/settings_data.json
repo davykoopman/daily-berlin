@@ -9,9 +9,9 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/VINCI_Elegant_Serif_Logo.png",
-    "logo_height": 36,
-    "logo_height_mobile": 28,
+    "logo": "shopify://shop_images/VINCI_Logo_Header.png",
+    "logo_height": 28,
+    "logo_height_mobile": 22,
     "favicon": "shopify://shop_images/Vinci_Favicon_V.png",
     "page_text_color": "#1C1714",
     "type_body_font": "manrope_n4",
