@@ -215,3 +215,7 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
   Still open for the owner: Terms of Service still shows the Privacy text; the homepage title, meta description and
   social image in Online Store → Preferences still say Newmae / newmae-logo-2.png; the Help menu item "FAQs"
   links to "#" (this was already the case before the switch).
+- 4 Nov: Terms of Service is correct (21 sections). Homepage title, meta description, og and twitter tags are live
+  as "Vinci | Timeless Fashion for Women & Men". The social image is VINCI_Elegant_Serif_Logo. No visible
+  "Newmae" left on the home, collection or FAQ pages. Next: Simprosys full resync (step 7), then GMC diagnostics,
+  then ads (step 9).
