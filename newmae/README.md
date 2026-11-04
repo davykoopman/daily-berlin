@@ -206,3 +206,12 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
     The owner pastes texts/new/policy-*.html (Settings → Policies → <> HTML view).
   - Owner did step C: store name "Vinci Fashion", store email and sender email support@vincifashion.com
     (domain authenticated).
+- Live check after D+E (4 Nov): vincifashion.com is primary with SSL. newmae.com and www → 301 to vincifashion.com,
+  deep links keep their path and query. Canonical, og:url and the sitemap use vincifashion.com. Theme
+  "Vinci - domain switch (werk)" is live with the VINCI logo and favicon, checked on desktop and mobile.
+  Fixed afterwards: alt text "Newmae …" → "Vinci …" on 19 collection images (collectionUpdate image.altText, image
+  unchanged), and the Quick Links menu "Track Your Order" changed from https://newmae.com/apps/parcelpanel to
+  /apps/parcelpanel.
+  Still open for the owner: Terms of Service still shows the Privacy text; the homepage title, meta description and
+  social image in Online Store → Preferences still say Newmae / newmae-logo-2.png; the Help menu item "FAQs"
+  links to "#" (this was already the case before the switch).
