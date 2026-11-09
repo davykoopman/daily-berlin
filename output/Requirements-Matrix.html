@@ -187,10 +187,20 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
 (function(){
 
 /* ---- local storage backend (replaces the shared database) ---- */
-const KEY='requirements-matrix.v1';
+const KEY='requirements-matrix.v2';
 const store=(function(){
   let data={clients:{},reqs:{},checks:{}}, subs={clients:[],reqs:[],checks:[]};
-  try{ const raw=localStorage.getItem(KEY); if(raw) data=JSON.parse(raw); else data=seed(); }catch(e){ data=seed(); }
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw) data=JSON.parse(raw);
+    else {
+      /* upgrade from an older version: keep real entries, drop old example rows, then load the new examples if nothing is left */
+      let old=null; try{ old=JSON.parse(localStorage.getItem('requirements-matrix.v1')||'null'); }catch(e){}
+      if(old){ ['clients','reqs'].forEach(k=>Object.keys(old[k]||{}).forEach(id=>{ if(old[k][id].ex){ delete old[k][id]; if(k==='clients') delete (old.checks||{})[id]; } }));
+        if(Object.keys(old.clients||{}).length||Object.keys(old.reqs||{}).length) data={clients:old.clients||{},reqs:old.reqs||{},checks:old.checks||{}}; else data=seed(); }
+      else data=seed();
+    }
+  }catch(e){ data=seed(); }
   function seed(){
     const S={"clients": [["c1", "Zalando", "Fashion e-commerce, DC Poland"], ["c2", "Browns", "Luxury fashion retail"], ["c3", "Harrods", "Luxury department store, London"], ["c4", "Sports Direct (Frasers Group)", "Sports retail, UK"]], "reqs": [["r1", "Max pallet height 180 cm", "Pallets", "Pallet including goods may not exceed 180 cm from floor. Example text: replace with the exact rule and tolerance from the client manual.", "Example"], ["r2", "Max pallet height 200 cm", "Pallets", "Pallet including goods may not exceed 200 cm. Example text.", "Example"], ["r3", "Max pallet height 220 cm", "Pallets", "Pallet including goods may not exceed 220 cm. Example text.", "Example"], ["r4", "EUR/EPAL pallets only", "Pallets", "Only undamaged EUR/EPAL pallets accepted; no chemical or one-way pallets. Example text.", "Example"], ["r5", "Single-SKU pallets", "Pallets", "One article per pallet; no mixed pallets. Example text.", "Example"], ["r6", "SSCC pallet label", "Labelling", "SSCC (GS1-128) label on two adjacent sides of every pallet, 40-80 cm from the floor. Example text.", "Example"], ["r7", "Carton label", "Labelling", "Carton label with article, quantity and PO number on the short side of each carton. Example text.", "Example"], ["r8", "EAN barcode per item", "Labelling", "Every item carries a scannable EAN barcode on the tag or polybag. Example text.", "Example"], ["r9", "Send ASN notification (Poland)", "Documents", "Send an advance shipping notice (ASN) before dispatch for deliveries to the Polish DC. Example text: add format, deadline and recipient.", "Example"], ["r10", "Packing list in carton", "Documents", "Printed packing list placed inside each carton. Example text.", "Example"], ["r11", "Customs documents (EORI/CN)", "Documents", "Customs documents with EORI number and CN codes for cross-border shipments. Example text.", "Example"], ["r12", "Dock appointment required", "Planning", "Book a dock slot before arrival; late arrivals are rejected. Example text.", "Example"], ["r13", "Delivery within time window", "Planning", "Deliver within the confirmed time window (for example +/- 30 min). Example text.", "Example"], ["r14", "Hanging garments (GOH)", "Packing", "Garments on hangers in GOH containers, not folded in cartons. Example text.", "Example"], ["r15", "Polybag per item", "Packing", "Each item in a sealed polybag with suffocation warning. Example text.", "Example"], ["r16", "Quality inspection before dispatch", "Quality", "Sample inspection before dispatch with a report on request. Example text.", "Example"]], "ticks": {"c1": ["r2", "r4", "r6", "r7", "r8", "r9", "r10", "r12", "r15"], "c2": ["r1", "r6", "r7", "r8", "r12", "r13", "r14", "r15", "r16"], "c3": ["r1", "r5", "r6", "r7", "r8", "r10", "r12", "r13", "r14", "r15", "r16"], "c4": ["r3", "r4", "r5", "r6", "r7", "r8", "r9", "r11", "r12", "r15"]}}; const d={clients:{},reqs:{},checks:{}};
     S.clients.forEach(([id,name,note],i)=>d.clients[id]={name,note,order:i+1,ex:true});
