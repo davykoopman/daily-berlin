@@ -131,9 +131,12 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
 .ci{display:flex;gap:10px;align-items:center;padding:5px 6px;border-radius:6px;border:0;background:none;text-align:left;width:100%}
 .ci:hover{background:var(--surface2)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:80;box-shadow:var(--shadow);max-width:90vw}
-.qa{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-.qa input{border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:8px 11px;min-width:0}
-.qa-name{flex:3 1 260px}.qa-cat{flex:1 1 150px}
+.add{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:12px}
+.qf{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+.qf .lbl{flex:0 0 100%}
+.qf input{border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:8px 11px;min-width:0}
+.f-name{flex:2 1 160px}.f-sub{flex:1 1 110px}
+@media (max-width:480px){.add{grid-template-columns:1fr}}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
 .tab{border:0;background:none;padding:10px 16px;font-weight:600;color:var(--mute);border-bottom:3px solid transparent;margin-bottom:-1px}
 .tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
@@ -166,19 +169,25 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
       <span class="sync off" id="sync"><i></i><span>Connecting…</span></span>
       <button class="btn" data-act="import" id="b-import">Import Excel</button>
       <button class="btn" data-act="export" id="b-export">Export to Excel</button>
-      <button class="btn" data-act="add-client">+ Client</button>
-      <button class="btn primary" data-act="add-req">+ Requirement</button>
       <input type="file" id="file" accept=".xlsx,.xls,.csv" hidden>
     </div>
   </header>
   <div id="banner"></div>
-  <form class="qa" id="qa" autocomplete="off">
-    <span class="lbl">Quick add</span>
-    <input id="qa-name" class="qa-name" placeholder="New requirement, e.g. Max pallet height 180 cm" aria-label="New requirement name" required>
-    <input id="qa-cat" class="qa-cat" list="qa-cats" placeholder="Category" aria-label="Category">
-    <datalist id="qa-cats"></datalist>
-    <button class="btn primary" type="submit">Add requirement</button>
-  </form>
+  <section class="add" aria-label="Add">
+    <form class="qf" id="qc" autocomplete="off">
+      <span class="lbl">Add client</span>
+      <input id="qc-name" class="f-name" placeholder="Client name, e.g. Zalando" aria-label="New client name" required>
+      <input id="qc-note" class="f-sub" placeholder="Note (optional)" aria-label="Client note">
+      <button class="btn primary" type="submit">Add client</button>
+    </form>
+    <form class="qf" id="qa" autocomplete="off">
+      <span class="lbl">Add requirement</span>
+      <input id="qa-name" class="f-name" placeholder="Requirement, e.g. Max pallet height 180 cm" aria-label="New requirement name" required>
+      <input id="qa-cat" class="f-sub" list="qa-cats" placeholder="Category" aria-label="Category">
+      <datalist id="qa-cats"></datalist>
+      <button class="btn primary" type="submit">Add requirement</button>
+    </form>
+  </section>
   <nav class="tabs" role="tablist" id="tabs"></nav>
   <section class="stats" id="stats" aria-label="Summary"></section>
   <section class="filters" id="filters"></section>
@@ -187,7 +196,7 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
     <div class="dtools"><input class="search" id="dq" type="search" placeholder="Search requirements or explanations…" aria-label="Search requirements"><select class="sel" id="dsel" aria-label="Show"><option value="all">All requirements</option><option value="missing">Without explanation</option></select></div>
     <div class="dlist" id="dlist" style="margin-top:14px"></div>
   </section>
-  <p class="hint" id="mhint">Click a box to link a requirement to a client. Click a client name or column heading to edit it. The funnel icon under a column heading shows only the clients that have that requirement.</p>
+  <p class="hint" id="mhint">Add clients and requirements in the two boxes above. Click a box to link a requirement to a client. Click a client name or column heading to edit it. The funnel icon under a column heading shows only the clients that have that requirement.</p>
   <p class="hint">Your data is saved automatically in this browser on this computer, not online. Use <b>Export to Excel</b> regularly as a backup or to share with colleagues.</p>
 </div>
 <div id="modal"></div>
@@ -311,7 +320,7 @@ function renderTabs(){
 }
 function renderDetails(){
   const q=D.q.trim().toLowerCase(); const list=sortedReqs().filter(r=>(!q||((r.name||'')+' '+(r.desc||'')+' '+(r.source||'')+' '+catOf(r)).toLowerCase().includes(q))&&(D.show==='all'||!(r.desc||'').trim()));
-  if(!reqs.length){ $('#dlist').innerHTML='<div class="empty"><h2>No requirements yet</h2><p>Add requirements first, then explain each one here.</p><button class="btn primary" data-act="add-req">+ Requirements</button></div>'; return; }
+  if(!reqs.length){ $('#dlist').innerHTML='<div class="empty"><h2>No requirements yet</h2><p>Add a requirement in the box at the top, then explain it here.</p></div>'; return; }
   if(!list.length){ $('#dlist').innerHTML='<div class="empty"><p>Nothing found.</p></div>'; return; }
   let last=null, out='';
   list.forEach(r=>{ const c=catOf(r);
@@ -356,7 +365,7 @@ function renderMatrix(){
   const rl=sortedReqs().filter(r=>!F.hiddenCats.has(catOf(r)));
   const cl=visibleClients();
   if(!clients.length&&!reqs.length){
-    $('#matrix').innerHTML=`<div class="empty"><h2>Start with your first client and requirement</h2><p>Add clients (you can paste one per line), then add the requirements and tick in the matrix what applies to whom. Everything is saved and shared automatically.</p><div class="actions"><button class="btn" data-act="add-client">+ Clients</button><button class="btn primary" data-act="add-req">+ Requirements</button></div></div>`;
+    $('#matrix').innerHTML=`<div class="empty"><h2>Start with your first client and requirement</h2><p>Add clients and requirements with the two boxes above, then tick in the matrix what applies to whom. Everything is saved and shared automatically.</p></div>`;
     return;
   }
   // category header groups
@@ -513,8 +522,8 @@ document.addEventListener('click',e=>{
     case 'tab': view=v; sched(); break;
     case 'tick': toggle(t.dataset.r,t.dataset.q); break;
     case 'mtick': {toggle(t.dataset.r,t.dataset.q); t.firstElementChild.classList.toggle('on'); break}
-    case 'add-client': canWrite?openModal({type:'client'}):toast('You cannot make changes here'); break;
-    case 'add-req': canWrite?openModal({type:'req'}):toast('You cannot make changes here'); break;
+    case 'add-client': $('#qc-name').focus(); break;
+    case 'add-req': $('#qa-name').focus(); break;
     case 'edit-client': openModal({type:'client',id:v}); break;
     case 'edit-req': openModal({type:'req',id:v}); break;
     case 'mclose': closeModal(); break;
@@ -541,6 +550,12 @@ $('#qa').addEventListener('submit',async e=>{
   e.preventDefault(); if(!db||!canWrite) return toast('You cannot make changes here');
   const name=$('#qa-name').value.trim(); if(!name) return; const cat=$('#qa-cat').value.trim();
   try{ await db.collection('reqs').add({name,cat,desc:'',order:nextOrder()}); $('#qa-name').value=''; $('#qa-name').focus(); toast('Added: '+name); }
+  catch(err){ toast('Save failed: '+(err&&err.message||'unknown error')); }
+});
+$('#qc').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!db||!canWrite) return toast('You cannot make changes here');
+  const name=$('#qc-name').value.trim(); if(!name) return; const note=$('#qc-note').value.trim();
+  try{ await db.collection('clients').add({name,note,order:nextOrder()}); $('#qc-name').value=''; $('#qc-note').value=''; $('#qc-name').focus(); toast('Added: '+name); }
   catch(err){ toast('Save failed: '+(err&&err.message||'unknown error')); }
 });
 const mx=$('#matrix');
