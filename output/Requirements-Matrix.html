@@ -44,6 +44,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
   --c1:#6AA0FF; --c2:#34C79A; --c3:#E3B34F; --c4:#C39BF0; --c5:#FF9A66; --c6:#4CC9E0;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 24px rgba(0,0,0,.35); color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--f-body);padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
 .wrap{max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
 button,input,textarea,select{font:inherit;color:inherit}
@@ -84,9 +85,9 @@ table{border-collapse:separate;border-spacing:0;font-size:13px;width:max-content
 th,td{padding:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line);background:var(--surface)}
 thead th{position:sticky;z-index:3}
 .catrow th{top:0;height:30px;font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:0;border-top:3px solid var(--cc,var(--line));background:color-mix(in srgb,var(--cc,var(--line)) 12%,var(--surface))}
-.hdrrow th{top:30px;height:176px;vertical-align:bottom;width:52px;min-width:52px}
+.hdrrow th{top:30px;height:230px;vertical-align:bottom;width:52px;min-width:52px}
 .hbtn{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;width:100%;height:100%;padding:6px 0;border:0;background:none}
-.rh{writing-mode:vertical-rl;transform:rotate(180deg);max-height:128px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;font-size:13px}
+.rh{writing-mode:vertical-rl;transform:rotate(180deg);max-height:182px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;font-size:13px}
 .hbtn:hover .rh{color:var(--accent)}
 .fbtn{width:24px;height:24px;border:1px solid transparent;background:none;border-radius:6px;color:var(--mute);display:grid;place-items:center;padding:0}
 .fbtn:hover{border-color:var(--line)}
@@ -130,6 +131,23 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
 .ci{display:flex;gap:10px;align-items:center;padding:5px 6px;border-radius:6px;border:0;background:none;text-align:left;width:100%}
 .ci:hover{background:var(--surface2)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:80;box-shadow:var(--shadow);max-width:90vw}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
+.tab{border:0;background:none;padding:10px 16px;font-weight:600;color:var(--mute);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--fg)}
+.dtools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.dlist{display:flex;flex-direction:column;gap:12px}
+.dgrp{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);display:flex;gap:8px;align-items:center;padding-top:8px}
+.dgrp .dot{width:9px;height:9px;border-radius:50%}
+.dc{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.dh{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
+.dh h3{margin:0;font:600 22px var(--f-display);min-width:0;overflow-wrap:anywhere}
+.dh .m{font:500 12px var(--f-mono);color:var(--mute)}
+.dg{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+.dc .field textarea{min-height:84px}
+.who{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--mute)}
+.who span.c{border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--fg);background:var(--surface2)}
+@media (max-width:700px){.dg{grid-template-columns:1fr}}
 @media (max-width:600px){h1{font-size:34px}.first{min-width:170px;max-width:170px}.stat.wide{grid-column:1/-1}.scroll{max-height:calc(100vh - 110px)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -151,10 +169,15 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
     </div>
   </header>
   <div id="banner"></div>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
   <section class="stats" id="stats" aria-label="Summary"></section>
   <section class="filters" id="filters"></section>
   <section class="scroll" id="matrix" aria-label="Matrix"></section>
-  <p class="hint">Click a box to link a requirement to a client. Click a client name or column heading to edit it. The funnel icon under a column heading shows only the clients that have that requirement.</p>
+  <section id="details" hidden>
+    <div class="dtools"><input class="search" id="dq" type="search" placeholder="Search requirements or explanations…" aria-label="Search requirements"><select class="sel" id="dsel" aria-label="Show"><option value="all">All requirements</option><option value="missing">Without explanation</option></select></div>
+    <div class="dlist" id="dlist" style="margin-top:14px"></div>
+  </section>
+  <p class="hint" id="mhint">Click a box to link a requirement to a client. Click a client name or column heading to edit it. The funnel icon under a column heading shows only the clients that have that requirement.</p>
   <p class="hint">Your data is saved automatically in this browser on this computer, not online. Use <b>Export to Excel</b> regularly as a backup or to share with colleagues.</p>
 </div>
 <div id="modal"></div>
@@ -169,10 +192,10 @@ const store=(function(){
   let data={clients:{},reqs:{},checks:{}}, subs={clients:[],reqs:[],checks:[]};
   try{ const raw=localStorage.getItem(KEY); if(raw) data=JSON.parse(raw); else data=seed(); }catch(e){ data=seed(); }
   function seed(){
-    const d={clients:{},reqs:{},checks:{}};
-    [['c1','Example client A','Pharma, distribution centre'],['c2','Example client B','Retail, store replenishment'],['c3','Example client C','Chemicals, tank containers'],['c4','Example client D','E-commerce, returns']].forEach(([id,name,note],i)=>d.clients[id]={name,note,order:i+1,ex:true});
-    [['r1','Temperature-controlled 2–8 °C','Quality'],['r2','GDP certified','Quality'],['r3','ADR dangerous goods','Safety'],['r4','Driver with ADR certificate','Safety'],['r5','SSCC pallet label','Documentation'],['r6','Track & trace','Documentation'],['r7','Dock appointment required','Planning'],['r8','Delivery within time window','Planning']].forEach(([id,name,cat],i)=>d.reqs[id]={name,cat,desc:'Example',order:i+1,ex:true});
-    d.checks={c1:{m:{r1:1,r2:1,r5:1,r6:1,r7:1}},c2:{m:{r5:1,r6:1,r7:1,r8:1}},c3:{m:{r3:1,r4:1,r6:1,r8:1}},c4:{m:{r6:1,r8:1}}};
+    const S={"clients": [["c1", "Zalando", "Fashion e-commerce, DC Poland"], ["c2", "Browns", "Luxury fashion retail"], ["c3", "Harrods", "Luxury department store, London"], ["c4", "Sports Direct (Frasers Group)", "Sports retail, UK"]], "reqs": [["r1", "Max pallet height 180 cm", "Pallets", "Pallet including goods may not exceed 180 cm from floor. Example text: replace with the exact rule and tolerance from the client manual.", "Example"], ["r2", "Max pallet height 200 cm", "Pallets", "Pallet including goods may not exceed 200 cm. Example text.", "Example"], ["r3", "Max pallet height 220 cm", "Pallets", "Pallet including goods may not exceed 220 cm. Example text.", "Example"], ["r4", "EUR/EPAL pallets only", "Pallets", "Only undamaged EUR/EPAL pallets accepted; no chemical or one-way pallets. Example text.", "Example"], ["r5", "Single-SKU pallets", "Pallets", "One article per pallet; no mixed pallets. Example text.", "Example"], ["r6", "SSCC pallet label", "Labelling", "SSCC (GS1-128) label on two adjacent sides of every pallet, 40-80 cm from the floor. Example text.", "Example"], ["r7", "Carton label", "Labelling", "Carton label with article, quantity and PO number on the short side of each carton. Example text.", "Example"], ["r8", "EAN barcode per item", "Labelling", "Every item carries a scannable EAN barcode on the tag or polybag. Example text.", "Example"], ["r9", "Send ASN notification (Poland)", "Documents", "Send an advance shipping notice (ASN) before dispatch for deliveries to the Polish DC. Example text: add format, deadline and recipient.", "Example"], ["r10", "Packing list in carton", "Documents", "Printed packing list placed inside each carton. Example text.", "Example"], ["r11", "Customs documents (EORI/CN)", "Documents", "Customs documents with EORI number and CN codes for cross-border shipments. Example text.", "Example"], ["r12", "Dock appointment required", "Planning", "Book a dock slot before arrival; late arrivals are rejected. Example text.", "Example"], ["r13", "Delivery within time window", "Planning", "Deliver within the confirmed time window (for example +/- 30 min). Example text.", "Example"], ["r14", "Hanging garments (GOH)", "Packing", "Garments on hangers in GOH containers, not folded in cartons. Example text.", "Example"], ["r15", "Polybag per item", "Packing", "Each item in a sealed polybag with suffocation warning. Example text.", "Example"], ["r16", "Quality inspection before dispatch", "Quality", "Sample inspection before dispatch with a report on request. Example text.", "Example"]], "ticks": {"c1": ["r2", "r4", "r6", "r7", "r8", "r9", "r10", "r12", "r15"], "c2": ["r1", "r6", "r7", "r8", "r12", "r13", "r14", "r15", "r16"], "c3": ["r1", "r5", "r6", "r7", "r8", "r10", "r12", "r13", "r14", "r15", "r16"], "c4": ["r3", "r4", "r5", "r6", "r7", "r8", "r9", "r11", "r12", "r15"]}}; const d={clients:{},reqs:{},checks:{}};
+    S.clients.forEach(([id,name,note],i)=>d.clients[id]={name,note,order:i+1,ex:true});
+    S.reqs.forEach(([id,name,cat,desc,source],i)=>d.reqs[id]={name,cat,desc,source,order:i+1,ex:true});
+    Object.entries(S.ticks).forEach(([cid,l])=>{const m={};l.forEach(r=>m[r]=true);d.checks[cid]={m}});
     return d;
   }
   function save(){ try{ localStorage.setItem(KEY,JSON.stringify(data)); }catch(e){ /* storage blocked: data lives until the tab closes */ } }
@@ -206,7 +229,7 @@ let db=null, canWrite=true;
 let clients=[], reqs=[], checks={};
 let ready={c:false,r:false,k:false};
 const F={q:'',hiddenCats:new Set(),reqs:new Set(),sort:'order'};
-let modal=null;
+let modal=null; let view='matrix'; const D={q:'',show:'all'};
 
 const catOf=r=>(r.cat||'').trim()||'Other';
 function sortedReqs(){
@@ -258,7 +281,27 @@ function visibleClients(){
 }
 function render(){
   if(!(ready.c&&ready.r&&ready.k)){ $('#matrix').innerHTML='<div class="empty"><p>Loading data…</p></div>'; return; }
-  renderBanner(); renderStats(); renderFilters(); renderMatrix();
+  renderBanner(); renderStats(); renderTabs();
+  const dv=view==='details'; $('#filters').hidden=dv; $('#matrix').hidden=dv; $('#mhint').hidden=dv; $('#details').hidden=!dv;
+  if(dv) renderDetails(); else { renderFilters(); renderMatrix(); }
+}
+function renderTabs(){
+  $('#tabs').innerHTML=[['matrix','Matrix'],['details','Requirement details']].map(([k,l])=>`<button class="tab" role="tab" data-act="tab" data-v="${k}" aria-selected="${view===k}">${l}${k==='details'?` · ${reqs.length}`:''}</button>`).join('');
+}
+function renderDetails(){
+  const q=D.q.trim().toLowerCase(); const list=sortedReqs().filter(r=>(!q||((r.name||'')+' '+(r.desc||'')+' '+(r.source||'')+' '+catOf(r)).toLowerCase().includes(q))&&(D.show==='all'||!(r.desc||'').trim()));
+  if(!reqs.length){ $('#dlist').innerHTML='<div class="empty"><h2>No requirements yet</h2><p>Add requirements first, then explain each one here.</p><button class="btn primary" data-act="add-req">+ Requirements</button></div>'; return; }
+  if(!list.length){ $('#dlist').innerHTML='<div class="empty"><p>Nothing found.</p></div>'; return; }
+  let last=null, out='';
+  list.forEach(r=>{ const c=catOf(r);
+    if(c!==last){ out+=`<div class="dgrp"><span class="dot" style="background:${catColor(c)}"></span>${esc(c)}</div>`; last=c; }
+    const who=clients.filter(cl=>isOn(cl.id,r.id));
+    out+=`<article class="dc"><div class="dh"><h3>${esc(r.name)}</h3><span class="m">${who.length} of ${clients.length} clients</span><button class="btn ghost" data-act="edit-req" data-v="${r.id}">Rename / category / delete</button></div>
+     <div class="dg"><div class="field"><label for="dd-${r.id}">Explanation</label><textarea id="dd-${r.id}" class="dd" data-id="${r.id}" data-f="desc" placeholder="What exactly is required? Add rules, tolerances, examples, exceptions.">${esc(r.desc||'')}</textarea></div>
+     <div class="field"><label for="ds-${r.id}">Source / reference</label><textarea id="ds-${r.id}" class="dd" data-id="${r.id}" data-f="source" placeholder="E.g. client manual section 4.2, email 12 May, contact person">${esc(r.source||'')}</textarea></div></div>
+     <div class="who"><span>Applies to:</span>${who.length?who.map(cl=>`<span class="c">${esc(cl.name)}</span>`).join(''):'<span>no clients yet</span>'}</div></article>`;
+  });
+  $('#dlist').innerHTML=out;
 }
 function renderBanner(){
   const n=clients.filter(c=>c.ex).length+reqs.filter(r=>r.ex).length;
@@ -389,9 +432,9 @@ function buildWorkbook(){
   ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:1,c:0},e:{r:1+cl.length,c:rl.length+2}})};
   ws['!freeze']={xSplit:2,ySplit:2};
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Matrix');
-  const a2=[['Requirement','Category','Description','Number of clients','Clients']];
-  rl.forEach(r=>{const k=cl.filter(c=>isOn(c.id,r.id)); a2.push([r.name,catOf(r),r.desc||'',k.length,k.map(c=>c.name).join('; ')])});
-  const w2=XLSX.utils.aoa_to_sheet(a2); w2['!cols']=[{wch:34},{wch:18},{wch:40},{wch:14},{wch:60}]; w2['!autofilter']={ref:'A1:E'+a2.length};
+  const a2=[['Requirement','Category','Description','Source','Number of clients','Clients']];
+  rl.forEach(r=>{const k=cl.filter(c=>isOn(c.id,r.id)); a2.push([r.name,catOf(r),r.desc||'',r.source||'',k.length,k.map(c=>c.name).join('; ')])});
+  const w2=XLSX.utils.aoa_to_sheet(a2); w2['!cols']=[{wch:34},{wch:18},{wch:60},{wch:30},{wch:14},{wch:60}]; w2['!autofilter']={ref:'A1:F'+a2.length};
   XLSX.utils.book_append_sheet(wb,w2,'Requirements');
   const a3=[['Client','Category','Requirement']];
   cl.forEach(c=>rl.forEach(r=>{if(isOn(c.id,r.id))a3.push([c.name,catOf(r),r.name])}));
@@ -433,6 +476,9 @@ async function doImport(file){
       for(let i=2;i<end;i++) if(colIds[i]&&String(row[i]).trim()!=='') m[colIds[i]]=true;
       checks[cid]=m; await db.collection('checks').doc(cid).set({m});
     }
+    const ws2=wb.Sheets['Requirements'];
+    if(ws2){ const rr=XLSX.utils.sheet_to_json(ws2,{header:1,defval:''}); const h=(rr[0]||[]).map(x=>String(x).trim().toLowerCase()); const iD=h.indexOf('description'),iS=h.indexOf('source');
+      for(let i=1;i<rr.length;i++){ const id=rmap[key(rr[i][0])]; if(!id) continue; const u={}; if(iD>=0&&String(rr[i][iD]).trim()) u.desc=String(rr[i][iD]).trim(); if(iS>=0&&String(rr[i][iS]).trim()) u.source=String(rr[i][iS]).trim(); if(Object.keys(u).length) await db.collection('reqs').doc(id).update(u); } }
     sched(); toast(`Imported: ${newC} new clients, ${newR} new requirements`);
   }catch(e){ toast('Import failed. Use a file that was exported from here.'); }
 }
@@ -443,6 +489,7 @@ document.addEventListener('click',e=>{
   const a=t.dataset.act, v=t.dataset.v;
   if(a==='mbg'){ if(e.target===t) closeModal(); return; }
   switch(a){
+    case 'tab': view=v; sched(); break;
     case 'tick': toggle(t.dataset.r,t.dataset.q); break;
     case 'mtick': {toggle(t.dataset.r,t.dataset.q); t.firstElementChild.classList.toggle('on'); break}
     case 'add-client': canWrite?openModal({type:'client'}):toast('You cannot make changes here'); break;
@@ -461,8 +508,10 @@ document.addEventListener('click',e=>{
     case 'reset': F.q='';F.hiddenCats.clear();F.reqs.clear(); sched(); break;
   }
 });
-document.addEventListener('input',e=>{ if(e.target.id==='q'){ F.q=e.target.value; const p=e.target.selectionStart; renderMatrix(); renderStats(); } });
-document.addEventListener('change',e=>{ if(e.target.id==='sort'){F.sort=e.target.value;sched()} if(e.target.id==='file'&&e.target.files[0]){doImport(e.target.files[0]);e.target.value=''} });
+document.addEventListener('input',e=>{ if(e.target.id==='dq'){ D.q=e.target.value; renderDetails(); return; } if(e.target.id==='q'){ F.q=e.target.value; const p=e.target.selectionStart; renderMatrix(); renderStats(); } });
+document.addEventListener('change',e=>{
+  if(e.target.id==='dsel'){D.show=e.target.value;renderDetails();return}
+  if(e.target.classList&&e.target.classList.contains('dd')){ const t=e.target; if(db&&canWrite) enqueue('d'+t.dataset.id,()=>db.collection('reqs').doc(t.dataset.id).update({[t.dataset.f]:t.value.trim(),ex:false})).then(()=>toast('Saved')); return; } if(e.target.id==='sort'){F.sort=e.target.value;sched()} if(e.target.id==='file'&&e.target.files[0]){doImport(e.target.files[0]);e.target.value=''} });
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&modal) closeModal();
   if(e.key==='Enter'&&modal&&e.target.tagName==='INPUT'&&e.target.id!=='f-cat'){e.preventDefault();saveModal()}
