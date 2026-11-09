@@ -131,6 +131,9 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
 .ci{display:flex;gap:10px;align-items:center;padding:5px 6px;border-radius:6px;border:0;background:none;text-align:left;width:100%}
 .ci:hover{background:var(--surface2)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:80;box-shadow:var(--shadow);max-width:90vw}
+.qa{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.qa input{border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:8px 11px;min-width:0}
+.qa-name{flex:3 1 260px}.qa-cat{flex:1 1 150px}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line)}
 .tab{border:0;background:none;padding:10px 16px;font-weight:600;color:var(--mute);border-bottom:3px solid transparent;margin-bottom:-1px}
 .tab[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
@@ -169,6 +172,13 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
     </div>
   </header>
   <div id="banner"></div>
+  <form class="qa" id="qa" autocomplete="off">
+    <span class="lbl">Quick add</span>
+    <input id="qa-name" class="qa-name" placeholder="New requirement, e.g. Max pallet height 180 cm" aria-label="New requirement name" required>
+    <input id="qa-cat" class="qa-cat" list="qa-cats" placeholder="Category" aria-label="Category">
+    <datalist id="qa-cats"></datalist>
+    <button class="btn primary" type="submit">Add requirement</button>
+  </form>
   <nav class="tabs" role="tablist" id="tabs"></nav>
   <section class="stats" id="stats" aria-label="Summary"></section>
   <section class="filters" id="filters"></section>
@@ -296,6 +306,7 @@ function render(){
   if(dv) renderDetails(); else { renderFilters(); renderMatrix(); }
 }
 function renderTabs(){
+  $('#qa-cats').innerHTML=catList().map(c=>`<option value="${esc(c)}">`).join('');
   $('#tabs').innerHTML=[['matrix','Matrix'],['details','Requirement details']].map(([k,l])=>`<button class="tab" role="tab" data-act="tab" data-v="${k}" aria-selected="${view===k}">${l}${k==='details'?` · ${reqs.length}`:''}</button>`).join('');
 }
 function renderDetails(){
@@ -525,6 +536,12 @@ document.addEventListener('change',e=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&modal) closeModal();
   if(e.key==='Enter'&&modal&&e.target.tagName==='INPUT'&&e.target.id!=='f-cat'){e.preventDefault();saveModal()}
+});
+$('#qa').addEventListener('submit',async e=>{
+  e.preventDefault(); if(!db||!canWrite) return toast('You cannot make changes here');
+  const name=$('#qa-name').value.trim(); if(!name) return; const cat=$('#qa-cat').value.trim();
+  try{ await db.collection('reqs').add({name,cat,desc:'',order:nextOrder()}); $('#qa-name').value=''; $('#qa-name').focus(); toast('Added: '+name); }
+  catch(err){ toast('Save failed: '+(err&&err.message||'unknown error')); }
 });
 const mx=$('#matrix');
 mx.addEventListener('mouseover',e=>{
