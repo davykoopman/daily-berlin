@@ -720,7 +720,7 @@ function render(force){
   else renderSettings(force);
 }
 function routeFromHash(){
-  const h=(location.hash||'').replace('#','');
+  let h=''; try{ h=(location.hash||'').replace('#',''); }catch(e){}
   S.tab = TABS.includes(h) ? h : 'overzicht';
   render(true);
 }
@@ -796,6 +796,12 @@ document.addEventListener('click',e=>{
 });
 ['input','change'].forEach(ev=>document.addEventListener(ev,onEdit));
 window.addEventListener('hashchange',routeFromHash);
+document.querySelector('.tabs').addEventListener('click',e=>{
+  const l=e.target.closest('a[data-tab]'); if(!l) return;
+  e.preventDefault(); S.tab=l.dataset.tab; render(true);
+  try{ history.replaceState(null,'','#'+S.tab); }catch(err){ try{ location.hash=S.tab; }catch(e2){} }
+  window.scrollTo(0,0);
+});
 
 /* ---------- start ---------- */
 function startLocal(){
