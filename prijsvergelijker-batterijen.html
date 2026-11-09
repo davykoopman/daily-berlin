@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Batterij Prijsvergelijker</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: één bron van waarheid (regels met inkoop, eigen prijs en concurrentprijzen);
+   Overzicht = rekenblad met automatische marges, Invoer = kaarten die op telefoon werken. */
+:root{
+  --bg:#edf1f4; --surface:#ffffff; --surface2:#f4f7f9; --line:#d3dce2;
+  --ink:#14232c; --muted:#586a76;
+  --accent:#0c6a87; --accent-ink:#ffffff; --accent-soft:#d9edf4;
+  --good:#0f7a49; --good-soft:#dcf2e6;
+  --warn:#8a5a00; --warn-soft:#fbefcf;
+  --bad:#b42318; --bad-soft:#fbe3e0;
+  --f-ui:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-head:'IBM Plex Sans Condensed','IBM Plex Sans',system-ui,sans-serif;
+  --f-num:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d171c; --surface:#14222a; --surface2:#192a33; --line:#2a3e49;
+    --ink:#e6eef2; --muted:#93a6b1;
+    --accent:#5cc0dd; --accent-ink:#06202a; --accent-soft:#12384a;
+    --good:#5fd39a; --good-soft:#12392a;
+    --warn:#f0c15a; --warn-soft:#3b3010;
+    --bad:#ff8c80; --bad-soft:#44201c;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d171c; --surface:#14222a; --surface2:#192a33; --line:#2a3e49;
+  --ink:#e6eef2; --muted:#93a6b1;
+  --accent:#5cc0dd; --accent-ink:#06202a; --accent-soft:#12384a;
+  --good:#5fd39a; --good-soft:#12392a;
+  --warn:#f0c15a; --warn-soft:#3b3010;
+  --bad:#ff8c80; --bad-soft:#44201c;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-ui);
+  padding-block:18px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));}
+.shell{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.brand{display:flex;gap:12px;align-items:center;min-width:0}
+.mark{flex:none;width:40px;height:40px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center}
+h1{font:700 24px/1.1 var(--f-head);letter-spacing:.01em;margin:0;text-wrap:balance}
+.sub{margin:2px 0 0;color:var(--muted);font-size:13px}
+.status{font-size:12px;padding:4px 10px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.status.ok{color:var(--good);background:var(--good-soft);border-color:transparent}
+.status.warn{color:var(--warn);background:var(--warn-soft);border-color:transparent}
+
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs a{padding:10px 14px;text-decoration:none;color:var(--muted);font-weight:500;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs a:hover{color:var(--ink)}
+
+.banner{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;padding:10px 14px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-size:13.5px}
+.banner.info{background:var(--accent-soft);color:var(--ink)}
+.banner.bad{background:var(--bad-soft);color:var(--bad)}
+.banner span{flex:1 1 220px;min-width:0}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:500;min-height:38px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.danger{color:var(--bad)}
+.btn.sm{padding:5px 10px;min-height:32px;font-size:13px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.kpi .l{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font:600 26px/1.15 var(--f-num);font-variant-numeric:tabular-nums}
+.kpi .n{font-size:12.5px;color:var(--muted)}
+
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);align-items:center}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);-webkit-overflow-scrolling:touch}
+table{border-collapse:separate;border-spacing:0;min-width:100%;font-size:13.5px}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;vertical-align:middle}
+thead th{position:sticky;top:0;background:var(--surface2);font-weight:600;font-size:12px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);z-index:2}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;z-index:1;background:var(--surface);box-shadow:1px 0 0 var(--line);min-width:190px;max-width:240px;white-space:normal}
+thead th:first-child{z-index:3;background:var(--surface2)}
+tr.cat td{background:var(--surface2);font:600 12px var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding-block:6px;text-align:left}
+tr.cat td:first-child{box-shadow:none}
+tr.cat td{position:static}
+tr.cat td:first-child{position:sticky;left:0;z-index:1;background:var(--surface2)}
+tbody tr:last-child td{border-bottom:0}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+td.num b{font-weight:500;display:block}
+td small{display:block;font-size:11.5px;color:var(--muted);font-family:var(--f-num)}
+td.low{background:var(--accent-soft)}
+td.low b{color:var(--accent);font-weight:600}
+td.own{border-left:1px solid var(--line)}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font:500 12.5px var(--f-num);font-variant-numeric:tabular-nums}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.mute{color:var(--muted)}
+.pname{font-weight:500}
+.pnote{display:block;font-size:12px;color:var(--muted)}
+.sep{border-left:1px solid var(--line)}
+
+.sec{display:flex;flex-direction:column;gap:10px}
+.sec h2{font:600 13px var(--f-head);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:6px 0 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card header{display:flex;gap:8px;justify-content:space-between;align-items:flex-start}
+.card h3{margin:0;font:600 16px/1.25 var(--f-head);overflow-wrap:anywhere}
+.card .desc{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.row3{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px}
+.f{display:flex;flex-direction:column;gap:3px;min-width:0}
+.f>span{font-size:12px;color:var(--muted)}
+.in{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface2);min-width:0}
+.in:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.in i{font-style:normal;padding-left:9px;color:var(--muted);font-family:var(--f-num)}
+.in input{border:0;background:transparent;padding:9px;width:100%;min-width:0;min-height:40px;outline:0;font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.in input.txt,.in select{font-family:var(--f-ui)}
+.in textarea{border:0;background:transparent;padding:9px;width:100%;min-width:0;min-height:64px;outline:0;resize:vertical;font:inherit;line-height:1.35}
+.in select{border:0;background:transparent;padding:9px;width:100%;min-height:40px;outline:0}
+.in input:disabled,.in select:disabled{opacity:.7}
+.res{display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 10px;background:var(--surface2);border-radius:8px;font-size:13px}
+.res b{font-family:var(--f-num);font-weight:500}
+details{border-top:1px solid var(--line);padding-top:8px}
+summary{cursor:pointer;font-weight:500;font-size:13.5px;padding:4px 0;list-style:none;display:flex;justify-content:space-between;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--muted);font-family:var(--f-num)}
+details[open] summary::after{content:"–"}
+details .body{display:flex;flex-direction:column;gap:10px;padding-top:8px}
+.hint{font-size:12px;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel h2{margin:0;font:600 17px var(--f-head)}
+.panel p{margin:0;color:var(--muted);font-size:13.5px;max-width:65ch}
+.pk-lines{display:flex;flex-direction:column;gap:8px}
+.pk-line{display:grid;grid-template-columns:minmax(0,1fr) 84px auto;gap:8px;align-items:end}
+.attr-head{display:flex;gap:8px;align-items:end}
+.attr-head .f{flex:1}
+td.txt{white-space:normal;min-width:150px;max-width:260px;font-family:var(--f-ui);text-align:left;vertical-align:top}
+.comp-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) auto;gap:8px;align-items:end}
+@media (max-width:560px){.comp-row{grid-template-columns:minmax(0,1fr) auto}.comp-row .f.note{grid-column:1 / -1;order:3}}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:28px 18px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.empty p{margin:0;color:var(--muted);max-width:46ch}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;font-size:13.5px;z-index:20;max-width:90vw}
+.skeleton{height:120px;border-radius:10px;background:linear-gradient(90deg,var(--surface),var(--surface2),var(--surface));background-size:200% 100%;animation:sh 1.4s infinite linear}
+@keyframes sh{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.skeleton{animation:none}}
+</style>
+
+</head><body>
+<div class="shell">
+  <header class="top">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M22 11v2"/><path d="M11 9.5l-2 3h4l-2 3"/></svg></div>
+      <div><h1>Batterij Prijsvergelijker</h1><p class="sub">Concurrentprijzen, inkoop en marges op één plek. Alle bedragen excl. btw.</p></div>
+    </div>
+    <span id="status" class="status" aria-live="polite">Laden…</span>
+  </header>
+  <nav class="tabs" aria-label="Weergave">
+    <a href="#overzicht" data-tab="overzicht">Overzicht</a>
+    <a href="#invoer" data-tab="invoer">Prijzen invoeren</a>
+    <a href="#pakketten" data-tab="pakketten">Pakketten</a>
+    <a href="#garantie" data-tab="garantie">Garantie &amp; voorwaarden</a>
+    <a href="#instellingen" data-tab="instellingen">Concurrenten &amp; instellingen</a>
+  </nav>
+  <div id="banners" style="display:flex;flex-direction:column;gap:8px"></div>
+  <main id="v-overzicht"></main>
+  <main id="v-invoer" hidden></main>
+  <main id="v-pakketten" hidden></main>
+  <main id="v-garantie" hidden></main>
+  <main id="v-instellingen" hidden></main>
+</div>
+<div id="toast" class="toast" role="status" hidden></div>
+
+<script>
+(function(){
+const SEED = {"cfg": {"competitors": [{"id": "c1", "name": "Deussolis", "note": "Venray · prijslijst B2B installatie 2026"}, {"id": "c2", "name": "Concurrent 2", "note": ""}, {"id": "c3", "name": "Concurrent 3", "note": ""}, {"id": "c4", "name": "Concurrent 4", "note": ""}, {"id": "c5", "name": "Concurrent 5", "note": ""}], "example": false, "mode": "margin", "target": 30}, "items": [{"cat": "Thuisbatterijen", "comp": {"c1": 895}, "cost": null, "desc": "Compleet installeren en aansluiten", "extra": null, "id": "thuis-1f", "name": "Standaard thuisbatterij – eenfase", "note": "", "order": 10, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Thuisbatterijen", "comp": {"c1": 995}, "cost": null, "desc": "Compleet installeren en aansluiten", "extra": null, "id": "thuis-3f", "name": "Standaard thuisbatterij – driefase", "note": "", "order": 20, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Thuisbatterijen", "comp": {"c1": 1195}, "cost": null, "desc": "Compleet installeren en aansluiten", "extra": null, "id": "thuis-32", "kwh": 32, "name": "32 kWh of hoger – driefase", "note": "", "order": 30, "price": null, "unit": "stuk"}, {"cat": "Thuisbatterijen", "comp": {}, "cost": null, "desc": "Compleet installeren en aansluiten", "extra": null, "id": "thuis-48", "kwh": 48, "name": "48 kWh of hoger – driefase", "note": "Deussolis: op offerte", "order": 40, "price": null, "unit": "stuk"}, {"cat": "Noodstroomvoorziening", "comp": {"c1": 250}, "cost": null, "desc": "Noodstroomfunctie installeren en testen", "extra": null, "id": "nood-1f", "name": "Volledige meterkast – eenfase", "note": "", "order": 50, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Noodstroomvoorziening", "comp": {"c1": 350}, "cost": null, "desc": "Noodstroomfunctie installeren en testen", "extra": null, "id": "nood-3f", "name": "Volledige meterkast – driefase", "note": "", "order": 60, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Groepenkast & elektra", "comp": {"c1": 650}, "cost": null, "desc": "Arbeid en materiaal", "extra": null, "id": "gk-vervang", "name": "Groepenkast vervangen (12 groepen)", "note": "", "order": 70, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Groepenkast & elektra", "comp": {"c1": 400}, "cost": null, "desc": "Alleen arbeid", "extra": null, "id": "gk-plaats", "name": "Groepenkast plaatsen", "note": "", "order": 80, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Groepenkast & elektra", "comp": {"c1": 35}, "cost": null, "desc": "", "extra": null, "id": "gk-groep", "name": "Extra groep bijplaatsen", "note": "", "order": 90, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Groepenkast & elektra", "comp": {"c1": 125}, "cost": null, "desc": "", "extra": null, "id": "gk-hoofd", "name": "Hoofdschakelaar plaatsen", "note": "", "order": 100, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Meerwerk", "comp": {"c1": 15}, "cost": null, "desc": "", "extra": null, "id": "mw-kabel", "name": "Extra bekabeling", "note": "", "order": 110, "price": null, "unit": "meter", "kwh": null}, {"cat": "Meerwerk", "comp": {"c1": 25}, "cost": null, "desc": "", "extra": null, "id": "mw-doorvoer", "name": "Extra doorvoer", "note": "", "order": 120, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Meerwerk", "comp": {"c1": 35}, "cost": null, "desc": "", "extra": null, "id": "mw-boren", "name": "Boren door beton of baksteen", "note": "", "order": 130, "price": null, "unit": "stuk", "kwh": null}, {"cat": "Meerwerk", "comp": {"c1": 65}, "cost": null, "desc": "", "extra": null, "id": "mw-uur", "name": "Tijd meerwerk", "note": "", "order": 140, "price": null, "unit": "uur", "kwh": null}, {"cat": "TP Link", "comp": {"c1": 56.19}, "cost": null, "desc": "", "extra": null, "id": "tp-link", "name": "TP Link", "note": "", "order": 150, "price": null, "unit": "stuk", "kwh": null}, {"cat": "No show", "comp": {"c1": 250}, "cost": null, "desc": "Bij annulering op de installatiedag (beide partijen)", "extra": null, "id": "ns-install", "name": "No show – installatie", "note": "", "order": 160, "price": null, "unit": "keer", "kwh": null}, {"cat": "No show", "comp": {"c1": 45}, "cost": null, "desc": "Bij annulering op de schouwdag (beide partijen)", "extra": null, "id": "ns-schouw", "name": "No show – schouw", "note": "", "order": 170, "price": null, "unit": "keer", "kwh": null}], "terms": {"attrs": [{"id": "g-prod", "label": "Productgarantie batterij"}, {"id": "g-inst", "label": "Garantie op installatie"}, {"id": "levertijd", "label": "Levertijd en planning"}, {"id": "voorrij", "label": "Voorrijkosten en parkeren"}, {"id": "traject", "label": "Inbegrepen kabeltraject"}, {"id": "betaal", "label": "Betaalvoorwaarden"}, {"id": "keur", "label": "Keurmerken en certificering"}, {"id": "merk", "label": "Merken en leveranciers"}, {"id": "overig", "label": "Overige voorwaarden"}], "vals": {"betaal": {"c1": "Alle prijzen zijn exclusief btw. Overige betaalvoorwaarden niet vermeld in de prijslijst."}, "c1": {}, "overig": {"c1": "Locatie moet technisch geschikt en veilig toegankelijk zijn. Batterijen worden op de begane grond geplaatst, anders zorgt de klant dat ze veilig op zolder of in de kelder komen. No show: € 250 (installatie) of € 45 (schouw)."}, "traject": {"c1": "Tot 10 meter van de meterkast. Extra afstand wordt als meerwerk berekend (€ 15 per meter)."}, "voorrij": {"c1": "Eventuele parkeerkosten en tol worden doorbelast."}}}, "packs": [{"disc": 0, "id": "p-basis", "lines": {"l1": {"item": "thuis-1f", "o": 1, "qty": 1}, "l2": {"item": "nood-1f", "o": 2, "qty": 1}}, "name": "Eenfase compleet (batterij + noodstroom)", "order": 10}, {"disc": 0, "id": "p-3f", "lines": {"l1": {"item": "thuis-3f", "o": 1, "qty": 1}, "l2": {"item": "nood-3f", "o": 2, "qty": 1}, "l3": {"item": "gk-vervang", "o": 3, "qty": 1}}, "name": "Driefase + noodstroom + nieuwe groepenkast", "order": 20}]};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const eurF = new Intl.NumberFormat('nl-NL',{style:'currency',currency:'EUR',minimumFractionDigits:0,maximumFractionDigits:2});
+const eur = v => v==null||!isFinite(v) ? '—' : eurF.format(v).replace(/ /g,' ');
+const pct = v => v==null||!isFinite(v) ? '—' : (Math.round(v*10)/10).toString().replace('.',',')+'%';
+const signed = v => v==null||!isFinite(v) ? '—' : (v>0?'+':'')+pct(v);
+const fmtIn = v => v==null||v==='' ? '' : String(v).replace('.',',');
+function parseNum(s){
+  s = String(s==null?'':s).trim().replace(/[€\s]/g,'');
+  if(!s) return null;
+  if(s.indexOf(',')>-1) s = s.replace(/\./g,'').replace(',','.');
+  else if(/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g,'');
+  const n = parseFloat(s);
+  return isFinite(n) ? n : null;
+}
+const uid = p => p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const use = async n => { try { return window.claude ? await window.claude.use(n) : null; } catch(e){ return null; } };
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>{t.hidden=true},3200); }
+
+/* ---------- state ---------- */
+const DEFAULT_CFG = {competitors: clone(SEED.cfg.competitors), target: SEED.cfg.target, mode: SEED.cfg.mode, example:false};
+const S = {
+  cfg: clone(DEFAULT_CFG), cfgExists:false, items:{}, terms:clone(SEED.terms), packs:{}, loaded:false,
+  local:false, canWrite:true, slow:false, saving:0, error:'', tab:'overzicht'
+};
+let db=null, dl=null;
+const pending = new Map();
+let flushTimer=null, cfgTimer=null, flushing=false;
+
+const sortedItems = () => Object.values(S.items).sort((a,b)=>(a.order||0)-(b.order||0)||String(a.name).localeCompare(String(b.name)));
+function groups(){
+  const g=[], idx={};
+  sortedItems().forEach(it=>{
+    const c = it.cat||'Overig';
+    if(!(c in idx)){ idx[c]=g.length; g.push({cat:c,items:[]}); }
+    g[idx[c]].items.push(it);
+  });
+  return g;
+}
+
+/* ---------- berekeningen ---------- */
+const target = () => S.cfg.target==null||!isFinite(S.cfg.target) ? 0 : S.cfg.target;
+function costOf(it){
+  if(it.cost==null && it.extra==null) return null;
+  return (it.cost||0)+(it.extra||0);
+}
+function marginOf(price,cost){
+  if(price==null||cost==null) return null;
+  const e = price-cost;
+  const p = S.cfg.mode==='markup' ? (cost>0 ? e/cost*100 : null) : (price>0 ? e/price*100 : null);
+  return {eur:e, pct:p};
+}
+const mcls = p => p==null ? '' : p>=target() ? 'good' : p>=0 ? 'warn' : 'bad';
+function advice(cost){
+  if(cost==null) return null;
+  const t=target()/100;
+  if(S.cfg.mode==='markup') return cost*(1+t);
+  return t<1 ? cost/(1-t) : null;
+}
+function stats(it){
+  const vals = S.cfg.competitors.map(c=>it.comp&&it.comp[c.id]).filter(v=>v!=null&&isFinite(v));
+  if(!vals.length) return {n:0};
+  return {n:vals.length, min:Math.min.apply(null,vals), max:Math.max.apply(null,vals), avg:vals.reduce((a,b)=>a+b,0)/vals.length};
+}
+const marginLabel = () => S.cfg.mode==='markup' ? 'opslag' : 'marge';
+
+/* ---------- opslag ---------- */
+function saveLocal(){ try{ localStorage.setItem('bp-v2',JSON.stringify({cfg:S.cfg,items:S.items,terms:S.terms,packs:S.packs})); }catch(e){} }
+function setSaving(d){ S.saving=Math.max(0,S.saving+d); renderChrome(); }
+function fail(e){ S.error = 'Niet opgeslagen. Je hebt waarschijnlijk alleen leesrechten (vraag Contributor- of Editor-toegang).'; renderChrome(); }
+
+function queueItem(id,patch){
+  const p = pending.get(id)||{};
+  Object.keys(patch).forEach(k=>{
+    if(k==='comp') p.comp = Object.assign(p.comp||{},patch.comp); else p[k]=patch[k];
+  });
+  pending.set(id,p);
+  clearTimeout(flushTimer); flushTimer=setTimeout(flush,600);
+  renderChrome();
+}
+async function flush(){
+  if(flushing){ flushTimer=setTimeout(flush,300); return; }
+  flushing=true;
+  try{
+    while(pending.size){
+      const [id,patch] = pending.entries().next().value;
+      pending.delete(id);
+      if(S.local||!db){ saveLocal(); continue; }
+      const ref = db.collection('items').doc(id);
+      try{ await ref.update(patch); }
+      catch(e){
+        try{ if(S.items[id]) await ref.set(S.items[id]); } catch(e2){ fail(e2); }
+      }
+    }
+  } finally { flushing=false; renderChrome(); }
+}
+function saveCfg(){
+  if(S.local||!db){ saveLocal(); renderChrome(); return; }
+  clearTimeout(cfgTimer);
+  cfgTimer=setTimeout(async()=>{
+    setSaving(1);
+    try{ await db.doc('config/main').set(S.cfg); S.cfgExists=true; } catch(e){ fail(e); }
+    setSaving(-1);
+  },600);
+}
+async function createItem(it){
+  S.items[it.id]=it;
+  if(S.local||!db){ saveLocal(); return; }
+  setSaving(1);
+  try{ await db.collection('items').doc(it.id).set(it); } catch(e){ fail(e); }
+  setSaving(-1);
+}
+async function removeItem(id){
+  delete S.items[id]; pending.delete(id);
+  if(S.local||!db){ saveLocal(); return; }
+  setSaving(1);
+  try{ await db.collection('items').doc(id).delete(); } catch(e){ fail(e); }
+  setSaving(-1);
+}
+function deepMerge(a,b){ Object.keys(b).forEach(k=>{ if(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k])) a[k]=deepMerge(a[k]&&typeof a[k]==='object'?a[k]:{},b[k]); else a[k]=b[k]; }); return a; }
+const pendingP = new Map(); let pendingT=null, tTimer=null, pTimer=null;
+function queueTerms(patch){
+  pendingT = deepMerge(pendingT||{},patch);
+  clearTimeout(tTimer); tTimer=setTimeout(flushTerms,600); renderChrome();
+}
+async function flushTerms(){
+  const patch=pendingT; pendingT=null; if(!patch) return;
+  if(S.local||!db){ saveLocal(); return; }
+  setSaving(1);
+  try{ try{ await db.doc('terms/main').update(patch); } catch(e){ await db.doc('terms/main').set(S.terms); } }catch(e){ fail(e); }
+  setSaving(-1);
+}
+function queuePack(id,patch){
+  pendingP.set(id,deepMerge(pendingP.get(id)||{},patch));
+  clearTimeout(pTimer); pTimer=setTimeout(flushPacks,600); renderChrome();
+}
+async function flushPacks(){
+  const all=Array.from(pendingP.entries()); pendingP.clear();
+  for(const [id,patch] of all){
+    if(S.local||!db){ saveLocal(); continue; }
+    setSaving(1);
+    try{ try{ await db.collection('packages').doc(id).update(patch); } catch(e){ if(S.packs[id]) await db.collection('packages').doc(id).set(S.packs[id]); } }catch(e){ fail(e); }
+    setSaving(-1);
+  }
+}
+async function createPack(p){
+  S.packs[p.id]=p;
+  if(S.local||!db){ saveLocal(); return; }
+  setSaving(1);
+  try{ await db.collection('packages').doc(p.id).set(p); } catch(e){ fail(e); }
+  setSaving(-1);
+}
+async function removePack(id){
+  delete S.packs[id]; pendingP.delete(id);
+  if(S.local||!db){ saveLocal(); return; }
+  setSaving(1);
+  try{ await db.collection('packages').doc(id).delete(); } catch(e){ fail(e); }
+  setSaving(-1);
+}
+async function loadExample(){
+  setSaving(1);
+  S.cfg = clone(SEED.cfg); S.cfgExists=true;
+  const list = SEED.items.map((it,i)=>Object.assign({},it,{order:(i+1)*10}));
+  list.forEach(it=>{ S.items[it.id]=it; });
+  S.terms=clone(SEED.terms); SEED.packs.forEach(p=>{ S.packs[p.id]=clone(p); });
+  if(S.local||!db){ saveLocal(); setSaving(-1); render(true); return; }
+  try{
+    await db.doc('config/main').set(S.cfg);
+    await db.doc('terms/main').set(S.terms);
+    for(const p of SEED.packs){ await db.collection('packages').doc(p.id).set(p); }
+    for(const it of list){ await db.collection('items').doc(it.id).set(it); }
+  }catch(e){ fail(e); }
+  setSaving(-1); render(true);
+}
+function clearExample(){
+  Object.values(S.items).forEach(it=>{
+    if(it.cost!=null||it.extra!=null||it.price!=null){
+      it.cost=null; it.extra=null; it.price=null;
+      queueItem(it.id,{cost:null,extra:null,price:null});
+    }
+  });
+  S.cfg.example=false; saveCfg(); render(true);
+  toast('Voorbeeldcijfers gewist');
+}
+
+/* ---------- invoer-binding ---------- */
+function getVal(k){
+  const p=k.split('|');
+  if(p[0]==='i') return S.items[p[1]] ? S.items[p[1]][p[2]] : null;
+  if(p[0]==='ic') return S.items[p[1]]&&S.items[p[1]].comp ? S.items[p[1]].comp[p[2]] : null;
+  if(p[0]==='c'){ const c=S.cfg.competitors.find(x=>x.id===p[1]); return c?c[p[2]]:null; }
+  if(p[0]==='cfg') return S.cfg[p[1]];
+  if(p[0]==='t') return (S.terms.vals[p[1]]||{})[p[2]];
+  if(p[0]==='ta'){ const a=S.terms.attrs.find(x=>x.id===p[1]); return a?a.label:null; }
+  if(p[0]==='pn'){ const k=S.packs[p[1]]; return k?k[p[2]]:null; }
+  if(p[0]==='pl'){ const k=S.packs[p[1]]; const l=k&&k.lines&&k.lines[p[2]]; return l?l[p[3]]:null; }
+}
+function setVal(k,v){
+  const p=k.split('|');
+  if(p[0]==='i'){ const it=S.items[p[1]]; if(!it) return; it[p[2]]=v; queueItem(it.id,{[p[2]]:v}); }
+  else if(p[0]==='ic'){ const it=S.items[p[1]]; if(!it) return; it.comp=it.comp||{}; it.comp[p[2]]=v; queueItem(it.id,{comp:{[p[2]]:v}}); }
+  else if(p[0]==='c'){ const c=S.cfg.competitors.find(x=>x.id===p[1]); if(c){ c[p[2]]=v; saveCfg(); } }
+  else if(p[0]==='cfg'){ S.cfg[p[1]]=v; saveCfg(); }
+  else if(p[0]==='t'){ S.terms.vals[p[1]]=S.terms.vals[p[1]]||{}; S.terms.vals[p[1]][p[2]]=v; queueTerms({vals:{[p[1]]:{[p[2]]:v}}}); }
+  else if(p[0]==='ta'){ const a=S.terms.attrs.find(x=>x.id===p[1]); if(a){ a.label=v; queueTerms({attrs:S.terms.attrs}); } }
+  else if(p[0]==='pn'){ const k=S.packs[p[1]]; if(k){ k[p[2]]=v; queuePack(k.id,{[p[2]]:v}); } }
+  else if(p[0]==='pl'){ const k=S.packs[p[1]]; if(k){ k.lines=k.lines||{}; k.lines[p[2]]=k.lines[p[2]]||{}; k.lines[p[2]][p[3]]=v; queuePack(k.id,{lines:{[p[2]]:{[p[3]]:v}}}); } }
+}
+function syncInputs(root){
+  root.querySelectorAll('[data-k]').forEach(el=>{
+    if(el===document.activeElement) return;
+    const v=getVal(el.dataset.k);
+    const s = el.dataset.num ? fmtIn(v) : (v==null?'':String(v));
+    if(el.value!==s) el.value=s;
+  });
+}
+function onEdit(e){
+  const el=e.target;
+  if(!el.dataset||!el.dataset.k) return;
+  const isSel = el.tagName==='SELECT';
+  if(e.type==='change' && !isSel && !el.dataset.struct) return;
+  if(e.type==='input' && (isSel || el.dataset.struct)) return;
+  const v = el.dataset.num ? parseNum(el.value) : el.value;
+  setVal(el.dataset.k, v);
+  if(el.dataset.struct || isSel){ render(true); return; }
+  refreshOuts();
+}
+
+/* ---------- veld-hulpjes ---------- */
+const dis = () => S.canWrite ? '' : ' disabled';
+function numField(k,label,id,ph){
+  return `<label class="f"><span>${esc(label)}</span><div class="in"><i>€</i><input id="${esc(id)}" inputmode="decimal" autocomplete="off" placeholder="${esc(ph||'0')}" data-k="${esc(k)}" data-num="1"${dis()}></div></label>`;
+}
+function txtField(k,label,id,extra){
+  return `<label class="f"><span>${esc(label)}</span><div class="in"><input class="txt" id="${esc(id)}" data-k="${esc(k)}" ${extra||''}${dis()}></div></label>`;
+}
+
+/* ---------- Overzicht ---------- */
+function renderOverview(){
+  const root=$('#v-overzicht');
+  if(!S.loaded){ root.innerHTML='<div class="skeleton"></div>'; return; }
+  const items=sortedItems();
+  if(!items.length){ root.innerHTML = emptyState(); return; }
+  const comps=S.cfg.competitors, t=target();
+  let mSum=0,mN=0,below=0,cheap=0,cmp=0;
+  items.forEach(it=>{
+    const m=marginOf(it.price,costOf(it));
+    if(m&&m.pct!=null){ mSum+=m.pct; mN++; if(m.pct<t) below++; }
+    const st=stats(it);
+    if(it.price!=null&&st.n){ cmp++; if(it.price<=st.avg) cheap++; }
+  });
+  const avg = mN ? mSum/mN : null;
+  const kpis = `<div class="kpis">
+    <div class="kpi"><span class="l">Gemiddelde ${marginLabel()}</span><span class="v">${pct(avg)}</span><span class="n">${mN} regels met inkoop en eigen prijs</span></div>
+    <div class="kpi"><span class="l">Onder streef${marginLabel()} (${pct(t)})</span><span class="v">${mN?below:'—'}</span><span class="n">${mN?('van '+mN+' regels'):'vul inkoop en eigen prijs in'}</span></div>
+    <div class="kpi"><span class="l">Eigen prijs onder gemiddelde</span><span class="v">${cmp?cheap:'—'}</span><span class="n">${cmp?('van '+cmp+' regels met concurrentprijzen'):'vul concurrentprijzen in'}</span></div>
+  </div>`;
+  const hasKwh = items.some(it=>it.kwh>0);
+  const nCols = 4+comps.length+4+(hasKwh?1:0);
+  let head = `<thead><tr><th>Product / dienst</th><th>Inkoop + kosten</th><th>Eigen prijs</th><th>Eigen ${marginLabel()}</th>`
+    + comps.map((c,i)=>`<th class="${i===0?'sep':''}">${esc(c.name||'Concurrent')}</th>`).join('')
+    + `<th class="sep">Laagste</th><th>Gemiddeld</th><th>Eigen vs gem.</th><th>Prijs bij ${pct(t)}</th>${hasKwh?'<th>€/kWh</th>':''}</tr></thead>`;
+  let body='<tbody>';
+  groups().forEach(g=>{
+    body+=`<tr class="cat"><td colspan="${nCols}">${esc(g.cat)}</td></tr>`;
+    g.items.forEach(it=>{
+      const cost=costOf(it), m=marginOf(it.price,cost), st=stats(it), adv=advice(cost);
+      const vs = (it.price!=null&&st.n&&st.avg>0) ? (it.price-st.avg)/st.avg*100 : null;
+      body+=`<tr><td><span class="pname">${esc(it.name)}</span>${it.unit?`<span class="pnote">${esc(it.unit)}${it.note?' · '+esc(it.note):''}</span>`:(it.note?`<span class="pnote">${esc(it.note)}</span>`:'')}</td>
+        <td class="num">${eur(cost)}</td>
+        <td class="num own ${it.price!=null&&st.n>1&&it.price<=st.min?'low':''}"><b>${eur(it.price)}</b></td>
+        <td class="num">${m?`<span class="pill ${mcls(m.pct)}">${pct(m.pct)}</span><small>${eur(m.eur)}</small>`:'<span class="mute">—</span>'}</td>`;
+      comps.forEach((c,i)=>{
+        const v=it.comp&&it.comp[c.id];
+        if(v==null){ body+=`<td class="num mute ${i===0?'sep':''}">—</td>`; return; }
+        const mm=marginOf(v,cost);
+        body+=`<td class="num ${i===0?'sep':''} ${st.n>1&&v===st.min?'low':''}"><b>${eur(v)}</b>${mm?`<small>${marginLabel()} ${pct(mm.pct)}</small>`:''}</td>`;
+      });
+      body+=`<td class="num sep">${st.n?eur(st.min):'—'}</td><td class="num">${st.n?eur(st.avg):'—'}</td>
+        <td class="num">${vs==null?'<span class="mute">—</span>':`<span class="${vs<=0?'':'mute'}">${signed(vs)}</span>`}</td>
+        <td class="num">${eur(adv)}</td>${hasKwh?kwhCell(it,st):''}</tr>`;
+    });
+  });
+  body+='</tbody>';
+  root.innerHTML = `<div class="sec">${kpis}
+    <div class="legend"><span><span class="dot" style="background:var(--good-soft);border:1px solid var(--good)"></span>${marginLabel()} op of boven streefwaarde</span><span><span class="dot" style="background:var(--warn-soft);border:1px solid var(--warn)"></span>positief, onder streefwaarde</span><span><span class="dot" style="background:var(--bad-soft);border:1px solid var(--bad)"></span>verlies</span><span><span class="dot" style="background:var(--accent-soft);border:1px solid var(--accent)"></span>laagste prijs in de rij</span></div>
+    <div class="tw" tabindex="0" aria-label="Prijsvergelijking, scroll horizontaal"><table>${head}${body}</table></div>
+    <p class="hint">Onder elke concurrentprijs staat de ${marginLabel()} die je overhoudt als je diezelfde prijs vraagt. ${S.cfg.mode==='markup'?'Opslag = (prijs − kosten) ÷ kosten.':'Marge = (prijs − kosten) ÷ prijs.'}</p>${packsOverview()}${termsOverview()}</div>`;
+}
+function kwhCell(it,st){
+  if(!(it.kwh>0)) return '<td class="num mute">—</td>';
+  return `<td class="num"><b>${eur(it.price!=null?it.price/it.kwh:null)}</b>${st.n?`<small>laagste conc. ${eur(st.min/it.kwh)}</small>`:''}</td>`;
+}
+function packCalc(p){
+  const lines=Object.values(p.lines||{}).filter(l=>l&&S.items[l.item]).map(l=>({it:S.items[l.item],q:l.qty==null?1:l.qty}));
+  const disc=p.disc||0;
+  const sum=f=>{ if(!lines.length) return null; let s=0; for(const l of lines){ const v=f(l.it); if(v==null) return null; s+=v*l.q; } return s; };
+  const cost=sum(costOf), list=sum(it=>it.price);
+  const price=list==null?null:list*(1-disc/100);
+  const comps=S.cfg.competitors.map(c=>({c,tot:sum(it=>it.comp&&it.comp[c.id]),have:lines.filter(l=>l.it.comp&&l.it.comp[c.id]!=null).length,n:lines.length}));
+  return {lines,cost,price,m:marginOf(price,cost),comps};
+}
+function sortedPacks(){ return Object.values(S.packs).sort((a,b)=>(a.order||0)-(b.order||0)); }
+function packResultHTML(p){
+  const r=packCalc(p);
+  if(!r.lines.length) return '<span class="hint">Voeg regels toe om het pakket door te rekenen.</span>';
+  let h=`<div class="tw"><table><thead><tr><th>Partij</th><th>Pakketprijs</th><th>${marginLabel()} bij die prijs</th><th>Ons verschil</th></tr></thead><tbody>`;
+  h+=`<tr><td><span class="pname">Ons pakket</span><span class="pnote">kosten ${eur(r.cost)}</span></td><td class="num"><b>${eur(r.price)}</b></td><td class="num">${r.m?`<span class="pill ${mcls(r.m.pct)}">${pct(r.m.pct)}</span><small>${eur(r.m.eur)}</small>`:'<span class="mute">—</span>'}</td><td class="num mute">—</td></tr>`;
+  const tots=r.comps.filter(x=>x.tot!=null).map(x=>x.tot), low=tots.length?Math.min.apply(null,tots):null;
+  r.comps.forEach(x=>{
+    if(x.tot==null){ h+=`<tr><td>${esc(x.c.name)}</td><td class="num mute" colspan="3">${x.have?`onvolledig (${x.have}/${x.n} regels met prijs)`:'geen prijzen'}</td></tr>`; return; }
+    const mm=marginOf(x.tot,r.cost), d=(r.price!=null&&x.tot>0)?(r.price-x.tot)/x.tot*100:null;
+    h+=`<tr><td>${esc(x.c.name)}</td><td class="num ${x.tot===low&&tots.length>1?'low':''}"><b>${eur(x.tot)}</b></td><td class="num">${mm?`<span class="pill ${mcls(mm.pct)}">${pct(mm.pct)}</span><small>${eur(mm.eur)}</small>`:'<span class="mute">—</span>'}</td><td class="num">${signed(d)}</td></tr>`;
+  });
+  return h+'</tbody></table></div>';
+}
+function packsOverview(){
+  const packs=sortedPacks(); if(!packs.length) return '';
+  const comps=S.cfg.competitors;
+  let h=`<h2>Pakketten</h2><div class="tw"><table><thead><tr><th>Pakket</th><th>Kosten</th><th>Eigen prijs</th><th>${marginLabel()}</th>${comps.map(c=>`<th>${esc(c.name)}</th>`).join('')}</tr></thead><tbody>`;
+  packs.forEach(p=>{
+    const r=packCalc(p), tots=r.comps.filter(x=>x.tot!=null).map(x=>x.tot), low=tots.length?Math.min.apply(null,tots):null;
+    h+=`<tr><td><span class="pname">${esc(p.name||'Pakket')}</span><span class="pnote">${r.lines.length} regels${p.disc?` · ${pct(p.disc)} korting`:''}</span></td><td class="num">${eur(r.cost)}</td><td class="num"><b>${eur(r.price)}</b></td>
+      <td class="num">${r.m?`<span class="pill ${mcls(r.m.pct)}">${pct(r.m.pct)}</span><small>${eur(r.m.eur)}</small>`:'<span class="mute">—</span>'}</td>`
+      +r.comps.map(x=>x.tot==null?`<td class="num mute">${x.have?x.have+'/'+x.n:'—'}</td>`:`<td class="num ${x.tot===low&&tots.length>1?'low':''}"><b>${eur(x.tot)}</b></td>`).join('')+'</tr>';
+  });
+  return h+'</tbody></table></div><p class="hint">Een concurrentprijs voor een pakket telt alleen mee als alle regels in het pakket een prijs hebben. Anders staat er hoeveel regels er ingevuld zijn.</p>';
+}
+function termCols(){ return [{id:'own',name:'Ons aanbod'}].concat(S.cfg.competitors.map(c=>({id:c.id,name:c.name||'Concurrent'}))); }
+function termsOverview(){
+  const cols=termCols(), rows=S.terms.attrs.filter(a=>cols.some(c=>((S.terms.vals[a.id]||{})[c.id]||'').trim()));
+  if(!rows.length) return `<h2>Garantie &amp; voorwaarden</h2><p class="hint">Nog niets ingevuld. Vul garantie, levertijd en voorwaarden in op het tabblad Garantie &amp; voorwaarden.</p>`;
+  return `<h2>Garantie &amp; voorwaarden</h2><div class="tw"><table><thead><tr><th>Onderwerp</th>${cols.map(c=>`<th>${esc(c.name)}</th>`).join('')}</tr></thead><tbody>`
+   +rows.map(a=>`<tr><td><span class="pname">${esc(a.label)}</span></td>${cols.map(c=>{ const v=((S.terms.vals[a.id]||{})[c.id]||'').trim(); return v?`<td class="txt">${esc(v).replace(/\n/g,'<br>')}</td>`:'<td class="txt mute">—</td>'; }).join('')}</tr>`).join('')+'</tbody></table></div>';
+}
+function emptyState(){
+  return `<div class="empty"><strong>Nog geen prijzen</strong><p>Voeg regels toe onder “Prijzen invoeren”, of laad de prijslijst van Deussolis als voorbeeld.</p>
+  <div class="actions">${S.canWrite?'<button class="btn primary" data-act="example">Laad voorbeeld (Deussolis)</button>':''}<a class="btn" href="#invoer" style="text-decoration:none">Naar invoer</a></div></div>`;
+}
+
+/* ---------- Invoer ---------- */
+let invSig='';
+function invoerSig(){
+  return JSON.stringify([S.canWrite, S.cfg.competitors.map(c=>[c.id,c.name]), sortedItems().map(i=>[i.id,i.cat,i.order])]);
+}
+function renderInvoer(force){
+  const root=$('#v-invoer');
+  if(!S.loaded){ root.innerHTML='<div class="skeleton"></div>'; invSig=''; return; }
+  const sig=invoerSig();
+  if(sig!==invSig||force){
+    invSig=sig;
+    const comps=S.cfg.competitors;
+    const cats=groups().map(g=>g.cat);
+    let h='<div class="sec">';
+    if(!sortedItems().length) h+=emptyState();
+    groups().forEach(g=>{
+      h+=`<h2>${esc(g.cat)}</h2><div class="cards">`;
+      g.items.forEach(it=>{
+        const id=it.id;
+        h+=`<article class="card" data-id="${esc(id)}">
+          <header><div><h3 data-out="title|${esc(id)}"></h3><p class="desc" data-out="desc|${esc(id)}"></p></div>
+          ${S.canWrite?`<button class="btn sm danger" data-act="del" data-id="${esc(id)}" aria-label="Regel verwijderen">Verwijder</button>`:''}</header>
+          <div class="row3">${numField('i|'+id+'|cost','Inkoop',id+'-cost')}${numField('i|'+id+'|extra','Overige kosten',id+'-extra')}${numField('i|'+id+'|price','Eigen prijs',id+'-price')}</div>
+          <div class="res" data-out="res|${esc(id)}"></div>
+          <details><summary>Concurrentprijzen <span class="hint" data-out="cnt|${esc(id)}"></span></summary><div class="body"><div class="row2">
+            ${comps.map(c=>`<div class="f">${numField('ic|'+id+'|'+c.id,c.name||'Concurrent',id+'-'+c.id)}<span class="hint" data-out="cm|${esc(id)}|${esc(c.id)}"></span></div>`).join('')}
+          </div></div></details>
+          <details><summary>Regel bewerken</summary><div class="body">
+            ${txtField('i|'+id+'|name','Naam',id+'-name','autocomplete="off"')}
+            ${txtField('i|'+id+'|desc','Omschrijving',id+'-desc','autocomplete="off"')}
+            <div class="row2">${txtField('i|'+id+'|unit','Eenheid (stuk, meter, uur)',id+'-unit','autocomplete="off"')}${txtField('i|'+id+'|cat','Categorie',id+'-cat','list="cats" autocomplete="off" data-struct="1"')}</div>
+            ${txtField('i|'+id+'|note','Notitie',id+'-note','autocomplete="off" placeholder="bijv. op offerte"')}
+            <label class="f"><span>Capaciteit (kWh, voor €/kWh)</span><div class="in"><input id="${esc(id)}-kwh" inputmode="decimal" autocomplete="off" data-k="i|${esc(id)}|kwh" data-num="1"${dis()}><i>kWh</i></div></label>
+          </div></details></article>`;
+      });
+      h+='</div>';
+    });
+    if(S.canWrite){
+      h+=`<h2>Nieuwe regel</h2><div class="panel"><datalist id="cats">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
+        <div class="row2">
+          <label class="f"><span>Categorie</span><div class="in"><input class="txt" id="new-cat" list="cats" autocomplete="off" placeholder="bijv. Thuisbatterijen"></div></label>
+          <label class="f"><span>Naam</span><div class="in"><input class="txt" id="new-name" autocomplete="off" placeholder="bijv. 10 kWh batterij"></div></label>
+          <label class="f"><span>Eenheid</span><div class="in"><input class="txt" id="new-unit" autocomplete="off" placeholder="stuk"></div></label>
+        </div><div class="actions"><button class="btn primary" data-act="add">Regel toevoegen</button></div></div>`;
+    } else h+='<datalist id="cats"></datalist>';
+    h+='</div>';
+    root.innerHTML=h;
+  }
+  syncInputs(root); refreshOuts();
+}
+function refreshOuts(){
+  document.querySelectorAll('[data-out^="pres|"]').forEach(el=>{ const p=S.packs[el.dataset.out.split('|')[1]]; if(p) el.innerHTML=packResultHTML(p); });
+  const root=$('#v-invoer');
+  root.querySelectorAll('[data-out]').forEach(el=>{
+    const p=el.dataset.out.split('|'), it=S.items[p[1]];
+    if(!it) return;
+    if(p[0]==='title') el.textContent=it.name||'Naamloos';
+    else if(p[0]==='desc') el.textContent=[it.desc,it.unit?('per '+it.unit):'',it.note].filter(Boolean).join(' · ');
+    else if(p[0]==='res'){
+      const cost=costOf(it), m=marginOf(it.price,cost), adv=advice(cost);
+      el.innerHTML = m
+        ? `<span>${S.cfg.mode==='markup'?'Opslag':'Marge'}</span><span class="pill ${mcls(m.pct)}">${pct(m.pct)}</span><span>= <b>${eur(m.eur)}</b> per ${esc(it.unit||'stuk')}</span><span class="hint">Prijs bij ${pct(target())}: <b>${eur(adv)}</b></span>`
+        : `<span class="hint">Vul inkoop en eigen prijs in voor de marge.${cost!=null?' Prijs bij '+pct(target())+': <b>'+eur(adv)+'</b>':''}</span>`;
+    }
+    else if(p[0]==='cnt'){
+      const n=S.cfg.competitors.filter(c=>it.comp&&it.comp[c.id]!=null).length;
+      el.textContent=`${n}/${S.cfg.competitors.length} ingevuld`;
+    }
+    else if(p[0]==='cm'){
+      const v=it.comp&&it.comp[p[2]], m=marginOf(v,costOf(it));
+      el.textContent = m ? `bij deze prijs ${marginLabel()} ${pct(m.pct)} (${eur(m.eur)})` : '';
+    }
+  });
+}
+
+/* ---------- Pakketten ---------- */
+let pkSig='';
+function renderPacksView(force){
+  const root=$('#v-pakketten');
+  if(!S.loaded){ root.innerHTML='<div class="skeleton"></div>'; pkSig=''; return; }
+  const sig=JSON.stringify([S.canWrite,S.cfg.competitors.map(c=>c.id),sortedItems().map(i=>[i.id,i.name,i.cat]),sortedPacks().map(p=>[p.id,Object.keys(p.lines||{}).filter(k=>p.lines[k])])]);
+  if(sig!==pkSig||force){
+    pkSig=sig;
+    const opts=groups().map(g=>`<optgroup label="${esc(g.cat)}">${g.items.map(i=>`<option value="${esc(i.id)}">${esc(i.name)}</option>`).join('')}</optgroup>`).join('');
+    let h='<div class="sec"><p class="hint" style="max-width:65ch">Stel een pakket samen uit de regels die je al hebt ingevoerd, bijvoorbeeld batterij, noodstroom en een nieuwe groepenkast. De totaalprijzen en marges worden automatisch berekend, ook voor de concurrenten.</p><div class="cards">';
+    sortedPacks().forEach(p=>{
+      const id=p.id, lines=Object.entries(p.lines||{}).filter(e=>e[1]).sort((a,b)=>(a[1].o||0)-(b[1].o||0));
+      h+=`<article class="card"><header><div style="flex:1;min-width:0">${txtField('pn|'+id+'|name','Pakketnaam','pn-'+id,'autocomplete="off"')}</div>${S.canWrite?`<button class="btn sm danger" data-act="delpack" data-id="${esc(id)}">Verwijder</button>`:''}</header>
+        <div class="pk-lines">${lines.map(([lid])=>`<div class="pk-line"><label class="f"><span>Regel</span><div class="in"><select id="pl-${esc(id)}-${esc(lid)}" data-k="pl|${esc(id)}|${esc(lid)}|item"${dis()}>${opts}</select></div></label>
+          <label class="f"><span>Aantal</span><div class="in"><input id="pq-${esc(id)}-${esc(lid)}" inputmode="decimal" data-k="pl|${esc(id)}|${esc(lid)}|qty" data-num="1" autocomplete="off"${dis()}></div></label>
+          ${S.canWrite?`<button class="btn sm" data-act="delline" data-id="${esc(id)}" data-line="${esc(lid)}" aria-label="Regel uit pakket halen">✕</button>`:''}</div>`).join('')}</div>
+        ${S.canWrite?`<div class="actions"><button class="btn sm" data-act="addline" data-id="${esc(id)}"${sortedItems().length?'':' disabled'}>Regel toevoegen</button></div>`:''}
+        <label class="f" style="max-width:200px"><span>Pakketkorting op onze prijs</span><div class="in"><input id="pd-${esc(id)}" inputmode="decimal" data-k="pn|${esc(id)}|disc" data-num="1" autocomplete="off" placeholder="0"${dis()}><i>%</i></div></label>
+        <div data-out="pres|${esc(id)}"></div></article>`;
+    });
+    h+='</div>';
+    if(!sortedPacks().length) h+='<div class="empty"><strong>Nog geen pakketten</strong><p>Maak een pakket, bijvoorbeeld “Eenfase compleet”.</p></div>';
+    if(S.canWrite) h+=`<div class="panel"><h2>Nieuw pakket</h2><label class="f"><span>Naam</span><div class="in"><input class="txt" id="new-pack" autocomplete="off" placeholder="bijv. Driefase + noodstroom"></div></label><div class="actions"><button class="btn primary" data-act="addpack">Pakket toevoegen</button></div></div>`;
+    root.innerHTML=h+'</div>';
+    root.querySelectorAll('select[data-k]').forEach(s=>{ const v=getVal(s.dataset.k); if(v) s.value=v; });
+  }
+  syncInputs(root); refreshOuts();
+}
+
+/* ---------- Garantie & voorwaarden ---------- */
+let trSig='';
+function renderTermsView(force){
+  const root=$('#v-garantie');
+  if(!S.loaded){ root.innerHTML='<div class="skeleton"></div>'; trSig=''; return; }
+  const cols=termCols();
+  const sig=JSON.stringify([S.canWrite,cols.map(c=>[c.id,c.name]),S.terms.attrs.map(a=>a.id)]);
+  if(sig!==trSig||force){
+    trSig=sig;
+    let h=`<div class="sec"><p class="hint" style="max-width:65ch">Leg per partij vast wat naast de prijs telt: garantie, levertijd, voorrijkosten en voorwaarden. Dit komt ook terug onderaan het overzicht. Laat leeg wat je niet weet.</p>`;
+    S.terms.attrs.forEach(a=>{
+      h+=`<div class="panel"><div class="attr-head">${txtField('ta|'+a.id+'|x','Onderwerp','ta-'+a.id,'autocomplete="off"').replace('data-k="ta|'+a.id+'|x"','data-k="ta|'+a.id+'"')}${S.canWrite?`<button class="btn sm danger" data-act="delattr" data-id="${esc(a.id)}">Verwijder</button>`:''}</div>
+        <div class="row2">${cols.map(c=>`<label class="f"><span>${esc(c.name)}</span><div class="in"><textarea id="t-${esc(a.id)}-${esc(c.id)}" data-k="t|${esc(a.id)}|${esc(c.id)}" rows="2"${dis()}></textarea></div></label>`).join('')}</div></div>`;
+    });
+    if(S.canWrite) h+=`<div class="panel"><h2>Onderwerp toevoegen</h2><label class="f"><span>Naam</span><div class="in"><input class="txt" id="new-attr" autocomplete="off" placeholder="bijv. Onderhoudscontract"></div></label><div class="actions"><button class="btn primary" data-act="addattr">Onderwerp toevoegen</button></div></div>`;
+    root.innerHTML=h+'</div>';
+  }
+  syncInputs(root);
+}
+
+/* ---------- Instellingen ---------- */
+let setSig='';
+function renderSettings(force){
+  const root=$('#v-instellingen');
+  if(!S.loaded){ root.innerHTML='<div class="skeleton"></div>'; setSig=''; return; }
+  const sig=JSON.stringify([S.canWrite,S.cfg.competitors.map(c=>c.id),!!S.cfg.example,!!dl,sortedItems().length,S.local]);
+  if(sig!==setSig||force){
+    setSig=sig;
+    const comps=S.cfg.competitors;
+    root.innerHTML=`<div class="sec">
+      <div class="panel"><h2>Concurrenten</h2><p>Zet hier de bedrijven neer die je vergelijkt. Een naam en een korte notitie (plaats, website) is genoeg. Maximaal 8.</p>
+        ${comps.map((c,i)=>`<div class="comp-row"><label class="f"><span>Naam</span><div class="in"><input class="txt" id="cn-${esc(c.id)}" data-k="c|${esc(c.id)}|name" autocomplete="off"${dis()}></div></label>
+          <label class="f note"><span>Notitie</span><div class="in"><input class="txt" id="cx-${esc(c.id)}" data-k="c|${esc(c.id)}|note" autocomplete="off" placeholder="plaats, website, bron"${dis()}></div></label>
+          ${S.canWrite?`<button class="btn sm danger" data-act="delcomp" data-id="${esc(c.id)}" aria-label="Concurrent verwijderen">Verwijder</button>`:''}</div>`).join('')}
+        ${S.canWrite&&comps.length<8?'<div class="actions"><button class="btn" data-act="addcomp">Concurrent toevoegen</button></div>':''}
+      </div>
+      <div class="panel"><h2>Marge</h2><p>De streefwaarde bepaalt de kleuren in het overzicht en de adviesprijs per regel.</p>
+        <div class="row2">
+          <label class="f"><span>Streefwaarde (%)</span><div class="in"><input id="s-target" inputmode="decimal" data-k="cfg|target" data-num="1" autocomplete="off"${dis()}><i>%</i></div></label>
+          <label class="f"><span>Berekening</span><div class="in"><select id="s-mode" data-k="cfg|mode"${dis()}><option value="margin">Marge over verkoopprijs</option><option value="markup">Opslag op inkoop</option></select></div></label>
+        </div>
+        <p class="hint">Voorbeeld: inkoop €600, verkoop €900. Marge = 33,3%. Opslag = 50%.</p>
+      </div>
+      <div class="panel"><h2>Gegevens</h2><p>Download alles als CSV (opent in Excel met komma als decimaalteken).</p>
+        <div class="actions"><button class="btn" data-act="csv">Download CSV</button>
+        ${S.canWrite&&S.cfg.example?'<button class="btn" data-act="clearex">Wis voorbeeldcijfers</button>':''}
+        ${S.canWrite&&!sortedItems().length?'<button class="btn" data-act="example">Laad voorbeeld (Deussolis)</button>':''}</div>
+      </div>
+      <div class="panel"><h2>Back-up en doorsturen</h2><p>Dit bestand slaat alles op in jouw browser. Kopieer de back-up en stuur die per app naar iemand. Die plakt hem hieronder en kiest importeren.</p>
+        <div class="actions"><button class="btn" data-act="bkcopy">Kopieer back-up</button></div>
+        <label class="f"><span>Back-up plakken</span><div class="in"><textarea id="bk-text" rows="3" placeholder="Plak hier de back-up"></textarea></div></label>
+        <div class="actions"><button class="btn primary" data-act="bkimport">Importeer back-up</button></div>
+        <p class="hint">Importeren vervangt alle gegevens op dit apparaat.</p>
+      </div></div>`;
+  }
+  syncInputs(root);
+  const m=$('#s-mode'); if(m) m.value=S.cfg.mode||'margin';
+}
+
+/* ---------- chrome ---------- */
+function renderChrome(){
+  const st=$('#status');
+  let t,c='';
+  if(!S.loaded) t='Laden…';
+  else if(S.local){ t='Alleen op dit apparaat'; c='warn'; }
+  else if(!S.canWrite){ t='Alleen lezen'; c='warn'; }
+  else if(S.saving||pending.size||cfgTimer&&S.saving){ t='Opslaan…'; }
+  else { t='Gedeeld · live'; c='ok'; }
+  st.textContent=t; st.className='status '+c;
+  const b=[];
+  if(S.error) b.push(`<div class="banner bad"><span>${esc(S.error)}</span><button class="btn sm" data-act="dismiss">Sluiten</button></div>`);
+  if(S.local) b.push('<div class="banner"><span>Losse versie: wijzigingen blijven alleen in deze browser op dit apparaat staan. Wil je gegevens doorsturen? Gebruik de back-up onder Concurrenten &amp; instellingen.</span></div>');
+  else if(S.loaded&&!S.canWrite) b.push('<div class="banner"><span>Je kunt meekijken. Om prijzen te wijzigen heb je Contributor- of Editor-toegang nodig.</span></div>');
+  if(S.slow&&!S.loaded) b.push('<div class="banner"><span>De opslag antwoordt nog niet. Gegevens kunnen verouderd zijn.</span></div>');
+  if(S.loaded&&S.cfg.example&&sortedItems().length) b.push(`<div class="banner info"><span><strong>Voorbeeldcijfers.</strong> De prijzen van Deussolis komen uit hun prijslijst 2026. Inkoop en eigen prijzen zijn verzonnen, vul je eigen cijfers in.</span>${S.canWrite?'<button class="btn sm" data-act="clearex">Wis voorbeeldcijfers</button>':''}</div>`);
+  const html=b.join('');
+  const el=$('#banners'); if(el._h!==html){ el._h=html; el.innerHTML=html; }
+}
+const TABS=['overzicht','invoer','pakketten','garantie','instellingen'];
+function render(force){
+  document.querySelectorAll('.tabs a').forEach(a=>{ if(a.dataset.tab===S.tab) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  TABS.forEach(n=>{ $('#v-'+n).hidden = n!==S.tab; });
+  renderChrome();
+  if(S.tab==='overzicht') renderOverview();
+  else if(S.tab==='invoer') renderInvoer(force);
+  else if(S.tab==='pakketten') renderPacksView(force);
+  else if(S.tab==='garantie') renderTermsView(force);
+  else renderSettings(force);
+}
+function routeFromHash(){
+  const h=(location.hash||'').replace('#','');
+  S.tab = TABS.includes(h) ? h : 'overzicht';
+  render(true);
+}
+
+/* ---------- acties ---------- */
+const confirmT={};
+function armed(key,btn,label){
+  if(confirmT[key]){ clearTimeout(confirmT[key].t); delete confirmT[key]; return true; }
+  const old=btn.textContent; btn.textContent='Zeker weten?';
+  confirmT[key]={t:setTimeout(()=>{ delete confirmT[key]; btn.textContent=old; },3000)};
+  return false;
+}
+function csv(){
+  const comps=S.cfg.competitors;
+  const q = v => '"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const n = v => v==null?'':String(v).replace('.',',');
+  const rows=[['Categorie','Product','Eenheid','Inkoop','Overige kosten','Eigen prijs','Marge €','Marge %'].concat(comps.map(c=>c.name)).concat(['Laagste','Gemiddeld'])];
+  sortedItems().forEach(it=>{
+    const cost=costOf(it), m=marginOf(it.price,cost), st=stats(it);
+    rows.push([it.cat,it.name,it.unit,n(it.cost),n(it.extra),n(it.price),m?n(Math.round(m.eur*100)/100):'',m&&m.pct!=null?n(Math.round(m.pct*10)/10):'']
+      .concat(comps.map(c=>n(it.comp&&it.comp[c.id]))).concat([st.n?n(st.min):'',st.n?n(Math.round(st.avg*100)/100):'']));
+  });
+  return '﻿'+rows.map(r=>r.map(q).join(';')).join('\r\n');
+}
+async function exportCsv(){
+  const data=csv();
+  try{ if(dl){ await dl.save({filename:'batterij-prijsvergelijking.csv',data}); return; } }catch(e){ if(e&&e.code==='declined') return; }
+  try{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'})); a.download='batterij-prijsvergelijking.csv'; document.body.appendChild(a); a.click(); a.remove(); return; }catch(e){}
+  try{ await navigator.clipboard.writeText(data); toast('CSV gekopieerd naar klembord'); }
+  catch(e){ toast('Downloaden is hier niet mogelijk'); }
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const a=b.dataset.act;
+  if(a==='bkcopy'){ const s=JSON.stringify({cfg:S.cfg,items:S.items,terms:S.terms,packs:S.packs}); const ta=$('#bk-text'); navigator.clipboard.writeText(s).then(()=>toast('Back-up gekopieerd')).catch(()=>{ ta.value=s; ta.focus(); ta.select(); toast('Selecteer en kopieer de tekst hieronder'); }); }
+  else if(a==='bkimport'){ try{ const d=JSON.parse($('#bk-text').value); if(!d.cfg||!d.items) throw 0; S.cfg=d.cfg; S.items=d.items; S.terms=d.terms||S.terms; S.packs=d.packs||{}; saveLocal(); render(true); toast('Back-up geïmporteerd'); }catch(e){ toast('Dit is geen geldige back-up'); } }
+  else if(a==='example') loadExample();
+  else if(a==='dismiss'){ S.error=''; renderChrome(); }
+  else if(a==='clearex') clearExample();
+  else if(a==='csv') exportCsv();
+  else if(a==='del'){ if(armed('d'+b.dataset.id,b)){ removeItem(b.dataset.id).then(()=>render(true)); } }
+  else if(a==='delcomp'){ if(armed('c'+b.dataset.id,b)){ S.cfg.competitors=S.cfg.competitors.filter(c=>c.id!==b.dataset.id); saveCfg(); render(true); } }
+  else if(a==='addcomp'){
+    if(S.cfg.competitors.length>=8) return;
+    S.cfg.competitors.push({id:uid('c'),name:'Concurrent '+(S.cfg.competitors.length+1),note:''}); saveCfg(); render(true);
+  }
+  else if(a==='addpack'){
+    const name=$('#new-pack').value.trim(); if(!name){ toast('Geef het pakket een naam'); $('#new-pack').focus(); return; }
+    const order=sortedPacks().reduce((m,i)=>Math.max(m,i.order||0),0)+10;
+    createPack({id:uid('p'),name,order,disc:0,lines:{}}).then(()=>render(true)); render(true);
+  }
+  else if(a==='delpack'){ if(armed('p'+b.dataset.id,b)){ removePack(b.dataset.id).then(()=>render(true)); render(true); } }
+  else if(a==='addline'){
+    const p=S.packs[b.dataset.id], first=sortedItems()[0]; if(!p||!first) return;
+    const lid=uid('l'), o=Object.values(p.lines||{}).reduce((m,l)=>Math.max(m,l&&l.o||0),0)+1;
+    p.lines=p.lines||{}; p.lines[lid]={item:first.id,qty:1,o}; queuePack(p.id,{lines:{[lid]:{item:first.id,qty:1,o}}}); render(true);
+  }
+  else if(a==='delline'){ const p=S.packs[b.dataset.id]; if(!p) return; p.lines[b.dataset.line]=null; queuePack(p.id,{lines:{[b.dataset.line]:null}}); render(true); }
+  else if(a==='addattr'){
+    const l=$('#new-attr').value.trim(); if(!l){ toast('Geef het onderwerp een naam'); return; }
+    S.terms.attrs.push({id:uid('a'),label:l}); queueTerms({attrs:S.terms.attrs}); render(true);
+  }
+  else if(a==='delattr'){ if(armed('a'+b.dataset.id,b)){ S.terms.attrs=S.terms.attrs.filter(x=>x.id!==b.dataset.id); queueTerms({attrs:S.terms.attrs}); render(true); } }
+  else if(a==='add'){
+    const name=$('#new-name').value.trim(), cat=$('#new-cat').value.trim()||'Overig', unit=$('#new-unit').value.trim();
+    if(!name){ toast('Geef de regel een naam'); $('#new-name').focus(); return; }
+    const order=sortedItems().reduce((m,i)=>Math.max(m,i.order||0),0)+10;
+    const it={id:uid('i'),cat,name,desc:'',unit,note:'',order,cost:null,extra:null,price:null,comp:{}};
+    createItem(it).then(()=>{ render(true); toast('Regel toegevoegd'); });
+    render(true);
+    setTimeout(()=>{ const f=document.getElementById(it.id+'-cost'); if(f){ f.scrollIntoView({block:'center'}); f.focus(); } },50);
+  }
+});
+['input','change'].forEach(ev=>document.addEventListener(ev,onEdit));
+window.addEventListener('hashchange',routeFromHash);
+
+/* ---------- start ---------- */
+function startLocal(){
+  S.local=true;
+  let d=null; try{ d=JSON.parse(localStorage.getItem('bp-v2')); }catch(e){}
+  if(d&&d.cfg){ S.cfg=d.cfg; S.items=d.items||{}; S.terms=d.terms||clone(SEED.terms); S.packs=d.packs||{}; }
+  else { S.cfg=clone(SEED.cfg); SEED.items.forEach((it,i)=>{ S.items[it.id]=Object.assign({},clone(it),{order:(i+1)*10}); }); S.terms=clone(SEED.terms); SEED.packs.forEach(p=>{ S.packs[p.id]=clone(p); }); }
+  S.cfgExists=true; S.loaded=true; render(true);
+}
+function applyPending(){
+  pending.forEach((patch,id)=>{
+    const it=S.items[id]; if(!it) return;
+    Object.keys(patch).forEach(k=>{ if(k==='comp') it.comp=Object.assign({},it.comp,patch.comp); else it[k]=patch[k]; });
+  });
+}
+function ensureComps(){ if(!S.cfg.competitors||!S.cfg.competitors.length) S.cfg.competitors=clone(DEFAULT_CFG.competitors); }
+async function init(){
+  routeFromHash();
+  dl=await use('downloads');
+  const user=await use('user');
+  if(user){ try{ const w=await user.can('data.write'); if(w===false) S.canWrite=false; }catch(e){} }
+  db=await use('db');
+  if(!db){ startLocal(); return; }
+  const timer=setTimeout(()=>{ S.slow=true; renderChrome(); },10000);
+  let gotC=false, gotI=false, gotT=false, gotP=false;
+  const done=()=>{ if(gotC&&gotI&&gotT&&gotP&&!S.loaded){ S.loaded=true; clearTimeout(timer); S.slow=false; } };
+  const onErr=e=>{ if(e&&e.code==='revoked'){ S.canWrite=false; } S.slow=true; renderChrome(); };
+  db.doc('config/main').onSnapshot(s=>{
+    gotC=true;
+    if(s.exists){ S.cfg=Object.assign({},DEFAULT_CFG,s.data()); S.cfgExists=true; } else { S.cfg=clone(DEFAULT_CFG); S.cfgExists=false; }
+    ensureComps(); done(); render();
+  },onErr);
+  db.doc('terms/main').onSnapshot(s=>{
+    gotT=true;
+    if(s.exists){ const d=s.data(); S.terms={attrs:d.attrs||[],vals:d.vals||{}}; } else S.terms={attrs:clone(SEED.terms.attrs),vals:{}};
+    if(pendingT) deepMerge(S.terms,clone(pendingT));
+    done(); render();
+  },onErr);
+  db.collection('packages').onSnapshot(q=>{
+    gotP=true;
+    const m={}; q.docs.forEach(d=>{ m[d.id]=Object.assign({id:d.id,lines:{}},d.data()); });
+    S.packs=m; pendingP.forEach((patch,id)=>{ if(S.packs[id]) deepMerge(S.packs[id],clone(patch)); }); done(); render();
+  },onErr);
+  db.collection('items').onSnapshot(q=>{
+    gotI=true;
+    const m={}; q.docs.forEach(d=>{ m[d.id]=Object.assign({id:d.id,comp:{}},d.data()); });
+    S.items=m; applyPending(); done(); render();
+  },onErr);
+}
+init();
+})();
+</script>
+
+</body></html>
