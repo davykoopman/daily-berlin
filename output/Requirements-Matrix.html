@@ -153,6 +153,26 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
 .dc .field textarea{min-height:84px}
 .who{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--mute)}
 .who span.c{border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--fg);background:var(--surface2)}
+#client .chead{display:flex}
+.chd{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.chd h2{margin:0;font:700 34px/1.05 var(--f-display)}
+.chd .sub{color:var(--mute);font-size:13px}
+.chl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chkl{display:inline-flex;gap:8px;align-items:center;font-size:13px}
+.cr{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.cr.off{padding:8px 14px;background:var(--surface2)}
+.crh{display:flex;gap:12px;align-items:center}
+.crh b{font-weight:600}
+.crh .m{margin-left:auto;font:500 12px var(--f-mono);color:var(--mute);white-space:nowrap}
+.gen{font-size:13px;color:var(--mute)}
+.gen summary{cursor:pointer}
+.gen p{margin:6px 0 0;color:var(--fg)}
+.pc{display:flex;flex-direction:column;gap:6px;border-top:1px dashed var(--line);padding-top:10px}
+.pc div{font-size:13px;display:flex;gap:8px;flex-wrap:wrap}
+.pc b{font-weight:600;min-width:140px}
+.dotn{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--surface)}
+.chk{position:relative}
+.tab.sub{color:var(--fg)}
 @media (max-width:700px){.dg{grid-template-columns:1fr}}
 @media (max-width:600px){h1{font-size:34px}.first{min-width:170px;max-width:170px}.stat.wide{grid-column:1/-1}.scroll{max-height:calc(100vh - 110px)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -192,11 +212,16 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
   <section class="stats" id="stats" aria-label="Summary"></section>
   <section class="filters" id="filters"></section>
   <section class="scroll" id="matrix" aria-label="Matrix"></section>
+  <section id="client" hidden>
+    <div id="chead"></div>
+    <div class="dtools"><input class="search" id="cq" type="search" placeholder="Search requirements…" aria-label="Search requirements"><label class="chkl"><input type="checkbox" id="conly" checked> Only requirements that apply</label></div>
+    <div class="dlist" id="clist" style="margin-top:14px"></div>
+  </section>
   <section id="details" hidden>
     <div class="dtools"><input class="search" id="dq" type="search" placeholder="Search requirements or explanations…" aria-label="Search requirements"><select class="sel" id="dsel" aria-label="Show"><option value="all">All requirements</option><option value="missing">Without explanation</option></select></div>
     <div class="dlist" id="dlist" style="margin-top:14px"></div>
   </section>
-  <p class="hint" id="mhint">Add clients and requirements in the two boxes above. Click a box to link a requirement to a client. Click a client name or column heading to edit it. The funnel icon under a column heading shows only the clients that have that requirement.</p>
+  <p class="hint" id="mhint">Add clients and requirements in the two boxes above. Click a box to link a requirement to a client. Click a client name to open that client and describe each requirement for them. Click a column heading to edit a requirement. A small dot in a box means a client-specific note exists. The funnel icon under a column heading shows only the clients that have that requirement.</p>
   <p class="hint">Your data is saved automatically in this browser on this computer, not online. Use <b>Export to Excel</b> regularly as a backup or to share with colleagues.</p>
 </div>
 <div id="modal"></div>
@@ -233,6 +258,7 @@ const store=(function(){
   let n=0; const nid=()=>'x'+Date.now().toString(36)+(n++).toString(36);
   function docRef(name,id){
     return {
+      id,
       async set(v){ data[name][id]=JSON.parse(JSON.stringify(v)); save(); emit(name); },
       async update(v){ data[name][id]=Object.assign({},data[name][id]||{},v); save(); emit(name); },
       async delete(){ delete data[name][id]; save(); emit(name); }
@@ -255,10 +281,10 @@ const CHECK='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-w
 const FUNNEL='<svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M2 3h12l-4.6 5.4V13l-2.8-1.6V8.4z"/></svg>';
 
 let db=null, canWrite=true;
-let clients=[], reqs=[], checks={};
+let clients=[], reqs=[], checks={}, cdet={};
 let ready={c:false,r:false,k:false};
 const F={q:'',hiddenCats:new Set(),reqs:new Set(),sort:'order'};
-let modal=null; let view='matrix'; const D={q:'',show:'all'};
+let modal=null; let view='matrix'; let curClient=null; const C={q:'',only:true}; const D={q:'',show:'all'};
 
 const catOf=r=>(r.cat||'').trim()||'Other';
 function sortedReqs(){
@@ -269,6 +295,7 @@ function sortedReqs(){
 function catList(){const l=[];sortedReqs().forEach(r=>{const c=catOf(r);if(!l.includes(c))l.push(c)});return l}
 const catColor=c=>'var(--c'+(1+catList().indexOf(c)%6)+')';
 const isOn=(cid,rid)=>!!(checks[cid]&&checks[cid][rid]);
+const detOf=(cid,rid)=>(cdet[cid]&&cdet[cid][rid])||'';
 const countFor=cid=>reqs.reduce((n,r)=>n+(isOn(cid,r.id)?1:0),0);
 
 /* ---------- data ---------- */
@@ -280,7 +307,7 @@ async function init(){
   db.collection('clients').onSnapshot(s=>{clients=s.docs.map(d=>({id:d.id,...d.data()}));ready.c=true;sched();},err);
   db.collection('reqs').onSnapshot(s=>{reqs=s.docs.map(d=>({id:d.id,...d.data()}));ready.r=true;sched();},err);
   db.collection('checks').onSnapshot(s=>{
-    const m={}; s.docs.forEach(d=>{m[d.id]=(d.data()||{}).m||{}}); checks=m; ready.k=true; sched();
+    const m={},dd={}; s.docs.forEach(d=>{const x=d.data()||{}; m[d.id]=x.m||{}; dd[d.id]=x.d||{}}); checks=m; cdet=dd; ready.k=true; sched();
   },err);
   setSync(true,'Saved in this browser');
   const dls=downloader;
@@ -291,7 +318,7 @@ let raf=0; function sched(){ if(raf)return; raf=requestAnimationFrame(()=>{raf=0
 
 const queues={};
 function enqueue(key,fn){ queues[key]=(queues[key]||Promise.resolve()).then(fn).catch(e=>toast('Save failed: '+(e&&e.message||'unknown error'))); return queues[key]; }
-function saveChecks(cid){ const m={...(checks[cid]||{})}; return enqueue('k'+cid,()=>db.collection('checks').doc(cid).set({m})); }
+function saveChecks(cid){ return enqueue('k'+cid,()=>db.collection('checks').doc(cid).set({m:{...(checks[cid]||{})},d:{...(cdet[cid]||{})}})); }
 function toggle(cid,rid){
   if(!db||!canWrite) return toast('You cannot make changes here');
   const m={...(checks[cid]||{})}; if(m[rid]) delete m[rid]; else m[rid]=true; checks[cid]=m; sched(); saveChecks(cid);
@@ -311,12 +338,33 @@ function visibleClients(){
 function render(){
   if(!(ready.c&&ready.r&&ready.k)){ $('#matrix').innerHTML='<div class="empty"><p>Loading data…</p></div>'; return; }
   renderBanner(); renderStats(); renderTabs();
-  const dv=view==='details'; $('#filters').hidden=dv; $('#matrix').hidden=dv; $('#mhint').hidden=dv; $('#details').hidden=!dv;
-  if(dv) renderDetails(); else { renderFilters(); renderMatrix(); }
+  if(view==='client'&&!clients.find(c=>c.id===curClient)) view='matrix';
+  const mv=view==='matrix'; $('#filters').hidden=!mv; $('#matrix').hidden=!mv; $('#mhint').hidden=!mv; $('#details').hidden=view!=='details'; $('#client').hidden=view!=='client';
+  if(view==='details') renderDetails(); else if(view==='client') renderClient(); else { renderFilters(); renderMatrix(); }
 }
 function renderTabs(){
   $('#qa-cats').innerHTML=catList().map(c=>`<option value="${esc(c)}">`).join('');
-  $('#tabs').innerHTML=[['matrix','Matrix'],['details','Requirement details']].map(([k,l])=>`<button class="tab" role="tab" data-act="tab" data-v="${k}" aria-selected="${view===k}">${l}${k==='details'?` · ${reqs.length}`:''}</button>`).join('');
+  const cc=clients.find(c=>c.id===curClient);
+  const tabs=[['matrix','Matrix'],['details',`Requirement details · ${reqs.length}`]]; if(view==='client'&&cc) tabs.push(['client','Client: '+cc.name]);
+  $('#tabs').innerHTML=tabs.map(([k,l])=>`<button class="tab${k==='client'?' sub':''}" role="tab" data-act="tab" data-v="${k}" aria-selected="${view===k}">${esc(l)}</button>`).join('');
+}
+function renderClient(){
+  const c=clients.find(x=>x.id===curClient); if(!c) return;
+  const all=[...clients].sort((a,b)=>(a.name||'').localeCompare(b.name||'','nl'));
+  const n=countFor(c.id);
+  $('#chead').innerHTML=`<div class="chd"><div><div class="sub">${esc(c.note||'')}</div><h2>${esc(c.name)}</h2><div class="sub">${n} of ${reqs.length} requirements apply · ${Object.keys(cdet[c.id]||{}).filter(k=>isOn(c.id,k)&&cdet[c.id][k]).length} with client-specific notes</div></div>
+   <div class="chl"><label class="lbl" for="csel">Client</label><select class="sel" id="csel">${all.map(x=>`<option value="${x.id}"${x.id===c.id?' selected':''}>${esc(x.name)}</option>`).join('')}</select><button class="btn" data-act="edit-client" data-v="${c.id}">Rename / delete client</button><button class="btn" data-act="tab" data-v="matrix">← Matrix</button></div></div>`;
+  $('#conly').checked=C.only;
+  const q=C.q.trim().toLowerCase();
+  const list=sortedReqs().filter(r=>(!q||((r.name||'')+' '+catOf(r)).toLowerCase().includes(q))&&(!C.only||isOn(c.id,r.id)));
+  if(!list.length){ $('#clist').innerHTML=`<div class="empty"><p>${C.only&&!q?'No requirements ticked for this client yet. Untick "Only requirements that apply" to tick some.':'Nothing found.'}</p></div>`; return; }
+  let last=null,out='';
+  list.forEach(r=>{ const cat=catOf(r); if(cat!==last){ out+=`<div class="dgrp"><span class="dot" style="background:${catColor(cat)}"></span>${esc(cat)}</div>`; last=cat; }
+    const on=isOn(c.id,r.id); const nn=clients.filter(x=>isOn(x.id,r.id)).length;
+    out+=`<article class="cr${on?'':' off'}"><div class="crh"><button class="chk${on?' on':''}" data-act="tick" data-r="${c.id}" data-q="${r.id}" aria-pressed="${on}" aria-label="${esc(r.name)} applies to ${esc(c.name)}">${CHECK}</button><b>${esc(r.name)}</b><span class="m">${nn} client${nn===1?'':'s'}</span></div>`+
+      (on?`${(r.desc||'').trim()?`<details class="gen"><summary>General rule</summary><p>${esc(r.desc)}</p></details>`:''}<div class="field"><label for="cd-${c.id}-${r.id}">Specific for ${esc(c.name)}</label><textarea id="cd-${c.id}-${r.id}" class="cd" data-cid="${c.id}" data-rid="${r.id}" placeholder="How does it apply for this client? E.g. label size, position, contact person, deadline, exception.">${esc(detOf(c.id,r.id))}</textarea></div>`:'')+`</article>`;
+  });
+  $('#clist').innerHTML=out;
 }
 function renderDetails(){
   const q=D.q.trim().toLowerCase(); const list=sortedReqs().filter(r=>(!q||((r.name||'')+' '+(r.desc||'')+' '+(r.source||'')+' '+catOf(r)).toLowerCase().includes(q))&&(D.show==='all'||!(r.desc||'').trim()));
@@ -329,6 +377,7 @@ function renderDetails(){
     out+=`<article class="dc"><div class="dh"><h3>${esc(r.name)}</h3><span class="m">${who.length} of ${clients.length} clients</span><button class="btn ghost" data-act="edit-req" data-v="${r.id}">Rename / category / delete</button></div>
      <div class="dg"><div class="field"><label for="dd-${r.id}">Explanation</label><textarea id="dd-${r.id}" class="dd" data-id="${r.id}" data-f="desc" placeholder="What exactly is required? Add rules, tolerances, examples, exceptions.">${esc(r.desc||'')}</textarea></div>
      <div class="field"><label for="ds-${r.id}">Source / reference</label><textarea id="ds-${r.id}" class="dd" data-id="${r.id}" data-f="source" placeholder="E.g. client manual section 4.2, email 12 May, contact person">${esc(r.source||'')}</textarea></div></div>
+     ${(()=>{const v=who.filter(cl=>detOf(cl.id,r.id)); return v.length?`<div class="pc"><span class="lbl">Client-specific notes</span>${v.map(cl=>`<div><b>${esc(cl.name)}</b><span>${esc(detOf(cl.id,r.id))}</span></div>`).join('')}</div>`:''})()}
      <div class="who"><span>Applies to:</span>${who.length?who.map(cl=>`<span class="c">${esc(cl.name)}</span>`).join(''):'<span>no clients yet</span>'}</div></article>`;
   });
   $('#dlist').innerHTML=out;
@@ -373,7 +422,7 @@ function renderMatrix(){
   const head=`<thead><tr class="catrow"><th class="first corner" rowspan="2" style="top:0;border-top:0;background:var(--surface)">Client · ${cl.length}${cl.length!==clients.length?' of '+clients.length:''}</th>${groups.map(g=>`<th colspan="${g.n}" style="--cc:${catColor(g.c)}" title="${esc(g.c)}">${esc(g.c)}</th>`).join('')}</tr>
    <tr class="hdrrow">${rl.map(r=>`<th data-c="${r.id}"><div class="hbtn"><button class="hbtn" style="height:auto;flex:1;justify-content:flex-end" data-act="edit-req" data-v="${r.id}" title="${esc(r.name)}${r.desc?' — '+esc(r.desc):''}"><span class="rh">${esc(r.name)}</span></button><button class="fbtn${F.reqs.has(r.id)?' on':''}" data-act="filt" data-v="${r.id}" title="Show only clients with this requirement" aria-pressed="${F.reqs.has(r.id)}">${FUNNEL}</button></div></th>`).join('')}</tr></thead>`;
   const total=reqs.length||1;
-  const body=`<tbody>${cl.map(c=>{const n=countFor(c.id);return `<tr data-r="${c.id}"><th class="first" scope="row"><button class="cl" data-act="edit-client" data-v="${c.id}"><span class="n"><span>${esc(c.name)}</span><span>${n}/${reqs.length}</span></span><span class="note">${esc(c.note||'')}</span><span class="bar"><i style="width:${Math.round(n/total*100)}%"></i></span></button></th>${rl.map(r=>{const on=isOn(c.id,r.id);return `<td class="cell" data-c="${r.id}"><button class="chk${on?' on':''}" data-act="tick" data-r="${c.id}" data-q="${r.id}" aria-pressed="${on}" aria-label="${esc(c.name)} · ${esc(r.name)}">${CHECK}</button></td>`}).join('')}</tr>`}).join('')}${cl.length?'':`<tr><td class="first" style="padding:16px 12px;color:var(--mute)">No clients found.</td>${rl.map(()=>'<td></td>').join('')}</tr>`}</tbody>`;
+  const body=`<tbody>${cl.map(c=>{const n=countFor(c.id);return `<tr data-r="${c.id}"><th class="first" scope="row"><button class="cl" data-act="open-client" data-v="${c.id}" title="Open ${esc(c.name)}"><span class="n"><span>${esc(c.name)}</span><span>${n}/${reqs.length}</span></span><span class="note">${esc(c.note||'')}</span><span class="bar"><i style="width:${Math.round(n/total*100)}%"></i></span></button></th>${rl.map(r=>{const on=isOn(c.id,r.id);return `<td class="cell" data-c="${r.id}"><button class="chk${on?' on':''}" data-act="tick" data-r="${c.id}" data-q="${r.id}" aria-pressed="${on}" aria-label="${esc(c.name)} · ${esc(r.name)}"${on&&detOf(c.id,r.id)?` title="${esc(detOf(c.id,r.id))}"`:''}>${CHECK}${on&&detOf(c.id,r.id)?'<i class="dotn"></i>':''}</button></td>`}).join('')}</tr>`}).join('')}${cl.length?'':`<tr><td class="first" style="padding:16px 12px;color:var(--mute)">No clients found.</td>${rl.map(()=>'<td></td>').join('')}</tr>`}</tbody>`;
   const foot=`<tfoot><tr><td class="first">Total${F.q||F.reqs.size?' (selection)':''}</td>${rl.map(r=>{const n=cl.filter(c=>isOn(c.id,r.id)).length;return `<td>${n}<small>${cl.length?Math.round(n/cl.length*100):0}%</small></td>`}).join('')}</tr></tfoot>`;
   const prev=$('#matrix'); const st=[prev.scrollTop,prev.scrollLeft];
   prev.innerHTML=`<table>${head}${body}${foot}</table>`;
@@ -438,7 +487,7 @@ async function delItem(){
   const m=modal; if(!m||!m.id) return; const b=$('#b-del');
   if(!b.dataset.sure){ b.dataset.sure='1'; b.textContent='Sure? Click again'; return; }
   try{
-    if(m.type==='client'){ await db.collection('clients').doc(m.id).delete(); await db.collection('checks').doc(m.id).delete(); }
+    if(m.type==='client'){ if(curClient===m.id) view='matrix'; await db.collection('clients').doc(m.id).delete(); await db.collection('checks').doc(m.id).delete(); }
     else await db.collection('reqs').doc(m.id).delete();
     closeModal(); toast('Deleted');
   }catch(e){ toast('Delete failed'); }
@@ -466,9 +515,9 @@ function buildWorkbook(){
   rl.forEach(r=>{const k=cl.filter(c=>isOn(c.id,r.id)); a2.push([r.name,catOf(r),r.desc||'',r.source||'',k.length,k.map(c=>c.name).join('; ')])});
   const w2=XLSX.utils.aoa_to_sheet(a2); w2['!cols']=[{wch:34},{wch:18},{wch:60},{wch:30},{wch:14},{wch:60}]; w2['!autofilter']={ref:'A1:F'+a2.length};
   XLSX.utils.book_append_sheet(wb,w2,'Requirements');
-  const a3=[['Client','Category','Requirement']];
-  cl.forEach(c=>rl.forEach(r=>{if(isOn(c.id,r.id))a3.push([c.name,catOf(r),r.name])}));
-  const w3=XLSX.utils.aoa_to_sheet(a3); w3['!cols']=[{wch:30},{wch:18},{wch:36}]; w3['!autofilter']={ref:'A1:C'+Math.max(2,a3.length)};
+  const a3=[['Client','Category','Requirement','Client-specific detail']];
+  cl.forEach(c=>rl.forEach(r=>{if(isOn(c.id,r.id))a3.push([c.name,catOf(r),r.name,detOf(c.id,r.id)])}));
+  const w3=XLSX.utils.aoa_to_sheet(a3); w3['!cols']=[{wch:30},{wch:18},{wch:36},{wch:70}]; w3['!autofilter']={ref:'A1:D'+Math.max(2,a3.length)};
   XLSX.utils.book_append_sheet(wb,w3,'List (client-requirement)');
   return wb;
 }
@@ -504,8 +553,12 @@ async function doImport(file){
       if(!cmap[key(name)]){ const ref=db.collection('clients').doc(); await ref.set({name,note:String(row[1]||'').trim(),order:++o}); cmap[key(name)]=ref.id; newC++; }
       const cid=cmap[key(name)]; const m={...(checks[cid]||{})};
       for(let i=2;i<end;i++) if(colIds[i]&&String(row[i]).trim()!=='') m[colIds[i]]=true;
-      checks[cid]=m; await db.collection('checks').doc(cid).set({m});
+      checks[cid]=m; await db.collection('checks').doc(cid).set({m,d:{...(cdet[cid]||{})}});
     }
+    const wsL=wb.Sheets['List (client-requirement)'];
+    if(wsL){ const ll=XLSX.utils.sheet_to_json(wsL,{header:1,defval:''}); const hh=(ll[0]||[]).map(x=>String(x).trim().toLowerCase()); const iDet=hh.indexOf('client-specific detail'); const touched=new Set();
+      if(iDet>=0) for(let i=1;i<ll.length;i++){ const cid=cmap[key(ll[i][0])], rid=rmap[key(ll[i][2])], txt=String(ll[i][iDet]).trim(); if(!cid||!rid||!txt) continue; cdet[cid]={...(cdet[cid]||{}),[rid]:txt}; touched.add(cid); }
+      for(const cid of touched){ await db.collection('checks').doc(cid).set({m:{...(checks[cid]||{})},d:{...(cdet[cid]||{})}}); } }
     const ws2=wb.Sheets['Requirements'];
     if(ws2){ const rr=XLSX.utils.sheet_to_json(ws2,{header:1,defval:''}); const h=(rr[0]||[]).map(x=>String(x).trim().toLowerCase()); const iD=h.indexOf('description'),iS=h.indexOf('source');
       for(let i=1;i<rr.length;i++){ const id=rmap[key(rr[i][0])]; if(!id) continue; const u={}; if(iD>=0&&String(rr[i][iD]).trim()) u.desc=String(rr[i][iD]).trim(); if(iS>=0&&String(rr[i][iS]).trim()) u.source=String(rr[i][iS]).trim(); if(Object.keys(u).length) await db.collection('reqs').doc(id).update(u); } }
@@ -519,7 +572,8 @@ document.addEventListener('click',e=>{
   const a=t.dataset.act, v=t.dataset.v;
   if(a==='mbg'){ if(e.target===t) closeModal(); return; }
   switch(a){
-    case 'tab': view=v; sched(); break;
+    case 'tab': view=v; sched(); window.scrollTo(0,0); break;
+    case 'open-client': curClient=v; view='client'; sched(); window.scrollTo(0,0); break;
     case 'tick': toggle(t.dataset.r,t.dataset.q); break;
     case 'mtick': {toggle(t.dataset.r,t.dataset.q); t.firstElementChild.classList.toggle('on'); break}
     case 'add-client': $('#qc-name').focus(); break;
@@ -538,8 +592,11 @@ document.addEventListener('click',e=>{
     case 'reset': F.q='';F.hiddenCats.clear();F.reqs.clear(); sched(); break;
   }
 });
-document.addEventListener('input',e=>{ if(e.target.id==='dq'){ D.q=e.target.value; renderDetails(); return; } if(e.target.id==='q'){ F.q=e.target.value; const p=e.target.selectionStart; renderMatrix(); renderStats(); } });
+document.addEventListener('input',e=>{ if(e.target.id==='cq'){ C.q=e.target.value; renderClient(); return; } if(e.target.id==='dq'){ D.q=e.target.value; renderDetails(); return; } if(e.target.id==='q'){ F.q=e.target.value; const p=e.target.selectionStart; renderMatrix(); renderStats(); } });
 document.addEventListener('change',e=>{
+  if(e.target.id==='csel'){ curClient=e.target.value; sched(); return; }
+  if(e.target.id==='conly'){ C.only=e.target.checked; renderClient(); return; }
+  if(e.target.classList&&e.target.classList.contains('cd')){ const t=e.target,cid=t.dataset.cid,rid=t.dataset.rid; const d={...(cdet[cid]||{})}; const v=t.value.trim(); if(v) d[rid]=v; else delete d[rid]; cdet[cid]=d; if(db&&canWrite) saveChecks(cid).then(()=>toast('Saved')); return; }
   if(e.target.id==='dsel'){D.show=e.target.value;renderDetails();return}
   if(e.target.classList&&e.target.classList.contains('dd')){ const t=e.target; if(db&&canWrite) enqueue('d'+t.dataset.id,()=>db.collection('reqs').doc(t.dataset.id).update({[t.dataset.f]:t.value.trim(),ex:false})).then(()=>toast('Saved')); return; } if(e.target.id==='sort'){F.sort=e.target.value;sched()} if(e.target.id==='file'&&e.target.files[0]){doImport(e.target.files[0]);e.target.value=''} });
 document.addEventListener('keydown',e=>{
