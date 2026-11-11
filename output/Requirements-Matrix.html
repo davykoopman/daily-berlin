@@ -152,7 +152,8 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
 .dg{display:grid;grid-template-columns:2fr 1fr;gap:12px}
 .dc .field textarea{min-height:84px}
 .who{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--mute)}
-.who span.c{border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--fg);background:var(--surface2)}
+.who .c{border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--fg);background:var(--surface2);font-size:12px}
+.who .c:hover{border-color:var(--accent);color:var(--accent)}
 #client .chead{display:flex}
 .chd{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;margin-bottom:12px}
 .chd h2{margin:0;font:700 34px/1.05 var(--f-display)}
@@ -218,7 +219,7 @@ tfoot small{display:block;color:var(--mute);font-size:10px}
     <div class="dlist" id="clist" style="margin-top:14px"></div>
   </section>
   <section id="details" hidden>
-    <div class="dtools"><input class="search" id="dq" type="search" placeholder="Search requirements or explanations…" aria-label="Search requirements"><select class="sel" id="dsel" aria-label="Show"><option value="all">All requirements</option><option value="missing">Without explanation</option></select></div>
+    <div class="dtools"><input class="search" id="dq" type="search" placeholder="Search requirement, client or note…" aria-label="Search requirements"></div>
     <div class="dlist" id="dlist" style="margin-top:14px"></div>
   </section>
   <p class="hint" id="mhint">Add clients and requirements in the two boxes above. Click a box to link a requirement to a client. Click a client name to open that client and describe each requirement for them. Click a column heading to edit a requirement. A small dot in a box means a client-specific note exists. The funnel icon under a column heading shows only the clients that have that requirement.</p>
@@ -246,9 +247,9 @@ const store=(function(){
     }
   }catch(e){ data=seed(); }
   function seed(){
-    const S={"clients": [["c1", "Zalando", "Fashion e-commerce, DC Poland"], ["c2", "Browns", "Luxury fashion retail"], ["c3", "Harrods", "Luxury department store, London"], ["c4", "Sports Direct (Frasers Group)", "Sports retail, UK"]], "reqs": [["r1", "Max pallet height 180 cm", "Pallets", "Pallet including goods may not exceed 180 cm from floor. Example text: replace with the exact rule and tolerance from the client manual.", "Example"], ["r2", "Max pallet height 200 cm", "Pallets", "Pallet including goods may not exceed 200 cm. Example text.", "Example"], ["r3", "Max pallet height 220 cm", "Pallets", "Pallet including goods may not exceed 220 cm. Example text.", "Example"], ["r4", "EUR/EPAL pallets only", "Pallets", "Only undamaged EUR/EPAL pallets accepted; no chemical or one-way pallets. Example text.", "Example"], ["r5", "Single-SKU pallets", "Pallets", "One article per pallet; no mixed pallets. Example text.", "Example"], ["r6", "SSCC pallet label", "Labelling", "SSCC (GS1-128) label on two adjacent sides of every pallet, 40-80 cm from the floor. Example text.", "Example"], ["r7", "Carton label", "Labelling", "Carton label with article, quantity and PO number on the short side of each carton. Example text.", "Example"], ["r8", "EAN barcode per item", "Labelling", "Every item carries a scannable EAN barcode on the tag or polybag. Example text.", "Example"], ["r9", "Send ASN notification (Poland)", "Documents", "Send an advance shipping notice (ASN) before dispatch for deliveries to the Polish DC. Example text: add format, deadline and recipient.", "Example"], ["r10", "Packing list in carton", "Documents", "Printed packing list placed inside each carton. Example text.", "Example"], ["r11", "Customs documents (EORI/CN)", "Documents", "Customs documents with EORI number and CN codes for cross-border shipments. Example text.", "Example"], ["r12", "Dock appointment required", "Planning", "Book a dock slot before arrival; late arrivals are rejected. Example text.", "Example"], ["r13", "Delivery within time window", "Planning", "Deliver within the confirmed time window (for example +/- 30 min). Example text.", "Example"], ["r14", "Hanging garments (GOH)", "Packing", "Garments on hangers in GOH containers, not folded in cartons. Example text.", "Example"], ["r15", "Polybag per item", "Packing", "Each item in a sealed polybag with suffocation warning. Example text.", "Example"], ["r16", "Quality inspection before dispatch", "Quality", "Sample inspection before dispatch with a report on request. Example text.", "Example"]], "ticks": {"c1": ["r2", "r4", "r6", "r7", "r8", "r9", "r10", "r12", "r15"], "c2": ["r1", "r6", "r7", "r8", "r12", "r13", "r14", "r15", "r16"], "c3": ["r1", "r5", "r6", "r7", "r8", "r10", "r12", "r13", "r14", "r15", "r16"], "c4": ["r3", "r4", "r5", "r6", "r7", "r8", "r9", "r11", "r12", "r15"]}}; const d={clients:{},reqs:{},checks:{}};
-    S.clients.forEach(([id,name,note],i)=>d.clients[id]={name,note,order:i+1,ex:true});
-    S.reqs.forEach(([id,name,cat,desc,source],i)=>d.reqs[id]={name,cat,desc,source,order:i+1,ex:true});
+    const S={"clients": [["c1", "Zalando", "Fashion e-commerce, DC Poland"], ["c2", "Browns", "Luxury fashion retail"], ["c3", "Harrods", "Luxury department store, London"], ["c4", "Sports Direct (Frasers Group)", "Sports retail, UK"]], "reqs": [["r1", "Max pallet height 180 cm", "Pallets", "Pallet including goods may not exceed 180 cm from floor. Example text: replace with the exact rule and tolerance from the client manual.", "Example"], ["r2", "Max pallet height 200 cm", "Pallets", "Pallet including goods may not exceed 200 cm. Example text.", "Example"], ["r3", "Max pallet height 220 cm", "Pallets", "Pallet including goods may not exceed 220 cm. Example text.", "Example"], ["r4", "EUR/EPAL pallets only", "Pallets", "Only undamaged EUR/EPAL pallets accepted; no chemical or one-way pallets. Example text.", "Example"], ["r5", "Single-SKU pallets", "Pallets", "One article per pallet; no mixed pallets. Example text.", "Example"], ["r6", "SSCC pallet label", "Labelling", "SSCC (GS1-128) label on two adjacent sides of every pallet, 40-80 cm from the floor. Example text.", "Example"], ["r7", "Carton label", "Labelling", "Carton label with article, quantity and PO number on the short side of each carton. Example text.", "Example"], ["r8", "EAN barcode per item", "Labelling", "Every item carries a scannable EAN barcode on the tag or polybag. Example text.", "Example"], ["r9", "Send ASN notification (Poland)", "Documents", "Send an advance shipping notice (ASN) before dispatch for deliveries to the Polish DC. Example text: add format, deadline and recipient.", "Example"], ["r10", "Packing list in carton", "Documents", "Printed packing list placed inside each carton. Example text.", "Example"], ["r11", "Customs documents (EORI/CN)", "Documents", "Customs documents with EORI number and CN codes for cross-border shipments. Example text.", "Example"], ["r12", "Dock appointment required", "Planning", "Book a dock slot before arrival; late arrivals are rejected. Example text.", "Example"], ["r13", "Delivery within time window", "Planning", "Deliver within the confirmed time window (for example +/- 30 min). Example text.", "Example"], ["r14", "Hanging garments (GOH)", "Packing", "Garments on hangers in GOH containers, not folded in cartons. Example text.", "Example"], ["r15", "Polybag per item", "Packing", "Each item in a sealed polybag with suffocation warning. Example text.", "Example"], ["r16", "Quality inspection before dispatch", "Quality", "Sample inspection before dispatch with a report on request. Example text.", "Example"]], "ticks": {"c1": ["r2", "r4", "r6", "r7", "r8", "r9", "r10", "r12", "r15"], "c2": ["r1", "r6", "r7", "r8", "r12", "r13", "r14", "r15", "r16"], "c3": ["r1", "r5", "r6", "r7", "r8", "r10", "r12", "r13", "r14", "r15", "r16"], "c4": ["r3", "r4", "r5", "r6", "r7", "r8", "r9", "r11", "r12", "r15"]}, "ex": true}; const d={clients:{},reqs:{},checks:{}};
+    S.clients.forEach(([id,name,note],i)=>d.clients[id]={name,note,order:i+1,ex:S.ex});
+    S.reqs.forEach(([id,name,cat,desc,source],i)=>d.reqs[id]={name,cat,desc,source,order:i+1,ex:S.ex});
     Object.entries(S.ticks).forEach(([cid,l])=>{const m={};l.forEach(r=>m[r]=true);d.checks[cid]={m}});
     return d;
   }
@@ -362,23 +363,24 @@ function renderClient(){
   list.forEach(r=>{ const cat=catOf(r); if(cat!==last){ out+=`<div class="dgrp"><span class="dot" style="background:${catColor(cat)}"></span>${esc(cat)}</div>`; last=cat; }
     const on=isOn(c.id,r.id); const nn=clients.filter(x=>isOn(x.id,r.id)).length;
     out+=`<article class="cr${on?'':' off'}"><div class="crh"><button class="chk${on?' on':''}" data-act="tick" data-r="${c.id}" data-q="${r.id}" aria-pressed="${on}" aria-label="${esc(r.name)} applies to ${esc(c.name)}">${CHECK}</button><b>${esc(r.name)}</b><span class="m">${nn} client${nn===1?'':'s'}</span></div>`+
-      (on?`${(r.desc||'').trim()?`<details class="gen"><summary>General rule</summary><p>${esc(r.desc)}</p></details>`:''}<div class="field"><label for="cd-${c.id}-${r.id}">Specific for ${esc(c.name)}</label><textarea id="cd-${c.id}-${r.id}" class="cd" data-cid="${c.id}" data-rid="${r.id}" placeholder="How does it apply for this client? E.g. label size, position, contact person, deadline, exception.">${esc(detOf(c.id,r.id))}</textarea></div>`:'')+`</article>`;
+      (on?`<div class="field"><label for="cd-${c.id}-${r.id}">Specific for ${esc(c.name)}</label><textarea id="cd-${c.id}-${r.id}" class="cd" data-cid="${c.id}" data-rid="${r.id}" placeholder="How does it apply for this client? E.g. label size, position, contact person, deadline, exception.">${esc(detOf(c.id,r.id))}</textarea></div>`:'')+`</article>`;
   });
   $('#clist').innerHTML=out;
 }
 function renderDetails(){
-  const q=D.q.trim().toLowerCase(); const list=sortedReqs().filter(r=>(!q||((r.name||'')+' '+(r.desc||'')+' '+(r.source||'')+' '+catOf(r)).toLowerCase().includes(q))&&(D.show==='all'||!(r.desc||'').trim()));
-  if(!reqs.length){ $('#dlist').innerHTML='<div class="empty"><h2>No requirements yet</h2><p>Add a requirement in the box at the top, then explain it here.</p></div>'; return; }
+  const q=D.q.trim().toLowerCase();
+  const hay=r=>{ const who=clients.filter(cl=>isOn(cl.id,r.id)); return (r.name+' '+catOf(r)+' '+who.map(cl=>cl.name+' '+detOf(cl.id,r.id)).join(' ')).toLowerCase(); };
+  const list=sortedReqs().filter(r=>!q||hay(r).includes(q));
+  if(!reqs.length){ $('#dlist').innerHTML='<div class="empty"><h2>No requirements yet</h2><p>Add a requirement in the box at the top.</p></div>'; return; }
   if(!list.length){ $('#dlist').innerHTML='<div class="empty"><p>Nothing found.</p></div>'; return; }
   let last=null, out='';
   list.forEach(r=>{ const c=catOf(r);
     if(c!==last){ out+=`<div class="dgrp"><span class="dot" style="background:${catColor(c)}"></span>${esc(c)}</div>`; last=c; }
-    const who=clients.filter(cl=>isOn(cl.id,r.id));
+    const who=clients.filter(cl=>isOn(cl.id,r.id)).sort((a,b)=>(a.name||'').localeCompare(b.name||'','nl'));
+    const v=who.filter(cl=>detOf(cl.id,r.id));
     out+=`<article class="dc"><div class="dh"><h3>${esc(r.name)}</h3><span class="m">${who.length} of ${clients.length} clients</span><button class="btn ghost" data-act="edit-req" data-v="${r.id}">Rename / category / delete</button></div>
-     <div class="dg"><div class="field"><label for="dd-${r.id}">Explanation</label><textarea id="dd-${r.id}" class="dd" data-id="${r.id}" data-f="desc" placeholder="What exactly is required? Add rules, tolerances, examples, exceptions.">${esc(r.desc||'')}</textarea></div>
-     <div class="field"><label for="ds-${r.id}">Source / reference</label><textarea id="ds-${r.id}" class="dd" data-id="${r.id}" data-f="source" placeholder="E.g. client manual section 4.2, email 12 May, contact person">${esc(r.source||'')}</textarea></div></div>
-     ${(()=>{const v=who.filter(cl=>detOf(cl.id,r.id)); return v.length?`<div class="pc"><span class="lbl">Client-specific notes</span>${v.map(cl=>`<div><b>${esc(cl.name)}</b><span>${esc(detOf(cl.id,r.id))}</span></div>`).join('')}</div>`:''})()}
-     <div class="who"><span>Applies to:</span>${who.length?who.map(cl=>`<span class="c">${esc(cl.name)}</span>`).join(''):'<span>no clients yet</span>'}</div></article>`;
+     ${v.length?`<div class="pc"><span class="lbl">Client-specific notes</span>${v.map(cl=>`<div><b>${esc(cl.name)}</b><span>${esc(detOf(cl.id,r.id))}</span></div>`).join('')}</div>`:''}
+     <div class="who"><span>Applies to:</span>${who.length?who.map(cl=>`<button class="c" data-act="open-client" data-v="${cl.id}" title="Open ${esc(cl.name)}">${esc(cl.name)}</button>`).join(''):'<span>no clients yet</span>'}</div></article>`;
   });
   $('#dlist').innerHTML=out;
 }
@@ -511,9 +513,9 @@ function buildWorkbook(){
   ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:1,c:0},e:{r:1+cl.length,c:rl.length+2}})};
   ws['!freeze']={xSplit:2,ySplit:2};
   const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Matrix');
-  const a2=[['Requirement','Category','Description','Source','Number of clients','Clients']];
-  rl.forEach(r=>{const k=cl.filter(c=>isOn(c.id,r.id)); a2.push([r.name,catOf(r),r.desc||'',r.source||'',k.length,k.map(c=>c.name).join('; ')])});
-  const w2=XLSX.utils.aoa_to_sheet(a2); w2['!cols']=[{wch:34},{wch:18},{wch:60},{wch:30},{wch:14},{wch:60}]; w2['!autofilter']={ref:'A1:F'+a2.length};
+  const a2=[['Requirement','Category','Number of clients','Clients']];
+  rl.forEach(r=>{const k=cl.filter(c=>isOn(c.id,r.id)); a2.push([r.name,catOf(r),k.length,k.map(c=>c.name).join('; ')])});
+  const w2=XLSX.utils.aoa_to_sheet(a2); w2['!cols']=[{wch:34},{wch:18},{wch:16},{wch:70}]; w2['!autofilter']={ref:'A1:D'+a2.length};
   XLSX.utils.book_append_sheet(wb,w2,'Requirements');
   const a3=[['Client','Category','Requirement','Client-specific detail']];
   cl.forEach(c=>rl.forEach(r=>{if(isOn(c.id,r.id))a3.push([c.name,catOf(r),r.name,detOf(c.id,r.id)])}));
