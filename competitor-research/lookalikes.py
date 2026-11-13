@@ -42,6 +42,7 @@ SPEC = {
     "wool_coat_m":     dict(cats=["Winterjas", "Tussenjas"], inc=R(r"wollmantel|wool coat|cappotto|manteau|płaszcz|abrigo|mantel|overcoat|peacoat|caban"), extra=None, long=None),
     "knit_vest_m":     dict(cats=["Vest / cardigan", "Trui / hoodie", "Blazer"], inc=R(r"weste|vest\b|gilet|kamizel|chaleco|pullunder|slipover"), extra=R(r"strick|knit|maglia|tricot|punto|dzian|v-?neck|v-ausschnitt|scollo a v|col v"), long=None),
     "field_jacket":    dict(cats=["Tussenjas", "Winterjas"], inc=R(r"field|feld|m-?65|cargo|utility|safari|militar|military|polow|worker|work jacket|multi.?pocket"), extra=None, long=None),
+    "suit_m":          dict(cats=["Set", "Blazer"], inc=R(r"anzug|suit|completo|costume|traje|garnitur|zweiteil|2-?piece|two.?piece|set\b|komplet|conjunto|ensemble"), extra=R(r"anzug|suit|blazer|sakko|giacca|veste|chaqueta|marynark|smart|elegant|formal|casual"), long=None),
     "boots_m":         dict(cats=["Laarzen", "Schoenen"], inc=R(r"stiefel|boot|stivale|botte|bota|kozak|trzewik|scarpa alta|high.?top|chelsea"), extra=None, long=None),
 }
 
@@ -130,6 +131,32 @@ def check(picks_path, out_path):
     Path(out_path).write_text(json.dumps(ok, ensure_ascii=False, indent=1))
 
 
+def auto(spec_path, out):
+    """spec: [{"family","gender","n","base_eur","cat","label"}] → per familie de n beste kandidaten met China-vlag en
+    bestseller-positie ≥ 0.5 (look-alikes die zelf ook verkopen), daarna check() en één review-sheet."""
+    spec = json.loads(Path(spec_path).read_text())
+    picks = []
+    for f in spec:
+        sheet(f["family"], f["gender"], 200, out)
+        js = json.loads((Path(out) / f"{f['family']}_{f['gender']}.json").read_text())
+        idx = [i for i, r in enumerate(js) if r["china"] and float(r.get("pct") or 0) >= 0.5][: f["n"]]
+        picks.append(dict(family=f["label"], sheet=f"{f['family']}_{f['gender']}", idx=idx, gender=f["gender"], base_eur=f["base_eur"], cat=f["cat"]))
+    (Path(out) / "picks.json").write_text(json.dumps(picks, indent=1))
+    check(str(Path(out) / "picks.json"), str(Path(out) / "ok.json"))
+    ok = json.loads((Path(out) / "ok.json").read_text())
+    from PIL import Image, ImageDraw
+    def load(u):
+        try: return Image.open(io.BytesIO(pp.get(u + ("&" if "?" in u else "?") + "width=200", binary=True))).convert("RGB").resize((120, 150))
+        except Exception: return Image.new("RGB", (120, 150), "grey")
+    P = {(r["store"], r["handle"]): r for f in spec for r in json.loads((Path(out) / f"{f['family']}_{f['gender']}.json").read_text())}
+    with cf.ThreadPoolExecutor(10) as ex: ims = list(ex.map(lambda c: load(P[(c["store"], c["handle"])]["img"]), ok))
+    sh = Image.new("RGB", (12 * 125, max(1, (len(ok) + 11) // 12) * 175), "white"); d = ImageDraw.Draw(sh)
+    for j, (c, im) in enumerate(zip(ok, ims)):
+        x, y = (j % 12) * 125, (j // 12) * 175
+        sh.paste(im, (x, y + 22)); d.text((x + 2, y + 2), f"{j} {c['fam'][:16]}", fill="black"); d.text((x + 2, y + 12), c["store"][:18], fill="grey")
+    sh.save(Path(out) / "review.png"); print("review", len(ok))
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd"); ap.add_argument("args", nargs="*")
@@ -137,5 +164,7 @@ if __name__ == "__main__":
     a = ap.parse_args()
     if a.cmd == "sheet":
         sheet(a.args[0], a.args[1], int(a.args[2]) if len(a.args) > 2 else 60, a.out)
+    elif a.cmd == "auto":
+        auto(a.args[0], a.out)
     elif a.cmd == "check":
         check(a.args[0], a.args[1])
