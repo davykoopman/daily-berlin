@@ -24,7 +24,7 @@ def main():
     ap.add_argument("items")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--max", type=int, default=999, help="max aantal regels per store uit dit bestand")
-    ap.add_argument("--factor", nargs="*", default=["Niaali=0.65"], help="prijsniveau t.o.v. Davento per store (look-alikes)")
+    ap.add_argument("--factor", nargs="*", default=["Niaali=1.0"], help="prijsniveau t.o.v. Davento per store (look-alikes)")
     a = ap.parse_args()
     items = json.loads(Path(a.items).read_text())
     cfg = json.loads((BASE / "config/stores.json").read_text())

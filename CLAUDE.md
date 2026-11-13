@@ -66,8 +66,16 @@ Werkwijze en criteria: `competitor-research/HOOFDPROMPT.md`.
   kleine, en (3) is het product (bijna) unisex: ook de heren- resp. damesversie. Eisen: aantoonbaar uit China
   (zelfde leveranciersfoto's bij ≥2 dropshipstores of 1688/Alibaba-foto's), niet al in de store of de file, ≥3 foto's,
   geen logo/merk, ≥50% maten leverbaar. Bron: liefst een product dat in een ander land goed loopt; kleine competitors (<75K) uit de eigen markt mogen ook (weinig concurrentie), grote spelers uit de eigen markt niet. Foto-kwaliteit en aantal foto's zijn doorslaggevend. Aantal: ~3-5 per bestsellertype, ~30 in totaal per grote store (Davento, Niaali), niet extreem (regel Davy 16-10). Deze regels komen bovenaan de Links-tab
-  van die store, zonder extra kolom of label. Prijs = prijsniveau van de eigen bestseller in díe store (Niaali ≈ 0,65×
-  Davento), nooit onder de bronprijs. Kleurvarianten op dezelfde pose tellen mee als foto's (≥3 foto's + ≥2 kleuren).
+  van die store, zonder extra kolom of label. Prijs = ECHTE verkoopprijs van de eigen bestseller (Shopify: omzet/stuks; NIET de prijs uit
+  het Google-rapport, dat is de vergelijkingsprijs), omgerekend per store, nooit onder de bronprijs. Kleurvarianten op dezelfde pose tellen mee als foto's (≥3 foto's + ≥2 kleuren).
 - Regels van de gebruiker: bron liefst NIET uit de eigen markt (zelfde foto+prijs = concurrentie);
   adviesprijs = prijs van de bronlink (niet onderprijzen, hoger is beter; alleen 'kan hoger' bij te lage prijs);
   foto's wegen zwaar (vooral de 1e); ~300 per store voor 20-25 dagen, koudere items later in de lijst.
+
+### Ronde 13-11 (akkoord Davy)
+- Focus: Davento, Niaali, Migesi, Vinci Fashion (ex-Newmae, vincifashion.com, US) = HERENSTORE (`"gender": "M"` in
+  stores.json → select_products neemt alleen aantoonbaar herenproducten). Dujje en Stellamea staan stil: geen open regels.
+- Bestsellers bij voorkeur uit Shopify (verbonden met Davento): `FROM sales SHOW net_sales, orders GROUP BY product_title SINCE -21d`
+  → data/shopify/; transfers.py + lookalikes.py (sheet/check) + add_prio.py.
+- Nieuwe competitors: Tranco-lijst → Shopify-scan (/products.json, kleding) → SimilarWeb. Niet geverifieerde stores staan met
+  0 bezoekers in competitors.csv: alleen look-alike-bron, geen bewijsbron.

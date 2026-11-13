@@ -39,7 +39,7 @@ def currency(domain):
         return None
 
 
-def fetch_store(c, max_age_h=20):
+def fetch_store(c, max_age_h=48):
     POOL_DIR.mkdir(parents=True, exist_ok=True)
     f = POOL_DIR / f'{c["domain"]}.json'
     if f.exists() and time.time() - f.stat().st_mtime < max_age_h * 3600:
