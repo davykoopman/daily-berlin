@@ -1,5 +1,5 @@
 {
- "_uitleg": "Doelmix per store voor NIEUWE producten. Davento op basis van Google-productrapport 12-26 okt 2026 (€28K omzet, ROAS 3,0; heren ~65%, jassen ~66% van de omzet); Niaali op basis van 1-16 okt; andere stores trekken de Davento-richting door (akkoord Davy 26-10).",
+ "_uitleg": "Doelmix per store voor NIEUWE producten. Davento op basis van Google-productrapport 12-26 okt 2026 (€28K omzet, ROAS 3,0; heren ~65%, jassen ~66% van de omzet); Niaali op basis van 1-16 okt; andere stores trekken de Davento-richting door (akkoord Davy 26-10). | 13-11: Vinci Fashion (ex-Newmae) = herenstore, mix naar Davento-herendata.",
  "Davento": {
   "share_w": 0.38,
   "boost": {
@@ -70,6 +70,28 @@
    "Blazer": 0.02,
    "Blouse / shirt": 0.02,
    "Schoenen": 0.01
+  }
+ },
+ "Vinci Fashion": {
+  "share_w": 0.0,
+  "boost": {
+   "M|Tussenjas": 1.2,
+   "M|Winterjas": 1.15,
+   "M|Set": 1.1,
+   "M|Broek": 1.1,
+   "M|Trui / hoodie": 1.05,
+   "M|Blazer": 1.05
+  },
+  "mix": {
+   "Tussenjas": 0.35,
+   "Winterjas": 0.2,
+   "Broek": 0.12,
+   "Trui / hoodie": 0.12,
+   "Set": 0.08,
+   "Laarzen": 0.05,
+   "Schoenen": 0.03,
+   "Blazer": 0.03,
+   "Blouse / shirt": 0.02
   }
  }
 }

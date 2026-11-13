@@ -386,6 +386,8 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
             if any(h - o <= 10 for o in own_h):
                 continue  # heb je al (ook met iets bewerkte foto's)
         g = gender(ev["best"]["title"])
+        if store.get("gender") and g != store["gender"]:
+            continue  # bijv. Vinci Fashion = herenstore: alleen producten die aantoonbaar heren zijn
         # Laat de mix aansluiten bij je store: dames/heren-verhouding als lichte weging (doel uit store_mix.json
         # als die er is, anders de huidige verhouding in je catalogus) + boost voor bewezen producttypes.
         sw = mix.get("share_w", own["share_w"])
