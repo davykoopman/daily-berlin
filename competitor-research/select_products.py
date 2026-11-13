@@ -396,6 +396,8 @@ def select_for_store(store, pool, groups, fx, names, taken, n_target, existing=(
         elif g == "M":
             ev["score"] *= 0.75 + 0.5 * (1 - sw)
         ev["score"] *= mix.get("boost", {}).get(f'{g}|{ev["best"]["cat"]}', 1.0)
+        if mix.get("kw_boost") and re.search(mix["kw_boost"], ev["best"]["title"], re.I):
+            ev["score"] *= mix.get("kw_factor", 1.15)
         ev["gender"], ev["key"] = g, k
         ev["score"] = round(ev["score"], 1)
         cands.append(ev)
