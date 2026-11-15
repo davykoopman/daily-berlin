@@ -1,0 +1,295 @@
+{
+ "type": "footer",
+ "name": "Footer",
+ "sections": {
+  "footer_m9NzUG": {
+   "type": "footer",
+   "name": "t:names.footer",
+   "blocks": {
+    "ft_info": {
+     "type": "group",
+     "settings": {
+      "content_direction": "column",
+      "vertical_on_mobile": true,
+      "horizontal_alignment": "flex-start",
+      "vertical_alignment": "center",
+      "align_baseline": false,
+      "horizontal_alignment_flex_direction_column": "flex-start",
+      "vertical_alignment_flex_direction_column": "flex-start",
+      "gap": 12,
+      "width": "fill",
+      "custom_width": 100,
+      "width_mobile": "fill",
+      "custom_width_mobile": 100,
+      "height": "fit",
+      "custom_height": 100,
+      "inherit_color_scheme": true,
+      "color_scheme": "",
+      "background_media": "none",
+      "video_position": "cover",
+      "background_image_position": "cover",
+      "border": "none",
+      "border_width": 1,
+      "border_opacity": 100,
+      "border_radius": 0,
+      "toggle_overlay": false,
+      "overlay_color": "#00000026",
+      "overlay_style": "solid",
+      "gradient_direction": "to top",
+      "link": "",
+      "open_in_new_tab": false,
+      "placeholder": "",
+      "padding-block-start": 0,
+      "padding-block-end": 0,
+      "padding-inline-start": 0,
+      "padding-inline-end": 0
+     },
+     "blocks": {
+      "ft_info_h": {
+       "type": "text",
+       "settings": {
+        "width": "100%",
+        "max_width": "normal",
+        "alignment": "left",
+        "font": "var(--font-body--family)",
+        "font_size": "1rem",
+        "line_height": "normal",
+        "letter_spacing": "normal",
+        "case": "none",
+        "wrap": "pretty",
+        "color": "var(--color-foreground)",
+        "background": false,
+        "background_color": "#00000026",
+        "corner_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "padding-inline-start": 0,
+        "padding-inline-end": 0,
+        "text": "<h3>Unsere Informationen</h3>",
+        "type_preset": "h6"
+       },
+       "blocks": {}
+      },
+      "ft_info_t": {
+       "type": "text",
+       "settings": {
+        "width": "100%",
+        "max_width": "normal",
+        "alignment": "left",
+        "font": "var(--font-body--family)",
+        "font_size": "1rem",
+        "line_height": "normal",
+        "letter_spacing": "normal",
+        "case": "none",
+        "wrap": "pretty",
+        "color": "var(--color-foreground)",
+        "background": false,
+        "background_color": "#00000026",
+        "corner_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "padding-inline-start": 0,
+        "padding-inline-end": 0,
+        "text": "<p><strong>Firmenname: </strong>Daily Berlin<strong><br/></strong><br/><strong>Firmenadresse: </strong>Rosa Luxemburgstraat 11, 1103 DR Amsterdam, Niederlande<br/><br/><strong>Lageradresse: </strong>Jänickestraße 40, 14167 Berlin (Steglitz-Zehlendorf), Deutschland<br/><br/><strong>Firmennummer: </strong>61429573861</p><p><strong>E-Mail:</strong>&nbsp;<a href=\"mailto:support@dailyberlin.de\">support@dailyberlin.de<br/><br/></a><strong>Kundenservice-Zeiten</strong><br/>Montag bis Freitag: 08:00 – 17:00 Uhr<br/>Samstag bis Sonntag: 09:00 – 16:00 Uhr<br/><br/>Durchschnittliche Antwortzeit: innerhalb von 12 Stunden<br/><br/><a href=\"https://www.instagram.com/dailyberlin2026/\" title=\"https://www.instagram.com/dailyberlin2026/\">Instagram Daily Berlin</a></p>",
+        "type_preset": "rte"
+       },
+       "blocks": {}
+      }
+     },
+     "block_order": [
+      "ft_info_h",
+      "ft_info_t"
+     ]
+    },
+    "ft_menu1": {
+     "type": "menu",
+     "settings": {
+      "menu": "main-menu-1",
+      "heading": "Informationen",
+      "heading_preset": "h6",
+      "link_preset": "paragraph",
+      "menu_spacing": 8
+     }
+    },
+    "ft_menu2": {
+     "type": "menu",
+     "settings": {
+      "menu": "footer",
+      "heading": "Rechtliche Hinweise",
+      "heading_preset": "h6",
+      "link_preset": "paragraph",
+      "menu_spacing": 8
+     }
+    },
+    "ft_news": {
+     "type": "group",
+     "settings": {
+      "content_direction": "column",
+      "vertical_on_mobile": true,
+      "horizontal_alignment": "flex-start",
+      "vertical_alignment": "center",
+      "align_baseline": false,
+      "horizontal_alignment_flex_direction_column": "flex-start",
+      "vertical_alignment_flex_direction_column": "flex-start",
+      "gap": 12,
+      "width": "fill",
+      "custom_width": 100,
+      "width_mobile": "fill",
+      "custom_width_mobile": 100,
+      "height": "fit",
+      "custom_height": 100,
+      "inherit_color_scheme": true,
+      "color_scheme": "",
+      "background_media": "none",
+      "video_position": "cover",
+      "background_image_position": "cover",
+      "border": "none",
+      "border_width": 1,
+      "border_opacity": 100,
+      "border_radius": 0,
+      "toggle_overlay": false,
+      "overlay_color": "#00000026",
+      "overlay_style": "solid",
+      "gradient_direction": "to top",
+      "link": "",
+      "open_in_new_tab": false,
+      "placeholder": "",
+      "padding-block-start": 0,
+      "padding-block-end": 0,
+      "padding-inline-start": 0,
+      "padding-inline-end": 0
+     },
+     "blocks": {
+      "ft_news_h": {
+       "type": "text",
+       "settings": {
+        "width": "100%",
+        "max_width": "normal",
+        "alignment": "left",
+        "font": "var(--font-body--family)",
+        "font_size": "1rem",
+        "line_height": "normal",
+        "letter_spacing": "normal",
+        "case": "none",
+        "wrap": "pretty",
+        "color": "var(--color-foreground)",
+        "background": false,
+        "background_color": "#00000026",
+        "corner_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "padding-inline-start": 0,
+        "padding-inline-end": 0,
+        "text": "<h3>Jetzt anmelden und sparen</h3>",
+        "type_preset": "h6"
+       },
+       "blocks": {}
+      },
+      "ft_news_t": {
+       "type": "text",
+       "settings": {
+        "width": "100%",
+        "max_width": "normal",
+        "alignment": "left",
+        "font": "var(--font-body--family)",
+        "font_size": "1rem",
+        "line_height": "normal",
+        "letter_spacing": "normal",
+        "case": "none",
+        "wrap": "pretty",
+        "color": "var(--color-foreground)",
+        "background": false,
+        "background_color": "#00000026",
+        "corner_radius": 0,
+        "padding-block-start": 0,
+        "padding-block-end": 0,
+        "padding-inline-start": 0,
+        "padding-inline-end": 0,
+        "text": "<p>Abonnieren Sie unseren Newsletter und erhalten Sie exklusive Angebote, kostenlose Geschenke und einmalige Deals</p>",
+        "type_preset": "rte"
+       },
+       "blocks": {}
+      },
+      "ft_news_f": {
+       "type": "email-signup",
+       "settings": {
+        "width": "fill",
+        "inherit_color_scheme": true,
+        "border_style": "all",
+        "border_width": 1,
+        "border_radius": 0,
+        "display_type": "arrow",
+        "label": "Anmelden",
+        "integrated_button": true
+       },
+       "blocks": {}
+      },
+      "ft_news_pay": {
+       "type": "payment-icons",
+       "settings": {
+        "horizontal_alignment": "flex-start",
+        "gap": 6
+       },
+       "blocks": {}
+      }
+     },
+     "block_order": [
+      "ft_news_h",
+      "ft_news_t",
+      "ft_news_f",
+      "ft_news_pay"
+     ]
+    }
+   },
+   "block_order": [
+    "ft_info",
+    "ft_menu1",
+    "ft_menu2",
+    "ft_news"
+   ],
+   "settings": {
+    "section_width": "page-width",
+    "gap": 40,
+    "color_scheme": "scheme-5",
+    "padding-block-start": 56,
+    "padding-block-end": 40
+   }
+  },
+  "footer_utilities_jLGE8U": {
+   "type": "footer-utilities",
+   "name": "t:names.utilities",
+   "blocks": {
+    "footer_copyright_jweRK8": {
+     "type": "footer-copyright",
+     "settings": {
+      "show_powered_by": false,
+      "font_size": "0.75rem",
+      "case": "none"
+     }
+    },
+    "social_links_Ew63Kq": {
+     "type": "social-links",
+     "settings": {
+      "instagram_url": "https://www.instagram.com/dailyberlin2026/"
+     }
+    }
+   },
+   "block_order": [
+    "footer_copyright_jweRK8",
+    "social_links_Ew63Kq"
+   ],
+   "settings": {
+    "section_width": "page-width",
+    "gap": 24,
+    "divider_thickness": 1,
+    "color_scheme": "scheme-5",
+    "padding-block-start": 20,
+    "padding-block-end": 32
+   }
+  }
+ },
+ "order": [
+  "footer_m9NzUG",
+  "footer_utilities_jLGE8U"
+ ]
+}

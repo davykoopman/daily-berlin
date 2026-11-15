@@ -1,0 +1,500 @@
+{
+ "sections": {
+  "hero_db": {
+   "type": "hero",
+   "blocks": {
+    "hero_t1": {
+     "type": "text",
+     "settings": {
+      "text": "<h1>Neue Saison, neue Styles</h1>",
+      "type_preset": "h1",
+      "alignment": "center",
+      "width": "100%"
+     }
+    },
+    "hero_t2": {
+     "type": "text",
+     "settings": {
+      "text": "<p>Entdecken Sie jetzt unsere aktuelle Kollektion für die laufende Saison.</p>",
+      "type_preset": "rte",
+      "alignment": "center",
+      "width": "100%"
+     }
+    },
+    "hero_btns": {
+     "type": "group",
+     "settings": {
+      "content_direction": "row",
+      "vertical_on_mobile": false,
+      "horizontal_alignment": "center",
+      "gap": 12,
+      "width": "fit-content",
+      "width_mobile": "fit-content"
+     },
+     "blocks": {
+      "hero_b1": {
+       "type": "button",
+       "settings": {
+        "label": "Damen",
+        "link": "shopify://collections/women",
+        "style_class": "button"
+       }
+      },
+      "hero_b2": {
+       "type": "button",
+       "settings": {
+        "label": "Herren",
+        "link": "shopify://collections/men",
+        "style_class": "button-secondary"
+       }
+      }
+     },
+     "block_order": [
+      "hero_b1",
+      "hero_b2"
+     ]
+    }
+   },
+   "block_order": [
+    "hero_t1",
+    "hero_t2",
+    "hero_btns"
+   ],
+   "settings": {
+    "media_type_1": "image",
+    "image_1": "shopify://shop_images/Daily_Berlin_Banner1.png",
+    "horizontal_alignment_flex_direction_column": "center",
+    "vertical_alignment_flex_direction_column": "center",
+    "gap": 16,
+    "section_width": "full-width",
+    "section_height": "large",
+    "color_scheme": "scheme-6",
+    "toggle_overlay": true,
+    "overlay_color": "#00000040",
+    "overlay_style": "solid",
+    "padding-block-start": 48,
+    "padding-block-end": 48
+   },
+   "name": "Hero"
+  },
+  "trust_db": {
+   "type": "section",
+   "blocks": {
+    "feat_0": {
+     "type": "group",
+     "settings": {
+      "content_direction": "column",
+      "horizontal_alignment_flex_direction_column": "center",
+      "gap": 8,
+      "width": "fill",
+      "width_mobile": "fill",
+      "padding-block-start": 16,
+      "padding-block-end": 16,
+      "padding-inline-start": 12,
+      "padding-inline-end": 12
+     },
+     "blocks": {
+      "feat_0_icon": {
+       "type": "icon",
+       "settings": {
+        "icon": "truck",
+        "width": 32
+       }
+      },
+      "feat_0_title": {
+       "type": "text",
+       "settings": {
+        "text": "<p><strong>Kostenloser Versand</strong></p>",
+        "type_preset": "h5",
+        "alignment": "center",
+        "width": "100%"
+       }
+      },
+      "feat_0_text": {
+       "type": "text",
+       "settings": {
+        "text": "<p>Kostenloser Versand in ganz Deutschland, Österreich, Frankreich und Liechtenstein</p>",
+        "type_preset": "rte",
+        "alignment": "center",
+        "width": "100%"
+       }
+      }
+     },
+     "block_order": [
+      "feat_0_icon",
+      "feat_0_title",
+      "feat_0_text"
+     ]
+    },
+    "feat_1": {
+     "type": "group",
+     "settings": {
+      "content_direction": "column",
+      "horizontal_alignment_flex_direction_column": "center",
+      "gap": 8,
+      "width": "fill",
+      "width_mobile": "fill",
+      "padding-block-start": 16,
+      "padding-block-end": 16,
+      "padding-inline-start": 12,
+      "padding-inline-end": 12
+     },
+     "blocks": {
+      "feat_1_icon": {
+       "type": "icon",
+       "settings": {
+        "icon": "return",
+        "width": 32
+       }
+      },
+      "feat_1_title": {
+       "type": "text",
+       "settings": {
+        "text": "<p><strong>60-Tage-Rückgabegarantie</strong></p>",
+        "type_preset": "h5",
+        "alignment": "center",
+        "width": "100%"
+       }
+      },
+      "feat_1_text": {
+       "type": "text",
+       "settings": {
+        "text": "<p>Nicht zufrieden mit Ihrem Kauf? Senden Sie ihn innerhalb von 60 Tagen zurück.</p>",
+        "type_preset": "rte",
+        "alignment": "center",
+        "width": "100%"
+       }
+      }
+     },
+     "block_order": [
+      "feat_1_icon",
+      "feat_1_title",
+      "feat_1_text"
+     ]
+    },
+    "feat_2": {
+     "type": "group",
+     "settings": {
+      "content_direction": "column",
+      "horizontal_alignment_flex_direction_column": "center",
+      "gap": 8,
+      "width": "fill",
+      "width_mobile": "fill",
+      "padding-block-start": 16,
+      "padding-block-end": 16,
+      "padding-inline-start": 12,
+      "padding-inline-end": 12
+     },
+     "blocks": {
+      "feat_2_icon": {
+       "type": "icon",
+       "settings": {
+        "icon": "chat_bubble",
+        "width": 32
+       }
+      },
+      "feat_2_title": {
+       "type": "text",
+       "settings": {
+        "text": "<p><strong>24/7 Kundenservice</strong></p>",
+        "type_preset": "h5",
+        "alignment": "center",
+        "width": "100%"
+       }
+      },
+      "feat_2_text": {
+       "type": "text",
+       "settings": {
+        "text": "<p>Wir sind jederzeit für Sie da, Tag und Nacht. Kontaktieren Sie uns jederzeit!</p>",
+        "type_preset": "rte",
+        "alignment": "center",
+        "width": "100%"
+       }
+      }
+     },
+     "block_order": [
+      "feat_2_icon",
+      "feat_2_title",
+      "feat_2_text"
+     ]
+    }
+   },
+   "block_order": [
+    "feat_0",
+    "feat_1",
+    "feat_2"
+   ],
+   "settings": {
+    "content_direction": "row",
+    "vertical_on_mobile": true,
+    "gap": 16,
+    "section_width": "page-width",
+    "color_scheme": "scheme-1",
+    "padding-block-start": 40,
+    "padding-block-end": 40
+   },
+   "name": "Vorteile"
+  },
+  "collections_db": {
+   "type": "collection-list",
+   "name": "Kollektionen",
+   "settings": {
+    "collection_list": [
+     "women",
+     "men"
+    ],
+    "layout_type": "grid",
+    "columns": 2,
+    "mobile_columns": "1",
+    "section_width": "page-width",
+    "padding-block-start": 24,
+    "padding-block-end": 24
+   },
+   "blocks": {
+    "coll_head": {
+     "type": "text",
+     "settings": {
+      "text": "<h2>Kollektionen</h2>",
+      "type_preset": "h3",
+      "alignment": "center",
+      "width": "100%"
+     }
+    },
+    "static-collection-card": {
+     "type": "_collection-card",
+     "static": true,
+     "settings": {
+      "horizontal_alignment": "center",
+      "vertical_alignment": "center",
+      "placement": "on_image"
+     },
+     "blocks": {
+      "collection-card-image": {
+       "type": "_collection-card-image",
+       "static": true,
+       "settings": {
+        "image_ratio": "square"
+       }
+      },
+      "collection-title": {
+       "type": "collection-title",
+       "settings": {
+        "type_preset": "h3",
+        "alignment": "center",
+        "background": true,
+        "background_color": "#ffffff",
+        "padding-block-start": 8,
+        "padding-block-end": 8,
+        "padding-inline-start": 16,
+        "padding-inline-end": 16
+       }
+      }
+     },
+     "block_order": [
+      "collection-title"
+     ]
+    }
+   },
+   "block_order": [
+    "coll_head"
+   ]
+  },
+  "about_db": {
+   "type": "media-with-content",
+   "settings": {
+    "media_position": "right",
+    "media_width": "medium",
+    "media_height": "auto",
+    "color_scheme": "scheme-1"
+   },
+   "blocks": {
+    "media": {
+     "type": "_media-without-appearance",
+     "static": true,
+     "settings": {
+      "image": "shopify://shop_images/Daily_Berlin_About_us.png",
+      "media_type": "image"
+     }
+    },
+    "content": {
+     "type": "_content-without-appearance",
+     "static": true,
+     "settings": {
+      "horizontal_alignment_flex_direction_column": "flex-start",
+      "vertical_alignment_flex_direction_column": "center",
+      "gap": 20,
+      "padding-block-start": 48,
+      "padding-block-end": 48,
+      "padding-inline-start": 48,
+      "padding-inline-end": 48
+     },
+     "blocks": {
+      "about_h": {
+       "type": "text",
+       "settings": {
+        "text": "<h2>Über uns</h2>",
+        "type_preset": "h3",
+        "alignment": "left",
+        "width": "100%"
+       }
+      },
+      "about_t": {
+       "type": "text",
+       "settings": {
+        "text": "<p>Daily Berlin entstand aus der Liebe zu Stil, Street Culture und durchdachtem Design.<br/><br/>Wir glauben, dass Kleidung mehr ist als nur das, was man trägt. Sie zeigt, wie man in der Welt auftritt.<br/><br/>Unsere Kollektionen verbinden moderne Ästhetik mit alltäglichem Komfort – mit Sorgfalt gefertigt für Qualität, Menschen und unseren Planeten.<br/><br/>Zeitlose Pieces, bewusste Entscheidungen, gemacht, um sich mit dir zu bewegen.<br/><br/>Street Vibes. Klares Design. Gemacht, um zu bleiben.<br/><br/>Das ist Daily Berlin.<br/><br/></p>",
+        "type_preset": "rte",
+        "alignment": "left",
+        "width": "100%"
+       }
+      },
+      "about_b": {
+       "type": "button",
+       "settings": {
+        "label": "Mehr über uns",
+        "link": "shopify://pages/uber-uns",
+        "style_class": "button"
+       }
+      }
+     },
+     "block_order": [
+      "about_h",
+      "about_t",
+      "about_b"
+     ]
+    }
+   },
+   "name": "Über uns"
+  },
+  "faq_db": {
+   "type": "section",
+   "blocks": {
+    "faq_title": {
+     "type": "text",
+     "settings": {
+      "text": "<h2>Häufig gestellte Fragen</h2>",
+      "type_preset": "h3",
+      "alignment": "center",
+      "width": "100%"
+     }
+    },
+    "faq_acc": {
+     "type": "accordion",
+     "settings": {
+      "icon": "plus",
+      "dividers": true,
+      "type_preset": "h6"
+     },
+     "blocks": {
+      "faq_row_1": {
+       "type": "_accordion-row",
+       "settings": {
+        "heading": "Wie lauten Ihre Rückgabebedingungen?"
+       },
+       "blocks": {
+        "faq_ans_1": {
+         "type": "text",
+         "settings": {
+          "text": "<p>Wir gewähren ein 60-tägiges Rückgaberecht für alle ungetragenen Artikel, an denen die Originaletiketten noch angebracht sind. Die Artikel müssen sich im Originalzustand befinden, damit eine vollständige Rückerstattung gewährt werden kann.</p>",
+          "type_preset": "rte",
+          "alignment": "left",
+          "width": "100%"
+         }
+        }
+       },
+       "block_order": [
+        "faq_ans_1"
+       ]
+      },
+      "faq_row_2": {
+       "type": "_accordion-row",
+       "settings": {
+        "heading": "Wie lange dauert der Versand?"
+       },
+       "blocks": {
+        "faq_ans_2": {
+         "type": "text",
+         "settings": {
+          "text": "<p>Bearbeitungszeit: 1–2 Werktage</p><p> Voraussichtliche Versanddauer: 3–7 Werktage</p><p>In den meisten Fällen trifft Ihre Bestellung innerhalb von insgesamt 4–9 Werktagen ein.<br/><br/></p>",
+          "type_preset": "rte",
+          "alignment": "left",
+          "width": "100%"
+         }
+        }
+       },
+       "block_order": [
+        "faq_ans_2"
+       ]
+      },
+      "faq_row_3": {
+       "type": "_accordion-row",
+       "settings": {
+        "heading": "Bieten Sie internationalen Versand an?"
+       },
+       "blocks": {
+        "faq_ans_3": {
+         "type": "text",
+         "settings": {
+          "text": "<p>Derzeit liefern wir nur innerhalb Deutschlands, Österreichs, Frankreich und Liechtensteins.</p>",
+          "type_preset": "rte",
+          "alignment": "left",
+          "width": "100%"
+         }
+        }
+       },
+       "block_order": [
+        "faq_ans_3"
+       ]
+      },
+      "faq_row_4": {
+       "type": "_accordion-row",
+       "settings": {
+        "heading": "Wie pflege ich meine Kleidungsstücke?"
+       },
+       "blocks": {
+        "faq_ans_4": {
+         "type": "text",
+         "settings": {
+          "text": "<p>Die Pflegehinweise finden Sie auf dem Etikett jedes Kleidungsstücks. Generell empfehlen wir, die Kleidungsstücke in kaltem Wasser zu waschen und zum Trocknen aufzuhängen, um die Qualität und Langlebigkeit Ihrer Kleidungsstücke zu erhalten.</p>",
+          "type_preset": "rte",
+          "alignment": "left",
+          "width": "100%"
+         }
+        }
+       },
+       "block_order": [
+        "faq_ans_4"
+       ]
+      }
+     },
+     "block_order": [
+      "faq_row_1",
+      "faq_row_2",
+      "faq_row_3",
+      "faq_row_4"
+     ]
+    }
+   },
+   "block_order": [
+    "faq_title",
+    "faq_acc"
+   ],
+   "settings": {
+    "content_direction": "column",
+    "horizontal_alignment_flex_direction_column": "center",
+    "gap": 24,
+    "section_width": "page-width",
+    "color_scheme": "scheme-1",
+    "padding-block-start": 48,
+    "padding-block-end": 48
+   },
+   "name": "FAQ"
+  }
+ },
+ "order": [
+  "hero_db",
+  "trust_db",
+  "collections_db",
+  "about_db",
+  "faq_db"
+ ]
+}

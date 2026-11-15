@@ -1,0 +1,189 @@
+{
+ "sections": {
+  "about_main": {
+   "type": "section",
+   "name": "Über uns",
+   "settings": {
+    "content_direction": "column",
+    "horizontal_alignment_flex_direction_column": "center",
+    "gap": 20,
+    "section_width": "page-width",
+    "color_scheme": "scheme-1",
+    "padding-block-start": 56,
+    "padding-block-end": 40
+   },
+   "blocks": {
+    "ab_h": {
+     "type": "text",
+     "settings": {
+      "text": "<h1>Über uns</h1>",
+      "type_preset": "h2",
+      "alignment": "center",
+      "width": "100%"
+     }
+    },
+    "ab_t": {
+     "type": "text",
+     "settings": {
+      "text": "<p>Willkommen bei <strong>Daily Berlin.</strong></p><p>Was als kleine Idee begann, inspiriert von den Straßen Berlins, von Kreativität, Bewegung und dem täglichen Leben in der Stadt, ist heute zu einer Marke geworden, die für Stil, Komfort und bewusste Entscheidungen steht.</p><p>Wir sind ein modernes Fashion-Label mit einer klaren Vision. Wir möchten Kleidung entwerfen, die mehr ist als nur Mode. Kleidung sollte nicht nur gut aussehen, sondern sich auch gut anfühlen. Sie sollte dich durch deinen Alltag begleiten und zu jedem Moment passen, vom Morgen bis in die Nacht, von der Arbeit bis zum Wochenende.</p><p>Bei Daily Berlin glauben wir, dass Stil etwas Persönliches ist. Er zeigt, wer du bist, wie du dich fühlst und wie du der Welt begegnest. Deshalb entwerfen wir zeitlose Pieces mit klaren Linien, modernen Silhouetten und hochwertigen Materialien. Designs, die sich mühelos kombinieren lassen und mit dir mitgehen, statt dich einzuschränken.</p><p>Jedes Teil wird mit Sorgfalt gefertigt, mit Respekt für Menschen und unseren Planeten. Wir achten bewusst auf Qualität, verantwortungsvolle Produktion und langlebige Materialien, damit du Kleidung tragen kannst, die sich in jeder Hinsicht richtig anfühlt.</p><p>Doch Daily Berlin ist mehr als nur Kleidung. Es sind die Menschen, die unsere Pieces tragen und unsere Werte teilen. Kreative Köpfe, Macher, Träumer und alle, die ihren eigenen Weg gehen. Gemeinsam bilden wir eine Community, die für Authentizität, Selbstbewusstsein und Zusammenhalt steht.</p><p>Wir wachsen mit euch, hören zu und entwickeln uns jeden Tag weiter. Denn Mode sollte dich nicht verändern. Sie sollte dich stärken und dir das Gefühl geben, ganz du selbst zu sein.</p><p>Selbstbewusst. Zeitlos. Echt. Das ist <strong>Daily Berlin.<br/><br/>Kontaktinformationen</strong></p><p><strong>Firmenname: </strong>Daily Berlin<strong><br/>Firmenadresse:&nbsp;</strong>Rosa Luxemburgstraat 11, 1103 DR Amsterdam, Niederlande<br/><strong>Lageradresse:&nbsp;</strong>Jänickestraße 40, 14167 Berlin (Steglitz-Zehlendorf), Deutschland<br/><strong>Firmennummer:&nbsp;</strong>61429573861<br/><strong>E-Mail:</strong>&nbsp;<a href=\"mailto:support@dailyberlin.de\">support@dailyberlin.de<br/></a><strong>Kundenservice-Zeiten</strong><br/>Montag bis Freitag: 08:00 – 17:00 Uhr<br/>Samstag bis Sonntag: 09:00 – 16:00 Uhr<br/>Durchschnittliche Antwortzeit: innerhalb von 12 Stunden<br/><br/><a href=\"https://www.instagram.com/dailyberlin2026/\" title=\"https://www.instagram.com/dailyberlin2026/\">Instagram Daily Berlin</a></p>",
+      "type_preset": "rte",
+      "alignment": "center",
+      "width": "100%",
+      "max_width": "narrow"
+     }
+    }
+   },
+   "block_order": [
+    "ab_h",
+    "ab_t"
+   ]
+  },
+  "about_cols": {
+   "type": "section",
+   "name": "Werte",
+   "settings": {
+    "content_direction": "row",
+    "vertical_on_mobile": true,
+    "gap": 32,
+    "section_width": "page-width",
+    "color_scheme": "scheme-1",
+    "padding-block-start": 24,
+    "padding-block-end": 56
+   },
+   "blocks": {
+    "column1": {
+     "type": "group",
+     "settings": {
+      "content_direction": "column",
+      "horizontal_alignment_flex_direction_column": "center",
+      "gap": 12,
+      "width": "fill",
+      "width_mobile": "fill"
+     },
+     "blocks": {
+      "column1_img": {
+       "type": "image",
+       "settings": {
+        "image": "shopify://shop_images/realistic-photo-of-customer-service-empl_cmAgt7ZIT1e60wRCcMtK9A_h8G_BdN_QKeYqxr8OcoLiw_hd.png"
+       }
+      },
+      "column1_h": {
+       "type": "text",
+       "settings": {
+        "text": "<h3>Exzellenter Kundenservice</h3>",
+        "type_preset": "h4",
+        "alignment": "center",
+        "width": "100%"
+       }
+      },
+      "column1_t": {
+       "type": "text",
+       "settings": {
+        "text": "<p>Bei <strong>Daily Berlin</strong> stehst du an erster Stelle.<br/><br/>Ob Fragen, Beratung oder Hilfe bei deiner Bestellung – wir sind persönlich für dich da. Schnell, unkompliziert und mit echter Aufmerksamkeit.</p><p>Wir glauben, guter Service bedeutet mehr als nur Antworten zu geben. Es geht darum zuzuhören, mitzudenken und Lösungen zu finden, die sich für dich richtig anfühlen.</p><p>Denn du bist nicht nur ein Kunde. Du bist Teil unserer Community.</p>",
+        "type_preset": "rte",
+        "alignment": "center",
+        "width": "100%"
+       }
+      }
+     },
+     "block_order": [
+      "column1_img",
+      "column1_h",
+      "column1_t"
+     ]
+    },
+    "column2": {
+     "type": "group",
+     "settings": {
+      "content_direction": "column",
+      "horizontal_alignment_flex_direction_column": "center",
+      "gap": 12,
+      "width": "fill",
+      "width_mobile": "fill"
+     },
+     "blocks": {
+      "column2_img": {
+       "type": "image",
+       "settings": {
+        "image": "shopify://shop_images/maak-een-realistische-foto-waarin-je-de-_P8DdUjWlRge7BxFzPJv8qg_6GL8IEUaSdG8b-2BqaaoCQ_hd.png"
+       }
+      },
+      "column2_h": {
+       "type": "text",
+       "settings": {
+        "text": "<h3>Faire Preise. Beste Qualität.</h3>",
+        "type_preset": "h4",
+        "alignment": "center",
+        "width": "100%"
+       }
+      },
+      "column2_t": {
+       "type": "text",
+       "settings": {
+        "text": "<p>Wir möchten Mode zugänglich machen, ohne Kompromisse bei Qualität oder Design.<br/><br/>Deshalb setzen wir auf hochwertige Materialien, saubere Verarbeitung und zeitlose Schnitte zu fairen Preisen.</p><p>Keine überteuerten Trends. Keine Wegwerfmode.<br/><br/>Nur Pieces, die lange halten und dich jeden Tag begleiten.</p><p>Gute Qualität sollte sich nicht wie ein Luxus anfühlen, sondern wie selbstverständlich.</p>",
+        "type_preset": "rte",
+        "alignment": "center",
+        "width": "100%"
+       }
+      }
+     },
+     "block_order": [
+      "column2_img",
+      "column2_h",
+      "column2_t"
+     ]
+    },
+    "column3": {
+     "type": "group",
+     "settings": {
+      "content_direction": "column",
+      "horizontal_alignment_flex_direction_column": "center",
+      "gap": 12,
+      "width": "fill",
+      "width_mobile": "fill"
+     },
+     "blocks": {
+      "column3_img": {
+       "type": "image",
+       "settings": {
+        "image": "shopify://shop_images/realistic-eco-friendly-packaging-flat-la_-Y1RKWrRQwSk_wkN2w_z5w_STyYROhwRpOfyU32JvkYBw_hd.png"
+       }
+      },
+      "column3_h": {
+       "type": "text",
+       "settings": {
+        "text": "<h3>Nachhaltigkeit im Herzen</h3>",
+        "type_preset": "h4",
+        "alignment": "center",
+        "width": "100%"
+       }
+      },
+      "column3_t": {
+       "type": "text",
+       "settings": {
+        "text": "<p>Verantwortung gehört für uns einfach dazu.<br/><br/>Von bewusst gewählten Materialien über faire Produktion bis hin zu umweltfreundlichen Verpackungen denken wir jeden Schritt mit.</p><p>Wir entscheiden uns lieber für langlebige Lösungen statt schnelle Trends. Für Qualität statt Masse. Für Morgen statt nur Heute.</p><p>Denn Mode sollte nicht nur gut aussehen, sondern auch ein gutes Gefühl hinterlassen.</p>",
+        "type_preset": "rte",
+        "alignment": "center",
+        "width": "100%"
+       }
+      }
+     },
+     "block_order": [
+      "column3_img",
+      "column3_h",
+      "column3_t"
+     ]
+    }
+   },
+   "block_order": [
+    "column1",
+    "column2",
+    "column3"
+   ]
+  }
+ },
+ "order": [
+  "about_main",
+  "about_cols"
+ ]
+}

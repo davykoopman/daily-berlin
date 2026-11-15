@@ -1,0 +1,101 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "rich-text": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "title": "Über uns"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "enlarge_text": true,
+            "text": "<p>Willkommen bei <strong>Daily Berlin.</strong></p><p>Was als kleine Idee begann, inspiriert von den Straßen Berlins, von Kreativität, Bewegung und dem täglichen Leben in der Stadt, ist heute zu einer Marke geworden, die für Stil, Komfort und bewusste Entscheidungen steht.</p><p>Wir sind ein modernes Fashion-Label mit einer klaren Vision. Wir möchten Kleidung entwerfen, die mehr ist als nur Mode. Kleidung sollte nicht nur gut aussehen, sondern sich auch gut anfühlen. Sie sollte dich durch deinen Alltag begleiten und zu jedem Moment passen, vom Morgen bis in die Nacht, von der Arbeit bis zum Wochenende.</p><p>Bei Daily Berlin glauben wir, dass Stil etwas Persönliches ist. Er zeigt, wer du bist, wie du dich fühlst und wie du der Welt begegnest. Deshalb entwerfen wir zeitlose Pieces mit klaren Linien, modernen Silhouetten und hochwertigen Materialien. Designs, die sich mühelos kombinieren lassen und mit dir mitgehen, statt dich einzuschränken.</p><p>Jedes Teil wird mit Sorgfalt gefertigt, mit Respekt für Menschen und unseren Planeten. Wir achten bewusst auf Qualität, verantwortungsvolle Produktion und langlebige Materialien, damit du Kleidung tragen kannst, die sich in jeder Hinsicht richtig anfühlt.</p><p>Doch Daily Berlin ist mehr als nur Kleidung. Es sind die Menschen, die unsere Pieces tragen und unsere Werte teilen. Kreative Köpfe, Macher, Träumer und alle, die ihren eigenen Weg gehen. Gemeinsam bilden wir eine Community, die für Authentizität, Selbstbewusstsein und Zusammenhalt steht.</p><p>Wir wachsen mit euch, hören zu und entwickeln uns jeden Tag weiter. Denn Mode sollte dich nicht verändern. Sie sollte dich stärken und dir das Gefühl geben, ganz du selbst zu sein.</p><p>Selbstbewusst. Zeitlos. Echt. Das ist <strong>Daily Berlin.<br/><br/>Kontaktinformationen</strong></p><p><strong>Firmenname: </strong>Daily Berlin<strong><br/>Firmenadresse:&nbsp;</strong>Rosa Luxemburgstraat 11, 1103 DR Amsterdam, Niederlande<br/><strong>Lageradresse:&nbsp;</strong>Jänickestraße 40, 14167 Berlin (Steglitz-Zehlendorf), Deutschland<br/><strong>Firmennummer:&nbsp;</strong>61429573861<br/><strong>E-Mail:</strong>&nbsp;<a href=\"mailto:support@dailyberlin.de\">support@dailyberlin.de<br/></a><strong>Kundenservice-Zeiten</strong><br/>Montag bis Freitag: 08:00 – 17:00 Uhr<br/>Samstag bis Sonntag: 09:00 – 16:00 Uhr<br/>Durchschnittliche Antwortzeit: innerhalb von 12 Stunden<br/><br/><a href=\"https://www.instagram.com/dailyberlin2026/\" title=\"https://www.instagram.com/dailyberlin2026/\">Instagram Daily Berlin</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "align_text": "center",
+        "narrow_column": true,
+        "divider": false
+      }
+    },
+    "text-columns": {
+      "type": "text-columns",
+      "blocks": {
+        "column1": {
+          "type": "text_block",
+          "settings": {
+            "enable_image": true,
+            "image": "shopify://shop_images/realistic-photo-of-customer-service-empl_cmAgt7ZIT1e60wRCcMtK9A_h8G_BdN_QKeYqxr8OcoLiw_hd.png",
+            "image_width": 650,
+            "title": "Exzellenter Kundenservice",
+            "text": "<p>Bei <strong>Daily Berlin</strong> stehst du an erster Stelle.<br/><br/>Ob Fragen, Beratung oder Hilfe bei deiner Bestellung – wir sind persönlich für dich da. Schnell, unkompliziert und mit echter Aufmerksamkeit.</p><p>Wir glauben, guter Service bedeutet mehr als nur Antworten zu geben. Es geht darum zuzuhören, mitzudenken und Lösungen zu finden, die sich für dich richtig anfühlen.</p><p>Denn du bist nicht nur ein Kunde. Du bist Teil unserer Community.</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "column2": {
+          "type": "text_block",
+          "settings": {
+            "enable_image": true,
+            "image": "shopify://shop_images/maak-een-realistische-foto-waarin-je-de-_P8DdUjWlRge7BxFzPJv8qg_6GL8IEUaSdG8b-2BqaaoCQ_hd.png",
+            "image_width": 650,
+            "title": "Faire Preise. Beste Qualität.",
+            "text": "<p>Wir möchten Mode zugänglich machen, ohne Kompromisse bei Qualität oder Design.<br/><br/>Deshalb setzen wir auf hochwertige Materialien, saubere Verarbeitung und zeitlose Schnitte zu fairen Preisen.</p><p>Keine überteuerten Trends. Keine Wegwerfmode.<br/><br/>Nur Pieces, die lange halten und dich jeden Tag begleiten.</p><p>Gute Qualität sollte sich nicht wie ein Luxus anfühlen, sondern wie selbstverständlich.</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "column3": {
+          "type": "text_block",
+          "settings": {
+            "enable_image": true,
+            "image": "shopify://shop_images/realistic-eco-friendly-packaging-flat-la_-Y1RKWrRQwSk_wkN2w_z5w_STyYROhwRpOfyU32JvkYBw_hd.png",
+            "image_width": 650,
+            "title": "Nachhaltigkeit im Herzen",
+            "text": "<p>Verantwortung gehört für uns einfach dazu.<br/><br/>Von bewusst gewählten Materialien über faire Produktion bis hin zu umweltfreundlichen Verpackungen denken wir jeden Schritt mit.</p><p>Wir entscheiden uns lieber für langlebige Lösungen statt schnelle Trends. Für Qualität statt Masse. Für Morgen statt nur Heute.</p><p>Denn Mode sollte nicht nur gut aussehen, sondern auch ein gutes Gefühl hinterlassen.</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column1",
+        "column2",
+        "column3"
+      ],
+      "settings": {
+        "title": "",
+        "align_text": "center",
+        "divider": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich-text",
+    "text-columns"
+  ]
+}

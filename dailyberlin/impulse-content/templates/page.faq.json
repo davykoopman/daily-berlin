@@ -1,0 +1,211 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "faq-0": {
+          "type": "rich-text",
+          "settings": {
+            "title": "Versand",
+            "text": "",
+            "align_text": "left"
+          }
+        },
+        "faq-2": {
+          "type": "question",
+          "settings": {
+            "title": "Bieten Sie internationalen Versand an?",
+            "text": "<p>Derzeit liefern wir ausschließlich innerhalb Deutschlands. Wir arbeiten daran, unseren Versand in Zukunft auf weitere Länder auszuweiten.<br/></p>"
+          }
+        },
+        "faq-1": {
+          "type": "question",
+          "settings": {
+            "title": "Wie hoch sind die Versandkosten?",
+            "text": "<p>Wir freuen uns, kostenlosen Versand für alle Bestellungen anzubieten – unabhängig vom Bestellwert. Sie zahlen keine Versandkosten.</p>"
+          }
+        },
+        "question_qGLkKA": {
+          "type": "question",
+          "settings": {
+            "title": "Mit welchem Versanddienstleister wird geliefert?",
+            "text": "<p>Alle Bestellungen werden zuverlässig mit DHL versendet.</p>"
+          }
+        },
+        "question_JwKr3e": {
+          "type": "question",
+          "settings": {
+            "title": "Wie kann ich meine Bestellung verfolgen?",
+            "text": "<p>Sobald Ihre Bestellung versandt wurde, erhalten Sie eine Versandbestätigung per E-Mail mit einer Sendungsnummer. Sie können Ihre Bestellung verfolgen, indem Sie auf den Link in der E-Mail klicken oder Ihre Sendungsnummer auf folgender Seite eingeben: [TRACKING-SEITE EINFÜGEN]. </p>"
+          }
+        },
+        "question_XY7VFW": {
+          "type": "question",
+          "settings": {
+            "title": "Wie lange dauert die Lieferung?",
+            "text": "<p>Unsere Bearbeitungszeit beträgt 1–2 Werktage. Nach dem Versand beträgt die Lieferzeit in der Regel 5–10 Werktage. Wir bemühen uns, Ihre Bestellung so schnell wie möglich zuzustellen. </p>"
+          }
+        },
+        "question_kUzahD": {
+          "type": "question",
+          "settings": {
+            "title": "Was passiert, wenn ich nicht zu Hause bin?",
+            "text": "<p>Sollten Sie bei der Zustellung nicht zu Hause sein, hinterlässt DHL eine Benachrichtigung oder liefert das Paket an eine nahegelegene Filiale oder Packstation.<br/></p>"
+          }
+        },
+        "faq-3": {
+          "type": "rich-text",
+          "settings": {
+            "title": "Retouren & Umtausch",
+            "text": "",
+            "align_text": "left"
+          }
+        },
+        "faq-4": {
+          "type": "question",
+          "settings": {
+            "title": "Wie funktioniert die Rücksendung?",
+            "text": "<p>Sie können Ihre Artikel innerhalb von 30 Tagen nach Erhalt zurücksenden. Bitte lesen Sie unsere Rückgaberichtlinie im Footer unserer Website. Um eine Rücksendung anzumelden, senden Sie uns einfach eine E-Mail – unser Team hilft Ihnen gerne weiter. </p>"
+          }
+        },
+        "question_jwYfFG": {
+          "type": "question",
+          "settings": {
+            "title": "Wer trägt die Kosten für die Rücksendung?",
+            "text": "<p>Die unmittelbaren Kosten der Rücksendung trägt der Kunde.<br/></p>"
+          }
+        },
+        "question_XD7i7z": {
+          "type": "question",
+          "settings": {
+            "title": "Was mache ich, wenn mein Artikel beschädigt oder defekt ist?",
+            "text": "<p>Bitte kontaktieren Sie unseren Kundenservice so schnell wie möglich mit Ihrer Bestellnummer und Fotos des beschädigten Artikels. Wir finden selbstverständlich eine passende Lösung. <br/></p>"
+          }
+        },
+        "question_a4zbDM": {
+          "type": "question",
+          "settings": {
+            "title": "Kann ich einen Artikel umtauschen?",
+            "text": "<p>Ein direkter Umtausch ist nicht möglich. Bitte senden Sie den Artikel zurück und geben Sie eine neue Bestellung auf. Bei Fragen kontaktieren Sie uns unter <a>support@dailyberlin.de</a>. <br/></p>"
+          }
+        },
+        "question_ED4MgT": {
+          "type": "question",
+          "settings": {
+            "title": "Wie lange dauert die Rückerstattung?",
+            "text": "<p>Sobald Ihre Rücksendung bei uns eingegangen und geprüft ist, erfolgt die Rückerstattung innerhalb von 5–10 Werktagen über die ursprünglich verwendete Zahlungsmethode. <br/></p>"
+          }
+        },
+        "rich_text_MTxhYY": {
+          "type": "rich-text",
+          "settings": {
+            "title": "Weitere Fragen",
+            "text": "",
+            "align_text": "left"
+          }
+        },
+        "question_dHRDb7": {
+          "type": "question",
+          "settings": {
+            "title": "Kann ich meine Bestellung stornieren oder ändern?",
+            "text": "<p>Bitte kontaktieren Sie uns so schnell wie möglich. Änderungen oder Stornierungen sind nur möglich, solange Ihre Bestellung noch nicht bearbeitet wurde. <br/></p>"
+          }
+        },
+        "question_qMrDTM": {
+          "type": "question",
+          "settings": {
+            "title": "Wie löse ich einen Rabattcode ein?",
+            "text": "<p>Geben Sie Ihren Rabattcode während des Bezahlvorgangs in das entsprechende Feld ein. Der Rabatt wird automatisch vom Gesamtbetrag abgezogen. <br/></p>"
+          }
+        },
+        "question_c94xNg": {
+          "type": "question",
+          "settings": {
+            "title": "Welche Zahlungsmethoden akzeptieren Sie?",
+            "text": "<p>Wir akzeptieren PayPal, Kreditkarte, Klarna (Rechnung & Ratenzahlung), Google Pay und Apple Pay. Alle verfügbaren Optionen sehen Sie im Checkout. <br/></p>"
+          }
+        },
+        "question_7hKVFJ": {
+          "type": "question",
+          "settings": {
+            "title": "Wie finde ich meine richtige Größe?",
+            "text": "<p>Auf jeder Produktseite finden Sie eine Größentabelle. Wenn Sie unsicher sind, kontaktieren Sie uns gerne – wir beraten Sie persönlich. <br/><br/></p>"
+          }
+        },
+        "question_kW3XEL": {
+          "type": "question",
+          "settings": {
+            "title": "Bieten Sie Geschenke oder Gutscheine an?",
+            "text": "<p>Ja, wir bieten Geschenkgutscheine an. Kontaktieren Sie uns dafür unter <a>support@dailyberlin.de</a>. <br/></p>"
+          }
+        },
+        "question_9EwLkN": {
+          "type": "question",
+          "settings": {
+            "title": "Wie melde ich mich für den Newsletter an?",
+            "text": "<p>Geben Sie Ihre E-Mail-Adresse im Anmeldefeld unten auf der Website ein, um Updates zu neuen Produkten und exklusiven Angeboten zu erhalten.<br/></p>"
+          }
+        },
+        "question_QkHjw9": {
+          "type": "question",
+          "settings": {
+            "title": "Wie kann ich den Kundenservice kontaktieren?",
+            "text": "<p>Sie erreichen uns jederzeit per E-Mail unter <a>support@dailyberlin.de</a>. Wir antworten in der Regel innerhalb von 24 Stunden an Werktagen. <br/><br/></p>"
+          }
+        },
+        "question_EqyhKC": {
+          "type": "question",
+          "settings": {
+            "title": "Wie gehen Sie mit meinen persönlichen Daten um?",
+            "text": "<p>Wir nehmen den Schutz Ihrer Daten sehr ernst. Weitere Informationen finden Sie in unserer Datenschutzerklärung. <br/></p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq-0",
+        "faq-2",
+        "faq-1",
+        "question_qGLkKA",
+        "question_JwKr3e",
+        "question_XY7VFW",
+        "question_kUzahD",
+        "faq-3",
+        "faq-4",
+        "question_jwYfFG",
+        "question_XD7i7z",
+        "question_a4zbDM",
+        "question_ED4MgT",
+        "rich_text_MTxhYY",
+        "question_dHRDb7",
+        "question_qMrDTM",
+        "question_c94xNg",
+        "question_7hKVFJ",
+        "question_kW3XEL",
+        "question_9EwLkN",
+        "question_QkHjw9",
+        "question_EqyhKC"
+      ],
+      "settings": {
+        "title": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "faq"
+  ]
+}

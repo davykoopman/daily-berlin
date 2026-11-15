@@ -1,0 +1,238 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "1788183836f615d327": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_25d2f63_eqBhaA": {
+          "type": "ai_gen_block_25d2f63",
+          "name": "Large image",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_Aug_31_2026_06_20_52_PM.png",
+            "min_height": 400,
+            "desktop_width_percent": 100,
+            "border_radius": 0,
+            "show_overlay": false,
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "show_text_box": true,
+            "heading": "",
+            "subheading": "",
+            "text_vertical_position": 50,
+            "text_horizontal_position": 50,
+            "text_alignment": "center",
+            "text_box_width": 80,
+            "text_box_padding": 30,
+            "text_box_background": "rgba(0,0,0,0)",
+            "text_box_border_radius": 0,
+            "heading_color": "#ffffff",
+            "heading_size": 40,
+            "heading_spacing": 16,
+            "text_color": "#ffffff",
+            "text_size": 18
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_25d2f63_eqBhaA"
+      ],
+      "settings": {}
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "variant_labels": true,
+            "picker_type": "button",
+            "color_swatches": false
+          }
+        },
+        "separator": {
+          "type": "separator",
+          "settings": {}
+        },
+        "sales_point": {
+          "type": "sales_point",
+          "disabled": true,
+          "settings": {
+            "icon": "truck",
+            "icon_size": 24,
+            "icon_text_padding": 8,
+            "text": "Versandkostenfrei innerhalb Deutschlands"
+          }
+        },
+        "sales_point_6EgxEJ": {
+          "type": "sales_point",
+          "disabled": true,
+          "settings": {
+            "icon": "package",
+            "icon_size": 24,
+            "icon_text_padding": 8,
+            "text": "60 Tage Rückgaberecht"
+          }
+        },
+        "sales_point_yGwBbf": {
+          "type": "sales_point",
+          "disabled": true,
+          "settings": {
+            "icon": "checkmark",
+            "icon_size": 24,
+            "icon_text_padding": 8,
+            "text": "24/7 Kundenservice"
+          }
+        },
+        "inventory_status": {
+          "type": "inventory_status",
+          "disabled": true,
+          "settings": {
+            "inventory_threshold": 10,
+            "inventory_transfers_enable": true
+          }
+        },
+        "buy_buttons_NkcUq9": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "surface_pickup_enable": true
+          }
+        },
+        "custom_Jm7hQ4": {
+          "type": "custom",
+          "settings": {
+            "code": "<style>\n.payment-icons {\n  display: flex;\n  flex-wrap: nowrap;\n  justify-content: space-between;\n  align-items: center;\n  gap: 4px;\n  list-style: none;\n  padding: 0;\n  margin: 0;\n  overflow-x: auto;\n  -webkit-overflow-scrolling: touch;\n}\n\n.payment-icons li {\n  flex: 0 0 auto;\n}\n\n.payment-icons svg {\n  width: 34px;\n  height: auto;\n}\n\n@media (max-width: 480px) {\n  .payment-icons svg {\n    width: 28px;\n  }\n}\n</style>\n\n<div style=\"margin-top:15px;\">\n  <ul class=\"payment-icons\">\n    <li>{{ 'visa' | payment_type_svg_tag }}</li>\n    <li>{{ 'master' | payment_type_svg_tag }}</li>\n    <li>{{ 'maestro' | payment_type_svg_tag }}</li>\n    <li>{{ 'american_express' | payment_type_svg_tag }}</li>\n    <li>{{ 'apple_pay' | payment_type_svg_tag }}</li>\n    <li>{{ 'google_pay' | payment_type_svg_tag }}</li>\n    <li>{{ 'shopify_pay' | payment_type_svg_tag }}</li>\n    <li>{{ 'unionpay' | payment_type_svg_tag }}</li>\n    <li>{{ 'paypal' | payment_type_svg_tag }}</li>\n    <li>{{ 'klarna' | payment_type_svg_tag }}</li>\n  </ul>\n</div>"
+          }
+        },
+        "kiwi_size_chart_recommender_kiwi_sizing_PEYjzP": {
+          "type": "shopify://apps/kiwi-size-chart-recommender/blocks/kiwiSizing/b7369922-bf15-44ce-a121-a22a8fcbc4b0",
+          "settings": {
+            "fallbackToBlockPosition": false,
+            "waitForElementSelector": "",
+            "waitForElementDelay": 5
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "is_tab": false
+          }
+        },
+        "tab": {
+          "type": "tab",
+          "settings": {
+            "title": "Lieferinformationen",
+            "content": "<p>Bearbeitungszeit: 1–2 Werktage</p><p> Voraussichtliche Versanddauer: 3–7 Werktage</p><p>In den meisten Fällen trifft Ihre Bestellung innerhalb von insgesamt 4–9 Werktagen ein.<br/><br/></p>",
+            "page": ""
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "price",
+        "variant_picker",
+        "separator",
+        "sales_point",
+        "sales_point_6EgxEJ",
+        "sales_point_yGwBbf",
+        "inventory_status",
+        "buy_buttons_NkcUq9",
+        "custom_Jm7hQ4",
+        "kiwi_size_chart_recommender_kiwi_sizing_PEYjzP",
+        "description",
+        "tab",
+        "share"
+      ],
+      "custom_css": [],
+      "settings": {
+        "sku_enable": false,
+        "image_position": "left",
+        "image_size": "medium",
+        "product_zoom_enable": true,
+        "thumbnail_position": "beside",
+        "thumbnail_arrows": false,
+        "mobile_layout": "full",
+        "enable_video_looping": true,
+        "product_video_style": "muted"
+      }
+    },
+    "sub": {
+      "type": "product-full-width",
+      "disabled": true,
+      "settings": {
+        "max_width": true
+      }
+    },
+    "1770041886bada6825": {
+      "type": "apps",
+      "settings": {
+        "full_width": false,
+        "space_around": true
+      }
+    },
+    "product-recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "show_product_recommendations": true,
+        "product_recommendations_heading": "Mehr Kaufen, mehr sparen",
+        "related_count": 5
+      }
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "settings": {
+        "recent_count": 5
+      }
+    },
+    "collection-return": {
+      "type": "collection-return",
+      "disabled": true,
+      "settings": {}
+    },
+    "text_and_image_eRXpdY": {
+      "type": "text-and-image",
+      "name": "Image with text",
+      "settings": {
+        "image": "shopify://shop_images/Daily_Berlin_About_us.png",
+        "image_width": 610,
+        "subtitle": "",
+        "title": "Über uns",
+        "text": "<p>Daily Berlin entstand aus der Liebe zu Stil, Street Culture und durchdachtem Design.<br/><br/>Wir glauben, dass Kleidung mehr ist als nur das, was man trägt. Sie zeigt, wie man in der Welt auftritt.<br/><br/>Unsere Kollektionen verbinden moderne Ästhetik mit alltäglichem Komfort – mit Sorgfalt gefertigt für Qualität, Menschen und unseren Planeten.<br/><br/>Zeitlose Pieces, bewusste Entscheidungen, gemacht, um sich mit dir zu bewegen.<br/><br/>Street Vibes. Klares Design. Gemacht, um zu bleiben.<br/><br/>Das ist Daily Berlin.<br/><br/></p>",
+        "button_label": "Mehr über uns",
+        "button_link": "shopify://pages/uber-uns",
+        "button_style": "primary",
+        "align_text": "left",
+        "layout": "right",
+        "divider": false
+      }
+    }
+  },
+  "order": [
+    "1788183836f615d327",
+    "main",
+    "sub",
+    "1770041886bada6825",
+    "product-recommendations",
+    "recently-viewed",
+    "collection-return",
+    "text_and_image_eRXpdY"
+  ]
+}

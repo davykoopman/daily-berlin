@@ -1,0 +1,144 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "collection-header": {
+      "type": "collection-header",
+      "settings": {
+        "enable": true,
+        "collection_image_enable": false,
+        "parallax": true
+      }
+    },
+    "main-collection": {
+      "type": "main-collection",
+      "blocks": {
+        "collection_description": {
+          "type": "collection_description",
+          "settings": {}
+        },
+        "subcollections": {
+          "type": "subcollections",
+          "settings": {
+            "subcollections_per_row": 5
+          }
+        },
+        "product_grid": {
+          "type": "product_grid",
+          "settings": {
+            "enable_collection_count": true,
+            "per_row": 4,
+            "rows_per_page": 7,
+            "mobile_flush_grid": false
+          }
+        }
+      },
+      "block_order": [
+        "collection_description",
+        "subcollections",
+        "product_grid"
+      ],
+      "settings": {
+        "enable_sidebar": true,
+        "collapsed": true,
+        "filter_style": "sidebar",
+        "enable_color_swatches": false,
+        "enable_sort": true
+      }
+    },
+    "ss_feature_1_ykHP4D": {
+      "type": "ss-feature-1",
+      "blocks": {
+        "image_rJktfw": {
+          "type": "image",
+          "settings": {
+            "feature_title": "Kostenloser Versand",
+            "feature_text": "<p>Bei Daily Berlin werden alle Bestellungen versandkostenfrei geliefert</p>",
+            "feature_url": "https://section.store/",
+            "hide_image": false
+          }
+        },
+        "image_MLyNmk": {
+          "type": "image",
+          "settings": {
+            "feature_title": "60-Tage-Rückgabegarantie",
+            "feature_text": "<p>Nicht zufrieden mit Ihrem Kauf? Senden Sie ihn innerhalb von 60 Tagen zurück.</p>",
+            "feature_url": "",
+            "hide_image": false
+          }
+        },
+        "image_KtfqLE": {
+          "type": "image",
+          "settings": {
+            "feature_title": "Kundenservice",
+            "feature_text": "<p>Montag bis Freitag: 08:00 – 17:00 Uhr</p><p>Samstag bis Sonntag: 09:00 – 16:00 Uhr</p><p></p>",
+            "feature_url": "",
+            "hide_image": false
+          }
+        }
+      },
+      "block_order": [
+        "image_rJktfw",
+        "image_MLyNmk",
+        "image_KtfqLE"
+      ],
+      "name": "SS - Feature #1",
+      "settings": {
+        "feature_row": 3,
+        "feature_row_mobile": 3,
+        "feature_gap": 20,
+        "feature_gap_mobile": 10,
+        "feature_padding_horizontal": 0,
+        "feature_padding_vertical": 0,
+        "feature_radius": 16,
+        "feature_border_thickness": 0,
+        "feature_shadow": false,
+        "feature_heading_custom": false,
+        "feature_heading_font": "josefin_sans_n4",
+        "feature_heading_size": 14,
+        "feature_heading_size_mobile": 12,
+        "feature_heading_height": 130,
+        "feature_heading_mt": 8,
+        "feature_text_custom": false,
+        "feature_text_font": "josefin_sans_n4",
+        "feature_text_size": 12,
+        "feature_text_size_mobile": 12,
+        "feature_text_height": 130,
+        "feature_text_mt": 4,
+        "feature_icon_size": 42,
+        "feature_icon_size_mobile": 42,
+        "feature_bg": "#ffffff",
+        "feature_border_color": "#000000",
+        "feature_shadow_color": "#000000",
+        "feature_heading_color": "#000000",
+        "feature_text_color": "#000000",
+        "feature_icon_color": "#000000",
+        "background_color": "#ffffff",
+        "background_gradient": "",
+        "border_color": "#000000",
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 16,
+        "padding_bottom": 16,
+        "padding_horizontal": 5,
+        "padding_horizontal_mobile": 1.5,
+        "full_width": false,
+        "content_width": 120,
+        "border_thickness": 0,
+        "lazy": true
+      }
+    }
+  },
+  "order": [
+    "collection-header",
+    "main-collection",
+    "ss_feature_1_ykHP4D"
+  ]
+}

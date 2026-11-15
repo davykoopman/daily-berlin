@@ -1,0 +1,243 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow": {
+      "type": "slideshow",
+      "blocks": {
+        "slideshow-0": {
+          "type": "image",
+          "settings": {
+            "top_subheading": "",
+            "title": "Neue Saison, neue Styles\n\nEntdecken Sie jetzt unsere aktuelle Kollektion für die laufende Saison.",
+            "title_size": 40,
+            "subheading": "",
+            "link": "shopify://collections/women",
+            "link_text": "Damen",
+            "link_2": "shopify://collections/men",
+            "link_text_2": "Herren",
+            "color_accent": "#000000",
+            "text_align": "vertical-center horizontal-center",
+            "image": "shopify://shop_images/Daily_Berlin_Banner1.png",
+            "overlay_opacity": 0,
+            "focal_point": "center center"
+          }
+        }
+      },
+      "block_order": [
+        "slideshow-0"
+      ],
+      "settings": {
+        "section_height": "750px",
+        "mobile_height": "auto",
+        "parallax": false,
+        "style": "bars",
+        "autoplay": true,
+        "autoplay_speed": 7
+      }
+    },
+    "text_and_image_zjfRD6": {
+      "type": "text-and-image",
+      "name": "Image with text",
+      "settings": {
+        "image": "shopify://shop_images/Daily_Berlin_About_us.png",
+        "image_width": 700,
+        "subtitle": "",
+        "title": "Über uns",
+        "text": "<p>Daily Berlin entstand aus der Liebe zu Stil, Street Culture und durchdachtem Design.<br/><br/>Wir glauben, dass Kleidung mehr ist als nur das, was man trägt. Sie zeigt, wie man in der Welt auftritt.<br/><br/>Unsere Kollektionen verbinden moderne Ästhetik mit alltäglichem Komfort – mit Sorgfalt gefertigt für Qualität, Menschen und unseren Planeten.<br/><br/>Zeitlose Pieces, bewusste Entscheidungen, gemacht, um sich mit dir zu bewegen.<br/><br/>Street Vibes. Klares Design. Gemacht, um zu bleiben.<br/><br/>Das ist Daily Berlin.<br/><br/></p>",
+        "button_label": "Mehr über uns",
+        "button_link": "shopify://pages/uber-uns",
+        "button_style": "primary",
+        "align_text": "left",
+        "layout": "right",
+        "divider": false
+      }
+    },
+    "featured_collections_Kii3QK": {
+      "type": "featured-collections",
+      "blocks": {
+        "collection_tn6VQR": {
+          "type": "collection",
+          "settings": {
+            "collection": "women",
+            "title": "",
+            "focal_point": "center center"
+          }
+        },
+        "collection_GbJMJj": {
+          "type": "collection",
+          "settings": {
+            "collection": "men",
+            "title": "",
+            "focal_point": "center center"
+          }
+        }
+      },
+      "block_order": [
+        "collection_tn6VQR",
+        "collection_GbJMJj"
+      ],
+      "name": "Collection list",
+      "settings": {
+        "title": "Kollektionen",
+        "divider": false,
+        "per_row": 2,
+        "enable_gutter": true
+      }
+    },
+    "1779873008ce6fa65a": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_1902a71_jek9zr": {
+          "type": "ai_gen_block_1902a71",
+          "settings": {
+            "question_1": "Wie lauten Ihre Rückgabebedingungen?",
+            "answer_1": "<p>Wir gewähren ein 60-tägiges Rückgaberecht für alle ungetragenen Artikel, an denen die Originaletiketten noch angebracht sind. Die Artikel müssen sich im Originalzustand befinden, damit eine vollständige Rückerstattung gewährt werden kann.</p>",
+            "question_2": "Wie lange dauert der Versand?",
+            "answer_2": "<p>Bearbeitungszeit: 1–2 Werktage</p><p> Voraussichtliche Versanddauer: 3–7 Werktage</p><p>In den meisten Fällen trifft Ihre Bestellung innerhalb von insgesamt 4–9 Werktagen ein.<br/><br/></p>",
+            "question_3": "Bieten Sie internationalen Versand an?",
+            "answer_3": "<p>Derzeit liefern wir nur innerhalb Deutschlands, Österreichs, Frankreich und Liechtensteins.</p>",
+            "question_4": "Wie pflege ich meine Kleidungsstücke?",
+            "answer_4": "<p>Die Pflegehinweise finden Sie auf dem Etikett jedes Kleidungsstücks. Generell empfehlen wir, die Kleidungsstücke in kaltem Wasser zu waschen und zum Trocknen aufzuhängen, um die Qualität und Langlebigkeit Ihrer Kleidungsstücke zu erhalten.</p>",
+            "question_5": "",
+            "answer_5": "",
+            "desktop_width_percent": 90,
+            "item_padding": 20,
+            "question_size": 18,
+            "question_weight": "600",
+            "question_spacing": 0.5,
+            "question_uppercase": true,
+            "question_color": "#000000",
+            "answer_size": 16,
+            "answer_line_height": 1.5,
+            "answer_color": "#000000",
+            "icon_size": 20,
+            "icon_thickness": 2,
+            "icon_color": "#000000",
+            "border_color": "#e8e8e1"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_1902a71_jek9zr"
+      ],
+      "settings": {}
+    },
+    "ss_feature_1_9YBKgz": {
+      "type": "ss-feature-1",
+      "blocks": {
+        "image_FNyJjW": {
+          "type": "image",
+          "settings": {
+            "feature_title": "Kostenloser Versand",
+            "feature_text": "<p>Kostenloser Versand in ganz Deutschland, Österreich, Frankreich und Liechtenstein</p>",
+            "feature_url": "https://section.store/",
+            "hide_image": false
+          }
+        },
+        "image_txp6H8": {
+          "type": "image",
+          "settings": {
+            "feature_title": "60-Tage-Rückgabegarantie",
+            "feature_text": "<p>Nicht zufrieden mit Ihrem Kauf? Senden Sie ihn innerhalb von 60 Tagen zurück.</p>",
+            "feature_url": "",
+            "hide_image": false
+          }
+        },
+        "image_VAKgkM": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "feature_title": "24/7 Kundenservice",
+            "feature_text": "<p>Wir sind jederzeit für Sie da, Tag und Nacht. Kontaktieren Sie uns jederzeit!</p>",
+            "feature_url": "",
+            "hide_image": false
+          }
+        }
+      },
+      "block_order": [
+        "image_FNyJjW",
+        "image_txp6H8",
+        "image_VAKgkM"
+      ],
+      "name": "SS - Feature #1",
+      "settings": {
+        "feature_row": 2,
+        "feature_row_mobile": 2,
+        "feature_gap": 20,
+        "feature_gap_mobile": 10,
+        "feature_padding_horizontal": 0,
+        "feature_padding_vertical": 0,
+        "feature_radius": 16,
+        "feature_border_thickness": 0,
+        "feature_shadow": false,
+        "feature_heading_custom": false,
+        "feature_heading_font": "josefin_sans_n4",
+        "feature_heading_size": 20,
+        "feature_heading_size_mobile": 16,
+        "feature_heading_height": 130,
+        "feature_heading_mt": 8,
+        "feature_text_custom": false,
+        "feature_text_font": "josefin_sans_n4",
+        "feature_text_size": 16,
+        "feature_text_size_mobile": 14,
+        "feature_text_height": 130,
+        "feature_text_mt": 4,
+        "feature_icon_size": 58,
+        "feature_icon_size_mobile": 42,
+        "feature_bg": "#ffffff",
+        "feature_border_color": "#000000",
+        "feature_shadow_color": "#000000",
+        "feature_heading_color": "#000000",
+        "feature_text_color": "#000000",
+        "feature_icon_color": "#000000",
+        "background_color": "#ffffff",
+        "background_gradient": "",
+        "border_color": "#000000",
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top": 16,
+        "padding_bottom": 16,
+        "padding_horizontal": 5,
+        "padding_horizontal_mobile": 1.5,
+        "full_width": false,
+        "content_width": 120,
+        "border_thickness": 0,
+        "lazy": true
+      }
+    },
+    "1783789944dbdf036b": {
+      "type": "_blocks",
+      "settings": {}
+    },
+    "17837902326ae4cde3": {
+      "type": "_blocks",
+      "settings": {}
+    },
+    "1788977964a61e41bd": {
+      "type": "apps",
+      "settings": {
+        "full_width": false,
+        "space_around": true
+      }
+    }
+  },
+  "order": [
+    "slideshow",
+    "text_and_image_zjfRD6",
+    "featured_collections_Kii3QK",
+    "1779873008ce6fa65a",
+    "ss_feature_1_9YBKgz",
+    "1783789944dbdf036b",
+    "17837902326ae4cde3",
+    "1788977964a61e41bd"
+  ]
+}
