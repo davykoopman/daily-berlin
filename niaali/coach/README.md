@@ -23,3 +23,8 @@
   19 kleuren waren in alle maten uitverkocht en zijn daardoor verdwenen (zie plan.json "fullcolor").
 - 34 middenmaten blijven uitverkocht → sizes/middenmaten_uitsluiten.csv (voor uitsluiten in campagnes).
 - Controle: na afloop staan precies deze 34 nog op voorraad 0 (DENY) in de winkel.
+
+## 1. NL-winkelwagen — KLAAR IN THEMAKOPIE (gebruiker publiceert)
+- Nieuw thema "Black Friday v4 (totaal NL)" #210865717580 = kopie van live v2 (#209403576652) + alleen snippets/cart-summary.liquid uit v3.
+- "Verwacht totaal" → "Totaal" (PL: "Suma", UK: "Total"); regel "Gratis verzending inbegrepen." (tax-info) verwijderd.
+- Gecontroleerd in preview /nl-nl/cart (desktop + mobiel): "Totaal €… EUR", geen verzendregel. Overige bestanden identiek aan live.
