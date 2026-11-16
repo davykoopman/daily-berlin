@@ -219,3 +219,22 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
   as "Vinci | Timeless Fashion for Women & Men". The social image is VINCI_Elegant_Serif_Logo. No visible
   "Newmae" left on the home, collection or FAQ pages. Next: Simprosys full resync (step 7), then GMC diagnostics,
   then ads (step 9).
+
+## Vinci → MEN store (16 Nov 2026, user GO "NU")
+- Drafted all 379 active WOMEN products. 664 WOMEN products in total are now draft, 0 active. Also drafted the women
+  gifts Marina Scarf and Card Holder.
+- Unisex → Men's: the snow jacket (type set to Mens - Jackets & Coats, tag set to match, new SEO) and the crew neck
+  pullover (new title and SEO). Handles kept.
+- Main menu: removed the WOMEN block. Home, Bestsellers, MEN (10 sub items), About, FAQs, Contact, Track remain.
+- Free Gift (BXGY): "buys" is now only the MEN collection; the gifts are only Classic Wallet and Curb Chain Bracelet.
+- Redirects: 676 imported (urlRedirectImport, 0 failed). 664 women products now point to the matching men category
+  (type mapping, see men/redirects.csv). 12 women collections point to the men equivalent. The collection
+  redirects only work after the collections are hidden; publishableUnpublish is blocked in the MCP, so the owner
+  does this.
+- Theme copy "Vinci MEN (werk)" (211569115461), not yet published:
+  - BF hero buttons are now "Shop men" (black-friday-men) and "Jackets & coats".
+  - Gift bar and gift minimum use only the 2 men gifts.
+  - Cart upsell always uses the men bestsellers.
+  - About Us now says "menswear".
+  - The group switch is hidden when the menu has only one group.
+  Preview checked on desktop and mobile: no "women" in the text, and 2 gifts in the bar.
