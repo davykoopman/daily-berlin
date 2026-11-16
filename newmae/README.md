@@ -238,3 +238,7 @@ Files: black-friday/theme (changed/new), black-friday/orig (before), black-frida
   - About Us now says "menswear".
   - The group switch is hidden when the menu has only one group.
   Preview checked on desktop and mobile: no "women" in the text, and 2 gifts in the bar.
+- 16 Nov: NEWMAE10 renamed to VINCI10. A discount run on 107 no-sale products (about 50%) was stopped on the user's
+  instruction ("Geen kortingen doen") after 18 products. Those 18 are back at their original price with no
+  compare-at price (checked). Seen afterwards: the Henley pullover has compare-at 126.50, which was not set by
+  Claude (someone else or an app).
