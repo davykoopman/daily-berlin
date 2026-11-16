@@ -1,0 +1,1 @@
+{"m0": [{"ownerId": "gid://shopify/Product/15798926737740", "namespace": "mm-google-shopping", "key": "gender", "type": "single_line_text_field", "value": "male"}, {"ownerId": "gid://shopify/Product/15798932275532", "namespace": "mm-google-shopping", "key": "gender", "type": "single_line_text_field", "value": "male"}]}
