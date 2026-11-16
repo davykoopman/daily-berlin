@@ -16,3 +16,10 @@
 ## 4. Zomerjurken — AL OP CONCEPT
 - Tags: SS = lente/zomer, AW = herfst/winter, AS = vermoedelijk all-season.
 - Alle 5 SS-jurken zijn al draft. De 11 actieve jurken zijn AW/AS, 0 verkopen in 90 dagen.
+
+## 3. Uitverkochte varianten — UITGEVOERD (GO: rand verwijderen, midden laten)
+- Regel: per kleur; uitverkochte maat aan begin/eind van de maatreeks → verwijderd; met leverbare maten aan beide kanten → blijft als uitverkocht.
+- 172 varianten verwijderd in 27 producten (sizes/plan.json "delete"; volledige backup sizes/prods.json).
+  19 kleuren waren in alle maten uitverkocht en zijn daardoor verdwenen (zie plan.json "fullcolor").
+- 34 middenmaten blijven uitverkocht → sizes/middenmaten_uitsluiten.csv (voor uitsluiten in campagnes).
+- Controle: na afloop staan precies deze 34 nog op voorraad 0 (DENY) in de winkel.
