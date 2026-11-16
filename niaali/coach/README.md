@@ -28,3 +28,4 @@
 - Nieuw thema "Black Friday v4 (totaal NL)" #210865717580 = kopie van live v2 (#209403576652) + alleen snippets/cart-summary.liquid uit v3.
 - "Verwacht totaal" → "Totaal" (PL: "Suma", UK: "Total"); regel "Gratis verzending inbegrepen." (tax-info) verwijderd.
 - Gecontroleerd in preview /nl-nl/cart (desktop + mobiel): "Totaal €… EUR", geen verzendregel. Overige bestanden identiek aan live.
+- Op verzoek: "Totaal" even groot en vet als het bedrag; beloftes (gratis verzending · 60 dagen retour · veilig betalen) als tekst zonder icoontjes.
